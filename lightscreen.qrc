@@ -1,0 +1,36 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="lightscreen">images/LS.ico</file>
+        <file alias="lightscreen.small">images/LSSmall.png</file>
+        <file alias="lightscreen.yes">images/LS.systemtray.good.png</file>
+        <file alias="lightscreen.no">images/LS.systemtray.bad.png</file>
+        <file alias="yes">images/good.png</file>
+        <file alias="no">images/bad.png</file>
+        <file alias="yes.big">images/area-accept.png</file>
+        <file alias="no.big">images/area-cancel.png</file>
+        <file alias="folder">images/document-open-folder.png</file>
+        <file alias="configure">images/configure.png</file>
+        <file alias="help">images/help.png</file>
+        <file alias="arrow-left">images/previewArrowLeft.png</file>
+        <file alias="arrow-right">images/previewArrowRight.png</file>
+        <file alias="picker">images/picker.png</file>
+        <file alias="zoom.in">images/zoom-in.png</file>
+        <file alias="zoom.out">images/zoom-out.png</file>
+        <file alias="screen">images/screen.png</file>
+        <file alias="area">images/area.png</file>
+        <file alias="window">images/window.png</file>
+    </qresource>
+    <qresource prefix="/backgrounds">
+        <file alias="checkerboard">images/checkerboard.png</file>
+    </qresource>
+    <qresource prefix="/translations">
+        <file alias="Chinese (Simplified)">translations/chinese_simplified.qm</file>
+        <file alias="Dutch">translations/dutch.qm</file>
+        <file alias="Italian">translations/italiano.qm</file>
+        <file alias="Japanese">translations/japanese.qm</file>
+        <file alias="Polish">translations/polish.qm</file>
+        <file alias="Portuguese">translations/portugues.qm</file>
+        <file alias="Russian">translations/russian.qm</file>
+        <file alias="Spanish">translations/spanish.qm</file>
+    </qresource>
+</RCC>

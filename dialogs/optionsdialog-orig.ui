@@ -1,0 +1,794 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>OptionsDialog</class>
+ <widget class="QDialog" name="OptionsDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>354</width>
+    <height>278</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Options - Lightscreen</string>
+  </property>
+  <layout class="QVBoxLayout" name="optionsLayout">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="generalTab">
+      <attribute name="title">
+       <string>&amp;General</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="generalLayout">
+       <item>
+        <widget class="QGroupBox" name="fileGroupBox">
+         <property name="title">
+          <string>File</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QGridLayout" name="fileGroupBoxLayout">
+          <property name="verticalSpacing">
+           <number>4</number>
+          </property>
+          <property name="margin">
+           <number>6</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="directoryLabel">
+            <property name="text">
+             <string>&amp;Directory:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>targetLineEdit</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="targetLineEdit">
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QPushButton" name="browsePushButton">
+            <property name="maximumSize">
+             <size>
+              <width>60</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../lightscreen.qrc">
+              <normaloff>:/icons/OpenFolder</normaloff>:/icons/OpenFolder</iconset>
+            </property>
+            <property name="autoDefault">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="filenameLabel">
+            <property name="toolTip">
+             <string>The prefix for the screenshot file</string>
+            </property>
+            <property name="text">
+             <string>&amp;Filename:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>prefixLineEdit</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <layout class="QHBoxLayout" name="filenameLayout">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <item>
+             <widget class="QLineEdit" name="prefixLineEdit">
+              <property name="whatsThis">
+               <string>The prefix will be inserted before the &lt;em&gt;Naming&lt;/em&gt; in the screenshot file and it is usually used to distinguish files. It can be left blank.</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="namingComboBox">
+              <property name="whatsThis">
+               <string>The naming is inserted after the prefix and is what makes each screenshot file unique to avoid overwriting.&lt;br /&gt;
+&lt;b&gt;Numeric&lt;/b&gt;: inserts a number in sequence, 1, 2, 3.
+&lt;b&gt;Timestamp&lt;/b&gt;: inserts a unique number (a Unix timestamp) that corresponds with the current time.
+&lt;b&gt;Date&lt;/b&gt;: inserts the current date and time, in the form of dd-MM-yyyy hh.mm.ss.</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>(number)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>(date)</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="2">
+           <widget class="QPushButton" name="flipPrefixPushButton">
+            <property name="icon">
+             <iconset resource="../lightscreen.qrc">
+              <normaloff>:/icons/PrefixLeft</normaloff>:/icons/PrefixLeft</iconset>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="autoDefault">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="formatLabel">
+            <property name="toolTip">
+             <string>The file format for the screenshot</string>
+            </property>
+            <property name="text">
+             <string>F&amp;ormat:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>formatComboBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="formatComboBox">
+            <item>
+             <property name="text">
+              <string>PNG</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>JPG</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>BMP</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="delayLabel">
+            <property name="text">
+             <string>D&amp;elay:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy">
+             <cstring>delaySpinBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QSpinBox" name="delaySpinBox">
+            <property name="whatsThis">
+             <string>Selecting anything other than 0 in this option will cause the program to &lt;b&gt;wait&lt;/b&gt; that amount of seconds before taking the screenshot.</string>
+            </property>
+            <property name="specialValueText">
+             <string>none</string>
+            </property>
+            <property name="accelerated">
+             <bool>true</bool>
+            </property>
+            <property name="correctionMode">
+             <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
+            </property>
+            <property name="suffix">
+             <string> seconds</string>
+            </property>
+            <property name="prefix">
+             <string/>
+            </property>
+            <property name="maximum">
+             <number>32767</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>1</width>
+           <height>1</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="startupCheckBox">
+         <property name="whatsThis">
+          <string/>
+         </property>
+         <property name="text">
+          <string>&amp;Run Lightscreen at system startup.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="startupHideLayout">
+         <item>
+          <spacer name="startupHideSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>10</width>
+             <height>15</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="startupHideCheckBox">
+           <property name="whatsThis">
+            <string/>
+           </property>
+           <property name="text">
+            <string>H&amp;ide the main window.</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="hotkeysTab">
+      <attribute name="title">
+       <string>&amp;Hotkeys</string>
+      </attribute>
+      <layout class="QGridLayout" name="hotkeyLayout">
+       <property name="margin">
+        <number>6</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="screenCheckBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Capture the screen</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <spacer name="hotkeySpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QCheckBox" name="windowCheckBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Capture the current window</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="HotkeyWidget" name="windowHotkeyWidget">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QCheckBox" name="windowPickerCheckBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Capture a chosen window</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="HotkeyWidget" name="windowPickerHotkeyWidget">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QCheckBox" name="areaCheckBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Capture a screen area</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="HotkeyWidget" name="areaHotkeyWidget">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" rowspan="2" colspan="4">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <widget class="QCheckBox" name="openCheckBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Open the program window</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="3" rowspan="2">
+        <widget class="HotkeyWidget" name="openHotkeyWidget">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2">
+        <widget class="QCheckBox" name="directoryCheckBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Open the directory</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="3">
+        <widget class="HotkeyWidget" name="directoryHotkeyWidget">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="HotkeyWidget" name="screenHotkeyWidget">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="optionsTab">
+      <attribute name="title">
+       <string>&amp;Options</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="optionsLayout_2">
+       <property name="margin">
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QCheckBox" name="trayCheckBox">
+         <property name="whatsThis">
+          <string/>
+         </property>
+         <property name="text">
+          <string>Sho&amp;w a system tray icon.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="hideCheckBox">
+         <property name="text">
+          <string>&amp;Hide Lightscreen while taking a screenshot.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="magnifyCheckBox">
+         <property name="text">
+          <string>&amp;Magnify around the mouse in Area mode.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="previewCheckBox">
+         <property name="text">
+          <string>View a preview of each screenshot.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="languageLayout">
+         <item>
+          <widget class="QLabel" name="languageLabel">
+           <property name="text">
+            <string>&amp;Language:</string>
+           </property>
+           <property name="buddy">
+            <cstring>languageComboBox</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="languageComboBox"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="moreInformationLabel">
+           <property name="whatsThis">
+            <string>Click here to go to the Lightscreen homepage to learn more about translations.</string>
+           </property>
+           <property name="text">
+            <string>&lt;a href=&quot;http://lightscreen.sourceforge.net/translation&quot;&gt;More information..&lt;/a&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="languageSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="notifyLayout">
+         <property name="spacing">
+          <number>12</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="notifyLabel">
+           <property name="text">
+            <string>&amp;Notify with:</string>
+           </property>
+           <property name="buddy">
+            <cstring>messageCheckBox</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="messageCheckBox">
+           <property name="whatsThis">
+            <string>Shows a completion message once the screenshot is saved, clicking this message takes you to the directory where the screenshot was saved.</string>
+           </property>
+           <property name="text">
+            <string>Tray icon Popup</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="playSoundCheckBox">
+           <property name="text">
+            <string>&amp;Sound cue</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="qualityLayout">
+         <item>
+          <widget class="QLabel" name="qualityLabel">
+           <property name="text">
+            <string>Screenshot &amp;Quality:</string>
+           </property>
+           <property name="buddy">
+            <cstring>qualitySlider</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="qualitySlider">
+           <property name="whatsThis">
+            <string>This slider goes from 0 to 100. 100 being the highest quality and 0 the lowest.&lt;br&gt;
+Quality is related to file size and of course to readability and overall quality of the image.</string>
+           </property>
+           <property name="maximum">
+            <number>100</number>
+           </property>
+           <property name="value">
+            <number>100</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="qualityValueLabel">
+           <property name="text">
+            <string>100</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="qualityPercentLabel">
+           <property name="text">
+            <string>%</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="advancedTab">
+      <attribute name="title">
+       <string>&amp;Advanced</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="margin">
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QCheckBox" name="saveAsCheckBox">
+         <property name="text">
+          <string>Choose where and how to &amp;save each screenshot (&quot;&amp;Save as&quot;).</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="clipboardCheckBox">
+         <property name="text">
+          <string>&amp;Copy the screenshot to the clipboard.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cursorCheckBox">
+         <property name="text">
+          <string>Inc&amp;lude the cursor in the screenshot.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="currentMonitorCheckBox">
+         <property name="text">
+          <string>&amp;Grab only the current monitor.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="optiPngCheckBox">
+         <property name="toolTip">
+          <string>Opens a new process called OptiPNG which dramatically reduces the file size.</string>
+         </property>
+         <property name="text">
+          <string>O&amp;ptimize PNG screenshots.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="warnHideCheckBox">
+         <property name="text">
+          <string>Warn when hiding without a tra&amp;y icon.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="updaterCheckBox">
+         <property name="text">
+          <string>Check for updates regularly.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>2</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="advancedButtonLayout">
+         <item>
+          <widget class="QPushButton" name="checkUpdatesPushButton">
+           <property name="text">
+            <string>Chec&amp;k Updates Now</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="advancedButtonSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="aboutPushButton">
+           <property name="text">
+            <string>About Lightscreen</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>HotkeyWidget</class>
+   <extends>QPushButton</extends>
+   <header>widgets/hotkeywidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>fileGroupBox</tabstop>
+  <tabstop>targetLineEdit</tabstop>
+  <tabstop>browsePushButton</tabstop>
+  <tabstop>prefixLineEdit</tabstop>
+  <tabstop>namingComboBox</tabstop>
+  <tabstop>flipPrefixPushButton</tabstop>
+  <tabstop>formatComboBox</tabstop>
+  <tabstop>delaySpinBox</tabstop>
+  <tabstop>startupCheckBox</tabstop>
+  <tabstop>trayCheckBox</tabstop>
+  <tabstop>hideCheckBox</tabstop>
+  <tabstop>magnifyCheckBox</tabstop>
+  <tabstop>languageComboBox</tabstop>
+  <tabstop>messageCheckBox</tabstop>
+  <tabstop>playSoundCheckBox</tabstop>
+  <tabstop>qualitySlider</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../lightscreen.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>OptionsDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>289</x>
+     <y>280</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
