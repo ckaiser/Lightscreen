@@ -29,11 +29,8 @@ Screenshot::Screenshot(QObject *parent, Screenshot::Options options):
 
 Screenshot::~Screenshot()
 {
-  qDebug() << "~Screenshot(), where \"" << mUnloadFilename << "\" is the unload filename.";
-
   if (mUnloaded) {
     QFile::remove(mUnloadFilename);
-    qDebug() << "Deleted!";
   }
 }
 

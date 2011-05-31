@@ -294,10 +294,11 @@ void LightscreenWindow::quit()
   if (!doing.isNull()) {
     answer = QMessageBox::question(this,
                                    tr("Are you sure you want to quit?"),
-                                   tr("You are currently %1, this will finish momentarily, are you sure you want to quit?").arg(doing),
+                                   tr("Lightscreen is currently %1, this will finish momentarily, are you sure you want to quit?").arg(doing),
                                    tr("Quit"),
                                    tr("Don't quit"));
   }
+
   if (!answer)
     accept();
 }
