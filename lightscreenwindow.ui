@@ -139,22 +139,5 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections>
-  <connection>
-   <sender>quitPushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>LightscreenWindowClass</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>135</x>
-     <y>79</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>71</x>
-     <y>101</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

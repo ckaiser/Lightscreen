@@ -45,7 +45,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   mHideTrigger(false),
   mReviveMain(false),
   mWasVisible(true),
-  mIsOptimizing(false),
+  mOptimizeCount(0),
   mLastMode(-1),
   mLastMessage(0),
   mLastScreenshot()
@@ -68,6 +68,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   connect(ui.optionsPushButton   , SIGNAL(clicked()), this, SLOT(showOptions()));
   connect(ui.hidePushButton      , SIGNAL(clicked()), this, SLOT(toggleVisibility()));
   connect(ui.screenshotPushButton, SIGNAL(clicked()), this, SLOT(showScreenshotMenu()));
+  connect(ui.quitPushButton      , SIGNAL(clicked()), this, SLOT(quit()));
 
   // Uploader
   connect(Uploader::instance(), SIGNAL(done(QString, QString)), this, SLOT(showUploaderMessage(QString, QString)));
@@ -270,6 +271,37 @@ void LightscreenWindow::preview(Screenshot* screenshot)
   }
 }
 
+void LightscreenWindow::quit()
+{
+  settings()->setValue("position", pos());
+
+  QString doing;
+  int answer = 0;
+
+  if (Uploader::instance()->uploading() > 0) {
+    doing = tr("uploading one or more screenshots");
+  }
+
+  if (mOptimizeCount > 0) {
+    if (!doing.isNull()) {
+      doing = tr("optimizing and uploading screenshots");
+    }
+    else {
+      doing = tr("optimizing one or more screenshots");
+    }
+  }
+
+  if (!doing.isNull()) {
+    answer = QMessageBox::question(this,
+                                   tr("Are you sure you want to quit?"),
+                                   tr("You are currently %1, this will finish momentarily, are you sure you want to quit?").arg(doing),
+                                   tr("Quit"),
+                                   tr("Don't quit"));
+  }
+  if (!answer)
+    accept();
+}
+
 void LightscreenWindow::restoreNotification()
 {
   if (mTrayIcon)
@@ -413,8 +445,6 @@ void LightscreenWindow::showScreenshotMessage(Screenshot::Result result, QString
 
 void LightscreenWindow::showUploaderMessage(QString fileName, QString url)
 {
-  qDebug() << "LightscreenWindow: showUploaderMessage!";
-
   if (!mTrayIcon)
     return;
 
@@ -503,8 +533,8 @@ void LightscreenWindow::optimizationDone()
 {
   // A mouthful :D
   QString screenshot = (qobject_cast<QProcess*>(sender()))->property("screenshot").toString();
-  qDebug() << "optimizationDone: " << screenshot;
   upload(screenshot);
+  mOptimizeCount--;
 }
 
 void LightscreenWindow::showHotkeyError(QStringList hotkeys)
@@ -545,7 +575,7 @@ void LightscreenWindow::showHotkeyError(QStringList hotkeys)
 
    if (msgBox.clickedButton() == exitButton) {
      dontShow = true;
-     QTimer::singleShot(10, this, SLOT(accept()));
+     QTimer::singleShot(10, this, SLOT(quit()));
    }
    else if (msgBox.clickedButton() == changeButton) {
     showOptions();
@@ -625,6 +655,7 @@ void LightscreenWindow::compressPng(QString fileName)
     connect(optipng, SIGNAL(finished(int, QProcess::ExitStatus)), optipng, SLOT(deleteLater()));
 
     optipng->start("optipng", QStringList() << fileName);
+    mOptimizeCount++;
   }
   else {
     // Otherwise start it detached from this process.
@@ -714,7 +745,7 @@ void LightscreenWindow::createTrayIcon()
   connect(goAction, SIGNAL(triggered()), this, SLOT(goToFolder()));
 
   QAction *quitAction = new QAction(tr("&Quit"), mTrayIcon);
-  connect(quitAction, SIGNAL(triggered()), this, SLOT(accept()));
+  connect(quitAction, SIGNAL(triggered()), this, SLOT(quit()));
 
   QMenu* screenshotMenu = new QMenu("Screenshot");
   screenshotMenu->addAction(screenAction);  
@@ -813,9 +844,11 @@ void LightscreenWindow::updateTrayIconTooltip()
 // Event handling
 bool LightscreenWindow::event(QEvent *event)
 {
-  if (event->type() == QEvent::Hide
-   || event->type() == QEvent::Close) {
+  if (event->type() == QEvent::Hide) {
     settings()->setValue("position", pos());
+  }
+  else if (event->type() == QEvent::Close) {
+    quit();
   }
   else if (event->type() == QEvent::Show) {    
     os::aeroGlass(this);

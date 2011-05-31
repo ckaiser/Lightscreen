@@ -33,6 +33,7 @@ public slots:
   void notify(Screenshot::Result result);
   void optimizationDone();
   void preview(Screenshot* screenshot);
+  void quit();
   void restoreNotification();
   void screenshotAction(int mode = 0);
   void screenshotActionTriggered(QAction* action);
@@ -40,13 +41,13 @@ public slots:
   void showOptions();
   void showScreenshotMenu();
   void showScreenshotMessage(Screenshot::Result result, QString fileName);
-  void showUploaderMessage(QString fileName, QString url);
   void showUploaderError();
+  void showUploaderMessage(QString fileName, QString url);
   void toggleVisibility(QSystemTrayIcon::ActivationReason reason = QSystemTrayIcon::DoubleClick);
+  void updateTrayIconTooltip();
   void updaterDone(bool result);
   void upload(QString fileName);
   void uploadLast();
-  void updateTrayIconTooltip();
   void windowHotkey();
   void windowPickerHotkey();
 
@@ -69,7 +70,7 @@ private:
   bool mHideTrigger;
   bool mReviveMain;
   bool mWasVisible;
-  bool mIsOptimizing;
+  int  mOptimizeCount;
   int  mLastMode;
   int  mLastMessage;
   QString mLastScreenshot;

@@ -12,19 +12,17 @@ Uploader::Uploader(QObject *parent) : QObject(parent)
 
 void Uploader::upload(QString fileName)
 {
-  qDebug() << "Uplader: upload me this: " << fileName;
-  if (!fileName.isEmpty()) {
+  if (!fileName.isEmpty() && !mScreenshots.contains(fileName)) {
     mImgur->upload(fileName);
+    mScreenshots.insert(fileName, "");
     mUploading++;
   }
 }
 
 void Uploader::uploaded(QString file, QString url)
 {
-  qDebug() << "Uploader: uploaded(" << file << ", " << url << ")";
-
+  mScreenshots[file] = url;
   mUploading--;
-  mScreenshots.insert(file, url);
   emit done(file, url);
 }
 
@@ -50,12 +48,10 @@ QString Uploader::lastUrl()
     url = i.previous().value();
 
     if (!url.isEmpty()) {
-      qDebug() << "Uploader: lastUrl is " << url;
       return url;
     }
   }
 
-  qDebug() << "Uploader: no go on lastUrl";
   return url;
 }
 
