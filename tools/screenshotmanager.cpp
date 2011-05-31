@@ -2,11 +2,19 @@
 #include "screenshot.h"
 
 #include <QSettings>
+#include <QApplication>
+#include <QFile>
 #include <QDebug>
 
 ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent), mCount(0)
 {
-  mSettings = new QSettings();
+  if (QFile::exists(qApp->applicationDirPath() + "/config.ini")) {
+    // Portable edition :]
+    mSettings = new QSettings(qApp->applicationDirPath() + "/config.ini", QSettings::IniFormat);
+  }
+  else {
+    mSettings = new QSettings();
+  }
 }
 
 ScreenshotManager::~ScreenshotManager()

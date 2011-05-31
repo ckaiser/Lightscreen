@@ -786,7 +786,6 @@ void LightscreenWindow::updaterDone(bool result)
 void LightscreenWindow::upload(QString fileName)
 {
   Uploader::instance()->upload(fileName);
-  tray
 }
 
 void LightscreenWindow::uploadLast()
