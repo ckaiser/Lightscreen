@@ -73,6 +73,7 @@ public:
   };
 
   Screenshot(QObject *parent, Screenshot::Options options);
+  ~Screenshot();
 
   Screenshot::Options options();
   QPixmap &pixmap();
@@ -84,6 +85,7 @@ public slots:
   void discard();
   void save();
   void setPixmap(QPixmap pixmap);
+  void confirmation();
 
 signals:
   void askConfirmation();
@@ -102,6 +104,8 @@ private:
   Screenshot::Options mOptions;
   QPixmap mPixmap;
   bool mPixmapDelay;
+  bool mUnloaded;
+  QString mUnloadFilename;
 
 };
 

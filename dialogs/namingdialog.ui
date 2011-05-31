@@ -48,6 +48,9 @@
             <property name="buttonSymbols">
              <enum>QAbstractSpinBox::PlusMinus</enum>
             </property>
+            <property name="suffix">
+             <string notr="true"/>
+            </property>
             <property name="minimum">
              <number>0</number>
             </property>
@@ -60,7 +63,7 @@
            </widget>
           </item>
           <item row="0" column="2">
-           <spacer name="horizontalSpacer_9">
+           <spacer name="horizontalSpacer_2">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -96,7 +99,7 @@
            </widget>
           </item>
           <item row="0" column="3">
-           <spacer name="horizontalSpacer_10">
+           <spacer name="horizontalSpacer">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -119,7 +122,7 @@
              <string notr="true">margin-left: 4px</string>
             </property>
             <property name="text">
-             <string> &lt;a href=&quot;http://lightscreen.sourceforge.net/help/date&quot;&gt;[?]&lt;/a&gt;</string>
+             <string notr="true"> &lt;a href=&quot;http://lightscreen.sourceforge.net/help/date&quot;&gt;[?]&lt;/a&gt;</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -133,12 +136,12 @@
             </property>
             <item>
              <property name="text">
-              <string>yyyy-MM-dd</string>
+              <string notr="true">yyyy-MM-dd</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>yyyy-MM-dd HH.mm.ss</string>
+              <string notr="true">yyyy-MM-dd HH.mm.ss</string>
              </property>
             </item>
            </widget>

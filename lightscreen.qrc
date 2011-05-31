@@ -19,6 +19,7 @@
         <file alias="screen">images/screen.png</file>
         <file alias="area">images/area.png</file>
         <file alias="window">images/window.png</file>
+        <file alias="imgur">images/imgur.png</file>
     </qresource>
     <qresource prefix="/backgrounds">
         <file alias="checkerboard">images/checkerboard.png</file>
@@ -26,11 +27,11 @@
     <qresource prefix="/translations">
         <file alias="Chinese (Simplified)">translations/chinese_simplified.qm</file>
         <file alias="Dutch">translations/dutch.qm</file>
-        <file alias="Italian">translations/italiano.qm</file>
         <file alias="Japanese">translations/japanese.qm</file>
         <file alias="Polish">translations/polish.qm</file>
-        <file alias="Portuguese">translations/portugues.qm</file>
         <file alias="Russian">translations/russian.qm</file>
         <file alias="Spanish">translations/spanish.qm</file>
+        <file alias="Portuguese">translations/portuguese.qm</file>
+        <file alias="Italian">translations/italian.qm</file>
     </qresource>
 </RCC>

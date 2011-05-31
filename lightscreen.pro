@@ -13,7 +13,9 @@ HEADERS += tools/os.h \
     tools/qtwin.h \
     dialogs/updaterdialog.h \
     dialogs/screenshotdialog.h \
-    dialogs/namingdialog.h
+    dialogs/namingdialog.h \
+    tools/qtimgur.h \
+    tools/uploader.h
 SOURCES += tools/os.cpp \
     updater/updater.cpp \
     dialogs/areadialog.cpp \
@@ -28,7 +30,9 @@ SOURCES += tools/os.cpp \
     tools/qtwin.cpp \
     dialogs/updaterdialog.cpp \
     dialogs/screenshotdialog.cpp \
-    dialogs/namingdialog.cpp
+    dialogs/namingdialog.cpp \
+    tools/qtimgur.cpp \
+    tools/uploader.cpp
 FORMS += dialogs/optionsdialog.ui \
     lightscreenwindow.ui \
     dialogs/namingdialog.ui
@@ -36,20 +40,21 @@ RESOURCES += lightscreen.qrc
 TRANSLATIONS += translations/untranslated.ts \
                 translations/spanish.ts \
                 translations/russian.ts \
-                translations/portugues.ts \
+                translations/portuguese.ts \
                 translations/polish.ts \
                 translations/japanese.ts \
-                translations/italiano.ts \
+                translations/italian.ts \
                 translations/dutch.ts
 RC_FILE += lightscreen.rc
 CODECFORSRC = UTF-8
 LIBS += libgcc
-QT += network \
-    core \
-    gui
+QT += network core gui xml
 win32:LIBS += libgdi32
 include($$PWD/tools/globalshortcut/globalshortcut.pri)
 include($$PWD/tools/qtsingleapplication/qtsingleapplication.pri)
 
-OTHER_FILES += TODO.txt \
-    TODO.txt
+OTHER_FILES += TODO.txt
+
+
+
+

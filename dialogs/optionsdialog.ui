@@ -121,9 +121,8 @@
               <property name="whatsThis">
                <string>The naming is inserted after the prefix and is what makes each screenshot file unique to avoid overwriting.&lt;br /&gt;
 &lt;b&gt;Numeric&lt;/b&gt;: inserts a number in sequence, 1, 2, 3..&lt;br /&gt;
-&lt;b&gt;Date&lt;/b&gt;: inserts the current date, in the form of dd-MM-yyyy..&lt;br /&gt;
-&lt;b&gt;Date &amp;amp; Time&lt;/b&gt;: inserts the current date and time, in the form of dd-MM-yyyy hh.mm.ss..&lt;br /&gt;
-&lt;b&gt;Timestamp&lt;/b&gt;: inserts a unique number (a Unix timestamp, the number of seconds passed since 1970-1-1 00:00:00) that corresponds with the current time.&lt;br /&gt;
+&lt;b&gt;Date&lt;/b&gt;: inserts the current date and time, in the form of dd-MM-yyyy, click the &quot;wrench&quot; button on the right to customize the format.&lt;br /&gt;
+&lt;b&gt;Timestamp&lt;/b&gt;: inserts a number, a Unix timestamp, which is the number of seconds passed since 1970-1-1 00:00:00.&lt;br /&gt;
 
 </string>
               </property>
@@ -563,7 +562,7 @@ Quality is related to file size and of course to readability and overall quality
             <x>0</x>
             <y>0</y>
             <width>358</width>
-            <height>574</height>
+            <height>597</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -765,6 +764,13 @@ Quality is related to file size and of course to readability and overall quality
                <widget class="QCheckBox" name="areaAutocloseCheckBox">
                 <property name="text">
                  <string>Snap area screenshots automatically (no resizing).</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="uploadCheckBox">
+                <property name="text">
+                 <string>Upload all my screenshots automatically.</string>
                 </property>
                </widget>
               </item>
@@ -1072,6 +1078,7 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
         <widget class="QLabel" name="versionLabel">
          <property name="font">
           <font>
+           <pointsize>12</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
@@ -1193,8 +1200,8 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
      <y>511</y>
     </hint>
     <hint type="destinationlabel">
-     <x>219</x>
-     <y>510</y>
+     <x>210</x>
+     <y>529</y>
     </hint>
    </hints>
   </connection>
@@ -1209,8 +1216,8 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
      <y>511</y>
     </hint>
     <hint type="destinationlabel">
-     <x>311</x>
-     <y>510</y>
+     <x>302</x>
+     <y>529</y>
     </hint>
    </hints>
   </connection>

@@ -28,8 +28,10 @@ public slots:
   void cleanup(Screenshot::Options options);
   bool closingWithoutTray();
   void goToFolder();
-  void messageReceived(const QString message);
   void messageClicked();
+  void messageReceived(const QString message);
+  void notify(Screenshot::Result result);
+  void optimizationDone();
   void preview(Screenshot* screenshot);
   void restoreNotification();
   void screenshotAction(int mode = 0);
@@ -38,9 +40,13 @@ public slots:
   void showOptions();
   void showScreenshotMenu();
   void showScreenshotMessage(Screenshot::Result result, QString fileName);
-  void notify(Screenshot::Result result);
+  void showUploaderMessage(QString fileName, QString url);
+  void showUploaderError();
   void toggleVisibility(QSystemTrayIcon::ActivationReason reason = QSystemTrayIcon::DoubleClick);
   void updaterDone(bool result);
+  void upload(QString fileName);
+  void uploadLast();
+  void updateTrayIconTooltip();
   void windowHotkey();
   void windowPickerHotkey();
 
@@ -65,6 +71,7 @@ private:
   bool mWasVisible;
   bool mIsOptimizing;
   int  mLastMode;
+  int  mLastMessage;
   QString mLastScreenshot;
   QPointer<QSystemTrayIcon> mTrayIcon;
   Ui::LightscreenWindowClass ui;

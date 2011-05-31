@@ -17,7 +17,24 @@
 
 #include "os.h"
 
-Screenshot::Screenshot(QObject *parent, Screenshot::Options options): QObject(parent), mOptions(options), mPixmapDelay(false) {
+Screenshot::Screenshot(QObject *parent, Screenshot::Options options):
+  QObject(parent),
+  mOptions(options),
+  mPixmapDelay(false),
+  mUnloaded(false),
+  mUnloadFilename()
+{
+  // Here be crickets
+}
+
+Screenshot::~Screenshot()
+{
+  qDebug() << "~Screenshot(), where \"" << mUnloadFilename << "\" is the unload filename.";
+
+  if (mUnloaded) {
+    QFile::remove(mUnloadFilename);
+    qDebug() << "Deleted!";
+  }
 }
 
 Screenshot::Options Screenshot::options()
@@ -142,13 +159,6 @@ QString Screenshot::extension()
 
 void Screenshot::selectedArea()
 {
-  static bool alreadySelecting = false; // Prevents multiple AreaDialog instances -- [Is this even possible anymore?]
-
-  if (alreadySelecting)
-    return;
-
-  alreadySelecting = true;
-
   grabDesktop();
 
   if (mPixmap.isNull())
@@ -156,8 +166,6 @@ void Screenshot::selectedArea()
 
   AreaDialog selector(this);
   int result = selector.exec();
-
-  alreadySelecting = false;
 
   if (result == QDialog::Accepted) {
     mPixmap = mPixmap.copy(selector.resultRect());
@@ -232,7 +240,7 @@ void Screenshot::take()
     confirm(false);
   }
   else {
-    emit askConfirmation();
+    confirmation();
   }
 }
 
@@ -294,14 +302,20 @@ void Screenshot::save()
 
   fileName = name + extension();
 
-  if (fileName.isEmpty()) {
-    result = Screenshot::Fail;
-  }
-  else if (mPixmap.save(fileName, 0, mOptions.quality)) {
-    result = Screenshot::Success;
-  }
+  if (mOptions.file) {
+    if (fileName.isEmpty()) {
+      result = Screenshot::Fail;
+    }
+    else if (mUnloaded) {
+      result = (QFile::rename(mUnloadFilename, fileName)) ? Screenshot::Success : Screenshot::Fail;
+    }
+    else if (mPixmap.save(fileName, 0, mOptions.quality)) {
+      result = Screenshot::Success;
+    }
+    else {
+      result = Screenshot::Fail;
+    }
 
-  if (mOptions.file) { // Windows only
     os::addToRecentDocuments(fileName);
   }
 
@@ -321,12 +335,28 @@ void Screenshot::save()
 void Screenshot::setPixmap(QPixmap pixmap)
 {
   mPixmap = pixmap;
-  pixmap = QPixmap(); // ??
 
   if (mPixmap.isNull()) {
     emit confirm(false);
   }
   else {
-    emit askConfirmation();
+    confirmation();
+  }
+}
+
+void Screenshot::confirmation()
+{
+  emit askConfirmation();
+
+  if (!mOptions.file) {
+    return;
+  }
+
+  // Unloading the pixmap to reduce memory usage during previews
+  mUnloadFilename = mOptions.directory.path() + QDir::separator() + QString("lstemp.%1%2").arg(qrand() * qrand() + QDateTime::currentDateTime().toTime_t()).arg(extension());
+  mUnloaded = mPixmap.save(mUnloadFilename, 0, mOptions.quality);
+
+  if (mUnloaded) {
+    mPixmap = QPixmap();
   }
 }

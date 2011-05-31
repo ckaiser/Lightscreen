@@ -2,56 +2,13 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="nl">
 <context>
-    <name>AboutDialog</name>
-    <message>
-        <source>Version %1</source>
-        <translation type="obsolete">Versie %1</translation>
-    </message>
-</context>
-<context>
-    <name>AboutDialogClass</name>
-    <message>
-        <source>About - Lightscreen</source>
-        <translation type="obsolete">Over Lightscreen</translation>
-    </message>
-    <message>
-        <source>Lightscreen is a simple tool to take screenshots, designed to be customizable and lightweight.&lt;br&gt;&lt;br&gt;
-Created by &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/a&gt;, using the &lt;a href=&quot;#aboutqt&quot;&gt;Qt toolkit&lt;/a&gt; for the graphical user interface.&lt;br&gt;&lt;br&gt;
-Released under the &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.html&quot;&gt;GNU General Public License&lt;/b&gt;.</source>
-        <translation type="obsolete">Lightscreen is een makkelijk programma om schermafdrukken te maken. &lt;br&gt;&lt;br&gt;
-&lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/a&gt;ontwikkelde dit programma. De grafische interface gebruikt &lt;a href=&quot;#aboutqt&quot;&gt;Qt&lt;/a&gt;.&lt;br&gt;&lt;br&gt;
-Lightscreen is beschikbaar onder de &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.html&quot;&gt;GNU General Public License&lt;/b&gt;.</translation>
-    </message>
-    <message>
-        <source>&lt;a href=&quot;https://sourceforge.net/projects/lightscreen/&quot;&gt;Visit Sourceforge project site&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://lightscreen.sourceforge.net/&quot;&gt;Visit Lightscreen home page&lt;/a&gt;</source>
-        <translation type="obsolete">&lt;a href=&quot;https://sourceforge.net/projects/lightscreen/&quot;&gt;Projectsite op Sourceforge bezoeken&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://lightscreen.sourceforge.net/&quot;&gt;Website van Lightscreen bezoeken&lt;/a&gt;</translation>
-    </message>
-</context>
-<context>
     <name>AreaDialog</name>
     <message>
-        <location filename="../dialogs/areadialog.cpp" line="127"/>
-        <source>Lightscreen screen area mode:
-Use your mouse to draw a rectangle to screenshot or exit pressing
-any key or using the right or middle mouse buttons.</source>
-        <translation type="unfinished">Schermafdruk van gebied:
-Teken een rechthoek met uw muis om een schermafdruk te maken. U kunt annuleren door
-op een toets te drukken of door te klikken met de rechter- of middelmuisknop.</translation>
-    </message>
-</context>
-<context>
-    <name>AreaSelector</name>
-    <message>
-        <source>Lightscreen screen area mode:
-Use your mouse to draw a rectangle to screenshot or exit pressing
-any key or using the right or middle mouse buttons.</source>
-        <translation type="obsolete">Schermafdruk van gebied:
-Teken een rechthoek met uw muis om een schermafdruk te maken. U kunt annuleren door
-op een toets te drukken of door te klikken met de rechter- of middelmuisknop.</translation>
-    </message>
-    <message>
-        <source>%1 x %2 px </source>
-        <translation type="obsolete">%1 x %2 px </translation>
+        <location filename="../dialogs/areadialog.cpp" line="135"/>
+        <source>Lightscreen area mode:
+Use your mouse to draw a rectangle to capture.
+Press any key or right click to exit.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -75,37 +32,32 @@ op een toets te drukken of door te klikken met de rechter- of middelmuisknop.</t
 <context>
     <name>LightscreenWindow</name>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="97"/>
-        <location filename="../lightscreenwindow.cpp" line="258"/>
-        <location filename="../lightscreenwindow.cpp" line="482"/>
-        <location filename="../lightscreenwindow.cpp" line="682"/>
+        <location filename="../lightscreenwindow.cpp" line="109"/>
+        <location filename="../lightscreenwindow.cpp" line="263"/>
+        <location filename="../lightscreenwindow.cpp" line="484"/>
+        <location filename="../lightscreenwindow.cpp" line="687"/>
         <source>Lightscreen</source>
         <translation>Lightscreen</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="98"/>
+        <location filename="../lightscreenwindow.cpp" line="110"/>
         <source>You have chosen to hide Lightscreen when there&apos;s no system tray icon, so you will not be able to access the program &lt;b&gt;unless you have selected a hotkey to do so&lt;/b&gt;.&lt;br&gt;What do you want to do?</source>
         <translation>U koos ervoor om Lightscreen te verbergen terwijl er geen pictogram is in het systeemvak. Hierdoor kunt u het programma alleen openen &lt;b&gt;als u een sneltoets hebt ingesteld&lt;/b&gt;.&lt;br&gt;Wat wilt u doen?</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="101"/>
+        <location filename="../lightscreenwindow.cpp" line="115"/>
         <source>Hide but enable tray</source>
         <translation>Verbergen maar pictogram in systeemvak inschakelen</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="103"/>
+        <location filename="../lightscreenwindow.cpp" line="117"/>
         <source>Hide and don&apos;t warn</source>
         <translation>Verbergen en niet waarschuwen</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="105"/>
+        <location filename="../lightscreenwindow.cpp" line="119"/>
         <source>Just hide</source>
         <translation>Enkel verbergen</translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="385"/>
-        <source>Saved to %1%2</source>
-        <translation>Opgeslagen naar %1%2</translation>
     </message>
     <message>
         <location filename="../lightscreenwindow.cpp" line="391"/>
@@ -113,26 +65,31 @@ op een toets te drukken of door te klikken met de rechter- of middelmuisknop.</t
         <translation>Er werd geen schermafdruk gemaakt</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="392"/>
-        <source>There was an error or you did not select a valid area.</source>
-        <translation>Er was een fout of u selecteerde een ongeldig gebied.</translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="407"/>
-        <location filename="../lightscreenwindow.cpp" line="612"/>
+        <location filename="../lightscreenwindow.cpp" line="406"/>
+        <location filename="../lightscreenwindow.cpp" line="616"/>
         <source>Active &amp;Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="410"/>
-        <location filename="../lightscreenwindow.cpp" line="615"/>
+        <location filename="../lightscreenwindow.cpp" line="409"/>
+        <location filename="../lightscreenwindow.cpp" line="619"/>
         <source>&amp;Pick Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="442"/>
-        <source>Sucess!</source>
-        <translation>Gelukt!</translation>
+        <location filename="../lightscreenwindow.cpp" line="387"/>
+        <source>Saved to &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="392"/>
+        <source>An error occurred.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="443"/>
+        <source>Success!</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../lightscreenwindow.cpp" line="447"/>
@@ -140,93 +97,90 @@ op een toets te drukken of door te klikken met de rechter- of middelmuisknop.</t
         <translation>Mislukt!</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="462"/>
+        <location filename="../lightscreenwindow.cpp" line="450"/>
+        <source>Cancelled!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="466"/>
         <source>Some hotkeys could not be registered, they might already be in use</source>
         <translation>Sommige sneltoetsen konden niet geregistreerd worden en zijn mogelijk al in gebruik</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="465"/>
+        <location filename="../lightscreenwindow.cpp" line="469"/>
         <source>&lt;br&gt;The failed hotkeys are the following:</source>
         <translation>&lt;b&gt;Dit zijn de mislukte sneltoetsen:</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="476"/>
+        <location filename="../lightscreenwindow.cpp" line="478"/>
         <source>&lt;br&gt;The failed hotkey is &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>&lt;br&gt;De mislukte sneltoets is &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="479"/>
+        <location filename="../lightscreenwindow.cpp" line="481"/>
         <source>&lt;br&gt;&lt;i&gt;What do you want to do?&lt;/i&gt;</source>
         <translation>&lt;br&gt;&lt;i&gt;Wat wilt u doen?&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="485"/>
+        <location filename="../lightscreenwindow.cpp" line="487"/>
         <source>Change</source>
         <translation>Veranderen</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="486"/>
+        <location filename="../lightscreenwindow.cpp" line="488"/>
         <source>Disable</source>
         <translation>Uitzetten</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="487"/>
+        <location filename="../lightscreenwindow.cpp" line="489"/>
         <source>Quit</source>
         <translation>Afsluiten</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="683"/>
+        <location filename="../lightscreenwindow.cpp" line="688"/>
         <source>There&apos;s a new version of Lightscreen available.&lt;br&gt;Would you like to see more information?&lt;br&gt;(&lt;em&gt;You can turn this notification off&lt;/em&gt;)</source>
         <translation>Er is een nieuwe versie van Lightscreen beschikbaar.&lt;br&gt;Wilt u meer informatie?&lt;br&gt;(&lt;em&gt;U kunt deze melding uitschakelen&lt;/em&gt;)</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="687"/>
+        <location filename="../lightscreenwindow.cpp" line="692"/>
         <source>Turn Off</source>
         <translation>Uitschakelen</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="688"/>
+        <location filename="../lightscreenwindow.cpp" line="693"/>
         <source>Remind Me Later</source>
         <translation>Herinner mij later</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="404"/>
-        <location filename="../lightscreenwindow.cpp" line="609"/>
+        <location filename="../lightscreenwindow.cpp" line="403"/>
+        <location filename="../lightscreenwindow.cpp" line="613"/>
         <source>&amp;Screen</source>
         <translation>&amp;Bureaublad</translation>
     </message>
     <message>
-        <source>&amp;Window</source>
-        <translation type="obsolete">&amp;Venster</translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="413"/>
-        <location filename="../lightscreenwindow.cpp" line="618"/>
+        <location filename="../lightscreenwindow.cpp" line="412"/>
+        <location filename="../lightscreenwindow.cpp" line="622"/>
         <source>&amp;Area</source>
         <translation>&amp;Gebied</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="416"/>
-        <location filename="../lightscreenwindow.cpp" line="632"/>
+        <location filename="../lightscreenwindow.cpp" line="415"/>
+        <location filename="../lightscreenwindow.cpp" line="636"/>
         <source>&amp;Go to Folder</source>
         <translation>Ga naar &amp;map</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="606"/>
+        <location filename="../lightscreenwindow.cpp" line="610"/>
         <source>Show&amp;/Hide</source>
         <translation>&amp;Tonen/Verbergen</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="629"/>
+        <location filename="../lightscreenwindow.cpp" line="633"/>
         <source>View &amp;Options</source>
         <translation>&amp;Voorkeuren</translation>
     </message>
     <message>
-        <source>&amp;About Lightscreen</source>
-        <translation type="obsolete">&amp;Over Lightscreen</translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="635"/>
+        <location filename="../lightscreenwindow.cpp" line="639"/>
         <source>&amp;Quit</source>
         <translation>&amp;Afsluiten</translation>
     </message>
@@ -239,32 +193,32 @@ op een toets te drukken of door te klikken met de rechter- of middelmuisknop.</t
         <translation>Lightscreen</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.ui" line="35"/>
+        <location filename="../lightscreenwindow.ui" line="41"/>
         <source>Screenshot</source>
         <translation>&amp;Schermafdruk</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.ui" line="54"/>
+        <location filename="../lightscreenwindow.ui" line="66"/>
         <source>Configure Lightscreen</source>
         <translation>Lightscreen instellen</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.ui" line="57"/>
+        <location filename="../lightscreenwindow.ui" line="69"/>
         <source>&amp;Options</source>
         <translation>&amp;Voorkeuren</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.ui" line="76"/>
+        <location filename="../lightscreenwindow.ui" line="94"/>
         <source>Hide Lightscreen </source>
         <translation>Lightscreen verbergen </translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.ui" line="82"/>
+        <location filename="../lightscreenwindow.ui" line="100"/>
         <source>&amp;Hide</source>
         <translation>Verber&amp;gen</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.ui" line="104"/>
+        <location filename="../lightscreenwindow.ui" line="128"/>
         <source>&amp;Quit</source>
         <translation>&amp;Aflsuiten</translation>
     </message>
@@ -282,27 +236,12 @@ op een toets te drukken of door te klikken met de rechter- of middelmuisknop.</t
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/namingdialog.ui" line="94"/>
+        <location filename="../dialogs/namingdialog.ui" line="97"/>
         <source>Date Format:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/namingdialog.ui" line="122"/>
-        <source> &lt;a href=&quot;http://lightscreen.sourceforge.net/help/date&quot;&gt;[?]&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/namingdialog.ui" line="136"/>
-        <source>yyyy-MM-dd</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/namingdialog.ui" line="141"/>
-        <source>yyyy-MM-dd HH.mm.ss</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/namingdialog.ui" line="161"/>
+        <location filename="../dialogs/namingdialog.ui" line="164"/>
         <source>Flip naming.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -310,77 +249,74 @@ op een toets te drukken of door te klikken met de rechter- of middelmuisknop.</t
 <context>
     <name>OptionsDialog</name>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="67"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="53"/>
+        <source>Restore Defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.cpp" line="69"/>
         <source>Version %1</source>
         <translation type="unfinished">Versie %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="142"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="143"/>
         <source>Hotkey conflict</source>
         <translation>Conflicterende sneltoetsen</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="142"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="143"/>
         <source>You have assigned the same hotkeys to more than one action.</source>
         <translation>U hebt dezelfde sneltoetsen toegewezen aan verschillende acties.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="147"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="148"/>
         <source>Filename character error</source>
         <translation>Tekenfout in bestandsnaam</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="147"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="148"/>
         <source>The filename can&apos;t contain any of the following characters: ? : \ / * &quot; &lt; &gt; |</source>
         <translation>De bestandsnaam kan volgende tekens niet bevatten: ? : \ / * &quot; &lt; &gt; |</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="152"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="153"/>
         <source>Final Destination</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="152"/>
-        <source>You can&apos;t take screenshots unless you enable file saving or the clipboard.</source>
+        <location filename="../dialogs/optionsdialog.cpp" line="153"/>
+        <source>You can&apos;t take screenshots unless you enable either file saving or the clipboard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="163"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="164"/>
         <source>Select where you want to save the screenshots</source>
         <translation>Selecteer waar u de schermafdrukken wilt opslaan</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="181"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="182"/>
         <source>Lightscreen - Options</source>
         <translation>Voorkeuren</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="182"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="183"/>
         <source>Restoring the default options will cause you to lose all of your current configuration.</source>
         <translation>U zult uw huidige voorkeuren verliezen als u de standaardwaarden herstelt.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="185"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="186"/>
         <source>Restore</source>
         <translation>Herstellen</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="186"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="187"/>
         <source>Don&apos;t Restore</source>
         <translation>Niet herstellen</translation>
-    </message>
-    <message>
-        <source> (OptiPNG not found)</source>
-        <translation type="obsolete"> (OptiPNG werd niet gevonden)</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="14"/>
         <source>Options - Lightscreen</source>
         <translation>Voorkeuren</translation>
-    </message>
-    <message>
-        <source>&amp;General</source>
-        <translation type="obsolete">&amp;Algemeen</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="36"/>
@@ -408,189 +344,168 @@ op een toets te drukken of door te klikken met de rechter- of middelmuisknop.</t
         <translation>Het voorvoegsel zal ingevoegd worden voor de &lt;em&gt;Naamgeving&lt;/em&gt; in het bestand met de schermafdruk. Het wordt gewoonlijk gebruikt om bestanden te onderscheiden. U kunt dit leeg laten.</translation>
     </message>
     <message>
-        <source>The naming is inserted after the prefix and is what makes each screenshot file unique to avoid overwriting.&lt;br /&gt;
-&lt;b&gt;Numeric&lt;/b&gt;: inserts a number in sequence, 1, 2, 3.
-&lt;b&gt;Timestamp&lt;/b&gt;: inserts a unique number (a Unix timestamp) that corresponds with the current time.
-&lt;b&gt;Date&lt;/b&gt;: inserts the current date and time, in the form of dd-MM-yyyy hh.mm.ss.</source>
-        <translation type="obsolete">De naamgeving wordt ingevoerd na het voorvoegsel en maakt elk bestand uniek zodat het niet wordt overschreven.&lt;br/&gt;
-&lt;b&gt;Numeriek&lt;/b&gt;: voegt een volgnummer in, 1, 2, 3.
-&lt;b&gt;Tijd&lt;/b&gt;: voegt een uniek nummer in dat overeenkomt met de huidige tijd.
-&lt;b&gt;Datum&lt;/b&gt;: voegt de huidige datum en tijd in (formaat: dd-MM-yyyy hh.mm.ss).</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="132"/>
+        <location filename="../dialogs/optionsdialog.ui" line="131"/>
         <source>(number)</source>
         <translation>(nummer)</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="137"/>
+        <location filename="../dialogs/optionsdialog.ui" line="136"/>
         <source>(date)</source>
         <translation>(datum)</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="142"/>
+        <location filename="../dialogs/optionsdialog.ui" line="141"/>
         <source>(timestamp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="168"/>
+        <location filename="../dialogs/optionsdialog.ui" line="167"/>
         <source>The file format for the screenshot</source>
         <translation>Het bestandsformaat voor de schermafdruk</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="171"/>
+        <location filename="../dialogs/optionsdialog.ui" line="170"/>
         <source>F&amp;ormat:</source>
         <translation>&amp;Formaat:</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="185"/>
+        <location filename="../dialogs/optionsdialog.ui" line="184"/>
         <source>PNG</source>
         <translation>PNG</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="190"/>
+        <location filename="../dialogs/optionsdialog.ui" line="189"/>
         <source>JPG</source>
         <translation>JPG</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="195"/>
+        <location filename="../dialogs/optionsdialog.ui" line="194"/>
         <source>BMP</source>
         <translation>BMP</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="267"/>
+        <location filename="../dialogs/optionsdialog.ui" line="266"/>
         <source>&lt;i&gt;Preview&lt;/i&gt;:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="203"/>
+        <location filename="../dialogs/optionsdialog.ui" line="202"/>
         <source>&amp;Quality:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="122"/>
-        <source>The naming is inserted after the prefix and is what makes each screenshot file unique to avoid overwriting.&lt;br /&gt;
-&lt;b&gt;Numeric&lt;/b&gt;: inserts a number in sequence, 1, 2, 3..&lt;br /&gt;
-&lt;b&gt;Date&lt;/b&gt;: inserts the current date, in the form of dd-MM-yyyy..&lt;br /&gt;
-&lt;b&gt;Date &amp;amp; Time&lt;/b&gt;: inserts the current date and time, in the form of dd-MM-yyyy hh.mm.ss..&lt;br /&gt;
-&lt;b&gt;Timestamp&lt;/b&gt;: inserts a unique number (a Unix timestamp, the number of seconds passed since 1970-1-1 00:00:00) that corresponds with the current time.&lt;br /&gt;
-
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="147"/>
+        <location filename="../dialogs/optionsdialog.ui" line="146"/>
         <source>(none)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="306"/>
+        <location filename="../dialogs/optionsdialog.ui" line="305"/>
         <source>System Startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="359"/>
+        <location filename="../dialogs/optionsdialog.ui" line="358"/>
         <source>Hotkeys</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="365"/>
+        <location filename="../dialogs/optionsdialog.ui" line="364"/>
         <source>Captures</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="409"/>
+        <location filename="../dialogs/optionsdialog.ui" line="408"/>
         <source>Capture the current window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="425"/>
+        <location filename="../dialogs/optionsdialog.ui" line="424"/>
         <source>Capture a chosen window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="467"/>
+        <location filename="../dialogs/optionsdialog.ui" line="466"/>
         <source>Lightscreen Control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="531"/>
+        <location filename="../dialogs/optionsdialog.ui" line="530"/>
         <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="579"/>
+        <location filename="../dialogs/optionsdialog.ui" line="578"/>
         <source>Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="706"/>
+        <location filename="../dialogs/optionsdialog.ui" line="705"/>
         <source>Screenshots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="715"/>
+        <location filename="../dialogs/optionsdialog.ui" line="714"/>
         <source>Choose where to save each screenshot (&quot;&amp;Save as&quot;).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="760"/>
+        <location filename="../dialogs/optionsdialog.ui" line="759"/>
         <source>Replace screenshots when there&apos;s an existing file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="776"/>
+        <location filename="../dialogs/optionsdialog.ui" line="775"/>
         <source>D&amp;elay:</source>
         <translation>V&amp;ertraging:</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="789"/>
+        <location filename="../dialogs/optionsdialog.ui" line="788"/>
         <source>Selecting anything other than 0 in this option will cause the program to &lt;b&gt;wait&lt;/b&gt; that amount of seconds before taking the screenshot.</source>
         <translation>Het programma zal het hier opgegeven aantal seconden &lt;b&gt;wachten&lt;/b&gt; voor de schermafdruk wordt gemaakt.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="792"/>
+        <location filename="../dialogs/optionsdialog.ui" line="791"/>
         <source>none</source>
         <translation>geen</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="801"/>
-        <location filename="../dialogs/optionsdialog.ui" line="955"/>
+        <location filename="../dialogs/optionsdialog.ui" line="800"/>
+        <location filename="../dialogs/optionsdialog.ui" line="954"/>
         <source> seconds</source>
         <translation> seconden</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="847"/>
+        <location filename="../dialogs/optionsdialog.ui" line="846"/>
         <source>Maximum Size:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="898"/>
+        <location filename="../dialogs/optionsdialog.ui" line="897"/>
         <source>Position:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="968"/>
+        <location filename="../dialogs/optionsdialog.ui" line="967"/>
         <source> and </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="982"/>
+        <location filename="../dialogs/optionsdialog.ui" line="981"/>
         <source>save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="987"/>
+        <location filename="../dialogs/optionsdialog.ui" line="986"/>
         <source>cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1055"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1054"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1061"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1060"/>
         <source>Lightscreen is a simple tool to take screenshots, designed to be customizable and lightweight.&lt;br&gt;&lt;br&gt;
 Created by &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/a&gt;, using the &lt;a href=&quot;#aboutqt&quot;&gt;Qt toolkit&lt;/a&gt; for the graphical user interface.&lt;br&gt;&lt;br&gt;
 Released under the &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.html&quot;&gt;GNU General Public License&lt;/a&gt;.&lt;br&gt;&lt;br&gt;
@@ -603,83 +518,67 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
         <translation type="unfinished">&lt;a href=&quot;https://sourceforge.net/projects/lightscreen/&quot;&gt;Projectsite op Sourceforge bezoeken&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://lightscreen.sourceforge.net/&quot;&gt;Website van Lightscreen bezoeken&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="318"/>
+        <location filename="../dialogs/optionsdialog.ui" line="317"/>
         <source>&amp;Run Lightscreen at system startup.</source>
         <translation>&amp;Lightscreen opstarten bij systeemstart.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="346"/>
+        <location filename="../dialogs/optionsdialog.ui" line="345"/>
         <source>H&amp;ide the main window.</source>
         <translation>&amp;Hoofdvenster verbergen.</translation>
     </message>
     <message>
-        <source>&amp;Hotkeys</source>
-        <translation type="obsolete">&amp;Sneltoetsen</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="386"/>
+        <location filename="../dialogs/optionsdialog.ui" line="385"/>
         <source>Capture the screen</source>
         <translation>Schermafdruk van b&amp;ureaublad</translation>
     </message>
     <message>
-        <source>Capture a window</source>
-        <translation type="obsolete">Schermafdruk van v&amp;enster</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="441"/>
+        <location filename="../dialogs/optionsdialog.ui" line="440"/>
         <source>Capture a screen area</source>
         <translation>Schermafdruk van ge&amp;bied</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="504"/>
+        <location filename="../dialogs/optionsdialog.ui" line="503"/>
         <source>Open the directory</source>
         <translation>&amp;Map openen</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="488"/>
+        <location filename="../dialogs/optionsdialog.ui" line="487"/>
         <source>Open the program window</source>
         <translation>&amp;Programmavenster openen</translation>
     </message>
     <message>
-        <source>&amp;Options</source>
-        <translation type="obsolete">&amp;Voorkeuren</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="591"/>
+        <location filename="../dialogs/optionsdialog.ui" line="590"/>
         <source>Sho&amp;w a system tray icon.</source>
         <translation>&amp;Pictogram tonen in systeemvak.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="598"/>
+        <location filename="../dialogs/optionsdialog.ui" line="597"/>
         <source>&amp;Hide Lightscreen while taking a screenshot.</source>
         <translation>&amp;Lightscreen verbergen bij aanmaak schermafdruk.</translation>
     </message>
     <message>
-        <source>Periodically check for updates.</source>
-        <translation type="obsolete">Automatisch &amp;controleren voor updates.</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="743"/>
+        <location filename="../dialogs/optionsdialog.ui" line="742"/>
         <source>&amp;Magnify around the mouse in Area mode.</source>
         <translation>Vergr&amp;ootglas tonen bij schermafdruk van gebied.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="661"/>
+        <location filename="../dialogs/optionsdialog.ui" line="660"/>
         <source>&amp;Language:</source>
         <translation>&amp;Taal:</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="678"/>
+        <location filename="../dialogs/optionsdialog.ui" line="677"/>
         <source>Click here to go to the Lightscreen homepage to learn more about translations.</source>
         <translation>Klik hier om de website van Lightscreen te bezoeken om meer te weten te komen over vertalingen.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="681"/>
+        <location filename="../dialogs/optionsdialog.ui" line="680"/>
         <source>&lt;a href=&quot;http://lightscreen.sourceforge.net/translation&quot;&gt;More information..&lt;/a&gt;</source>
         <translation>&lt;a href=&quot;http://lightscreen.sourceforge.net/translation&quot;&gt;Meer informatie.&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="617"/>
+        <location filename="../dialogs/optionsdialog.ui" line="616"/>
         <source>&amp;Notify with:</source>
         <translation>&amp;Notificeer met:</translation>
     </message>
@@ -689,138 +588,132 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="627"/>
+        <location filename="../dialogs/optionsdialog.ui" line="626"/>
         <source>Shows a completion message once the screenshot is saved, clicking this message takes you to the directory where the screenshot was saved.</source>
         <translation>Toont een bericht wanneer de schermafdruk is opgeslagen. Als u op dit bericht klikt, dan wordt de map geöpend waarin de schermafdruk werd opgeslagen.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="630"/>
+        <location filename="../dialogs/optionsdialog.ui" line="629"/>
         <source>Tray icon Popup</source>
         <translation>Bericht bij systeemvakpictogram</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="637"/>
+        <location filename="../dialogs/optionsdialog.ui" line="636"/>
         <source>&amp;Sound cue</source>
         <translation>Gel&amp;uidsnotificatie</translation>
     </message>
     <message>
-        <source>Screenshot &amp;Quality:</source>
-        <translation type="obsolete">&amp;Kwaliteit van de schermafdruk:</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="216"/>
+        <location filename="../dialogs/optionsdialog.ui" line="215"/>
         <source>This slider goes from 0 to 100. 100 being the highest quality and 0 the lowest.&lt;br&gt;
 Quality is related to file size and of course to readability and overall quality of the image.</source>
         <translation>Deze schuifbalk gaat van 0 (laagst) tot 100 (hoogst).&lt;br&gt;
 De kwaliteit heeft invloed op de bestandsgrootte en de duidelijkheid van de schermafdruk.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="246"/>
+        <location filename="../dialogs/optionsdialog.ui" line="245"/>
         <source>100</source>
         <translation>100</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="258"/>
+        <location filename="../dialogs/optionsdialog.ui" line="257"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <source>&amp;Advanced</source>
-        <translation type="obsolete">&amp;Geavanceerd</translation>
-    </message>
-    <message>
-        <source>Choose where and how to &amp;save each screenshot (&quot;&amp;Save as&quot;).</source>
-        <translation type="obsolete">Steeds &quot;&amp;Opslaan als&quot;-venster tonen.</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="722"/>
+        <location filename="../dialogs/optionsdialog.ui" line="721"/>
         <source>&amp;Copy the screenshot to the clipboard.</source>
         <translation>Schermafdruk &amp;kopiëren naar het klipbord.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="736"/>
+        <location filename="../dialogs/optionsdialog.ui" line="735"/>
         <source>Inc&amp;lude the cursor in the screenshot.</source>
         <translation>Cursor op&amp;nemen in de schermafdruk.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="729"/>
+        <location filename="../dialogs/optionsdialog.ui" line="728"/>
         <source>&amp;Grab only the current monitor.</source>
         <translation>&amp;Enkel schermafdruk maken op huidige beeldscherm.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="750"/>
+        <location filename="../dialogs/optionsdialog.ui" line="749"/>
         <source>Opens a new process called OptiPNG which dramatically reduces the file size.</source>
         <translation>Dit opent een nieuw proces &quot;OptiPNG&quot; dat de bestandsgrootte drastisch reduceert.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="753"/>
+        <location filename="../dialogs/optionsdialog.ui" line="752"/>
         <source>O&amp;ptimize PNG screenshots.</source>
         <translation>Schermafdrukken in &amp;PNG-formaat optimaliseren.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="605"/>
+        <location filename="../dialogs/optionsdialog.ui" line="604"/>
         <source>Warn when hiding without a tra&amp;y icon.</source>
         <translation>&amp;Waarschuwen bij verbergen zonder pictogram in systeemvak.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="767"/>
+        <location filename="../dialogs/optionsdialog.ui" line="122"/>
+        <source>The naming is inserted after the prefix and is what makes each screenshot file unique to avoid overwriting.&lt;br /&gt;
+&lt;b&gt;Numeric&lt;/b&gt;: inserts a number in sequence, 1, 2, 3..&lt;br /&gt;
+&lt;b&gt;Date&lt;/b&gt;: inserts the current date and time, in the form of dd-MM-yyyy, click the &quot;wrench&quot; button on the right to customize the format.&lt;br /&gt;
+&lt;b&gt;Timestamp&lt;/b&gt;: inserts a number, a Unix timestamp, which is the number of seconds passed since 1970-1-1 00:00:00.&lt;br /&gt;
+
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="766"/>
         <source>Snap area screenshots automatically (no resizing).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="832"/>
+        <location filename="../dialogs/optionsdialog.ui" line="831"/>
         <source>Screenshot Previews</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="912"/>
+        <location filename="../dialogs/optionsdialog.ui" line="911"/>
         <source>Top Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="917"/>
+        <location filename="../dialogs/optionsdialog.ui" line="916"/>
         <source>Top Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="922"/>
+        <location filename="../dialogs/optionsdialog.ui" line="921"/>
         <source>Bottom Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="927"/>
+        <location filename="../dialogs/optionsdialog.ui" line="926"/>
         <source>Bottom Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="948"/>
+        <location filename="../dialogs/optionsdialog.ui" line="947"/>
         <source>Auto-close after</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1011"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1010"/>
         <source>Updater</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1020"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1019"/>
         <source>Check for updates regularly.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1040"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1039"/>
         <source>Chec&amp;k Updates Now</source>
         <translation>&amp;Controleren voor updates</translation>
-    </message>
-    <message>
-        <source>About Lightscreen</source>
-        <translation type="obsolete">Over &amp;Lightscreen</translation>
     </message>
 </context>
 <context>
     <name>PreviewDialog</name>
     <message>
-        <location filename="../dialogs/previewdialog.cpp" line="308"/>
+        <location filename="../dialogs/previewdialog.cpp" line="309"/>
         <source>Screenshot Preview: Closing in %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -842,35 +735,8 @@ De kwaliteit heeft invloed op de bestandsgrootte en de duidelijkheid van de sche
     </message>
     <message>
         <location filename="../dialogs/screenshotdialog.cpp" line="20"/>
-        <source>You can zoom using the mouse wheel while holding the CTRL key. To return to the default zoom (100%) press &quot;Ctrl-0&quot;.</source>
+        <source>You can zoom using the mouse wheel while holding the CTRL key. To return to the default zoom press &quot;Ctrl-0&quot;.</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UpdaterDialog</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Annuleren</translation>
-    </message>
-    <message>
-        <source>Updater - Lightscreen</source>
-        <translation type="obsolete">Updates</translation>
-    </message>
-    <message>
-        <source>Checking for updates</source>
-        <translation type="obsolete">Controleren voor updates</translation>
-    </message>
-    <message>
-        <source>There&apos;s a new version available,&lt;br&gt; please see &lt;a href=&quot;http://lightscreen.sourceforge.net/new-version&quot;&gt;the Lighscreen website&lt;/a&gt;.</source>
-        <translation type="obsolete">Er is een nieuwe versie beschikbaar;&lt;br&gt; kijk op de &lt;a href=&quot;http://lightscreen.sourceforge.net/new-version&quot;&gt;website van Lightscreen&lt;/a&gt;.</translation>
-    </message>
-    <message>
-        <source>No new versions available</source>
-        <translation type="obsolete">Geen nieuwe versie beschikbaar</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="obsolete">Sluiten</translation>
     </message>
 </context>
 <context>
@@ -881,17 +747,17 @@ De kwaliteit heeft invloed op de bestandsgrootte en de duidelijkheid van de sche
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/windowpicker.cpp" line="26"/>
-        <source>Grab the picker by clicking and holding down the mouse button, then drag it to the window of your choice and release it to capture.</source>
+        <location filename="../tools/windowpicker.cpp" line="27"/>
+        <source>Grab the window picker by clicking and holding down the mouse button, then drag it to the window of your choice and release it to capture.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/windowpicker.cpp" line="41"/>
+        <location filename="../tools/windowpicker.cpp" line="42"/>
         <source> - Start dragging to select windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/windowpicker.cpp" line="50"/>
+        <location filename="../tools/windowpicker.cpp" line="49"/>
         <source>Close</source>
         <translation type="unfinished">Sluiten</translation>
     </message>

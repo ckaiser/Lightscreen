@@ -286,6 +286,9 @@ void OptionsDialog::saveSettings()
     settings()->setValue("optipng", ui.optiPngCheckBox->isChecked());
     settings()->setValue("currentMonitor", ui.currentMonitorCheckBox->isChecked());
     settings()->setValue("replace", ui.replaceCheckBox->isChecked());
+
+    //Upload
+    settings()->setValue("uploadAuto", ui.uploadCheckBox->isChecked());
   settings()->endGroup();
 
   settings()->beginGroup("actions");
@@ -380,7 +383,7 @@ void OptionsDialog::loadSettings()
     ui.warnHideCheckBox->setChecked(!settings()->value("disableHideAlert", false).toBool());
     ui.currentMonitorCheckBox->setChecked(settings()->value("currentMonitor", false).toBool());
     ui.replaceCheckBox->setChecked(settings()->value("replace", false).toBool());
-
+    ui.uploadCheckBox->setChecked(settings()->value("uploadAuto", false).toBool());
 
 #if defined(Q_WS_WIN)
   if (QFile::exists("optipng.exe")) {

@@ -26,13 +26,15 @@ PreviewDialog::PreviewDialog(QWidget *parent) :
   os::aeroGlass(this);
   setWindowTitle("Screenshot Preview");
 
-  mSize = ScreenshotManager::instance()->settings()->value("options/previewSize", 300).toInt();
-  mPosition  = ScreenshotManager::instance()->settings()->value("options/previewPosition", 3).toInt();
+  QSettings *settings = ScreenshotManager::instance()->settings();
 
-  if (ScreenshotManager::instance()->settings()->value("options/previewAutoclose", false).toBool()) {
-    mAutoclose = ScreenshotManager::instance()->settings()->value("options/previewAutocloseTime").toInt();
+  mSize      = settings->value("options/previewSize", 300).toInt();
+  mPosition  = settings->value("options/previewPosition", 3).toInt();
+
+  if (settings->value("options/previewAutoclose", false).toBool()) {
+    mAutoclose = settings->value("options/previewAutocloseTime").toInt();
     mAutocloseReset = mAutoclose;
-    mAutocloseAction = ScreenshotManager::instance()->settings()->value("options/previewAutocloseAction").toInt();
+    mAutocloseAction = settings->value("options/previewAutocloseAction").toInt();
   }
 
   QHBoxLayout *l = new QHBoxLayout;
