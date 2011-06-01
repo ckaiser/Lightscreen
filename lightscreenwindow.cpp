@@ -299,7 +299,7 @@ void LightscreenWindow::quit()
                                    tr("Don't quit"));
   }
 
-  if (!answer)
+  if (answer == 0)
     accept();
 }
 

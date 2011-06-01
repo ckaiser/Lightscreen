@@ -37,12 +37,7 @@ AreaDialog::AreaDialog(Screenshot *screenshot) :
   setMouseTracking(true);
   setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
 
-  if (screenshot->options().magnify) {
-    setCursor(Qt::BlankCursor);
-  }
-  else {
-    setCursor(Qt::CrossCursor);
-  }
+  setCursor(Qt::CrossCursor);
 
   connect(&mIdleTimer, SIGNAL(timeout()), this, SLOT(displayHelp()));
   mIdleTimer.start(2000);
@@ -271,15 +266,19 @@ void AreaDialog::paintEvent(QPaintEvent* e)
       painter.setOpacity(0.7);
   }
 
-  if (!pixmapRect.contains(newRect, true))
+  if (!pixmapRect.contains(newRect, true)) {
     return;
+  }
 
   QPixmap magnified = mScreenshot->pixmap().copy(newRect).scaled(QSize(newRect.width()*2, newRect.height()*2));
 
   QPainter magPainter(&magnified);
   magPainter.setPen(QPen(QBrush(QColor(25, 115, 240)), 2)); // Same border pen
   magPainter.drawRect(magnified.rect());
-  magPainter.drawText(magnified.rect().center()-QPoint(4, -4), "+"); //Center minus the 4 pixels wide and across of the "+" -- TODO: Test alternative DPI settings.
+
+  if (!mMouseMagnifier) {
+    magPainter.drawText(magnified.rect().center()-QPoint(4, -4), "+"); //Center minus the 4 pixels wide and across of the "+" -- TODO: Test alternative DPI settings.
+  }
 
   painter.drawPixmap(drawPosition, magnified);
 }
