@@ -24,7 +24,7 @@ public:
   ~ScreenshotManager();
   static ScreenshotManager *instance();
 
-  void setCount(const unsigned int count){ mCount = count; }
+  void setCount(const unsigned int c){ mCount = c; }
   unsigned int count() const { return mCount; }
   QSettings *settings() const { return mSettings; }
 

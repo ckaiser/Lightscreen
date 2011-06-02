@@ -12,6 +12,7 @@ public:
   Uploader(QObject *parent = 0);
   static Uploader* instance();
   QString lastUrl();
+  QMap<QString, QString> &screenshots() { return mScreenshots; }
 
 public slots:
   void upload(QString fileName);

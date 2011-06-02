@@ -89,6 +89,7 @@ void ScreenshotDialog::mousePressEvent(QMouseEvent *event)
 
 void ScreenshotDialog::mouseReleaseEvent(QMouseEvent *event)
 {
+  Q_UNUSED(event)
   setCursor(Qt::OpenHandCursor);
 }
 

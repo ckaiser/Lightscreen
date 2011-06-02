@@ -282,6 +282,8 @@ void PreviewDialog::enlargePreview()
 
 void PreviewDialog::closeEvent(QCloseEvent *event)
 {
+  Q_UNUSED(event)
+
   mInstance = 0;
   deleteLater();
 }

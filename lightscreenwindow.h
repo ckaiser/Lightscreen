@@ -47,6 +47,7 @@ public slots:
   void updateTrayIconTooltip();
   void updaterDone(bool result);
   void upload(QString fileName);
+  void uploadHistory(QAction* upload);
   void uploadLast();
   void windowHotkey();
   void windowPickerHotkey();
@@ -58,6 +59,7 @@ private:
   void compressPng(QString fileName);
   void connectHotkeys();
   void createTrayIcon();
+  bool eventFilter(QObject *object, QEvent *event);
 
   // Convenience function
   QSettings *settings() const;
@@ -73,6 +75,7 @@ private:
   int  mOptimizeCount;
   int  mLastMode;
   int  mLastMessage;
+  QActionGroup* mUploadHistoryActions;
   QString mLastScreenshot;
   QPointer<QSystemTrayIcon> mTrayIcon;
   Ui::LightscreenWindowClass ui;

@@ -33,6 +33,7 @@ int Uploader::uploading()
 
 void Uploader::imgurError(QtImgur::Error e)
 {
+  //TODO
   mUploading--;
   emit error();
 }

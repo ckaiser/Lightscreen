@@ -53,6 +53,7 @@ win32:LIBS += libgdi32
 include($$PWD/tools/globalshortcut/globalshortcut.pri)
 include($$PWD/tools/qtsingleapplication/qtsingleapplication.pri)
 
+QMAKE_CXXFLAGS = -Wextra -Wall -Wpointer-arith
 OTHER_FILES += TODO.txt
 
 
