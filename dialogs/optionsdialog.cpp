@@ -386,11 +386,9 @@ void OptionsDialog::loadSettings()
     ui.uploadCheckBox->setChecked(settings()->value("uploadAuto", false).toBool());
 
 #if defined(Q_WS_WIN)
-  if (QFile::exists("optipng.exe")) {
-    ui.optiPngCheckBox->setEnabled(true);
-  }
-  else {
+  if (!QFile::exists("optipng.exe")) {
     ui.optiPngCheckBox->setEnabled(false);
+    ui.optiPngCheckBox->setChecked(false);
   }
 #endif
 

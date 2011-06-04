@@ -560,7 +560,7 @@ Quality is related to file size and of course to readability and overall quality
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>0</y>
+            <y>-137</y>
             <width>358</width>
             <height>597</height>
            </rect>
@@ -746,7 +746,7 @@ Quality is related to file size and of course to readability and overall quality
               <item>
                <widget class="QCheckBox" name="optiPngCheckBox">
                 <property name="toolTip">
-                 <string>Opens a new process called OptiPNG which dramatically reduces the file size.</string>
+                 <string>Runs OptiPNG which reduces screenshot file size.</string>
                 </property>
                 <property name="text">
                  <string>O&amp;ptimize PNG screenshots.</string>

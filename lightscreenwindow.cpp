@@ -73,7 +73,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
 
   // Uploader
   connect(Uploader::instance(), SIGNAL(done(QString, QString)), this, SLOT(showUploaderMessage(QString, QString)));
-  connect(Uploader::instance(), SIGNAL(error()), this, SLOT(showUploaderError()));
+  connect(Uploader::instance(), SIGNAL(error(QString)), this, SLOT(showUploaderError(QString)));
 
   // Manager
   connect(ScreenshotManager::instance(), SIGNAL(confirm(Screenshot*)),               this, SLOT(preview(Screenshot*)));
@@ -309,7 +309,7 @@ void LightscreenWindow::restoreNotification()
   if (mTrayIcon)
     mTrayIcon->setIcon(QIcon(":/icons/lightscreen.small"));
 
-  setWindowTitle(tr("Lightscreen"));
+  updateUploadStatus();
 }
 
 void LightscreenWindow::screenshotAction(int mode)
@@ -454,17 +454,17 @@ void LightscreenWindow::showUploaderMessage(QString fileName, QString url)
 
   mLastMessage = 2;
   mTrayIcon->showMessage(tr("%1 uploaded").arg(screenshot), tr("Click here to go to %1").arg(url));
-  updateTrayIconTooltip();
+  updateUploadStatus();
 }
 
-void LightscreenWindow::showUploaderError()
+void LightscreenWindow::showUploaderError(QString error)
 {
   if (!mTrayIcon)
     return;
 
   mLastMessage = -1;
-  mTrayIcon->showMessage(tr("Upload error"), tr("A screenshot failed to upload."));
-  updateTrayIconTooltip();
+  mTrayIcon->showMessage(tr("Upload error"), error);
+  updateUploadStatus();
 }
 
 void LightscreenWindow::showScreenshotMenu()
@@ -650,10 +650,8 @@ void LightscreenWindow::compressPng(QString fileName)
 #if defined(Q_OS_UNIX)
   QProcess::startDetached("optipng " + fileName + " -quiet");
 #else
-
   if (settings()->value("options/uploadAuto").toBool()) {
     // If the user has chosen to automatically upload screenshots we have to track the progress of the optimization, so we use QProcess
-
     QProcess* optipng = new QProcess(this);
 
     // To be read by optimizationDone() (for uploading)
@@ -664,6 +662,7 @@ void LightscreenWindow::compressPng(QString fileName)
     connect(optipng, SIGNAL(finished(int, QProcess::ExitStatus)), optipng, SLOT(deleteLater()));
 
     optipng->start("optipng", QStringList() << fileName);
+
     mOptimizeCount++;
   }
   else {
@@ -716,7 +715,7 @@ void LightscreenWindow::connectHotkeys()
 void LightscreenWindow::createTrayIcon()
 {
   mTrayIcon = new QSystemTrayIcon(QIcon(":/icons/lightscreen.small"), this);
-  updateTrayIconTooltip();
+  updateUploadStatus();
 
   connect(mTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(toggleVisibility(QSystemTrayIcon::ActivationReason)));
   connect(mTrayIcon, SIGNAL(messageClicked()), this, SLOT(messageClicked()));
@@ -905,23 +904,26 @@ void LightscreenWindow::uploadHistory(QAction *upload)
 void LightscreenWindow::uploadLast()
 {
   upload(mLastScreenshot);
-  updateTrayIconTooltip();
+  updateUploadStatus();
 }
 
-void LightscreenWindow::updateTrayIconTooltip()
+void LightscreenWindow::updateUploadStatus()
 {
-  if (!mTrayIcon) {
-    return;
-  }
-
   int uploading = Uploader::instance()->uploading();
+  QString statusString;
 
   if (uploading > 0) {
-    mTrayIcon->setToolTip(tr("Lightscreen: Uploading %1 screenshot").arg(uploading));
+    statusString = tr("Lightscreen: Uploading %1 screenshot").arg(uploading);
   }
   else {
-    mTrayIcon->setToolTip(tr("Lightscreen %1").arg(qApp->applicationVersion()));
+    statusString = tr("Lightscreen %1").arg(qApp->applicationVersion());
   }
+
+  if (mTrayIcon) {
+    mTrayIcon->setToolTip(statusString);
+  }
+
+  setWindowTitle(statusString);
 }
 
 // Event handling

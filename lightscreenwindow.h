@@ -41,10 +41,10 @@ public slots:
   void showOptions();
   void showScreenshotMenu();
   void showScreenshotMessage(Screenshot::Result result, QString fileName);
-  void showUploaderError();
+  void showUploaderError(QString error);
   void showUploaderMessage(QString fileName, QString url);
   void toggleVisibility(QSystemTrayIcon::ActivationReason reason = QSystemTrayIcon::DoubleClick);
-  void updateTrayIconTooltip();
+  void updateUploadStatus();
   void updaterDone(bool result);
   void upload(QString fileName);
   void uploadHistory(QAction* upload);

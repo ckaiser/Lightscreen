@@ -35,7 +35,31 @@ void Uploader::imgurError(QtImgur::Error e)
 {
   //TODO
   mUploading--;
-  emit error();
+
+  if (e == mLastError) {
+    // Fail silently? Really? FINE
+    return;
+  }
+
+  QString errorString;
+
+  switch (e) {
+    case QtImgur::ErrorFile:
+      errorString = tr("Screenshot file not found.");
+    break;
+    case QtImgur::ErrorNetwork:
+      errorString   = tr("Could not reach imgur.com");
+    break;
+    case QtImgur::ErrorCredits:
+      errorString   = tr("You have exceeded your upload quota.");
+    break;
+    case QtImgur::ErrorUpload:
+      errorString   = tr("Upload failed.");
+    break;
+  }
+
+  mLastError = e;
+  emit error(errorString);
 }
 
 QString Uploader::lastUrl()

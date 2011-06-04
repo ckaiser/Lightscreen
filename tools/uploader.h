@@ -22,7 +22,7 @@ public slots:
 
 signals:
   void done(QString, QString);
-  void error();
+  void error(QString);
 
 private:
   static Uploader* mInstance;
@@ -30,6 +30,7 @@ private:
   // Filename, url
   QMap<QString, QString> mScreenshots;
   QtImgur *mImgur;
+  QtImgur::Error mLastError;
 
   int mUploading;
 
