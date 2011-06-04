@@ -541,9 +541,9 @@ void LightscreenWindow::notify(Screenshot::Result result)
 void LightscreenWindow::optimizationDone()
 {
   // A mouthful :D
+  mOptimizeCount--;
   QString screenshot = (qobject_cast<QProcess*>(sender()))->property("screenshot").toString();
   upload(screenshot);
-  mOptimizeCount--;
 }
 
 void LightscreenWindow::showHotkeyError(QStringList hotkeys)

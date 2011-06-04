@@ -88,6 +88,7 @@ WindowPicker::WindowPicker() : QWidget(0), mCrosshair(":/icons/picker"), mWindow
 }
 
 WindowPicker::~WindowPicker() {
+  qApp->restoreOverrideCursor();
   delete mWindowIndicator;
 }
 

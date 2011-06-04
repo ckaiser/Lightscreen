@@ -32,7 +32,7 @@ AreaDialog::AreaDialog(Screenshot *screenshot) :
   mHandles << &mTLHandle << &mTRHandle << &mBLHandle << &mBRHandle
            << &mLHandle << &mTHandle << &mRHandle << &mBHandle;
 
-  mMouseOverHandle = &mBRHandle;
+  mMouseOverHandle = 0;
 
   setMouseTracking(true);
   setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
@@ -41,7 +41,6 @@ AreaDialog::AreaDialog(Screenshot *screenshot) :
 
   connect(&mIdleTimer, SIGNAL(timeout()), this, SLOT(displayHelp()));
   mIdleTimer.start(2000);
-
 
   mAutoclose = ScreenshotManager::instance()->settings()->value("options/areaAutoclose").toBool();
 
@@ -79,7 +78,6 @@ AreaDialog::AreaDialog(Screenshot *screenshot) :
 
 AreaDialog::~AreaDialog()
 {
-  //releaseMouse();
 }
 
 QRect AreaDialog::resultRect()
@@ -224,28 +222,23 @@ void AreaDialog::paintEvent(QPaintEvent* e)
   else {
     // So pretty.. oh so pretty.
     if (mMouseOverHandle == &mTLHandle)
-         magStart = mSelection.topLeft();
-
-    if (mMouseOverHandle == &mTRHandle)
-         magStart = mSelection.topRight();
-
-    if (mMouseOverHandle == &mBLHandle)
-         magStart = mSelection.bottomLeft();
-
-    if (mMouseOverHandle == &mBRHandle)
-         magStart = mSelection.bottomRight();
-
-    if (mMouseOverHandle == &mLHandle)
-         magStart = QPoint(mSelection.left(), mSelection.center().y());
-
-    if (mMouseOverHandle == &mTHandle)
-         magStart = QPoint(mSelection.center().x(), mSelection.top());
-
-    if (mMouseOverHandle == &mRHandle)
-         magStart = QPoint(mSelection.right(), mSelection.center().y());
-
-    if (mMouseOverHandle == &mBHandle)
-         magStart =  QPoint(mSelection.center().x(), mSelection.bottom());
+      magStart = mSelection.topLeft();
+    else if (mMouseOverHandle == &mTRHandle)
+      magStart = mSelection.topRight();
+    else if (mMouseOverHandle == &mBLHandle)
+      magStart = mSelection.bottomLeft();
+    else if (mMouseOverHandle == &mBRHandle)
+      magStart = mSelection.bottomRight();
+    else if (mMouseOverHandle == &mLHandle)
+      magStart = QPoint(mSelection.left(), mSelection.center().y());
+    else if (mMouseOverHandle == &mTHandle)
+      magStart = QPoint(mSelection.center().x(), mSelection.top());
+    else if (mMouseOverHandle == &mRHandle)
+      magStart = QPoint(mSelection.right(), mSelection.center().y());
+    else if (mMouseOverHandle == &mBHandle)
+      magStart =  QPoint(mSelection.center().x(), mSelection.bottom());
+    else if (mMouseOverHandle == 0)
+      magStart = QCursor::pos();
 
     magEnd = magStart;
     drawPosition = mSelection.bottomRight();
@@ -386,7 +379,7 @@ void AreaDialog::mouseMoveEvent(QMouseEvent* e)
     }
 
     if (mAcceptWidget) {
-      QPoint acceptPos = e->pos() + QPoint(0, 0);
+      QPoint acceptPos = e->pos();
       QRect  acceptRect = QRect(acceptPos, QSize(120, 70));
 
       if ((acceptPos.x()+120) > mScreenshot->pixmap().rect().width())
@@ -455,6 +448,8 @@ void AreaDialog::mouseMoveEvent(QMouseEvent* e)
       if (mMouseOverHandle == &mTHandle || mMouseOverHandle == &mBHandle)
         setCursor(Qt::SizeVerCursor);
     }
+
+
   }
 }
 
