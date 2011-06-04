@@ -7,14 +7,14 @@ Uploader::Uploader(QObject *parent) : QObject(parent)
 {
   mImgur = new QtImgur("6920a141451d125b3e1357ce0e432409", this);
   connect(mImgur, SIGNAL(uploaded(QString, QString)), this, SLOT(uploaded(QString, QString)));
-  connect(mImgur, SIGNAL(error(QtImgur::Error)), this, SLOT(imgurError(QtImgur::Error)));
+  connect(mImgur, SIGNAL(error(QString, QtImgur::Error)), this, SLOT(imgurError(QString, QtImgur::Error)));
 }
 
 void Uploader::upload(QString fileName)
 {
   if (!fileName.isEmpty() && !mScreenshots.contains(fileName)) {
     mImgur->upload(fileName);
-    mScreenshots.insert(fileName, "");
+    mScreenshots.insert(fileName, tr("Uploading..."));
     mUploading++;
   }
 }
@@ -31,10 +31,10 @@ int Uploader::uploading()
   return mUploading;
 }
 
-void Uploader::imgurError(QtImgur::Error e)
+void Uploader::imgurError(QString file, QtImgur::Error e)
 {
-  //TODO
   mUploading--;
+  mScreenshots.remove(file);
 
   if (e == mLastError) {
     // Fail silently? Really? FINE
@@ -48,13 +48,13 @@ void Uploader::imgurError(QtImgur::Error e)
       errorString = tr("Screenshot file not found.");
     break;
     case QtImgur::ErrorNetwork:
-      errorString   = tr("Could not reach imgur.com");
+      errorString = tr("Could not reach imgur.com");
     break;
     case QtImgur::ErrorCredits:
-      errorString   = tr("You have exceeded your upload quota.");
+      errorString = tr("You have exceeded your upload quota.");
     break;
     case QtImgur::ErrorUpload:
-      errorString   = tr("Upload failed.");
+      errorString = tr("Upload failed.");
     break;
   }
 
@@ -72,7 +72,7 @@ QString Uploader::lastUrl()
   while (i.hasPrevious()) {
     url = i.previous().value();
 
-    if (!url.isEmpty()) {
+    if (!url.contains(tr("Uploading..."))) {
       return url;
     }
   }

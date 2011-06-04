@@ -18,7 +18,7 @@ public slots:
   void upload(QString fileName);
   void uploaded(QString fileName, QString url);
   int  uploading();
-  void imgurError(QtImgur::Error e);
+  void imgurError(QString file, QtImgur::Error e);
 
 signals:
   void done(QString, QString);
