@@ -1,7 +1,10 @@
 #include "uploader.h"
 #include "qtimgur.h"
 
+#include <QList>
+#include <QPair>
 #include <QDebug>
+
 
 Uploader::Uploader(QObject *parent) : QObject(parent)
 {
@@ -12,16 +15,38 @@ Uploader::Uploader(QObject *parent) : QObject(parent)
 
 void Uploader::upload(QString fileName)
 {
-  if (!fileName.isEmpty() && !mScreenshots.contains(fileName)) {
-    mImgur->upload(fileName);
-    mScreenshots.insert(fileName, tr("Uploading..."));
-    mUploading++;
+  if (fileName.isEmpty()) {
+    return;
   }
+
+  // Cancel on duplicate
+  for (int i = 0; i < mScreenshots.size(); ++i) {
+    if (mScreenshots.at(i).first == fileName) {
+      return;
+    }
+  }
+
+  mImgur->upload(fileName);
+
+  QPair<QString, QString> screenshot;
+  screenshot.first = fileName;
+  screenshot.second = tr("Uploading...");
+
+  mScreenshots.append(screenshot);
+
+  mUploading++;
 }
 
 void Uploader::uploaded(QString file, QString url)
 {
-  mScreenshots[file] = url;
+  // Modifying uploaded list, adding url.
+  for (int i = 0; i < mScreenshots.size(); ++i) {
+    if (mScreenshots.at(i).first == file) {
+      mScreenshots[i].second = url;
+      break;
+    }
+  }
+
   mUploading--;
   emit done(file, url);
 }
@@ -33,8 +58,17 @@ int Uploader::uploading()
 
 void Uploader::imgurError(QString file, QtImgur::Error e)
 {
+  qDebug() << "Uploader::imgurError(" << file << ", " << e << ")";
+
   mUploading--;
-  mScreenshots.remove(file);
+
+  // Removing the screenshot.
+  for (int i = 0; i < mScreenshots.size(); ++i) {
+    if (mScreenshots.at(i).first == file) {
+      mScreenshots.removeAt(i);
+      break;
+    }
+  }
 
   if (e == mLastError) {
     // Fail silently? Really? FINE
@@ -64,13 +98,13 @@ void Uploader::imgurError(QString file, QtImgur::Error e)
 
 QString Uploader::lastUrl()
 {
-  QMapIterator<QString, QString> i(mScreenshots);
+  QListIterator< QPair<QString, QString> >  i(mScreenshots);
   i.toBack();
 
   QString url;
 
   while (i.hasPrevious()) {
-    url = i.previous().value();
+    url = i.previous().second;
 
     if (!url.contains(tr("Uploading..."))) {
       return url;

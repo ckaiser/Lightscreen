@@ -2,7 +2,8 @@
 #define UPLOADER_H
 
 #include <QObject>
-#include <QMap>
+#include <QList>
+#include <QPair>
 #include "qtimgur.h"
 
 class Uploader : public QObject
@@ -12,7 +13,7 @@ public:
   Uploader(QObject *parent = 0);
   static Uploader* instance();
   QString lastUrl();
-  QMap<QString, QString> &screenshots() { return mScreenshots; }
+  QList< QPair<QString, QString> > &screenshots() { return mScreenshots; }
 
 public slots:
   void upload(QString fileName);
@@ -28,7 +29,7 @@ private:
   static Uploader* mInstance;
 
   // Filename, url
-  QMap<QString, QString> mScreenshots;
+  QList< QPair<QString, QString> > mScreenshots;
   QtImgur *mImgur;
   QtImgur::Error mLastError;
 

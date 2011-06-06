@@ -73,7 +73,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
 
   // Uploader
   connect(Uploader::instance(), SIGNAL(done(QString, QString)), this, SLOT(showUploaderMessage(QString, QString)));
-  connect(Uploader::instance(), SIGNAL(error(QString)), this, SLOT(showUploaderError(QString)));
+  connect(Uploader::instance(), SIGNAL(error(QString))        , this, SLOT(showUploaderError(QString)));
 
   // Manager
   connect(ScreenshotManager::instance(), SIGNAL(confirm(Screenshot*)),               this, SLOT(preview(Screenshot*)));
@@ -762,8 +762,6 @@ void LightscreenWindow::createTrayIcon()
   screenshotMenu->addAction(areaAction);
   screenshotMenu->addAction(windowAction);
   screenshotMenu->addAction(windowPickerAction);
-  screenshotMenu->addSeparator();
-  screenshotMenu->addAction(uploadAction);
 
   // Duplicated for the screenshot button :(
   QMenu* imgurMenu = new QMenu("Upload");
@@ -807,7 +805,7 @@ bool LightscreenWindow::eventFilter(QObject *object, QEvent *event)
       }
 
       // Iterating back to front for the first 10 screenshots in the uploader history.
-      QMapIterator<QString, QString> iterator(Uploader::instance()->screenshots());
+      QListIterator< QPair<QString, QString> > iterator(Uploader::instance()->screenshots());
       iterator.toBack();
 
       int limit = 0;
@@ -817,11 +815,11 @@ bool LightscreenWindow::eventFilter(QObject *object, QEvent *event)
           break;
         }
 
-        action = new QAction(iterator.peekPrevious().value(), menu);
-        action->setToolTip(QFileInfo(iterator.peekPrevious().key()).fileName());
+        action = new QAction(iterator.peekPrevious().second, menu);
+        action->setToolTip(QFileInfo(iterator.peekPrevious().first).fileName());
 
-        if (iterator.previous().value() == mLastScreenshot) {
-          uploadAction->setEnabled(true);
+        if (iterator.previous().first == mLastScreenshot) {
+          uploadAction->setEnabled(false);
         }
 
         mUploadHistoryActions->addAction(action);
