@@ -36,6 +36,24 @@
 #include "tools/screenshot.h"
 #include "tools/screenshotmanager.h"
 #include "tools/qtwin.h"
+/*
+ * Copyright (C) 2011  Christian Kaiser
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
 #include "tools/uploader.h"
 
 #include "updater/updater.h"
@@ -83,7 +101,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
     showOptions();  // There are no options (or the options config is invalid or incomplete)
   }
   else {
-    QTimer::singleShot(0, this, SLOT(applySettings()));
+    QTimer::singleShot(0   , this, SLOT(applySettings()));
     QTimer::singleShot(5000, this, SLOT(checkForUpdates()));
   }
 }
@@ -165,10 +183,8 @@ void LightscreenWindow::cleanup(Screenshot::Options options)
 
       PreviewDialog::instance()->show();
     }
-    else {
-      if (mWasVisible) {
-        show();
-      }
+    else if (mWasVisible) {
+      show();
     }
 
     mHideTrigger = false;
@@ -368,7 +384,7 @@ void LightscreenWindow::screenshotAction(int mode)
   static Screenshot::Options options;
 
   if (!mDoCache) {
-    // Populating the option object that will then be passed to the screenshot engine
+    // Populating the option object that will then be passed to the screenshot engine (sounds fancy huh?)
     options.file           = settings()->value("file/enabled").toBool();
     options.format         = (Screenshot::Format) settings()->value("file/format").toInt();
     options.prefix         = settings()->value("file/prefix").toString();
@@ -770,7 +786,7 @@ void LightscreenWindow::createTrayIcon()
   imgurMenu->addSeparator();
 
   mUploadHistoryActions = new QActionGroup(imgurMenu);
-  connect(mUploadHistoryActions, SIGNAL(triggered(QAction*)), this, SLOT(uploadHistory(QAction*)));
+  connect(mUploadHistoryActions, SIGNAL(triggered(QAction*)), this, SLOT(uploadAction(QAction*)));
 
   QMenu* trayIconMenu = new QMenu;
   trayIconMenu->addAction(hideAction);
@@ -894,9 +910,16 @@ void LightscreenWindow::upload(QString fileName)
   Uploader::instance()->upload(fileName);
 }
 
-void LightscreenWindow::uploadHistory(QAction *upload)
+void LightscreenWindow::uploadAction(QAction *upload)
 {
-  QDesktopServices::openUrl(QUrl(upload->text()));
+  QString url = upload->text();
+
+  if (url == tr("Uploading...")) {
+    //int confirm = QMessageBox::question()
+  }
+  else {
+    QDesktopServices::openUrl(QUrl(url));
+  }
 }
 
 void LightscreenWindow::uploadLast()

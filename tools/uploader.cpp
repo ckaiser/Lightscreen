@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2011  Christian Kaiser
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
 #include "uploader.h"
 #include "qtimgur.h"
 
@@ -13,7 +31,7 @@ Uploader::Uploader(QObject *parent) : QObject(parent)
   connect(mImgur, SIGNAL(error(QString, QtImgur::Error)), this, SLOT(imgurError(QString, QtImgur::Error)));
 }
 
-void Uploader::upload(QString fileName)
+void Uploader::upload(const QString &fileName)
 {
   if (fileName.isEmpty()) {
     return;
@@ -29,7 +47,7 @@ void Uploader::upload(QString fileName)
   mImgur->upload(fileName);
 
   QPair<QString, QString> screenshot;
-  screenshot.first = fileName;
+  screenshot.first  = fileName;
   screenshot.second = tr("Uploading...");
 
   mScreenshots.append(screenshot);
@@ -37,7 +55,7 @@ void Uploader::upload(QString fileName)
   mUploading++;
 }
 
-void Uploader::uploaded(QString file, QString url)
+void Uploader::uploaded(const QString &file, const QString &url)
 {
   // Modifying uploaded list, adding url.
   for (int i = 0; i < mScreenshots.size(); ++i) {
@@ -56,7 +74,7 @@ int Uploader::uploading()
   return mUploading;
 }
 
-void Uploader::imgurError(QString file, QtImgur::Error e)
+void Uploader::imgurError(const QString &file, const QtImgur::Error e)
 {
   qDebug() << "Uploader::imgurError(" << file << ", " << e << ")";
 
