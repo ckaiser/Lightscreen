@@ -32,7 +32,7 @@
 #include <QDesktopWidget>
 #include <QToolTip>
 #include <QPushButton>
-#include <Qsettings>
+#include <QSettings>
 #include <QHBoxLayout>
 #include <QTimer>
 
