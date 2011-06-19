@@ -31,9 +31,8 @@
 #include "os.h"
 
 #ifdef Q_OS_WIN
-#include <windows.h>
-#endif
 
+#include <windows.h>
 
 WindowPicker::WindowPicker() : QWidget(0), mCrosshair(":/icons/picker"), mWindowLabel(0), mTaken(false)
 {
@@ -222,3 +221,5 @@ void WindowPicker::closeEvent(QCloseEvent*)
   qApp->restoreOverrideCursor();
   deleteLater();
 }
+
+#endif

@@ -19,6 +19,8 @@
 #ifndef WINDOWPICKER_H
 #define WINDOWPICKER_H
 
+#ifdef Q_OS_WIN
+
 #include <QWidget>
 
 class QLabel;
@@ -55,4 +57,5 @@ private:
 
 };
 
+#endif
 #endif // WINDOWPICKER_H
