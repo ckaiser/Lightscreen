@@ -27,10 +27,10 @@
 
 #if defined(Q_WS_WIN)
   #include <windows.h>
+  #include "windowpicker.h"
 #endif
 
-#include "../dialogs/AreaDialog.h"
-#include "windowpicker.h"
+#include "../dialogs/areadialog.h"
 #include "screenshot.h"
 
 #include "os.h"
