@@ -19,9 +19,9 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QLocale>
-#include <QtSingleApplication>
 
 #include "tools/os.h"
+#include <QtSingleApplication>
 #include "lightscreenwindow.h"
 
 int main(int argc, char *argv[])
