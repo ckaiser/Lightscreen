@@ -50,9 +50,8 @@ private:
     QLabel *mWindowIcon;
     QLabel *mCrosshairLabel;
     QRubberBand *mWindowIndicator;
-    HWND mCurrentWindow;
+    WId mCurrentWindow;
     bool mTaken;
-
 };
 
 #endif // WINDOWPICKER_H

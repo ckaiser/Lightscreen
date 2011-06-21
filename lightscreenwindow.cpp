@@ -348,15 +348,7 @@ void LightscreenWindow::screenshotAction(int mode)
   delayms = settings()->value("options/delay", 0).toInt();
   delayms = delayms * 1000; // Converting the delay to milliseconds.
 
-  delayms += 200;
-
-#if defined(Q_WS_WIN)
-  if (optionsHide) {
-    // When on Windows Vista, the window takes a little bit longer to hide
-    if (QSysInfo::WindowsVersion == QSysInfo::WV_VISTA)
-      delayms += 200;
-  }
-#endif
+  delayms += 400;
 
   if (optionsHide && PreviewDialog::isActive()) {
     if (PreviewDialog::instance()->count() >= 1)

@@ -61,6 +61,23 @@ void OptionsDialog::init()
 #if !defined(Q_WS_WIN)
   ui.cursorCheckBox->setVisible(false);
   ui.cursorCheckBox->setChecked(false);
+
+  // KDE-specific style tweaks.
+  if (qApp->style()->objectName() == "oxygen") {
+      qDebug() << "OXYGENN YEAAHH";
+      ui.browsePushButton->setMaximumWidth(30);
+      ui.namingOptionsButton->setMaximumWidth(30);
+
+      ui.fileGroupBox->setFlat(false);
+      ui.startupGroupBox->setFlat(false);
+      ui.capturesGroupBox->setFlat(false);
+      ui.controlGroupBox->setFlat(false);
+      ui.interfaceGroupBox->setFlat(false);
+      ui.screenshotsGroupBox->setFlat(false);
+      ui.previewGroupBox->setFlat(false);
+      ui.updaterGroupBox->setFlat(false);
+      ui.aboutTab->layout()->setMargin(8);
+  }
 #endif
 
   // Make the scroll area share the Tab Widget background color
@@ -290,7 +307,7 @@ void OptionsDialog::saveSettings()
     settings()->setValue("magnify", ui.magnifyCheckBox->isChecked());
     settings()->setValue("cursor", ui.cursorCheckBox->isChecked());
     settings()->setValue("saveAs", ui.saveAsCheckBox->isChecked());
-    settings()->setValue("preview", ui.previewCheckBox->isChecked());
+    settings()->setValue("preview", ui.previewGroupBox->isChecked());
     settings()->setValue("previewSize", ui.previewSizeSpinBox->value());
     settings()->setValue("previewPosition", ui.previewPositionComboBox->currentIndex());
     settings()->setValue("previewAutoclose", ui.previewAutocloseCheckBox->isChecked());
@@ -387,7 +404,7 @@ void OptionsDialog::loadSettings()
     ui.magnifyCheckBox->setChecked(settings()->value("magnify", true).toBool());
     ui.cursorCheckBox->setChecked(settings()->value("cursor", true).toBool());
     ui.saveAsCheckBox->setChecked(settings()->value("saveAs", false).toBool());
-    ui.previewCheckBox->setChecked(settings()->value("preview", false).toBool());
+    ui.previewGroupBox->setChecked(settings()->value("preview", false).toBool());
     ui.previewSizeSpinBox->setValue(settings()->value("previewSize", 300).toInt());
     ui.previewPositionComboBox->setCurrentIndex(settings()->value("previewPosition", 3).toInt());
     ui.previewAutocloseCheckBox->setChecked(settings()->value("previewAutoclose", false).toBool());

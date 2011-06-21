@@ -119,6 +119,7 @@ void WindowPicker::cancel() {
 void WindowPicker::mouseReleaseEvent(QMouseEvent *event)
 {
   if (event->button() == Qt::LeftButton) {
+#ifdef Q_OS_WINDOWS
      POINT mousePos;
      mousePos.x = event->globalX();
      mousePos.y = event->globalY();
@@ -137,7 +138,7 @@ void WindowPicker::mouseReleaseEvent(QMouseEvent *event)
      close();
 
      emit pixmap(os::grabWindow(window));
-
+#endif
      return;
   }
 
@@ -157,6 +158,7 @@ void WindowPicker::mousePressEvent(QMouseEvent *event)
 
 void WindowPicker::mouseMoveEvent(QMouseEvent *event)
 {
+#ifdef Q_OS_WINDOWS
   POINT mousePos;
   mousePos.x = event->globalX();
   mousePos.y = event->globalY();
@@ -212,6 +214,7 @@ void WindowPicker::mouseMoveEvent(QMouseEvent *event)
   else {
     mWindowLabel->setText(windowText);
   }
+#endif
 }
 
 void WindowPicker::closeEvent(QCloseEvent*)

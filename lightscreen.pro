@@ -47,9 +47,8 @@ TRANSLATIONS += translations/untranslated.ts \
                 translations/dutch.ts
 RC_FILE += lightscreen.rc
 CODECFORSRC = UTF-8
-LIBS += libgcc
 QT += network core gui xml
-win32:LIBS += libgdi32
+win32:LIBS += libgdi32 libgcc
 include($$PWD/tools/globalshortcut/globalshortcut.pri)
 include($$PWD/tools/qtsingleapplication/qtsingleapplication.pri)
 

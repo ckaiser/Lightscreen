@@ -24,7 +24,7 @@
 #include <QDebug>
 
 
-Uploader::Uploader(QObject *parent) : QObject(parent)
+Uploader::Uploader(QObject *parent) : QObject(parent), mUploading(0)
 {
   mImgur = new QtImgur("6920a141451d125b3e1357ce0e432409", this);
   connect(mImgur, SIGNAL(uploaded(QString, QString)), this, SLOT(uploaded(QString, QString)));
@@ -52,6 +52,7 @@ void Uploader::upload(const QString &fileName)
 
   mScreenshots.append(screenshot);
 
+  qDebug() << "WTF";
   mUploading++;
 }
 
