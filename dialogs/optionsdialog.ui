@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>399</width>
-    <height>320</height>
+    <height>341</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -560,9 +560,9 @@ Quality is related to file size and of course to readability and overall quality
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-137</y>
-            <width>358</width>
-            <height>597</height>
+            <y>0</y>
+            <width>366</width>
+            <height>653</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -833,7 +833,7 @@ Quality is related to file size and of course to readability and overall quality
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="previewCheckBox">
+            <widget class="QGroupBox" name="previewGroupBox">
              <property name="title">
               <string>Screenshot Previews</string>
              </property>
@@ -1159,7 +1159,7 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
   <tabstop>replaceCheckBox</tabstop>
   <tabstop>areaAutocloseCheckBox</tabstop>
   <tabstop>delaySpinBox</tabstop>
-  <tabstop>previewCheckBox</tabstop>
+  <tabstop>previewGroupBox</tabstop>
   <tabstop>previewSizeSpinBox</tabstop>
   <tabstop>previewPositionComboBox</tabstop>
   <tabstop>previewAutocloseCheckBox</tabstop>

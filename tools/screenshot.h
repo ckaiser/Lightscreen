@@ -41,7 +41,7 @@ public:
     Numeric = 0,
     Date = 1,
     Timestamp = 2,
-    None = 3
+    Empty = 3
   };
 
   enum Mode
@@ -93,7 +93,7 @@ public:
   Screenshot(QObject *parent, Screenshot::Options options);
   ~Screenshot();
 
-  Screenshot::Options options();
+  Screenshot::Options options() const;
   QPixmap &pixmap();
   static QString getName(NamingOptions options, QString prefix, QDir directory);
 

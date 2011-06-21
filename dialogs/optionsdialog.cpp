@@ -64,7 +64,6 @@ void OptionsDialog::init()
 
   // KDE-specific style tweaks.
   if (qApp->style()->objectName() == "oxygen") {
-      qDebug() << "OXYGENN YEAAHH";
       ui.browsePushButton->setMaximumWidth(30);
       ui.namingOptionsButton->setMaximumWidth(30);
 
@@ -76,7 +75,8 @@ void OptionsDialog::init()
       ui.screenshotsGroupBox->setFlat(false);
       ui.previewGroupBox->setFlat(false);
       ui.updaterGroupBox->setFlat(false);
-      ui.aboutTab->layout()->setMargin(8);
+      ui.optionsTab->layout()->setMargin(4);
+      ui.aboutTab->layout()->setContentsMargins(0, 0, 6, 0);
   }
 #endif
 
@@ -612,7 +612,7 @@ void OptionsDialog::updatePreview()
   options.leadingZeros = settings()->value("options/naming/leadingZeros").toInt();
   options.dateFormat   = settings()->value("options/naming/dateFormat").toString();
 
-  ui.namingOptionsButton->setDisabled((options.naming == Screenshot::None));
+  ui.namingOptionsButton->setDisabled((options.naming == Screenshot::Empty));
 
   QString preview = Screenshot::getName(options,
                                         ui.prefixLineEdit->text(),

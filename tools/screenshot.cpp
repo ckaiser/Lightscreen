@@ -25,15 +25,22 @@
 #include <QPixmap>
 #include <QDebug>
 
-#if defined(Q_WS_WIN)
-  #include <windows.h>
-  #include "windowpicker.h"
-#endif
-
+#include "windowpicker.h"
 #include "../dialogs/areadialog.h"
 #include "screenshot.h"
 
 #include "os.h"
+
+
+#ifdef Q_WS_WIN
+  #include <windows.h>
+#endif
+
+#ifdef Q_WS_X11
+  #include <QX11Info>
+  #include <X11/X.h>
+  #include <X11/Xlib.h>
+#endif
 
 Screenshot::Screenshot(QObject *parent, Screenshot::Options options):
   QObject(parent),
@@ -52,7 +59,7 @@ Screenshot::~Screenshot()
   }
 }
 
-Screenshot::Options Screenshot::options()
+Screenshot::Options Screenshot::options() const
 {
   return mOptions;
 }
@@ -76,8 +83,17 @@ void Screenshot::activeWindow()
   }
 
   mPixmap = os::grabWindow(GetForegroundWindow());
-#else
-  wholeScreen(); //TODO
+#endif
+
+#if defined(Q_WS_X11)
+  Display *display;
+  Window focus;
+  int revert;
+
+  display = XOpenDisplay(NULL);
+  XGetInputFocus(display, &focus, &revert);
+
+  mPixmap = QPixmap::grabWindow(focus);
 #endif
 }
 
@@ -127,7 +143,7 @@ QString Screenshot::getName(NamingOptions options, QString prefix, QDir director
   case  Screenshot::Timestamp: // Timestamp
     naming = naming.arg(QDateTime::currentDateTime().toTime_t());
     break;
-  case  Screenshot::None:
+  case  Screenshot::Empty:
     naming = naming.arg("");
     break;
   }
@@ -193,14 +209,10 @@ void Screenshot::selectedArea()
 
 void Screenshot::selectedWindow()
 {
-#if defined(Q_WS_WIN)
   WindowPicker* windowPicker = new WindowPicker;
   mPixmapDelay = true;
 
   connect(windowPicker, SIGNAL(pixmap(QPixmap)), this, SLOT(setPixmap(QPixmap)));
-#else
-  wholeScreen();
-#endif
 }
 
 void Screenshot::wholeScreen()
@@ -317,15 +329,16 @@ void Screenshot::save()
 
   fileName = name + extension();
 
+  // In the following code I use  (Screenshot::Result)1 instead of Screenshot::Success because of some weird issue with the X11 headers. //TODO
   if (mOptions.file) {
     if (fileName.isEmpty()) {
       result = Screenshot::Fail;
     }
     else if (mUnloaded) {
-      result = (QFile::rename(mUnloadFilename, fileName)) ? Screenshot::Success : Screenshot::Fail;
+      result = (QFile::rename(mUnloadFilename, fileName)) ?  (Screenshot::Result)1: Screenshot::Fail;
     }
     else if (mPixmap.save(fileName, 0, mOptions.quality)) {
-      result = Screenshot::Success;
+      result = (Screenshot::Result)1;
     }
     else {
       result = Screenshot::Fail;
@@ -338,7 +351,7 @@ void Screenshot::save()
     QApplication::clipboard()->setPixmap(mPixmap, QClipboard::Clipboard);
 
     if (!mOptions.file) {
-      result = Screenshot::Success;
+      result =  (Screenshot::Result)1;
     }
   }
 
