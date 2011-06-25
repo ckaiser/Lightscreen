@@ -40,23 +40,21 @@
   #include <X11/Xatom.h>
 #endif
 
-
 WindowPicker::WindowPicker() : QWidget(0), mCrosshair(":/icons/picker"), mWindowLabel(0), mTaken(false)
 {
-  setWindowTitle(tr("Lightscreen Window Picker"));
-
+#if defined(Q_OS_WIN)
+  setWindowFlags(Qt::SplashScreen | Qt::WindowStaysOnTopHint);
+#elif defined(Q_WS_X11)
   setWindowFlags(Qt::WindowStaysOnTopHint);
+#endif
+
+  setWindowTitle(tr("Lightscreen Window Picker"));
   setStyleSheet("QWidget { color: #000; } #frame { padding: 7px 10px; border: 1px solid #898c95; background-color: qlineargradient(spread:pad, x1:1, y1:1, x2:0.988636, y2:0.608, stop:0 rgba(235, 235, 235, 255), stop:1 rgba(255, 255, 255, 255)); border-radius: 8px; }");
 
   QLabel *helpLabel = new QLabel(tr("Grab the window picker by clicking and holding down the mouse button, then drag it to the window of your choice and release it to capture."), this);
   helpLabel->setMinimumWidth(400);
   helpLabel->setMaximumWidth(400);
   helpLabel->setWordWrap(true);
-
-  mWindowIndicator = new QRubberBand(QRubberBand::Rectangle, 0);
-  mWindowIndicator->setWindowFlags(mWindowIndicator->windowFlags() & Qt::WindowStaysOnTopHint);
-  mWindowIndicator->setGeometry(0, 0, 0, 0);
-  mWindowIndicator->show();
 
   mWindowIcon = new QLabel(this);
   mWindowIcon->setMinimumSize(22, 22);
@@ -113,26 +111,24 @@ WindowPicker::WindowPicker() : QWidget(0), mCrosshair(":/icons/picker"), mWindow
 
 WindowPicker::~WindowPicker() {
   qApp->restoreOverrideCursor();
-  delete mWindowIndicator;
 }
 
 void WindowPicker::cancel() {
   mWindowIcon->setPixmap(QPixmap());
   mCrosshairLabel->setPixmap(mCrosshair);
-  mWindowIndicator->setGeometry(0, 0, 0, 0);
   qApp->restoreOverrideCursor();
 }
 
 void WindowPicker::mouseReleaseEvent(QMouseEvent *event)
 {
   if (event->button() == Qt::LeftButton) {
-#ifdef Q_OS_WINDOWS
+#if defined(Q_OS_WIN)
      POINT mousePos;
      mousePos.x = event->globalX();
      mousePos.y = event->globalY();
 
      HWND window = GetAncestor(WindowFromPoint(mousePos), GA_ROOT);
-#else
+#elif defined(Q_WS_X11)
     Window window = os::windowUnderCursor(false);
 #endif
 
@@ -141,7 +137,6 @@ void WindowPicker::mouseReleaseEvent(QMouseEvent *event)
        return;
      }
 
-     mWindowIndicator->hide();
      mTaken = true;
 
      setWindowFlags(windowFlags() ^ Qt::WindowStaysOnTopHint);
@@ -155,8 +150,6 @@ void WindowPicker::mouseReleaseEvent(QMouseEvent *event)
 
      return;
   }
-
-  mWindowIndicator->setGeometry(0, 0, 0, 0);
 
   close();
 }
@@ -174,23 +167,12 @@ void WindowPicker::mouseMoveEvent(QMouseEvent *event)
 {
   QString windowName;
 
-#if defined(Q_OS_WINDOWS)
+#if defined(Q_OS_WIN)
   POINT mousePos;
   mousePos.x = event->globalX();
   mousePos.y = event->globalY();
 
   HWND cWindow = GetAncestor(WindowFromPoint(mousePos), GA_ROOT);
-
-  if (cWindow == mWindowIndicator->winId()) {
-    return;
-  }
-
-  if (mCurrentWindow != cWindow) {
-    SetForegroundWindow(cWindow);
-    RECT rc;
-    GetWindowRect(cWindow, &rc);
-    mWindowIndicator->setGeometry(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
-  }
 
   mCurrentWindow = cWindow;
 
@@ -205,7 +187,7 @@ void WindowPicker::mouseMoveEvent(QMouseEvent *event)
   HICON icon;
 
   ::GetWindowText(mCurrentWindow, str, 60);
-  windowName = QString::fromWCharArray(str)
+  windowName = QString::fromWCharArray(str);
   ///
 
   // Retrieving the application icon
@@ -217,7 +199,6 @@ void WindowPicker::mouseMoveEvent(QMouseEvent *event)
   else {
     mWindowIcon->setPixmap(QPixmap());
   }
-
 #elif defined(Q_WS_X11)
   Window cWindow = os::windowUnderCursor(false);
 
@@ -291,7 +272,7 @@ void WindowPicker::mouseMoveEvent(QMouseEvent *event)
 
   QString windowText;
 
-  if (!mWindowIcon->pixmap()->isNull()) {
+  if (!mWindowIcon->pixmap()) {
     windowText = QString(" - %1").arg(windowName);
   }
   else {

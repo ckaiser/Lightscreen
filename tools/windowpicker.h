@@ -49,7 +49,6 @@ private:
     QLabel *mWindowLabel;
     QLabel *mWindowIcon;
     QLabel *mCrosshairLabel;
-    QRubberBand *mWindowIndicator;
     WId mCurrentWindow;
     bool mTaken;
 };
