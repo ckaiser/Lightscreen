@@ -52,12 +52,6 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
     resize(minimumSizeHint());
   }
 
-  QTimer::singleShot(0, this, SLOT(init()));
-  QTimer::singleShot(1, this, SLOT(loadSettings()));
-}
-
-void OptionsDialog::init()
-{
 #if !defined(Q_WS_WIN)
   ui.cursorCheckBox->setVisible(false);
   ui.cursorCheckBox->setChecked(false);
@@ -75,11 +69,17 @@ void OptionsDialog::init()
       ui.screenshotsGroupBox->setFlat(false);
       ui.previewGroupBox->setFlat(false);
       ui.updaterGroupBox->setFlat(false);
-      ui.optionsTab->layout()->setMargin(4);
-      ui.aboutTab->layout()->setContentsMargins(0, 0, 6, 0);
+      ui.optionsTab->layout()->setContentsMargins(0, 0, 6, 0);
+      ui.aboutTab->layout()->setMargin(8);
   }
 #endif
 
+  QTimer::singleShot(0, this, SLOT(init()));
+  QTimer::singleShot(1, this, SLOT(loadSettings()));
+}
+
+void OptionsDialog::init()
+{
   // Make the scroll area share the Tab Widget background color
   QPalette optionsPalette = ui.optionsScrollArea->palette();
   optionsPalette.setColor(QPalette::Window,  ui.tabWidget->palette().color(QPalette::Base));

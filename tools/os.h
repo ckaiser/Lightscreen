@@ -26,6 +26,8 @@ struct QPoint;
 struct QString;
 struct QUrl;
 class QGraphicsEffect;
+typedef unsigned long XID;
+typedef XID Window;
 
 namespace os
 {
@@ -49,6 +51,10 @@ namespace os
   void effect(QObject* target, const char* slot, int frames, int duration = 400, const char* cleanup = 0);
   // Creates a new QGraphicsDropShadowEffect to apply to widgets.
   QGraphicsEffect* shadow(QColor color = Qt::black, int blurRadius = 6, int offset = 1);
+#if defined(Q_WS_X11)
+  Window findRealWindow(Window w, int depth = 0);
+  Window windowUnderCursor(bool includeDecorations = true);
+#endif
 }
 
 

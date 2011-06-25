@@ -30,15 +30,22 @@
 #include "windowpicker.h"
 #include "os.h"
 
-#ifdef Q_OS_WIN
-#include <windows.h>
+#if defined(Q_OS_WIN)
+  #include <windows.h>
+#elif defined(Q_WS_X11)
+  #include <QX11Info>
+  #include <X11/X.h>
+  #include <X11/Xlib.h>
+  #include <X11/Xutil.h>
+  #include <X11/Xatom.h>
 #endif
 
 
 WindowPicker::WindowPicker() : QWidget(0), mCrosshair(":/icons/picker"), mWindowLabel(0), mTaken(false)
 {
-  setWindowFlags(Qt::SplashScreen | Qt::WindowStaysOnTopHint);
   setWindowTitle(tr("Lightscreen Window Picker"));
+
+  setWindowFlags(Qt::WindowStaysOnTopHint);
   setStyleSheet("QWidget { color: #000; } #frame { padding: 7px 10px; border: 1px solid #898c95; background-color: qlineargradient(spread:pad, x1:1, y1:1, x2:0.988636, y2:0.608, stop:0 rgba(235, 235, 235, 255), stop:1 rgba(255, 255, 255, 255)); border-radius: 8px; }");
 
   QLabel *helpLabel = new QLabel(tr("Grab the window picker by clicking and holding down the mouse button, then drag it to the window of your choice and release it to capture."), this);
@@ -125,6 +132,9 @@ void WindowPicker::mouseReleaseEvent(QMouseEvent *event)
      mousePos.y = event->globalY();
 
      HWND window = GetAncestor(WindowFromPoint(mousePos), GA_ROOT);
+#else
+    Window window = os::windowUnderCursor(false);
+#endif
 
      if (window == winId()) {
        cancel();
@@ -137,8 +147,12 @@ void WindowPicker::mouseReleaseEvent(QMouseEvent *event)
      setWindowFlags(windowFlags() ^ Qt::WindowStaysOnTopHint);
      close();
 
+#ifdef Q_WS_X11
+     emit pixmap(QPixmap::grabWindow(mCurrentWindow));
+#else
      emit pixmap(os::grabWindow(window));
 #endif
+
      return;
   }
 
@@ -149,16 +163,18 @@ void WindowPicker::mouseReleaseEvent(QMouseEvent *event)
 
 void WindowPicker::mousePressEvent(QMouseEvent *event)
 {
-    qApp->setOverrideCursor(QCursor(mCrosshair));
-    mCrosshairLabel->setMinimumWidth(mCrosshairLabel->width());
-    mCrosshairLabel->setMinimumHeight(mCrosshairLabel->height());
-    mCrosshairLabel->setPixmap(QPixmap());
-    QWidget::mousePressEvent(event);
+  qApp->setOverrideCursor(QCursor(mCrosshair));
+  mCrosshairLabel->setMinimumWidth(mCrosshairLabel->width());
+  mCrosshairLabel->setMinimumHeight(mCrosshairLabel->height());
+  mCrosshairLabel->setPixmap(QPixmap());
+  QWidget::mousePressEvent(event);
 }
 
 void WindowPicker::mouseMoveEvent(QMouseEvent *event)
 {
-#ifdef Q_OS_WINDOWS
+  QString windowName;
+
+#if defined(Q_OS_WINDOWS)
   POINT mousePos;
   mousePos.x = event->globalX();
   mousePos.y = event->globalY();
@@ -189,6 +205,7 @@ void WindowPicker::mouseMoveEvent(QMouseEvent *event)
   HICON icon;
 
   ::GetWindowText(mCurrentWindow, str, 60);
+  windowName = QString::fromWCharArray(str)
   ///
 
   // Retrieving the application icon
@@ -201,7 +218,85 @@ void WindowPicker::mouseMoveEvent(QMouseEvent *event)
     mWindowIcon->setPixmap(QPixmap());
   }
 
-  QString windowText = QString(" - %1").arg(QString::fromWCharArray(str));
+#elif defined(Q_WS_X11)
+  Window cWindow = os::windowUnderCursor(false);
+
+  if (cWindow == mCurrentWindow) {
+    return;
+  }
+
+  mCurrentWindow = cWindow;
+
+  if (mCurrentWindow == winId()) {
+    mWindowIcon->setPixmap(QPixmap());
+    mWindowLabel->setText("");
+    return;
+  }
+
+  // Getting the window name property.
+  XTextProperty tp;
+  char **text;
+  int count;
+
+  if (XGetTextProperty(QX11Info::display(), cWindow, &tp, XA_WM_NAME) != 0 && tp.value != NULL ) {
+    if (tp.encoding == XA_STRING) {
+      windowName = QString::fromLocal8Bit((const char*) tp.value);
+    }
+    else if (XmbTextPropertyToTextList( QX11Info::display(), &tp, &text, &count) == Success &&
+             text != NULL && count > 0) {
+      windowName = QString::fromLocal8Bit(text[0]);
+      XFreeStringList(text);
+    }
+
+    XFree(tp.value);
+  }
+
+  // Retrieving the _NET_WM_ICON property.
+  Atom type_ret = None;
+  unsigned char *data = 0;
+  int format = 0;
+  unsigned long n = 0;
+  unsigned long extra = 0;
+  int width = 0;
+  int height = 0;
+
+  Atom _net_wm_icon = XInternAtom(QX11Info::display(), "_NET_WM_ICON", False);
+
+  if (XGetWindowProperty(QX11Info::display(), cWindow, _net_wm_icon, 0, 1, False,
+                         XA_CARDINAL, &type_ret, &format, &n, &extra, (unsigned char **)&data) == Success && data)
+  {
+    width = data[0];
+    XFree(data);
+  }
+
+  if (XGetWindowProperty(QX11Info::display(), cWindow, _net_wm_icon, 1, 1, False,
+                         XA_CARDINAL, &type_ret, &format, &n, &extra, (unsigned char **)&data) == Success && data)
+  {
+    height = data[0];
+    XFree(data);
+  }
+
+  if (XGetWindowProperty(QX11Info::display(), cWindow, _net_wm_icon, 2, width*height, False,
+                         XA_CARDINAL, &type_ret, &format, &n, &extra, (unsigned char **)&data) == Success && data)
+  {
+    QImage img(data, width, height, QImage::Format_ARGB32);
+    mWindowIcon->setPixmap(QPixmap::fromImage(img));
+    XFree(data);
+  }
+  else {
+    mWindowIcon->setPixmap(QPixmap());
+  }
+
+#endif
+
+  QString windowText;
+
+  if (!mWindowIcon->pixmap()->isNull()) {
+    windowText = QString(" - %1").arg(windowName);
+  }
+  else {
+    windowText = windowName;
+  }
 
   if (windowText == " - ") {
     mWindowLabel->setText("");
@@ -214,7 +309,6 @@ void WindowPicker::mouseMoveEvent(QMouseEvent *event)
   else {
     mWindowLabel->setText(windowText);
   }
-#endif
 }
 
 void WindowPicker::closeEvent(QCloseEvent*)

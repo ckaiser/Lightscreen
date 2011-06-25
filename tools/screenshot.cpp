@@ -86,12 +86,10 @@ void Screenshot::activeWindow()
 #endif
 
 #if defined(Q_WS_X11)
-  Display *display;
   Window focus;
   int revert;
 
-  display = XOpenDisplay(NULL);
-  XGetInputFocus(display, &focus, &revert);
+  XGetInputFocus(QX11Info::display(), &focus, &revert);
 
   mPixmap = QPixmap::grabWindow(focus);
 #endif

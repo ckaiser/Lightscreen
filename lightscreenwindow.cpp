@@ -169,9 +169,11 @@ void LightscreenWindow::cleanup(Screenshot::Options options)
 {
   // Reversing settings
   if (settings()->value("options/hide").toBool()) {
+#ifndef Q_WS_X11 // X is not quick enough and the notification ends up everywhere but in the icon
     if (settings()->value("options/tray").toBool() && mTrayIcon) {
       mTrayIcon->show();
     }
+#endif
 
     if (PreviewDialog::isActive()) {
       if (PreviewDialog::instance()->count() <= 1 && mWasVisible) {
@@ -340,8 +342,10 @@ void LightscreenWindow::screenshotAction(int mode)
   if (optionsHide) {
     hide();
 
+#ifndef Q_WS_X11 // X is not quick enough and the notification ends up everywhere but in the icon
     if (mTrayIcon)
       mTrayIcon->hide();
+#endif
   }
 
   // Screenshot delay

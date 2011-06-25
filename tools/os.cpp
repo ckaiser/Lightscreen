@@ -44,6 +44,12 @@
 #if defined(Q_WS_WIN)
   #include <qt_windows.h>
   #include <shlobj.h>
+#elif defined(Q_WS_X11)
+  #include <QX11Info>
+  #include <X11/X.h>
+  #include <X11/Xlib.h>
+  #include <X11/Xutil.h>
+  #include <X11/Xatom.h>
 #endif
 
 #include "os.h"
@@ -324,4 +330,73 @@ QGraphicsEffect* os::shadow(QColor color, int blurRadius, int offset) {
   return shadowEffect;
 }
 
+#ifdef Q_WS_X11
+// Taken from KSnapshot. Oh KDE, what would I do whithout you :D
+Window os::findRealWindow(Window w, int depth)
+{
+    if( depth > 5 ) {
+        return None;
+    }
 
+    static Atom wm_state = XInternAtom( QX11Info::display(), "WM_STATE", False );
+    Atom type;
+    int format;
+    unsigned long nitems, after;
+    unsigned char* prop;
+
+    if( XGetWindowProperty( QX11Info::display(), w, wm_state, 0, 0, False, AnyPropertyType,
+                            &type, &format, &nitems, &after, &prop ) == Success ) {
+        if( prop != NULL ) {
+            XFree( prop );
+        }
+
+        if( type != None ) {
+            return w;
+        }
+    }
+
+    Window root, parent;
+    Window* children;
+    unsigned int nchildren;
+    Window ret = None;
+
+    if( XQueryTree( QX11Info::display(), w, &root, &parent, &children, &nchildren ) != 0 ) {
+        for( unsigned int i = 0;
+             i < nchildren && ret == None;
+             ++i ) {
+            ret = os::findRealWindow( children[ i ], depth + 1 );
+        }
+
+        if( children != NULL ) {
+            XFree( children );
+        }
+    }
+
+    return ret;
+}
+
+Window os::windowUnderCursor(bool includeDecorations)
+{
+    Window root;
+    Window child;
+    uint mask;
+    int rootX, rootY, winX, winY;
+
+    XQueryPointer( QX11Info::display(), QX11Info::appRootWindow(), &root, &child,
+           &rootX, &rootY, &winX, &winY, &mask );
+
+    if( child == None ) {
+        child = QX11Info::appRootWindow();
+    }
+
+    if( !includeDecorations ) {
+        Window real_child = os::findRealWindow( child );
+
+        if( real_child != None ) { // test just in case
+            child = real_child;
+        }
+    }
+
+    return child;
+}
+#endif
