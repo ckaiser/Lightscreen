@@ -31,7 +31,7 @@ class Uploader : public QObject
 public:
   Uploader(QObject *parent = 0);
   static Uploader* instance();
-  QString lastUrl();
+  QString lastUrl() const;
   QList< QPair<QString, QString> > &screenshots() { return mScreenshots; }
 
 public slots:

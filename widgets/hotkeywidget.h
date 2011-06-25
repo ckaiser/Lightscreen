@@ -29,7 +29,7 @@ public:
   HotkeyWidget(QWidget *parent = 0);
 
   void setHotkey(QKeySequence hotkey);
-  QKeySequence hotkey();
+  QKeySequence &hotkey();
 
 signals:
   void invalidHotkeyError();

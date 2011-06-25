@@ -43,7 +43,7 @@ public slots:
   void action(int mode = 3);
   void areaHotkey();
   void checkForUpdates();
-  void cleanup(Screenshot::Options options);
+  void cleanup(Screenshot::Options &options);
   bool closingWithoutTray();
   void goToFolder();
   void messageClicked();

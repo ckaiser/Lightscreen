@@ -27,6 +27,7 @@
 #include <QSettings>
 #include <QUrl>
 #include <QTimer>
+#include <QProcess>
 
 #include <QDebug>
 
@@ -52,10 +53,7 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
     resize(minimumSizeHint());
   }
 
-#if !defined(Q_WS_WIN)
-  ui.cursorCheckBox->setVisible(false);
-  ui.cursorCheckBox->setChecked(false);
-
+#if defined(Q_WS_X11)
   // KDE-specific style tweaks.
   if (qApp->style()->objectName() == "oxygen") {
       ui.browsePushButton->setMaximumWidth(30);
@@ -69,6 +67,7 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
       ui.screenshotsGroupBox->setFlat(false);
       ui.previewGroupBox->setFlat(false);
       ui.updaterGroupBox->setFlat(false);
+
       ui.optionsTab->layout()->setContentsMargins(0, 0, 6, 0);
       ui.aboutTab->layout()->setMargin(8);
   }
@@ -424,7 +423,22 @@ void OptionsDialog::loadSettings()
   if (!QFile::exists("optipng.exe")) {
     ui.optiPngCheckBox->setEnabled(false);
     ui.optiPngCheckBox->setChecked(false);
+    ui.optiPngLabel->setText(" - optipng.exe not found");
   }
+#elif defined(Q_WS_X11)
+  if (!QProcess::startDetached("optipng")) {
+    ui.optiPngCheckBox->setChecked(false);
+    ui.optiPngCheckBox->setEnabled(false);
+    ui.optiPngLabel->setText(tr(" - Install 'OptiPNG'"));
+  }
+
+  //TODO: Sound cue support on Linux
+  ui.playSoundCheckBox->setVisible(false);
+  ui.playSoundCheckBox->setChecked(false);
+
+  //TODO: Cursor support on X11
+  ui.cursorCheckBox->setVisible(false);
+  ui.cursorCheckBox->setChecked(false);
 #endif
 
   //TODO: Must replace with not-stupid system

@@ -24,6 +24,7 @@
 
 class QNetworkAccessManager;
 class QNetworkReply;
+
 class QtImgur: public QObject {
   Q_OBJECT
 

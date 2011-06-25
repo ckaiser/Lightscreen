@@ -40,7 +40,7 @@ ScreenshotManager::~ScreenshotManager()
   delete mSettings;
 }
 
-void ScreenshotManager::take(Screenshot::Options options)
+void ScreenshotManager::take(Screenshot::Options &options)
 {
   Screenshot* newScreenshot = new Screenshot(this, options);
 

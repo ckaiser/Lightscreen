@@ -32,7 +32,7 @@ public:
   PreviewDialog(QWidget *parent);
 
   void add(Screenshot* screenshot);
-  int count();
+  int count() const;
 
   static PreviewDialog *instance();
   static bool isActive();

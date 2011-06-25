@@ -93,7 +93,7 @@ public:
   Screenshot(QObject *parent, Screenshot::Options options);
   ~Screenshot();
 
-  Screenshot::Options options() const;
+  Screenshot::Options &options();
   QPixmap &pixmap();
   static QString getName(NamingOptions options, QString prefix, QDir directory);
 
@@ -111,8 +111,8 @@ signals:
 
 private:
   void    activeWindow();
-  QString newFileName();
-  QString extension();
+  QString newFileName() const;
+  QString extension()   const;
   void    selectedArea();
   void    selectedWindow();
   void    wholeScreen();

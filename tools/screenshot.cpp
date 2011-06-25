@@ -59,13 +59,20 @@ Screenshot::~Screenshot()
   }
 }
 
-Screenshot::Options Screenshot::options() const
+Screenshot::Options &Screenshot::options()
 {
   return mOptions;
 }
 
 QPixmap &Screenshot::pixmap()
 {
+  if (mUnloaded) {
+    // A local reference.. what could go wrong? Nothing! Right guys? Guys?
+    QPixmap p;
+    p.load(mUnloadFilename);
+    return p;
+  }
+
   return mPixmap;
 }
 
@@ -149,7 +156,7 @@ QString Screenshot::getName(NamingOptions options, QString prefix, QDir director
   return naming;
 }
 
-QString Screenshot::newFileName()
+QString Screenshot::newFileName() const
 {
   if (!mOptions.directory.exists())
     mOptions.directory.mkpath(mOptions.directory.path());
@@ -170,7 +177,7 @@ QString Screenshot::newFileName()
   return fileName;
 }
 
-QString Screenshot::extension()
+QString Screenshot::extension() const
 {
   switch (mOptions.format) {
     case Screenshot::PNG:

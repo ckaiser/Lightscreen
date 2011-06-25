@@ -218,6 +218,9 @@ Quality is related to file size and of course to readability and overall quality
             <property name="maximum">
              <number>100</number>
             </property>
+            <property name="pageStep">
+             <number>5</number>
+            </property>
             <property name="value">
              <number>100</number>
             </property>
@@ -382,7 +385,7 @@ Quality is related to file size and of course to readability and overall quality
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Capture the screen</string>
+             <string>Fullscreen</string>
             </property>
            </widget>
           </item>
@@ -396,23 +399,7 @@ Quality is related to file size and of course to readability and overall quality
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="windowCheckBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Capture the current window</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="HotkeyWidget" name="windowHotkeyWidget"/>
-          </item>
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QCheckBox" name="windowPickerCheckBox">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
@@ -421,30 +408,14 @@ Quality is related to file size and of course to readability and overall quality
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Capture a chosen window</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="HotkeyWidget" name="windowPickerHotkeyWidget"/>
-          </item>
-          <item row="3" column="0">
-           <widget class="QCheckBox" name="areaCheckBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Capture a screen area</string>
+             <string>Window Picker</string>
             </property>
            </widget>
           </item>
           <item row="3" column="2">
-           <widget class="HotkeyWidget" name="areaHotkeyWidget"/>
+           <widget class="HotkeyWidget" name="windowPickerHotkeyWidget"/>
           </item>
-          <item row="1" column="1">
+          <item row="2" column="1">
            <spacer name="horizontalSpacer_4">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -456,6 +427,38 @@ Quality is related to file size and of course to readability and overall quality
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="windowCheckBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Active Window</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="HotkeyWidget" name="windowHotkeyWidget"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="areaCheckBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Screen Area</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="HotkeyWidget" name="areaHotkeyWidget"/>
           </item>
          </layout>
         </widget>
@@ -560,9 +563,9 @@ Quality is related to file size and of course to readability and overall quality
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>0</y>
+            <y>-175</y>
             <width>366</width>
-            <height>653</height>
+            <height>702</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -580,7 +583,7 @@ Quality is related to file size and of course to readability and overall quality
              <property name="flat">
               <bool>true</bool>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_7">
+             <layout class="QVBoxLayout" name="verticalLayout_6">
               <item>
                <widget class="QCheckBox" name="trayCheckBox">
                 <property name="whatsThis">
@@ -606,21 +609,28 @@ Quality is related to file size and of course to readability and overall quality
                </widget>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="notifyLayout">
-                <property name="spacing">
-                 <number>12</number>
+               <widget class="QLabel" name="notifyLabel">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                  <underline>true</underline>
+                 </font>
                 </property>
-                <item>
-                 <widget class="QLabel" name="notifyLabel">
-                  <property name="text">
-                   <string>&amp;Notify with:</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>messageCheckBox</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item>
+                <property name="text">
+                 <string>&amp;Notify with:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>messageCheckBox</cstring>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QGridLayout" name="notifyLayout">
+                <property name="bottomMargin">
+                 <number>4</number>
+                </property>
+                <item row="0" column="1">
                  <widget class="QCheckBox" name="messageCheckBox">
                   <property name="whatsThis">
                    <string>Shows a completion message once the screenshot is saved, clicking this message takes you to the directory where the screenshot was saved.</string>
@@ -630,14 +640,30 @@ Quality is related to file size and of course to readability and overall quality
                   </property>
                  </widget>
                 </item>
-                <item>
+                <item row="1" column="1">
                  <widget class="QCheckBox" name="playSoundCheckBox">
                   <property name="text">
                    <string>&amp;Sound cue</string>
                   </property>
                  </widget>
                 </item>
-                <item>
+                <item row="0" column="0">
+                 <spacer name="horizontalSpacer_9">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Fixed</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>15</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item row="0" column="2">
                  <spacer name="horizontalSpacer">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
@@ -707,7 +733,7 @@ Quality is related to file size and of course to readability and overall quality
              <property name="flat">
               <bool>true</bool>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_9">
+             <layout class="QVBoxLayout" name="verticalLayout_7">
               <item>
                <widget class="QCheckBox" name="saveAsCheckBox">
                 <property name="text">
@@ -725,7 +751,7 @@ Quality is related to file size and of course to readability and overall quality
               <item>
                <widget class="QCheckBox" name="currentMonitorCheckBox">
                 <property name="text">
-                 <string>&amp;Grab only the current monitor.</string>
+                 <string>&amp;Grab only the active monitor.</string>
                 </property>
                </widget>
               </item>
@@ -744,14 +770,62 @@ Quality is related to file size and of course to readability and overall quality
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="optiPngCheckBox">
-                <property name="toolTip">
-                 <string>Runs OptiPNG which reduces screenshot file size.</string>
-                </property>
-                <property name="text">
-                 <string>O&amp;ptimize PNG screenshots.</string>
-                </property>
-               </widget>
+               <layout class="QHBoxLayout" name="horizontalLayout_2">
+                <item>
+                 <widget class="QCheckBox" name="optiPngCheckBox">
+                  <property name="toolTip">
+                   <string>Runs OptiPNG which reduces screenshot file size.</string>
+                  </property>
+                  <property name="text">
+                   <string>O&amp;ptimize PNG screenshots.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="optiPngLabel">
+                  <property name="palette">
+                   <palette>
+                    <active>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>128</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </active>
+                    <inactive>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>128</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </inactive>
+                    <disabled>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>141</red>
+                        <green>138</green>
+                        <blue>136</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </disabled>
+                   </palette>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
               <item>
                <widget class="QCheckBox" name="replaceCheckBox">
@@ -1138,8 +1212,6 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
   <tabstop>windowHotkeyWidget</tabstop>
   <tabstop>windowPickerCheckBox</tabstop>
   <tabstop>windowPickerHotkeyWidget</tabstop>
-  <tabstop>areaCheckBox</tabstop>
-  <tabstop>areaHotkeyWidget</tabstop>
   <tabstop>openCheckBox</tabstop>
   <tabstop>openHotkeyWidget</tabstop>
   <tabstop>directoryCheckBox</tabstop>
@@ -1147,8 +1219,6 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
   <tabstop>trayCheckBox</tabstop>
   <tabstop>hideCheckBox</tabstop>
   <tabstop>warnHideCheckBox</tabstop>
-  <tabstop>messageCheckBox</tabstop>
-  <tabstop>playSoundCheckBox</tabstop>
   <tabstop>languageComboBox</tabstop>
   <tabstop>saveAsCheckBox</tabstop>
   <tabstop>clipboardCheckBox</tabstop>

@@ -43,8 +43,7 @@ class AreaDialog : public QDialog
 
 public:
     AreaDialog(Screenshot* screenshot);
-    ~AreaDialog();
-    QRect resultRect();
+    QRect &resultRect();
 
 protected slots:
     void displayHelp();

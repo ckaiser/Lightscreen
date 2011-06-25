@@ -91,8 +91,8 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   connect(Uploader::instance(), SIGNAL(error(QString))        , this, SLOT(showUploaderError(QString)));
 
   // Manager
-  connect(ScreenshotManager::instance(), SIGNAL(confirm(Screenshot*)),               this, SLOT(preview(Screenshot*)));
-  connect(ScreenshotManager::instance(), SIGNAL(windowCleanup(Screenshot::Options)), this, SLOT(cleanup(Screenshot::Options)));
+  connect(ScreenshotManager::instance(), SIGNAL(confirm(Screenshot*)),                this, SLOT(preview(Screenshot*)));
+  connect(ScreenshotManager::instance(), SIGNAL(windowCleanup(Screenshot::Options&)), this, SLOT(cleanup(Screenshot::Options&)));
 
   if (!settings()->contains("file/format")) {
     showOptions();  // There are no options (or the options config is invalid or incomplete)
@@ -165,7 +165,7 @@ bool LightscreenWindow::closingWithoutTray()
   return true; // Cancel
 }
 
-void LightscreenWindow::cleanup(Screenshot::Options options)
+void LightscreenWindow::cleanup(Screenshot::Options &options)
 {
   // Reversing settings
   if (settings()->value("options/hide").toBool()) {
@@ -208,7 +208,7 @@ void LightscreenWindow::cleanup(Screenshot::Options options)
 
   if (options.result == Screenshot::Success
    && settings()->value("options/optipng").toBool()
-   && settings()->value("file/format").toInt() == Screenshot::PNG)
+   && options.format == Screenshot::PNG)
   {
     compressPng(options.fileName);
   }

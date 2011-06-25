@@ -21,6 +21,7 @@
 #include <QKeyEvent>
 #include <QKeySequence>
 #include <QTimer>
+#include <QStyle>
 
 #include <QDebug>
 
@@ -31,7 +32,13 @@ HotkeyWidget::HotkeyWidget(QWidget *parent) :
 {
   setStyleSheet("text-align: left; padding: 3px 6px;");
   setText(tr("Click to select hotkey..."));
-  setMinimumWidth(110);
+
+  if (qApp->style()->objectName() == "oxygen") {
+    setMinimumWidth(130);
+  }
+  else {
+    setMinimumWidth(110);
+  }
 }
 
 void HotkeyWidget::setHotkey(QKeySequence hotkey)
@@ -40,7 +47,7 @@ void HotkeyWidget::setHotkey(QKeySequence hotkey)
   setHotkeyText();
 }
 
-QKeySequence HotkeyWidget::hotkey()
+QKeySequence &HotkeyWidget::hotkey()
 {
   return mHotkey;
 }

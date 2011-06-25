@@ -199,7 +199,7 @@ void PreviewDialog::add(Screenshot *screenshot)
   relocate();
 }
 
-int PreviewDialog::count()
+int PreviewDialog::count() const
 {
   return mStack->count();
 }

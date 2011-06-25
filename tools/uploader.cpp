@@ -52,7 +52,6 @@ void Uploader::upload(const QString &fileName)
 
   mScreenshots.append(screenshot);
 
-  qDebug() << "WTF";
   mUploading++;
 }
 
@@ -115,7 +114,7 @@ void Uploader::imgurError(const QString &file, const QtImgur::Error e)
   emit error(errorString);
 }
 
-QString Uploader::lastUrl()
+QString Uploader::lastUrl() const
 {
   QListIterator< QPair<QString, QString> >  i(mScreenshots);
   i.toBack();

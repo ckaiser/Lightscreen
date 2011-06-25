@@ -47,13 +47,13 @@ public:
   QSettings *settings() const { return mSettings; }
 
 public slots:
-  void take(Screenshot::Options options);
+  void take(Screenshot::Options &options);
   void askConfirmation();
   void cleanup();
 
 signals:
   void confirm(Screenshot* screenshot);
-  void windowCleanup(Screenshot::Options options);
+  void windowCleanup(Screenshot::Options &options);
 
 private:
   static ScreenshotManager* mInstance;

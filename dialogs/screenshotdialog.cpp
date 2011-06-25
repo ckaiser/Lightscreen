@@ -61,7 +61,7 @@ ScreenshotDialog::ScreenshotDialog(Screenshot *screenshot, QWidget *parent) :
 
   mOriginalSize = mLabel->size();
 
-  QSize size = (screenshot->pixmap().size() + QSize(2, 2)); // WTF: The 2x2 avoids the scrollbars..
+  QSize size = (mLabel->pixmap()->size() + QSize(10, 10)); //TODO: Good padding for all platforms
 
   if (size.width() >= qApp->desktop()->availableGeometry().width()) {
     size.setWidth(qApp->desktop()->availableGeometry().size().width() - 300);
@@ -71,7 +71,8 @@ ScreenshotDialog::ScreenshotDialog(Screenshot *screenshot, QWidget *parent) :
     size.setHeight(qApp->desktop()->availableGeometry().size().height() - 300);
   }
 
-  resize(size);  
+  resize(size);
+  move(qApp->desktop()->screen(qApp->desktop()->primaryScreen())->rect().center()-QPoint(height()/2, width()/2));
   show();
 }
 

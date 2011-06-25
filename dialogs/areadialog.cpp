@@ -94,11 +94,7 @@ AreaDialog::AreaDialog(Screenshot *screenshot) :
   mAcceptWidget->setVisible(false);
 }
 
-AreaDialog::~AreaDialog()
-{
-}
-
-QRect AreaDialog::resultRect()
+QRect &AreaDialog::resultRect()
 {
   return mSelection;
 }
