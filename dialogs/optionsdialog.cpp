@@ -423,13 +423,13 @@ void OptionsDialog::loadSettings()
   if (!QFile::exists("optipng.exe")) {
     ui.optiPngCheckBox->setEnabled(false);
     ui.optiPngCheckBox->setChecked(false);
-    ui.optiPngLabel->setText(" - optipng.exe not found");
+    ui.optiPngLabel->setText("optipng.exe not found");
   }
 #elif defined(Q_WS_X11)
   if (!QProcess::startDetached("optipng")) {
     ui.optiPngCheckBox->setChecked(false);
     ui.optiPngCheckBox->setEnabled(false);
-    ui.optiPngLabel->setText(tr(" - Install 'OptiPNG'"));
+    ui.optiPngLabel->setText(tr("Install 'OptiPNG'"));
   }
 
   //TODO: Sound cue support on Linux

@@ -774,6 +774,9 @@ Quality is related to file size and of course to readability and overall quality
               </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_2">
+                <property name="spacing">
+                 <number>2</number>
+                </property>
                 <item>
                  <widget class="QCheckBox" name="optiPngCheckBox">
                   <property name="toolTip">
@@ -860,7 +863,7 @@ Quality is related to file size and of course to readability and overall quality
               <item>
                <widget class="QCheckBox" name="uploadCheckBox">
                 <property name="text">
-                 <string>Upload all my screenshots automatically.</string>
+                 <string>Upload my screenshots automatically.</string>
                 </property>
                </widget>
               </item>

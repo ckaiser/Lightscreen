@@ -4,7 +4,7 @@
 <context>
     <name>AreaDialog</name>
     <message>
-        <location filename="../dialogs/areadialog.cpp" line="135"/>
+        <location filename="../dialogs/areadialog.cpp" line="142"/>
         <source>Lightscreen area mode:
 Use your mouse to draw a rectangle to capture.
 Press any key or right click to exit.</source>
@@ -14,17 +14,18 @@ Press any key or right click to exit.</source>
 <context>
     <name>HotkeyWidget</name>
     <message>
-        <location filename="../widgets/hotkeywidget.cpp" line="15"/>
+        <location filename="../widgets/hotkeywidget.cpp" line="36"/>
         <source>Click to select hotkey...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgets/hotkeywidget.cpp" line="47"/>
+        <location filename="../widgets/hotkeywidget.cpp" line="75"/>
         <source>Type your hotkey</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../widgets/hotkeywidget.cpp" line="56"/>
+        <location filename="../widgets/hotkeywidget.cpp" line="84"/>
+        <location filename="../widgets/hotkeywidget.cpp" line="105"/>
         <source>Invalid hotkey</source>
         <translation type="unfinished"></translation>
     </message>
@@ -32,155 +33,227 @@ Press any key or right click to exit.</source>
 <context>
     <name>LightscreenWindow</name>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="109"/>
-        <location filename="../lightscreenwindow.cpp" line="263"/>
-        <location filename="../lightscreenwindow.cpp" line="484"/>
-        <location filename="../lightscreenwindow.cpp" line="687"/>
+        <location filename="../lightscreenwindow.cpp" line="133"/>
+        <location filename="../lightscreenwindow.cpp" line="585"/>
+        <location filename="../lightscreenwindow.cpp" line="881"/>
         <source>Lightscreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="110"/>
+        <location filename="../lightscreenwindow.cpp" line="134"/>
         <source>You have chosen to hide Lightscreen when there&apos;s no system tray icon, so you will not be able to access the program &lt;b&gt;unless you have selected a hotkey to do so&lt;/b&gt;.&lt;br&gt;What do you want to do?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="115"/>
+        <location filename="../lightscreenwindow.cpp" line="139"/>
         <source>Hide but enable tray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="117"/>
+        <location filename="../lightscreenwindow.cpp" line="141"/>
         <source>Hide and don&apos;t warn</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="119"/>
+        <location filename="../lightscreenwindow.cpp" line="143"/>
         <source>Just hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="391"/>
+        <location filename="../lightscreenwindow.cpp" line="298"/>
+        <source>uploading one or more screenshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="303"/>
+        <source>optimizing and uploading screenshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="306"/>
+        <source>optimizing one or more screenshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="312"/>
+        <source>Are you sure you want to quit?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="313"/>
+        <source>Lightscreen is currently %1, this will finish momentarily, are you sure you want to quit?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="315"/>
+        <source>Don&apos;t quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="449"/>
         <source>The screenshot was not taken</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="406"/>
-        <location filename="../lightscreenwindow.cpp" line="616"/>
-        <source>Active &amp;Window</source>
+        <location filename="../lightscreenwindow.cpp" line="465"/>
+        <source>%1 uploaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="409"/>
-        <location filename="../lightscreenwindow.cpp" line="619"/>
-        <source>&amp;Pick Window</source>
+        <location filename="../lightscreenwindow.cpp" line="465"/>
+        <source>Click here to go to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="447"/>
-        <source>Failed!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="450"/>
-        <source>Cancelled!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="466"/>
-        <source>Some hotkeys could not be registered, they might already be in use</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="469"/>
-        <source>&lt;br&gt;The failed hotkeys are the following:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="478"/>
-        <source>&lt;br&gt;The failed hotkey is &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="481"/>
-        <source>&lt;br&gt;&lt;i&gt;What do you want to do?&lt;/i&gt;</source>
+        <location filename="../lightscreenwindow.cpp" line="475"/>
+        <source>Upload error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../lightscreenwindow.cpp" line="487"/>
+        <location filename="../lightscreenwindow.cpp" line="738"/>
+        <source>Active &amp;Window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="490"/>
+        <location filename="../lightscreenwindow.cpp" line="741"/>
+        <source>&amp;Pick Window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="496"/>
+        <location filename="../lightscreenwindow.cpp" line="756"/>
+        <source>&amp;Upload last</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="497"/>
+        <location filename="../lightscreenwindow.cpp" line="757"/>
+        <source>Upload the last screenshot you took to imgur.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="540"/>
+        <source>Failed!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="543"/>
+        <source>Cancelled!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="567"/>
+        <source>Some hotkeys could not be registered, they might already be in use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="570"/>
+        <source>&lt;br&gt;The failed hotkeys are the following:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="579"/>
+        <source>&lt;br&gt;The failed hotkey is &lt;b&gt;%1&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="582"/>
+        <source>&lt;br&gt;&lt;i&gt;What do you want to do?&lt;/i&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="588"/>
         <source>Change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="488"/>
+        <location filename="../lightscreenwindow.cpp" line="589"/>
         <source>Disable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="489"/>
+        <location filename="../lightscreenwindow.cpp" line="910"/>
+        <source>Uploading...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="930"/>
+        <source>Lightscreen: Uploading %1 screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="933"/>
+        <source>Lightscreen %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="314"/>
+        <location filename="../lightscreenwindow.cpp" line="590"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="688"/>
+        <location filename="../lightscreenwindow.cpp" line="882"/>
         <source>There&apos;s a new version of Lightscreen available.&lt;br&gt;Would you like to see more information?&lt;br&gt;(&lt;em&gt;You can turn this notification off&lt;/em&gt;)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="692"/>
+        <location filename="../lightscreenwindow.cpp" line="886"/>
         <source>Turn Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="693"/>
+        <location filename="../lightscreenwindow.cpp" line="887"/>
         <source>Remind Me Later</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="403"/>
-        <location filename="../lightscreenwindow.cpp" line="613"/>
+        <location filename="../lightscreenwindow.cpp" line="484"/>
+        <location filename="../lightscreenwindow.cpp" line="735"/>
         <source>&amp;Screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="387"/>
+        <location filename="../lightscreenwindow.cpp" line="445"/>
         <source>Saved to &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="392"/>
+        <location filename="../lightscreenwindow.cpp" line="450"/>
         <source>An error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="412"/>
-        <location filename="../lightscreenwindow.cpp" line="622"/>
+        <location filename="../lightscreenwindow.cpp" line="493"/>
+        <location filename="../lightscreenwindow.cpp" line="744"/>
         <source>&amp;Area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="415"/>
-        <location filename="../lightscreenwindow.cpp" line="636"/>
+        <location filename="../lightscreenwindow.cpp" line="501"/>
+        <location filename="../lightscreenwindow.cpp" line="763"/>
         <source>&amp;Go to Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="443"/>
+        <location filename="../lightscreenwindow.cpp" line="536"/>
         <source>Success!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="610"/>
+        <location filename="../lightscreenwindow.cpp" line="732"/>
         <source>Show&amp;/Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="633"/>
+        <location filename="../lightscreenwindow.cpp" line="760"/>
         <source>View &amp;Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="639"/>
+        <location filename="../lightscreenwindow.cpp" line="766"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -194,7 +267,7 @@ Press any key or right click to exit.</source>
     </message>
     <message>
         <location filename="../lightscreenwindow.ui" line="41"/>
-        <source>Screenshot</source>
+        <source>&amp;Screenshot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -249,68 +322,73 @@ Press any key or right click to exit.</source>
 <context>
     <name>OptionsDialog</name>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="53"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="87"/>
         <source>Restore Defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="69"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="103"/>
         <source>Version %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="143"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="177"/>
         <source>Hotkey conflict</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="143"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="177"/>
         <source>You have assigned the same hotkeys to more than one action.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="148"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="182"/>
         <source>Filename character error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="148"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="182"/>
         <source>The filename can&apos;t contain any of the following characters: ? : \ / * &quot; &lt; &gt; |</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="153"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="187"/>
         <source>Final Destination</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="153"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="187"/>
         <source>You can&apos;t take screenshots unless you enable either file saving or the clipboard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="164"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="198"/>
         <source>Select where you want to save the screenshots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="182"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="216"/>
         <source>Lightscreen - Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="183"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="217"/>
         <source>Restoring the default options will cause you to lose all of your current configuration.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="186"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="220"/>
         <source>Restore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="187"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="221"/>
         <source>Don&apos;t Restore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.cpp" line="432"/>
+        <source>Install &apos;OptiPNG&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -394,7 +472,7 @@ Press any key or right click to exit.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="266"/>
+        <location filename="../dialogs/optionsdialog.ui" line="269"/>
         <source>&lt;i&gt;Preview&lt;/i&gt;:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -409,113 +487,113 @@ Press any key or right click to exit.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="305"/>
+        <location filename="../dialogs/optionsdialog.ui" line="308"/>
         <source>System Startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="358"/>
+        <location filename="../dialogs/optionsdialog.ui" line="361"/>
         <source>Hotkeys</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="364"/>
+        <location filename="../dialogs/optionsdialog.ui" line="367"/>
         <source>Captures</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="408"/>
-        <source>Capture the current window</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="424"/>
-        <source>Capture a chosen window</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="466"/>
+        <location filename="../dialogs/optionsdialog.ui" line="469"/>
         <source>Lightscreen Control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="530"/>
+        <location filename="../dialogs/optionsdialog.ui" line="533"/>
         <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="578"/>
+        <location filename="../dialogs/optionsdialog.ui" line="581"/>
         <source>Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="705"/>
+        <location filename="../dialogs/optionsdialog.ui" line="734"/>
         <source>Screenshots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="714"/>
+        <location filename="../dialogs/optionsdialog.ui" line="743"/>
         <source>Choose where to save each screenshot (&quot;&amp;Save as&quot;).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="759"/>
+        <location filename="../dialogs/optionsdialog.ui" line="757"/>
+        <source>&amp;Grab only the active monitor.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="783"/>
+        <source>Runs OptiPNG which reduces screenshot file size.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="852"/>
         <source>Replace screenshots when there&apos;s an existing file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="775"/>
+        <location filename="../dialogs/optionsdialog.ui" line="875"/>
         <source>D&amp;elay:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="788"/>
+        <location filename="../dialogs/optionsdialog.ui" line="888"/>
         <source>Selecting anything other than 0 in this option will cause the program to &lt;b&gt;wait&lt;/b&gt; that amount of seconds before taking the screenshot.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="791"/>
+        <location filename="../dialogs/optionsdialog.ui" line="891"/>
         <source>none</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="800"/>
-        <location filename="../dialogs/optionsdialog.ui" line="954"/>
+        <location filename="../dialogs/optionsdialog.ui" line="900"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1054"/>
         <source> seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="846"/>
+        <location filename="../dialogs/optionsdialog.ui" line="946"/>
         <source>Maximum Size:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="897"/>
+        <location filename="../dialogs/optionsdialog.ui" line="997"/>
         <source>Position:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="967"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1067"/>
         <source> and </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="981"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1081"/>
         <source>save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="986"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1086"/>
         <source>cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1054"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1154"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1060"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1160"/>
         <source>Lightscreen is a simple tool to take screenshots, designed to be customizable and lightweight.&lt;br&gt;&lt;br&gt;
 Created by &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/a&gt;, using the &lt;a href=&quot;#aboutqt&quot;&gt;Qt toolkit&lt;/a&gt; for the graphical user interface.&lt;br&gt;&lt;br&gt;
 Released under the &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.html&quot;&gt;GNU General Public License&lt;/a&gt;.&lt;br&gt;&lt;br&gt;
@@ -523,72 +601,62 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1090"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1190"/>
         <source>&lt;a href=&quot;https://sourceforge.net/projects/lightscreen/&quot;&gt;Visit Sourceforge project site&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://lightscreen.sourceforge.net/&quot;&gt;Visit Lightscreen home page&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="317"/>
+        <location filename="../dialogs/optionsdialog.ui" line="320"/>
         <source>&amp;Run Lightscreen at system startup.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="345"/>
+        <location filename="../dialogs/optionsdialog.ui" line="348"/>
         <source>H&amp;ide the main window.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="385"/>
-        <source>Capture the screen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="440"/>
-        <source>Capture a screen area</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="503"/>
+        <location filename="../dialogs/optionsdialog.ui" line="506"/>
         <source>Open the directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="487"/>
+        <location filename="../dialogs/optionsdialog.ui" line="490"/>
         <source>Open the program window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="590"/>
+        <location filename="../dialogs/optionsdialog.ui" line="593"/>
         <source>Sho&amp;w a system tray icon.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="597"/>
+        <location filename="../dialogs/optionsdialog.ui" line="600"/>
         <source>&amp;Hide Lightscreen while taking a screenshot.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="742"/>
+        <location filename="../dialogs/optionsdialog.ui" line="771"/>
         <source>&amp;Magnify around the mouse in Area mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="660"/>
+        <location filename="../dialogs/optionsdialog.ui" line="689"/>
         <source>&amp;Language:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="677"/>
+        <location filename="../dialogs/optionsdialog.ui" line="706"/>
         <source>Click here to go to the Lightscreen homepage to learn more about translations.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="680"/>
+        <location filename="../dialogs/optionsdialog.ui" line="709"/>
         <source>&lt;a href=&quot;http://lightscreen.sourceforge.net/translation&quot;&gt;More information..&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="616"/>
+        <location filename="../dialogs/optionsdialog.ui" line="675"/>
         <source>&amp;Notify with:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -598,17 +666,17 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="626"/>
+        <location filename="../dialogs/optionsdialog.ui" line="622"/>
         <source>Shows a completion message once the screenshot is saved, clicking this message takes you to the directory where the screenshot was saved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="629"/>
+        <location filename="../dialogs/optionsdialog.ui" line="625"/>
         <source>Tray icon Popup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="636"/>
+        <location filename="../dialogs/optionsdialog.ui" line="632"/>
         <source>&amp;Sound cue</source>
         <translation type="unfinished"></translation>
     </message>
@@ -619,92 +687,107 @@ Quality is related to file size and of course to readability and overall quality
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="245"/>
+        <location filename="../dialogs/optionsdialog.ui" line="248"/>
         <source>100</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="257"/>
+        <location filename="../dialogs/optionsdialog.ui" line="260"/>
         <source>%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="721"/>
+        <location filename="../dialogs/optionsdialog.ui" line="750"/>
         <source>&amp;Copy the screenshot to the clipboard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="735"/>
+        <location filename="../dialogs/optionsdialog.ui" line="764"/>
         <source>Inc&amp;lude the cursor in the screenshot.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="728"/>
-        <source>&amp;Grab only the current monitor.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="749"/>
-        <source>Opens a new process called OptiPNG which dramatically reduces the file size.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="752"/>
+        <location filename="../dialogs/optionsdialog.ui" line="786"/>
         <source>O&amp;ptimize PNG screenshots.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="604"/>
+        <location filename="../dialogs/optionsdialog.ui" line="607"/>
         <source>Warn when hiding without a tra&amp;y icon.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="766"/>
+        <location filename="../dialogs/optionsdialog.ui" line="388"/>
+        <source>Fullscreen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="411"/>
+        <source>Window Picker</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="440"/>
+        <source>Active Window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="456"/>
+        <source>Screen Area</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="859"/>
         <source>Snap area screenshots automatically (no resizing).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="831"/>
+        <location filename="../dialogs/optionsdialog.ui" line="866"/>
+        <source>Upload my screenshots automatically.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="931"/>
         <source>Screenshot Previews</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="911"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1011"/>
         <source>Top Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="916"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1016"/>
         <source>Top Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="921"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1021"/>
         <source>Bottom Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="926"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1026"/>
         <source>Bottom Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="947"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1047"/>
         <source>Auto-close after</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1010"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1110"/>
         <source>Updater</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1019"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1119"/>
         <source>Check for updates regularly.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1039"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1139"/>
         <source>Chec&amp;k Updates Now</source>
         <translation type="unfinished"></translation>
     </message>
@@ -712,7 +795,7 @@ Quality is related to file size and of course to readability and overall quality
 <context>
     <name>PreviewDialog</name>
     <message>
-        <location filename="../dialogs/previewdialog.cpp" line="309"/>
+        <location filename="../dialogs/previewdialog.cpp" line="329"/>
         <source>Screenshot Preview: Closing in %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -720,7 +803,7 @@ Quality is related to file size and of course to readability and overall quality
 <context>
     <name>Screenshot</name>
     <message>
-        <location filename="../tools/screenshot.cpp" line="272"/>
+        <location filename="../tools/screenshot.cpp" line="307"/>
         <source>Save as..</source>
         <translation type="unfinished"></translation>
     </message>
@@ -728,35 +811,64 @@ Quality is related to file size and of course to readability and overall quality
 <context>
     <name>ScreenshotDialog</name>
     <message>
-        <location filename="../dialogs/screenshotdialog.cpp" line="18"/>
+        <location filename="../dialogs/screenshotdialog.cpp" line="36"/>
         <source>Lightscreen Screenshot Viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/screenshotdialog.cpp" line="20"/>
+        <location filename="../dialogs/screenshotdialog.cpp" line="38"/>
         <source>You can zoom using the mouse wheel while holding the CTRL key. To return to the default zoom press &quot;Ctrl-0&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Uploader</name>
+    <message>
+        <location filename="../tools/uploader.cpp" line="51"/>
+        <location filename="../tools/uploader.cpp" line="127"/>
+        <source>Uploading...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/uploader.cpp" line="100"/>
+        <source>Screenshot file not found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/uploader.cpp" line="103"/>
+        <source>Could not reach imgur.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/uploader.cpp" line="106"/>
+        <source>You have exceeded your upload quota.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/uploader.cpp" line="109"/>
+        <source>Upload failed.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>WindowPicker</name>
     <message>
-        <location filename="../tools/windowpicker.cpp" line="24"/>
+        <location filename="../tools/windowpicker.cpp" line="51"/>
         <source>Lightscreen Window Picker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/windowpicker.cpp" line="27"/>
+        <location filename="../tools/windowpicker.cpp" line="54"/>
         <source>Grab the window picker by clicking and holding down the mouse button, then drag it to the window of your choice and release it to capture.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/windowpicker.cpp" line="42"/>
+        <location filename="../tools/windowpicker.cpp" line="64"/>
         <source> - Start dragging to select windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/windowpicker.cpp" line="49"/>
+        <location filename="../tools/windowpicker.cpp" line="71"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
