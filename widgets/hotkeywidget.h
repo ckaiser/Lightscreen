@@ -50,8 +50,8 @@ private:
   QKeySequence mHotkey;
   bool mShowingError;
   bool mKeyboardFocus;
+  QString mDefaultStyleSheet;
 
-  QKeySequence getKeySequence(QKeyEvent* event) const;
   bool isValid(int key) const;
   bool isModifier(int key) const;
 

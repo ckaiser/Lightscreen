@@ -635,8 +635,8 @@ void OptionsDialog::updatePreview()
   preview = QString("%1.%2").arg(preview).arg(ui.formatComboBox->currentText().toLower());
 
   if (preview.length() >= 40) {
-      preview.truncate(37);
-      preview.append("...");
+    preview.truncate(37);
+    preview.append("...");
   }
 
   ui.previewLabel->setText(preview);

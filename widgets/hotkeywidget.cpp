@@ -30,8 +30,11 @@
 HotkeyWidget::HotkeyWidget(QWidget *parent) :
   QPushButton(parent), mHotkey(QKeySequence()), mShowingError(false), mKeyboardFocus(false)
 {
-  setStyleSheet("text-align: left; padding: 3px 6px;");
+  mDefaultStyleSheet = "text-align: left; padding: 3px 6px;";
+  setStyleSheet(mDefaultStyleSheet);
+
   setText(tr("Click to select hotkey..."));
+  setObjectName("HotkeyWidget");
 
   if (qApp->style()->objectName() == "oxygen") {
     setMinimumWidth(130);
@@ -98,11 +101,15 @@ void HotkeyWidget::keyPressEvent(QKeyEvent *event)
   if (isModifier(event->key()))
     return;
 
-  mHotkey = getKeySequence(event);
+  if (!isValid(event->key())) {
+    setText(tr("Invalid hotkey"));
+    parentWidget()->setFocus();
+    return;
+  }
+
+  mHotkey = QKeySequence(event->key() + (event->modifiers() & ~Qt::KeypadModifier));
 
   setHotkeyText();
-
-  event->ignore();
 }
 
 void HotkeyWidget::showError()
@@ -112,40 +119,29 @@ void HotkeyWidget::showError()
 
   mShowingError = true;
 
-  setStyleSheet("color: #d90000;");
-  QTimer::singleShot(500, this, SLOT(hideError()));
+  setStyleSheet(mDefaultStyleSheet + "color: #d90000;");
+  QTimer::singleShot(1000, this, SLOT(hideError()));
 }
 
 void HotkeyWidget::hideError()
 {
-  setStyleSheet("");
+  setStyleSheet(mDefaultStyleSheet);
   mShowingError = false;
 }
 
-QKeySequence HotkeyWidget::getKeySequence(QKeyEvent* event) const
-{
-  return QKeySequence((isValid(event->key()) ? event->key() : 0)
-      + (event->modifiers() & ~Qt::KeypadModifier));
-}
-
-/**
- * Returns true if \param key could be used in a shortcut.
- */
 bool HotkeyWidget::isValid(int key) const
 {
   switch (key)
   {
-  case 0:
-  case Qt::Key_unknown:
-    return false;
+    case 0:
+    case Qt::Key_Escape:
+    case Qt::Key_unknown:
+      return false;
   }
 
   return !isModifier(key);
 }
 
-/**
- * Returns true if \param key is modifier.
- */
 bool HotkeyWidget::isModifier(int key) const
 {
   switch (key)
@@ -162,4 +158,3 @@ bool HotkeyWidget::isModifier(int key) const
   }
   return false;
 }
-

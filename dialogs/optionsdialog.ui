@@ -423,7 +423,7 @@ Quality is related to file size and of course to readability and overall quality
             <property name="sizeHint" stdset="0">
              <size>
               <width>40</width>
-              <height>20</height>
+              <height>0</height>
              </size>
             </property>
            </spacer>
@@ -518,7 +518,7 @@ Quality is related to file size and of course to readability and overall quality
             <property name="sizeHint" stdset="0">
              <size>
               <width>40</width>
-              <height>20</height>
+              <height>0</height>
              </size>
             </property>
            </spacer>
@@ -563,9 +563,9 @@ Quality is related to file size and of course to readability and overall quality
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-175</y>
-            <width>366</width>
-            <height>702</height>
+            <y>0</y>
+            <width>358</width>
+            <height>640</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -609,28 +609,14 @@ Quality is related to file size and of course to readability and overall quality
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="notifyLabel">
-                <property name="font">
-                 <font>
-                  <weight>75</weight>
-                  <bold>true</bold>
-                  <underline>true</underline>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>&amp;Notify with:</string>
-                </property>
-                <property name="buddy">
-                 <cstring>messageCheckBox</cstring>
-                </property>
-               </widget>
-              </item>
-              <item>
                <layout class="QGridLayout" name="notifyLayout">
-                <property name="bottomMargin">
-                 <number>4</number>
+                <property name="topMargin">
+                 <number>2</number>
                 </property>
-                <item row="0" column="1">
+                <property name="bottomMargin">
+                 <number>2</number>
+                </property>
+                <item row="1" column="1">
                  <widget class="QCheckBox" name="messageCheckBox">
                   <property name="whatsThis">
                    <string>Shows a completion message once the screenshot is saved, clicking this message takes you to the directory where the screenshot was saved.</string>
@@ -640,14 +626,14 @@ Quality is related to file size and of course to readability and overall quality
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="1">
+                <item row="2" column="1">
                  <widget class="QCheckBox" name="playSoundCheckBox">
                   <property name="text">
                    <string>&amp;Sound cue</string>
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="0">
+                <item row="1" column="0">
                  <spacer name="horizontalSpacer_9">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
@@ -658,12 +644,12 @@ Quality is related to file size and of course to readability and overall quality
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>15</width>
-                    <height>20</height>
+                    <height>0</height>
                    </size>
                   </property>
                  </spacer>
                 </item>
-                <item row="0" column="2">
+                <item row="1" column="2">
                  <spacer name="horizontalSpacer">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
@@ -671,10 +657,27 @@ Quality is related to file size and of course to readability and overall quality
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>40</width>
-                    <height>20</height>
+                    <height>0</height>
                    </size>
                   </property>
                  </spacer>
+                </item>
+                <item row="0" column="0" colspan="3">
+                 <widget class="QLabel" name="notifyLabel">
+                  <property name="font">
+                   <font>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                    <underline>true</underline>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>&amp;Notify with:</string>
+                  </property>
+                  <property name="buddy">
+                   <cstring>messageCheckBox</cstring>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
@@ -715,7 +718,7 @@ Quality is related to file size and of course to readability and overall quality
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>40</width>
-                    <height>20</height>
+                    <height>0</height>
                    </size>
                   </property>
                  </spacer>
@@ -825,6 +828,19 @@ Quality is related to file size and of course to readability and overall quality
                   </property>
                  </widget>
                 </item>
+                <item>
+                 <spacer name="horizontalSpacer_10">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
                </layout>
               </item>
               <item>
@@ -896,7 +912,7 @@ Quality is related to file size and of course to readability and overall quality
                   <property name="sizeHint" stdset="0">
                    <size>
                     <width>114</width>
-                    <height>13</height>
+                    <height>0</height>
                    </size>
                   </property>
                  </spacer>
@@ -967,7 +983,7 @@ Quality is related to file size and of course to readability and overall quality
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>41</width>
-                  <height>4</height>
+                  <height>0</height>
                  </size>
                 </property>
                </spacer>
@@ -1017,7 +1033,7 @@ Quality is related to file size and of course to readability and overall quality
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>4</width>
-                  <height>4</height>
+                  <height>0</height>
                  </size>
                 </property>
                </spacer>
@@ -1077,7 +1093,7 @@ Quality is related to file size and of course to readability and overall quality
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>23</width>
-                  <height>4</height>
+                  <height>0</height>
                  </size>
                 </property>
                </spacer>
@@ -1109,7 +1125,7 @@ Quality is related to file size and of course to readability and overall quality
                 <property name="sizeHint" stdset="0">
                  <size>
                   <width>40</width>
-                  <height>20</height>
+                  <height>0</height>
                  </size>
                 </property>
                </spacer>
