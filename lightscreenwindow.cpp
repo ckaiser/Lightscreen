@@ -927,10 +927,10 @@ void LightscreenWindow::updateUploadStatus()
   QString statusString;
 
   if (uploading > 0) {
-    statusString = tr("Lightscreen: Uploading %1 screenshot").arg(uploading);
+    statusString = tr("Uploading %1 screenshot(s)").arg(uploading);
   }
   else {
-    statusString = tr("Lightscreen %1").arg(qApp->applicationVersion());
+    statusString = tr("Lightscreen");
   }
 
   if (mTrayIcon) {

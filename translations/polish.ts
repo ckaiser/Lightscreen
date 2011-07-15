@@ -36,6 +36,7 @@ Press any key or right click to exit.</source>
         <location filename="../lightscreenwindow.cpp" line="133"/>
         <location filename="../lightscreenwindow.cpp" line="585"/>
         <location filename="../lightscreenwindow.cpp" line="881"/>
+        <location filename="../lightscreenwindow.cpp" line="933"/>
         <source>Lightscreen</source>
         <translation>Lightscreen</translation>
     </message>
@@ -196,12 +197,7 @@ Press any key or right click to exit.</source>
     </message>
     <message>
         <location filename="../lightscreenwindow.cpp" line="930"/>
-        <source>Lightscreen: Uploading %1 screenshot</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="933"/>
-        <source>Lightscreen %1</source>
+        <source>Uploading %1 screenshot(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -369,8 +365,8 @@ Press any key or right click to exit.</source>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.cpp" line="216"/>
-        <source>Lightscreen - Options</source>
-        <translation>Lightscreen - Opcje</translation>
+        <source>Lightscreen - Restore Default Options</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.cpp" line="217"/>
@@ -388,7 +384,7 @@ Press any key or right click to exit.</source>
         <translation>Nie Odtwarzaj</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="432"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="433"/>
         <source>Install &apos;OptiPNG&apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -451,21 +447,6 @@ Press any key or right click to exit.</source>
         <location filename="../dialogs/optionsdialog.ui" line="170"/>
         <source>F&amp;ormat:</source>
         <translation>&amp;Format:</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="184"/>
-        <source>PNG</source>
-        <translation>PNG</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="189"/>
-        <source>JPG</source>
-        <translation>JPG</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="194"/>
-        <source>BMP</source>
-        <translation>BMP</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="388"/>
@@ -674,6 +655,11 @@ Press any key or right click to exit.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../dialogs/optionsdialog.ui" line="1139"/>
+        <source>Chec&amp;k Now</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../dialogs/optionsdialog.ui" line="1154"/>
         <source>About</source>
         <translation type="unfinished"></translation>
@@ -697,16 +683,6 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
 Quality is related to file size and of course to readability and overall quality of the image.</source>
         <translation>Ten suwak ma wartości od 0 do 100. 100 to najwyższa jakość a 0 najniższa.&lt;br&gt;
 Różnica jakości związana jest z rozmiarem pliku, jego czytelnością i ogólnym wyglądem obrazu.</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="248"/>
-        <source>100</source>
-        <translation>100</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="260"/>
-        <source>%</source>
-        <translation>%</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="750"/>
@@ -788,17 +764,12 @@ Różnica jakości związana jest z rozmiarem pliku, jego czytelnością i ogól
         <source>Check for updates regularly.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1139"/>
-        <source>Chec&amp;k Updates Now</source>
-        <translation>Sprawdź teraz &amp;aktualizacje</translation>
-    </message>
 </context>
 <context>
     <name>PreviewDialog</name>
     <message>
         <location filename="../dialogs/previewdialog.cpp" line="329"/>
-        <source>Screenshot Preview: Closing in %1</source>
+        <source>Preview: Closing in %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

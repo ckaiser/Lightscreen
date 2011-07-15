@@ -36,6 +36,7 @@ Press any key or right click to exit.</source>
         <location filename="../lightscreenwindow.cpp" line="133"/>
         <location filename="../lightscreenwindow.cpp" line="585"/>
         <location filename="../lightscreenwindow.cpp" line="881"/>
+        <location filename="../lightscreenwindow.cpp" line="933"/>
         <source>Lightscreen</source>
         <translation type="unfinished"></translation>
     </message>
@@ -180,12 +181,7 @@ Press any key or right click to exit.</source>
     </message>
     <message>
         <location filename="../lightscreenwindow.cpp" line="930"/>
-        <source>Lightscreen: Uploading %1 screenshot</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="933"/>
-        <source>Lightscreen %1</source>
+        <source>Uploading %1 screenshot(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -368,7 +364,7 @@ Press any key or right click to exit.</source>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.cpp" line="216"/>
-        <source>Lightscreen - Options</source>
+        <source>Lightscreen - Restore Default Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -387,7 +383,7 @@ Press any key or right click to exit.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="432"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="433"/>
         <source>Install &apos;OptiPNG&apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -454,21 +450,6 @@ Press any key or right click to exit.</source>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="170"/>
         <source>F&amp;ormat:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="184"/>
-        <source>PNG</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="189"/>
-        <source>JPG</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="194"/>
-        <source>BMP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -588,6 +569,11 @@ Press any key or right click to exit.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../dialogs/optionsdialog.ui" line="1139"/>
+        <source>Chec&amp;k Now</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../dialogs/optionsdialog.ui" line="1154"/>
         <source>About</source>
         <translation type="unfinished"></translation>
@@ -687,16 +673,6 @@ Quality is related to file size and of course to readability and overall quality
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="248"/>
-        <source>100</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="260"/>
-        <source>%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../dialogs/optionsdialog.ui" line="750"/>
         <source>&amp;Copy the screenshot to the clipboard.</source>
         <translation type="unfinished"></translation>
@@ -786,17 +762,12 @@ Quality is related to file size and of course to readability and overall quality
         <source>Check for updates regularly.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1139"/>
-        <source>Chec&amp;k Updates Now</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>PreviewDialog</name>
     <message>
         <location filename="../dialogs/previewdialog.cpp" line="329"/>
-        <source>Screenshot Preview: Closing in %1</source>
+        <source>Preview: Closing in %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -326,7 +326,7 @@ void PreviewDialog::timerEvent(QTimerEvent *event)
     killTimer(event->timerId());
   }
   else {
-    setWindowTitle(tr("Screenshot Preview: Closing in %1").arg(mAutoclose));
+    setWindowTitle(tr("Preview: Closing in %1").arg(mAutoclose));
     mAutoclose--;
   }
 }

@@ -38,13 +38,14 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
         <location filename="../lightscreenwindow.cpp" line="133"/>
         <location filename="../lightscreenwindow.cpp" line="585"/>
         <location filename="../lightscreenwindow.cpp" line="881"/>
+        <location filename="../lightscreenwindow.cpp" line="933"/>
         <source>Lightscreen</source>
         <translation>Lightscreen</translation>
     </message>
     <message>
         <location filename="../lightscreenwindow.cpp" line="134"/>
         <source>You have chosen to hide Lightscreen when there&apos;s no system tray icon, so you will not be able to access the program &lt;b&gt;unless you have selected a hotkey to do so&lt;/b&gt;.&lt;br&gt;What do you want to do?</source>
-        <translation>Ha elegido cerrar Lightscreen cuando este no tiene un ícono en la barra de tareas, por lo que no podrá acceder al programa &lt;b&gt;a menos que haya seleccionado un atajo para hacerlo.&lt;/b&gt;.&lt;br&gt;Que desea hacer?</translation>
+        <translation>Ha elegido esconder Lightscreen cuando este no tiene un ícono en la barra de tareas, por lo que no podrá acceder al programa &lt;b&gt;a menos que haya seleccionado un atajo para hacerlo.&lt;/b&gt;.&lt;br&gt;Que desea hacer?</translation>
     </message>
     <message>
         <location filename="../lightscreenwindow.cpp" line="139"/>
@@ -172,13 +173,8 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
     </message>
     <message>
         <location filename="../lightscreenwindow.cpp" line="930"/>
-        <source>Lightscreen: Uploading %1 screenshot</source>
-        <translation>Lightscreen: Subiendo %1 captura(s)</translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="933"/>
-        <source>Lightscreen %1</source>
-        <translation>Lightscreen %1</translation>
+        <source>Uploading %1 screenshot(s)</source>
+        <translation>Subiendo %1 captura(s)</translation>
     </message>
     <message>
         <location filename="../lightscreenwindow.cpp" line="484"/>
@@ -326,7 +322,7 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
     <message>
         <location filename="../dialogs/optionsdialog.cpp" line="87"/>
         <source>Restore Defaults</source>
-        <translation>Restaurar Default</translation>
+        <translation>Restablecer por defecto</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.cpp" line="103"/>
@@ -370,11 +366,11 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.cpp" line="216"/>
-        <source>Lightscreen - Options</source>
-        <translation>Lightscreen - Opciones</translation>
+        <source>Lightscreen - Restore Default Options</source>
+        <translation>Lightscreen - Restablecer Opciones por Defecto</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="432"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="433"/>
         <source>Install &apos;OptiPNG&apos;</source>
         <translation>Instale &apos;OptiPNG&apos;</translation>
     </message>
@@ -422,21 +418,6 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
         <location filename="../dialogs/optionsdialog.ui" line="167"/>
         <source>The file format for the screenshot</source>
         <translation>El formato de la captura</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="184"/>
-        <source>PNG</source>
-        <translation>PNG</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="189"/>
-        <source>JPG</source>
-        <translation>JPG</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="194"/>
-        <source>BMP</source>
-        <translation>BMP</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="269"/>
@@ -534,6 +515,11 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
         <translation>cancelar</translation>
     </message>
     <message>
+        <location filename="../dialogs/optionsdialog.ui" line="1139"/>
+        <source>Chec&amp;k Now</source>
+        <translation>Buscar Ahora</translation>
+    </message>
+    <message>
         <location filename="../dialogs/optionsdialog.ui" line="1154"/>
         <source>About</source>
         <translation>Acerca De</translation>
@@ -557,17 +543,17 @@ Un agradecimiento especial a los &lt;a href=&quot;http://lightscreen.sourceforge
     <message>
         <location filename="../dialogs/optionsdialog.cpp" line="217"/>
         <source>Restoring the default options will cause you to lose all of your current configuration.</source>
-        <translation>Restaurar las opciones por defecto hara que pierda toda su configuración actual.</translation>
+        <translation>Restablecer las opciones por defecto hara que pierda toda su configuración actual.</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.cpp" line="220"/>
         <source>Restore</source>
-        <translation>Restaurar</translation>
+        <translation>Restablecer</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.cpp" line="221"/>
         <source>Don&apos;t Restore</source>
-        <translation>No Restaurar</translation>
+        <translation>No Restablecer</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="900"/>
@@ -588,7 +574,7 @@ Un agradecimiento especial a los &lt;a href=&quot;http://lightscreen.sourceforge
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="593"/>
         <source>Sho&amp;w a system tray icon.</source>
-        <translation>Mo&amp;strar un ícono de sistema.</translation>
+        <translation>Mo&amp;strar un ícono en la barra de tareas.</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="600"/>
@@ -640,7 +626,7 @@ La calidad tiene relacion con el tamaño del archivo y la legibilidad/calidad ge
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="625"/>
         <source>Tray icon Popup</source>
-        <translation>Popup en el ícono de sistema</translation>
+        <translation>Popup en el ícono de barra de tareas</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="632"/>
@@ -691,16 +677,6 @@ La calidad tiene relacion con el tamaño del archivo y la legibilidad/calidad ge
         <location filename="../dialogs/optionsdialog.ui" line="348"/>
         <source>H&amp;ide the main window.</source>
         <translation>Esconder la ventana pr&amp;incipal.</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="248"/>
-        <source>100</source>
-        <translation>100</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="260"/>
-        <source>%</source>
-        <translation>%</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="750"/>
@@ -780,7 +756,7 @@ La calidad tiene relacion con el tamaño del archivo y la legibilidad/calidad ge
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="1047"/>
         <source>Auto-close after</source>
-        <translation>Cerrar automaticamente despues de</translation>
+        <translation>Cerrar despues de</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="1110"/>
@@ -793,11 +769,6 @@ La calidad tiene relacion con el tamaño del archivo y la legibilidad/calidad ge
         <translation>Buscar actualizaciones periodicamente.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1139"/>
-        <source>Chec&amp;k Updates Now</source>
-        <translation>Buscar Actualizaciónes A&amp;hora</translation>
-    </message>
-    <message>
         <location filename="../dialogs/optionsdialog.ui" line="622"/>
         <source>Shows a completion message once the screenshot is saved, clicking this message takes you to the directory where the screenshot was saved.</source>
         <translation>Muestra un mensaje al completar una captura, clickear en este mensaje lleva al directorio donde la misma fue guardada.</translation>
@@ -807,7 +778,7 @@ La calidad tiene relacion con el tamaño del archivo y la legibilidad/calidad ge
     <name>PreviewDialog</name>
     <message>
         <location filename="../dialogs/previewdialog.cpp" line="329"/>
-        <source>Screenshot Preview: Closing in %1</source>
+        <source>Preview: Closing in %1</source>
         <translation>Vista Previa: Cerrando en %1</translation>
     </message>
 </context>

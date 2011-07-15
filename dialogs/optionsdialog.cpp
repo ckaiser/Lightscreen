@@ -213,13 +213,14 @@ void OptionsDialog::dialogButtonClicked(QAbstractButton *button)
 {
   if (ui.buttonBox->buttonRole(button) == QDialogButtonBox::ResetRole) {
     QMessageBox msgBox;
-    msgBox.setWindowTitle(tr("Lightscreen - Options"));
+    msgBox.setWindowTitle(tr("Lightscreen - Restore Default Options"));
     msgBox.setText(tr("Restoring the default options will cause you to lose all of your current configuration."));
     msgBox.setIcon(QMessageBox::Warning);
 
     QPushButton *restoreButton     = msgBox.addButton(tr("Restore"), QMessageBox::ActionRole);
     QPushButton *dontRestoreButton = msgBox.addButton(tr("Don't Restore"), QMessageBox::ActionRole);
 
+    msgBox.setDefaultButton(dontRestoreButton);
     msgBox.exec();
 
     Q_UNUSED(restoreButton)

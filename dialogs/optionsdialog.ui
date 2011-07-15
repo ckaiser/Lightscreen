@@ -181,17 +181,17 @@
            <widget class="QComboBox" name="formatComboBox">
             <item>
              <property name="text">
-              <string>PNG</string>
+              <string notr="true">PNG</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>JPG</string>
+              <string notr="true">JPG</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>BMP</string>
+              <string notr="true">BMP</string>
              </property>
             </item>
            </widget>
@@ -245,7 +245,7 @@ Quality is related to file size and of course to readability and overall quality
                </font>
               </property>
               <property name="text">
-               <string>100</string>
+               <string notr="true">100</string>
               </property>
              </widget>
             </item>
@@ -257,7 +257,7 @@ Quality is related to file size and of course to readability and overall quality
                </font>
               </property>
               <property name="text">
-               <string>%</string>
+               <string notr="true">%</string>
               </property>
              </widget>
             </item>
@@ -1136,7 +1136,7 @@ Quality is related to file size and of course to readability and overall quality
               <item>
                <widget class="QPushButton" name="checkUpdatesPushButton">
                 <property name="text">
-                 <string>Chec&amp;k Updates Now</string>
+                 <string>Chec&amp;k Now</string>
                 </property>
                </widget>
               </item>
