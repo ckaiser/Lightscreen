@@ -11,11 +11,11 @@ HEADERS += tools/os.h \
     tools/screenshotmanager.h \
     tools/windowpicker.h \
     tools/qtwin.h \
+    tools/uploader.h \
+    tools/qtimgur.h \
     dialogs/updaterdialog.h \
     dialogs/screenshotdialog.h \
-    dialogs/namingdialog.h \
-    tools/qtimgur.h \
-    tools/uploader.h
+    dialogs/namingdialog.h
 SOURCES += tools/os.cpp \
     updater/updater.cpp \
     dialogs/areadialog.cpp \
@@ -28,11 +28,11 @@ SOURCES += tools/os.cpp \
     tools/screenshotmanager.cpp \
     tools/windowpicker.cpp \
     tools/qtwin.cpp \
+    tools/uploader.cpp \
+    tools/qtimgur.cpp \
     dialogs/updaterdialog.cpp \
     dialogs/screenshotdialog.cpp \
-    dialogs/namingdialog.cpp \
-    tools/qtimgur.cpp \
-    tools/uploader.cpp
+    dialogs/namingdialog.cpp
 FORMS += dialogs/optionsdialog.ui \
     lightscreenwindow.ui \
     dialogs/namingdialog.ui
@@ -48,13 +48,12 @@ TRANSLATIONS += translations/untranslated.ts \
 RC_FILE += lightscreen.rc
 CODECFORSRC = UTF-8
 QT += network core gui xml
-win32:LIBS += libgdi32 libgcc
+
 include($$PWD/tools/globalshortcut/globalshortcut.pri)
 include($$PWD/tools/qtsingleapplication/qtsingleapplication.pri)
+include($$PWD/tools/qwin7utils/qwin7utils.pri)
+
+win32:LIBS += libgdi32 libgcc libuser32 libole32 libshell32 libshlwapi libcomctl32
 
 QMAKE_CXXFLAGS = -Wextra -Wall -Wpointer-arith
 OTHER_FILES += TODO.txt
-
-
-
-

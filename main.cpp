@@ -19,6 +19,13 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QLocale>
+#include <QDebug>
+
+#if defined(Q_WS_WIN)
+  #include "tools/qwin7utils/AppUserModel.h"
+  #include "tools/qwin7utils/JumpList.h"
+  using namespace QW7;
+#endif
 
 #include "tools/os.h"
 #include <QtSingleApplication>
@@ -33,11 +40,38 @@ int main(int argc, char *argv[])
   application.setQuitOnLastWindowClosed(false);
 
   if (application.isRunning()) {
-    application.sendMessage("-wake");
+    if (application.arguments().size() > 1) {
+      QStringList arguments = application.arguments();
+      arguments.removeFirst();
+      application.sendMessage(arguments.join(" "));
+    }
+    else {
+      application.sendMessage("-wake");
+    }
+
     return 0;
   }
 
   LightscreenWindow lightscreen;
+
+#if defined(Q_WS_WIN)
+  // Windows 7 jumplists.
+  AppUserModel::SetCurrentProcessExplicitAppUserModelID("Lightscreen");
+
+  JumpList jumpList("Lightscreen");
+
+  QList<JumpListItem> tasks;
+  tasks.append(JumpListItem(application.applicationFilePath(), "-screen"      , lightscreen.tr("Screen"), "", "", 0, application.applicationDirPath()));
+  tasks.append(JumpListItem(application.applicationFilePath(), "-area"        , lightscreen.tr("Area")  , "", "", 0, application.applicationDirPath()));
+  tasks.append(JumpListItem(application.applicationFilePath(), "-activewindow", lightscreen.tr("Active Window"), "", "", 0, application.applicationDirPath()));
+  tasks.append(JumpListItem(application.applicationFilePath(), "-pickwindow"  , lightscreen.tr("Pick Window"), "", "", 0, application.applicationDirPath()));
+  tasks.append(JumpListItem());
+  tasks.append(JumpListItem(application.applicationFilePath(), "-folder"  , lightscreen.tr("Go to Folder"), "", "", 0, application.applicationDirPath()));
+
+  jumpList.Begin();
+  jumpList.AddUserTasks(tasks);
+  jumpList.Commit();
+#endif
 
   if (application.arguments().size() > 1) {
     lightscreen.messageReceived(application.arguments().at(1));

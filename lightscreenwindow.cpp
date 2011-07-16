@@ -36,6 +36,8 @@
 
 #if defined(Q_WS_WIN)
   #include <windows.h>
+  #include "tools/qwin7utils/JumpList.h"
+  using namespace QW7;
 #endif
 
 /*

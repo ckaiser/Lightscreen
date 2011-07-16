@@ -228,6 +228,7 @@ void PreviewDialog::relocate()
 {
   updateGeometry();
   resize(minimumSizeHint());
+  QApplication::sendEvent(this, new QEvent(QEvent::Enter)); // Ensures the buttons are visible.
 
   QPoint where;
   switch (mPosition)
@@ -299,14 +300,12 @@ void PreviewDialog::previous()
 {
   mStack->setCurrentIndex(mStack->currentIndex()-1);
   relocate();
-  QApplication::sendEvent(this, new QEvent(QEvent::Enter)); // Ensures the buttons are visible.
 }
 
 void PreviewDialog::next()
 {
   mStack->setCurrentIndex(mStack->currentIndex()+1);
   relocate();
-  QApplication::sendEvent(this, new QEvent(QEvent::Enter));
 }
 
 void PreviewDialog::enlargePreview()
