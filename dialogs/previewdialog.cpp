@@ -163,16 +163,19 @@ void PreviewDialog::add(Screenshot *screenshot)
     confirmPushButton->setPopupMode(QToolButton::MenuButtonPopup);
   }
 
+  confirmPushButton->setAutoRaise(true);
   confirmPushButton->setVisible(false);
 
   discardPushButton->setIconSize(QSize(24, 24));
   discardPushButton->setCursor(Qt::PointingHandCursor);
   discardPushButton->setGraphicsEffect(os::shadow());
+  discardPushButton->setFlat(true);
   discardPushButton->setVisible(false);
 
   enlargePushButton->setIconSize(QSize(22, 22));
   enlargePushButton->setCursor(Qt::PointingHandCursor);
   enlargePushButton->setGraphicsEffect(os::shadow());
+  enlargePushButton->setFlat(true);
   enlargePushButton->setVisible(false);
 
   enlargePushButton->setDisabled(small);
