@@ -107,7 +107,6 @@ void PreviewDialog::add(Screenshot *screenshot)
   }
 
   QLabel *label = new QLabel(this);
-  label->installEventFilter(this);
   label->setGraphicsEffect(os::shadow());
 
   bool small = false;
@@ -131,12 +130,12 @@ void PreviewDialog::add(Screenshot *screenshot)
 
   label->setAlignment(Qt::AlignCenter);
 
-  if (size.height() < 80) {
-    label->setMinimumHeight(80);
+  if (size.height() < 120) {
+    label->setMinimumHeight(120);
   }
 
-  if (size.width() < 80) {
-    label->setMinimumWidth(80);
+  if (size.width() < 140) {
+    label->setMinimumWidth(140);
   }
 
   label->resize(size);
@@ -146,19 +145,24 @@ void PreviewDialog::add(Screenshot *screenshot)
   QPushButton *enlargePushButton = new QPushButton(QIcon(":/icons/zoom.in"), "", label);
 
   confirmPushButton->setIcon(QIcon(":/icons/yes"));
-  //confirmPushButton->setStyleSheet("QToolButton { padding: 4px 10px; } QToolButton::menu-arrow { background: transparent; }");
   confirmPushButton->setIconSize(QSize(24, 24));
   confirmPushButton->setCursor(Qt::PointingHandCursor);
   confirmPushButton->setGraphicsEffect(os::shadow());
 
-  QMenu *confirmMenu = new QMenu(confirmPushButton);
-  confirmMenu->setObjectName("confirmMenu");
+  if (!ScreenshotManager::instance()->settings()->value("options/uploadAuto").toBool()) {
+    QMenu *confirmMenu = new QMenu(confirmPushButton);
+    confirmMenu->setObjectName("confirmMenu");
 
-  QAction *uploadAction = new QAction(QIcon(":/icons/imgur"), tr("Upload"), confirmMenu);
+    QAction *uploadAction = new QAction(QIcon(":/icons/imgur"), tr("Upload"), confirmPushButton);
+    connect(uploadAction, SIGNAL(triggered()), screenshot, SLOT(confirm()));
+    connect(uploadAction, SIGNAL(triggered()), parent(),   SLOT(uploadLast()));
+    connect(uploadAction, SIGNAL(triggered()), this,       SLOT(closePreview()));
 
-  confirmMenu->addAction(uploadAction);
-  confirmPushButton->setMenu(confirmMenu);
-  confirmPushButton->setPopupMode(QToolButton::MenuButtonPopup);
+    confirmMenu->addAction(uploadAction);
+    confirmPushButton->setMenu(confirmMenu);
+    confirmPushButton->setPopupMode(QToolButton::MenuButtonPopup);
+  }
+
   confirmPushButton->setVisible(false);
 
   discardPushButton->setIconSize(QSize(24, 24));
@@ -178,10 +182,6 @@ void PreviewDialog::add(Screenshot *screenshot)
 
   connect(confirmPushButton, SIGNAL(clicked()), screenshot, SLOT(confirm()));
   connect(confirmPushButton, SIGNAL(clicked()), this, SLOT(closePreview()));
-
-  connect(uploadAction, SIGNAL(triggered()), screenshot, SLOT(confirm()));
-  connect(uploadAction, SIGNAL(triggered()), parent(),   SLOT(uploadLast()));
-  connect(uploadAction, SIGNAL(triggered()), this,       SLOT(closePreview()));
 
   connect(discardPushButton, SIGNAL(clicked()), screenshot, SLOT(discard()));
   connect(discardPushButton, SIGNAL(clicked()), this, SLOT(closePreview()));
@@ -253,9 +253,9 @@ void PreviewDialog::relocate()
 
 void PreviewDialog::closePreview()
 {
-  QWidget *container = qobject_cast<QWidget*>(sender()->parent());
-  mStack->removeWidget(container);
-  container->deleteLater();
+  QWidget *widget = mStack->currentWidget();
+  mStack->removeWidget(widget);
+  widget->deleteLater();
 
   if (mStack->count() == 0) {
     close();
@@ -296,12 +296,14 @@ void PreviewDialog::previous()
 {
   mStack->setCurrentIndex(mStack->currentIndex()-1);
   relocate();
+  QApplication::sendEvent(this, new QEvent(QEvent::Enter)); // Ensures the buttons are visible.
 }
 
 void PreviewDialog::next()
 {
   mStack->setCurrentIndex(mStack->currentIndex()+1);
   relocate();
+  QApplication::sendEvent(this, new QEvent(QEvent::Enter));
 }
 
 void PreviewDialog::enlargePreview()
@@ -313,16 +315,32 @@ void PreviewDialog::enlargePreview()
   }
 }
 
-void PreviewDialog::closeEvent(QCloseEvent *event)
+bool PreviewDialog::event(QEvent *event)
 {
-  Q_UNUSED(event)
-  deleteLater();
-}
+  if ((event->type() == QEvent::Enter || event->type() == QEvent::Leave)
+      && mStack->currentWidget())
+  {
+    foreach (QObject *child, mStack->currentWidget()->children()) {
+      QWidget *widget = qobject_cast<QWidget*>(child);
 
-void PreviewDialog::mouseDoubleClickEvent(QMouseEvent *event)
-{
-  Q_UNUSED(event)
-  enlargePreview();
+      if (widget) {
+        // Lets avoid disappearing buttons and bail if the menu is open.
+        QMenu *confirmMenu = widget->findChild<QMenu*>("confirmMenu");
+        if (confirmMenu && confirmMenu->isVisible())
+          return false;
+
+        widget->setVisible((event->type() == QEvent::Enter));
+      }
+    }
+  }
+  else if (event->type() == QEvent::Close) {
+    deleteLater();
+  }
+  else if (event->type() == QEvent::MouseButtonDblClick) {
+    enlargePreview();
+  }
+
+  return QDialog::event(event);
 }
 
 void PreviewDialog::timerEvent(QTimerEvent *event)
@@ -342,26 +360,4 @@ void PreviewDialog::timerEvent(QTimerEvent *event)
     setWindowTitle(tr("Preview: Closing in %1").arg(mAutoclose));
     mAutoclose--;
   }
-}
-
-bool PreviewDialog::eventFilter(QObject *object, QEvent *event)
-{
-  if (event->type() != QEvent::Enter && event->type() != QEvent::Leave) {
-    return false;
-  }
-
-  foreach (QObject *child, object->children()) {
-    QWidget *w = qobject_cast<QWidget*>(child);
-
-    if (w) {
-      // Lets avoid disappearing buttons and bail if the menu is open.
-      QMenu *confirmMenu = w->findChild<QMenu*>("confirmMenu");
-      if (confirmMenu && confirmMenu->isVisible())
-        return false;
-
-      w->setVisible((event->type() == QEvent::Enter));
-    }
-  }
-
-  return true;
 }

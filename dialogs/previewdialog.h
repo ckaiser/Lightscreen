@@ -54,10 +54,8 @@ private slots:
   void enlargePreview();
 
 protected:
-  void closeEvent(QCloseEvent* event);
-  void mouseDoubleClickEvent(QMouseEvent *event);
   void timerEvent(QTimerEvent *event);
-  bool eventFilter(QObject *object, QEvent *event);
+  bool event(QEvent *event);
 
 private:
   static PreviewDialog* mInstance;
