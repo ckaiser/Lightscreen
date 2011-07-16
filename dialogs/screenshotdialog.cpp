@@ -72,7 +72,6 @@ ScreenshotDialog::ScreenshotDialog(Screenshot *screenshot, QWidget *parent) :
   }
 
   resize(size);
-  move(qApp->desktop()->screen(qApp->desktop()->primaryScreen())->rect().center()-QPoint(height()/2, width()/2));
   show();
 }
 

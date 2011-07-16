@@ -34,6 +34,8 @@
 #include <QLabel>
 #include <QStackedLayout>
 #include <QSettings>
+#include <QToolButton>
+#include <QMenu>
 
 #include <QDebug>
 
@@ -104,12 +106,13 @@ void PreviewDialog::add(Screenshot *screenshot)
     mAutoclose = mAutocloseReset;
   }
 
-  QLabel *widget = new QLabel(this);
-  widget->setGraphicsEffect(os::shadow());
+  QLabel *label = new QLabel(this);
+  label->installEventFilter(this);
+  label->setGraphicsEffect(os::shadow());
 
   bool small = false;
 
-  connect(widget, SIGNAL(destroyed()), screenshot, SLOT(discard()));
+  connect(label, SIGNAL(destroyed()), screenshot, SLOT(discard()));
 
   QSize size = screenshot->pixmap().size();
 
@@ -122,41 +125,51 @@ void PreviewDialog::add(Screenshot *screenshot)
 
   QPixmap thumbnail = screenshot->pixmap().scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-  widget->setPixmap(thumbnail);
+  label->setPixmap(thumbnail);
 
   thumbnail = QPixmap();
 
-  widget->setAlignment(Qt::AlignCenter);
+  label->setAlignment(Qt::AlignCenter);
 
   if (size.height() < 80) {
-    widget->setMinimumHeight(80);
+    label->setMinimumHeight(80);
   }
 
   if (size.width() < 80) {
-    widget->setMinimumWidth(80);
+    label->setMinimumWidth(80);
   }
 
-  widget->resize(size);
+  label->resize(size);
 
-  QPushButton *confirmPushButton = new QPushButton(QIcon(":/icons/yes")  , "", widget);
-  QPushButton *discardPushButton = new QPushButton(QIcon(":/icons/no")   , "", widget);
-  QPushButton *enlargePushButton = new QPushButton(QIcon(":/icons/zoom.in"), "", widget);
+  QToolButton *confirmPushButton = new QToolButton(label);
+  QPushButton *discardPushButton = new QPushButton(QIcon(":/icons/no")   , "", label);
+  QPushButton *enlargePushButton = new QPushButton(QIcon(":/icons/zoom.in"), "", label);
 
-  confirmPushButton->setFlat(true);
+  confirmPushButton->setIcon(QIcon(":/icons/yes"));
+  //confirmPushButton->setStyleSheet("QToolButton { padding: 4px 10px; } QToolButton::menu-arrow { background: transparent; }");
   confirmPushButton->setIconSize(QSize(24, 24));
   confirmPushButton->setCursor(Qt::PointingHandCursor);
   confirmPushButton->setGraphicsEffect(os::shadow());
-  confirmPushButton->setDefault(true);
 
-  discardPushButton->setFlat(true);
+  QMenu *confirmMenu = new QMenu(confirmPushButton);
+  confirmMenu->setObjectName("confirmMenu");
+
+  QAction *uploadAction = new QAction(QIcon(":/icons/imgur"), tr("Upload"), confirmMenu);
+
+  confirmMenu->addAction(uploadAction);
+  confirmPushButton->setMenu(confirmMenu);
+  confirmPushButton->setPopupMode(QToolButton::MenuButtonPopup);
+  confirmPushButton->setVisible(false);
+
   discardPushButton->setIconSize(QSize(24, 24));
   discardPushButton->setCursor(Qt::PointingHandCursor);
   discardPushButton->setGraphicsEffect(os::shadow());
+  discardPushButton->setVisible(false);
 
-  enlargePushButton->setFlat(true);
   enlargePushButton->setIconSize(QSize(22, 22));
   enlargePushButton->setCursor(Qt::PointingHandCursor);
   enlargePushButton->setGraphicsEffect(os::shadow());
+  enlargePushButton->setVisible(false);
 
   enlargePushButton->setDisabled(small);
 
@@ -165,6 +178,10 @@ void PreviewDialog::add(Screenshot *screenshot)
 
   connect(confirmPushButton, SIGNAL(clicked()), screenshot, SLOT(confirm()));
   connect(confirmPushButton, SIGNAL(clicked()), this, SLOT(closePreview()));
+
+  connect(uploadAction, SIGNAL(triggered()), screenshot, SLOT(confirm()));
+  connect(uploadAction, SIGNAL(triggered()), parent(),   SLOT(uploadLast()));
+  connect(uploadAction, SIGNAL(triggered()), this,       SLOT(closePreview()));
 
   connect(discardPushButton, SIGNAL(clicked()), screenshot, SLOT(discard()));
   connect(discardPushButton, SIGNAL(clicked()), this, SLOT(closePreview()));
@@ -184,9 +201,9 @@ void PreviewDialog::add(Screenshot *screenshot)
   wl->addLayout(wlayout);
   wl->setMargin(0);
 
-  widget->setLayout(wl);
+  label->setLayout(wl);
 
-  mStack->addWidget(widget);
+  mStack->addWidget(label);
   mStack->setCurrentIndex(mStack->count()-1);
 
   mNextButton->setEnabled(false);
@@ -236,10 +253,9 @@ void PreviewDialog::relocate()
 
 void PreviewDialog::closePreview()
 {
-  QLabel *widget = qobject_cast<QLabel*>(sender()->parent());
-  mStack->removeWidget(widget);
-  widget->hide();
-  widget->deleteLater();
+  QWidget *container = qobject_cast<QWidget*>(sender()->parent());
+  mStack->removeWidget(container);
+  container->deleteLater();
 
   if (mStack->count() == 0) {
     close();
@@ -292,17 +308,14 @@ void PreviewDialog::enlargePreview()
 {
   Screenshot *screenshot = qobject_cast<Screenshot*>(ScreenshotManager::instance()->children().at(mStack->currentIndex()));
 
-  if (screenshot == 0)
-    return;
-
-  new ScreenshotDialog(screenshot);
+  if (screenshot) {
+    new ScreenshotDialog(screenshot, this);
+  }
 }
 
 void PreviewDialog::closeEvent(QCloseEvent *event)
 {
   Q_UNUSED(event)
-
-  mInstance = 0;
   deleteLater();
 }
 
@@ -331,24 +344,24 @@ void PreviewDialog::timerEvent(QTimerEvent *event)
   }
 }
 
-// Singleton
-
-PreviewDialog* PreviewDialog::mInstance = 0;
-
-PreviewDialog *PreviewDialog::instance()
+bool PreviewDialog::eventFilter(QObject *object, QEvent *event)
 {
-  if (!mInstance) {
-    mInstance = new PreviewDialog(0);
+  if (event->type() != QEvent::Enter && event->type() != QEvent::Leave) {
+    return false;
   }
 
-  return mInstance;
-}
+  foreach (QObject *child, object->children()) {
+    QWidget *w = qobject_cast<QWidget*>(child);
 
-bool PreviewDialog::isActive()
-{
-  if (mInstance) {
-    return true;
+    if (w) {
+      // Lets avoid disappearing buttons and bail if the menu is open.
+      QMenu *confirmMenu = w->findChild<QMenu*>("confirmMenu");
+      if (confirmMenu && confirmMenu->isVisible())
+        return false;
+
+      w->setVisible((event->type() == QEvent::Enter));
+    }
   }
 
-  return false;
+  return true;
 }

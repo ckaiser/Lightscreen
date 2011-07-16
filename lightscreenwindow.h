@@ -25,6 +25,7 @@
 
 #include "updater/updater.h"
 #include "tools/screenshot.h"
+#include "dialogs/previewdialog.h"
 
 #include "ui_lightscreenwindow.h"
 
@@ -96,6 +97,7 @@ private:
   QActionGroup* mUploadHistoryActions;
   QString mLastScreenshot;
   QPointer<QSystemTrayIcon> mTrayIcon;
+  QPointer<PreviewDialog> mPreviewDialog;
   Ui::LightscreenWindowClass ui;
 
 };

@@ -175,12 +175,12 @@ void LightscreenWindow::cleanup(Screenshot::Options &options)
     }
 #endif
 
-    if (PreviewDialog::isActive()) {
-      if (PreviewDialog::instance()->count() <= 1 && mWasVisible) {
+    if (mPreviewDialog) {
+      if (mPreviewDialog->count() <= 1 && mWasVisible) {
         show();
       }
 
-      PreviewDialog::instance()->show();
+      mPreviewDialog->show();
     }
     else if (mWasVisible) {
       show();
@@ -280,7 +280,11 @@ void LightscreenWindow::messageClicked()
 void LightscreenWindow::preview(Screenshot* screenshot)
 {
   if (screenshot->options().preview) {
-    PreviewDialog::instance()->add(screenshot);
+    if (!mPreviewDialog) {
+      mPreviewDialog = new PreviewDialog(this);
+    }
+
+    mPreviewDialog->add(screenshot);
   }
   else {
     screenshot->confirm(true);
@@ -354,9 +358,10 @@ void LightscreenWindow::screenshotAction(int mode)
 
   delayms += 400;
 
-  if (optionsHide && PreviewDialog::isActive()) {
-    if (PreviewDialog::instance()->count() >= 1)
-      PreviewDialog::instance()->hide();
+  if (optionsHide && mPreviewDialog) {
+    if (mPreviewDialog->count() >= 1) {
+      mPreviewDialog->hide();
+    }
   }
 
   // The delayed functions works using the static variable lastMode
@@ -428,7 +433,7 @@ void LightscreenWindow::showOptions()
 void LightscreenWindow::showScreenshotMessage(Screenshot::Result result, QString fileName)
 {
   if (result == Screenshot::Cancel
-      || PreviewDialog::isActive())
+      || mPreviewDialog)
     return;
 
   // Showing message.
