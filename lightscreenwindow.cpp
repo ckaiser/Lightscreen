@@ -974,7 +974,9 @@ void LightscreenWindow::updateUploadStatus()
   }
   else {
     statusString = tr("Lightscreen");
+#ifdef Q_WS_WIN
     mTaskbarButton->SetProgresValue(0, 0);
+#endif
   }
 
   if (mTrayIcon) {
