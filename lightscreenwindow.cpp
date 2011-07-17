@@ -879,10 +879,12 @@ bool LightscreenWindow::eventFilter(QObject *object, QEvent *event)
   return QDialog::eventFilter(object, event);
 }
 
+#ifdef Q_WS_WIN
 bool LightscreenWindow::winEvent(MSG *message, long *result)
 {
   Taskbar::GetInstance()->winEvent(message, result);
 }
+#endif
 
 QSettings *LightscreenWindow::settings() const
 {

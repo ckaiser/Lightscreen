@@ -84,8 +84,9 @@ private:
   void connectHotkeys();
   void createTrayIcon();
   bool eventFilter(QObject *object, QEvent *event);
+#ifdef Q_WS_WIN
   bool winEvent(MSG *message, long *result);
-
+#endif
   // Convenience function
   QSettings *settings() const;
 
