@@ -41,7 +41,7 @@
 
 #include "qtwin.h"
 
-#if defined(Q_WS_WIN)
+#ifdef Q_WS_WIN
   #include <qt_windows.h>
   #include <shlobj.h>
 #elif defined(Q_WS_X11)

@@ -21,9 +21,9 @@
 
 #include <QObject>
 #include <QHash>
+#include <QNetworkReply>
 
 class QNetworkAccessManager;
-class QNetworkReply;
 
 class QtImgur: public QObject {
   Q_OBJECT
@@ -43,6 +43,7 @@ public slots:
 
 protected slots:
   void reply(QNetworkReply* reply);
+  void progress(qint64, qint64);
 
 signals:
   void uploaded(QString file, QString url);
@@ -53,7 +54,6 @@ private:
   QString mAPIKey;
   QNetworkAccessManager *mNetworkManager;
   QHash<QNetworkReply*, QString> mFiles;
-
 };
 
 #endif // QTIMGUR_H

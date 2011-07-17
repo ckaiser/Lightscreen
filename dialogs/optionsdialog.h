@@ -45,7 +45,7 @@ public slots:
 protected:
   bool event(QEvent *event);
 
-#if defined(Q_WS_WIN)
+#ifdef Q_WS_WIN
   bool winEvent(MSG *message, long *result);
 #endif
 

@@ -34,9 +34,10 @@
 
 #include <QDebug>
 
-#if defined(Q_WS_WIN)
+#ifdef Q_WS_WIN
   #include <windows.h>
-  #include "tools/qwin7utils/JumpList.h"
+  #include "tools/qwin7utils/Taskbar.h"
+  #include "tools/qwin7utils/TaskbarButton.h"
   using namespace QW7;
 #endif
 
@@ -82,6 +83,10 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
 
   setWindowFlags(windowFlags() ^ Qt::WindowContextHelpButtonHint); // Remove the what's this button, no real use in the main window.
 
+#ifdef Q_WS_WIN
+  mTaskbarButton = new TaskbarButton(this);
+#endif
+
   // Actions
   connect(ui.optionsPushButton   , SIGNAL(clicked()), this, SLOT(showOptions()));
   connect(ui.hidePushButton      , SIGNAL(clicked()), this, SLOT(toggleVisibility()));
@@ -89,8 +94,9 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   connect(ui.quitPushButton      , SIGNAL(clicked()), this, SLOT(quit()));
 
   // Uploader
-  connect(Uploader::instance(), SIGNAL(done(QString, QString)), this, SLOT(showUploaderMessage(QString, QString)));
-  connect(Uploader::instance(), SIGNAL(error(QString))        , this, SLOT(showUploaderError(QString)));
+  connect(Uploader::instance(), SIGNAL(progress(qint64,qint64)), this, SLOT(uploadProgress(qint64, qint64)));
+  connect(Uploader::instance(), SIGNAL(done(QString, QString)) , this, SLOT(showUploaderMessage(QString, QString)));
+  connect(Uploader::instance(), SIGNAL(error(QString))         , this, SLOT(showUploaderError(QString)));
 
   // Manager
   connect(ScreenshotManager::instance(), SIGNAL(confirm(Screenshot*)),                this, SLOT(preview(Screenshot*)));
@@ -330,6 +336,11 @@ void LightscreenWindow::restoreNotification()
   if (mTrayIcon)
     mTrayIcon->setIcon(QIcon(":/icons/lightscreen.small"));
 
+#ifdef Q_WS_WIN
+  mTaskbarButton->SetOverlayIcon(QIcon(), "");
+  mTaskbarButton->SetState(STATE_NORMAL);
+#endif
+
   updateUploadStatus();
 }
 
@@ -540,18 +551,28 @@ void LightscreenWindow::notify(Screenshot::Result result)
   {
   case Screenshot::Success:
     mTrayIcon->setIcon(QIcon(":/icons/lightscreen.yes"));
+#ifdef Q_WS_WIN
+    mTaskbarButton->SetOverlayIcon(QIcon(":/icons/yes"), tr("Success!"));
+#endif
     setWindowTitle(tr("Success!"));
     break;
   case Screenshot::Fail:
     mTrayIcon->setIcon(QIcon(":/icons/lightscreen.no"));
     setWindowTitle(tr("Failed!"));
+#ifdef Q_WS_WIN
+    mTaskbarButton->SetOverlayIcon(QIcon(":/icons/no"), tr("Failed!"));
+    mTaskbarButton->SetState(STATE_ERROR);
+#endif
     break;
   case Screenshot::Cancel:
     setWindowTitle(tr("Cancelled!"));
+#ifdef Q_WS_WIN
+    mTaskbarButton->SetState(STATE_NOPROGRESS);
+#endif
     break;
   }
 
-  QTimer::singleShot(1500, this, SLOT(restoreNotification()));
+  QTimer::singleShot(2000, this, SLOT(restoreNotification()));
 }
 
 void LightscreenWindow::optimizationDone()
@@ -858,6 +879,11 @@ bool LightscreenWindow::eventFilter(QObject *object, QEvent *event)
   return QDialog::eventFilter(object, event);
 }
 
+bool LightscreenWindow::winEvent(MSG *message, long *result)
+{
+  Taskbar::GetInstance()->winEvent(message, result);
+}
+
 QSettings *LightscreenWindow::settings() const
 {
   return ScreenshotManager::instance()->settings();
@@ -922,6 +948,14 @@ void LightscreenWindow::uploadAction(QAction *upload)
   }
 }
 
+void LightscreenWindow::uploadProgress(qint64 sent, qint64 total)
+{
+#ifdef Q_WS_WIN
+  mTaskbarButton->SetProgresValue(sent, total);
+#endif
+  //TODO: Update mTrayIcon & windowTitle()
+}
+
 void LightscreenWindow::uploadLast()
 {
   upload(mLastScreenshot);
@@ -938,6 +972,7 @@ void LightscreenWindow::updateUploadStatus()
   }
   else {
     statusString = tr("Lightscreen");
+    mTaskbarButton->SetProgresValue(0, 0);
   }
 
   if (mTrayIcon) {

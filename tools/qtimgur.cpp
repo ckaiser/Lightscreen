@@ -51,7 +51,7 @@ void QtImgur::upload(const QString &fileName)
   data.append(QUrl::toPercentEncoding(image));
 
   QNetworkReply *reply = mNetworkManager->post(QNetworkRequest(QUrl("http://api.imgur.com/2/upload.xml")), data);
-  connect(reply, SIGNAL(uploadProgress(qint64, qint64)), this, SIGNAL(uploadProgress(qint64, qint64)));
+  connect(reply, SIGNAL(uploadProgress(qint64, qint64)), this, SLOT(progress(qint64, qint64)));
 
   mFiles.insert(reply, fileName);
 }
@@ -88,6 +88,26 @@ void QtImgur::reply(QNetworkReply *reply)
       }
     }
   }
+}
 
+void QtImgur::progress(qint64 bytesSent, qint64 bytesTotal)
+{
+  qint64 totalSent, totalTotal;
 
+  QNetworkReply *senderReply = qobject_cast<QNetworkReply*>(sender());
+
+  senderReply->setProperty("bytesSent", bytesSent);
+  senderReply->setProperty("bytesTotal", bytesTotal);
+
+  totalSent = bytesSent;
+  totalTotal = bytesTotal;
+
+  foreach (QNetworkReply *reply, mFiles.keys()) {
+    if (reply != senderReply) {
+      totalSent  += reply->property("bytesSent").toLongLong();
+      totalTotal += reply->property("bytesTotal").toLongLong();
+    }
+  }
+
+  emit uploadProgress(totalSent, totalTotal);
 }

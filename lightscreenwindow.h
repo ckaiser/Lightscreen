@@ -29,6 +29,10 @@
 
 #include "ui_lightscreenwindow.h"
 
+#ifdef Q_WS_WIN
+  #include "tools/qwin7utils/TaskbarButton.h"
+#endif
+
 class QHttp;
 class Updater;
 class QSettings;
@@ -67,6 +71,7 @@ public slots:
   void updaterDone(bool result);
   void upload(QString fileName);
   void uploadAction(QAction* upload);
+  void uploadProgress(qint64 sent, qint64 total);
   void uploadLast();
   void windowHotkey();
   void windowPickerHotkey();
@@ -79,6 +84,7 @@ private:
   void connectHotkeys();
   void createTrayIcon();
   bool eventFilter(QObject *object, QEvent *event);
+  bool winEvent(MSG *message, long *result);
 
   // Convenience function
   QSettings *settings() const;
@@ -100,6 +106,9 @@ private:
   QPointer<PreviewDialog> mPreviewDialog;
   Ui::LightscreenWindowClass ui;
 
+#ifdef Q_WS_WIN
+  QW7::TaskbarButton *mTaskbarButton;
+#endif
 };
 
 #endif // LIGHTSCREENWINDOW_H

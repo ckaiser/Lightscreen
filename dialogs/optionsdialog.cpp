@@ -31,7 +31,7 @@
 
 #include <QDebug>
 
-#if defined(Q_WS_WIN)
+#ifdef Q_WS_WIN
   #include <windows.h>
 #endif
 
@@ -420,7 +420,7 @@ void OptionsDialog::loadSettings()
     ui.replaceCheckBox->setChecked(settings()->value("replace", false).toBool());
     ui.uploadCheckBox->setChecked(settings()->value("uploadAuto", false).toBool());
 
-#if defined(Q_WS_WIN)
+#ifdef Q_WS_WIN
   if (!QFile::exists("optipng.exe")) {
     ui.optiPngCheckBox->setEnabled(false);
     ui.optiPngCheckBox->setChecked(false);
@@ -661,7 +661,7 @@ bool OptionsDialog::event(QEvent* event)
   return QDialog::event(event);
 }
 
-#if defined(Q_WS_WIN)
+#ifdef Q_WS_WIN
 // Qt does not send the print screen key as a regular QKeyPress event, so we must use the Windows API
 bool OptionsDialog::winEvent(MSG *message, long *result)
 {

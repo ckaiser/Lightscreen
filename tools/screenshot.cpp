@@ -78,7 +78,7 @@ QPixmap &Screenshot::pixmap()
 
 void Screenshot::activeWindow()
 {
-#if defined(Q_WS_WIN)
+#ifdef Q_WS_WIN
   HWND fWindow = GetForegroundWindow();
 
   if (fWindow == NULL)

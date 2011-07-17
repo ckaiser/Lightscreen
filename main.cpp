@@ -21,9 +21,10 @@
 #include <QLocale>
 #include <QDebug>
 
-#if defined(Q_WS_WIN)
+#ifdef Q_WS_WIN
   #include "tools/qwin7utils/AppUserModel.h"
   #include "tools/qwin7utils/JumpList.h"
+  #include "tools/qwin7utils/Taskbar.h"
   using namespace QW7;
 #endif
 
@@ -54,7 +55,7 @@ int main(int argc, char *argv[])
 
   LightscreenWindow lightscreen;
 
-#if defined(Q_WS_WIN)
+#ifdef Q_WS_WIN
   // Windows 7 jumplists.
   AppUserModel::SetCurrentProcessExplicitAppUserModelID("Lightscreen");
 
@@ -83,5 +84,11 @@ int main(int argc, char *argv[])
   QObject::connect(&application, SIGNAL(messageReceived(const QString&)), &lightscreen, SLOT(messageReceived(const QString&)));
   QObject::connect(&lightscreen, SIGNAL(finished(int)), &application, SLOT(quit()));
 
-  return application.exec();
+  int result = application.exec();
+
+#ifdef Q_WS_WIN
+  Taskbar::ReleaseInstance();
+#endif
+
+  return result;
 }

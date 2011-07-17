@@ -43,6 +43,7 @@ public slots:
 signals:
   void done(QString, QString);
   void error(QString);
+  void progress(qint64, qint64);
 
 private:
   static Uploader* mInstance;
