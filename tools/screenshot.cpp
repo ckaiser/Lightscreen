@@ -177,6 +177,11 @@ QString Screenshot::newFileName() const
   return fileName;
 }
 
+void Screenshot::markUpload()
+{
+  mOptions.upload = true;
+}
+
 QString Screenshot::extension() const
 {
   switch (mOptions.format) {

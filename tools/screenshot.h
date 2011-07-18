@@ -88,6 +88,7 @@ public:
     bool saveAs;
     bool animations;
     bool replace;
+    bool upload;
   };
 
   Screenshot(QObject *parent, Screenshot::Options options);
@@ -104,6 +105,7 @@ public slots:
   void save();
   void setPixmap(QPixmap pixmap);
   void confirmation();
+  void markUpload();
 
 signals:
   void askConfirmation();

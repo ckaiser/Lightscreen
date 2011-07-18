@@ -56,15 +56,29 @@ void QtImgur::upload(const QString &fileName)
   mFiles.insert(reply, fileName);
 }
 
+void QtImgur::cancel(const QString &fileName)
+{
+  QNetworkReply *reply = mFiles.key(fileName);
+
+  if (!reply) {
+    return;
+  }
+
+  reply->abort();
+  mFiles.remove(reply);
+  reply->deleteLater();
+}
+
 void QtImgur::reply(QNetworkReply *reply)
 {
   reply->deleteLater();
 
   QString fileName = mFiles[reply];
   mFiles.remove(reply);
+  reply->deleteLater();
 
   if (reply->error() != QNetworkReply::NoError) {
-    emit error(fileName, QtImgur::ErrorNetwork);
+    emit error(fileName, QtImgur::ErrorCancel);
     return;
   }
 

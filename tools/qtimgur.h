@@ -33,13 +33,15 @@ public:
     ErrorFile,
     ErrorNetwork,
     ErrorCredits,
-    ErrorUpload
+    ErrorUpload,
+    ErrorCancel
   };
 
   QtImgur(const QString &APIKey, QObject *parent);
 
 public slots:
   void upload(const QString &fileName);
+  void cancel(const QString &fileName);
 
 protected slots:
   void reply(QNetworkReply* reply);

@@ -70,6 +70,11 @@ void Uploader::uploaded(const QString &file, const QString &url)
   emit done(file, url);
 }
 
+void Uploader::cancel(const QString &fileName)
+{
+  mImgur->cancel(fileName);
+}
+
 int Uploader::uploading()
 {
   return mUploading;

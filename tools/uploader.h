@@ -37,6 +37,7 @@ public:
 public slots:
   void upload(const QString &fileName);
   void uploaded(const QString &fileName, const QString &url);
+  void cancel(const QString &fileName);
   int  uploading();
   void imgurError(const QString &file, const QtImgur::Error e);
 

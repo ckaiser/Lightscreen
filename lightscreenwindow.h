@@ -80,7 +80,7 @@ private slots:
   void applySettings();
 
 private:
-  void compressPng(QString fileName);
+  void optiPNG(QString fileName, bool upload);
   void connectHotkeys();
   void createTrayIcon();
   bool eventFilter(QObject *object, QEvent *event);

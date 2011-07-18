@@ -154,8 +154,8 @@ void PreviewDialog::add(Screenshot *screenshot)
     confirmMenu->setObjectName("confirmMenu");
 
     QAction *uploadAction = new QAction(QIcon(":/icons/imgur"), tr("Upload"), confirmPushButton);
+    connect(uploadAction, SIGNAL(triggered()), screenshot, SLOT(markUpload()));
     connect(uploadAction, SIGNAL(triggered()), screenshot, SLOT(confirm()));
-    connect(uploadAction, SIGNAL(triggered()), parent(),   SLOT(uploadLast()));
     connect(uploadAction, SIGNAL(triggered()), this,       SLOT(closePreview()));
 
     confirmMenu->addAction(uploadAction);

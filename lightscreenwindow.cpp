@@ -218,10 +218,7 @@ void LightscreenWindow::cleanup(Screenshot::Options &options)
    && settings()->value("options/optipng").toBool()
    && options.format == Screenshot::PNG)
   {
-    compressPng(options.fileName);
-  }
-  else if (settings()->value("options/uploadAuto").toBool()) {
-    upload(options.fileName);
+    optiPNG(options.fileName, options.upload);
   }
 
   if (options.result == Screenshot::Success && options.file)  {
@@ -338,7 +335,6 @@ void LightscreenWindow::restoreNotification()
 
 #ifdef Q_WS_WIN
   mTaskbarButton->SetOverlayIcon(QIcon(), "");
-  mTaskbarButton->SetState(STATE_NORMAL);
 #endif
 
   updateUploadStatus();
@@ -409,6 +405,7 @@ void LightscreenWindow::screenshotAction(int mode)
     options.saveAs         = settings()->value("options/saveAs" , false).toBool();
     options.animations     = settings()->value("options/animations" , true).toBool();
     options.replace        = settings()->value("options/replace", false).toBool();
+    options.upload         = settings()->value("options/uploadAuto", false).toBool();
 
     Screenshot::NamingOptions namingOptions;
     namingOptions.naming       = (Screenshot::Naming) settings()->value("file/naming").toInt();
@@ -486,11 +483,12 @@ void LightscreenWindow::showUploaderMessage(QString fileName, QString url)
 
 void LightscreenWindow::showUploaderError(QString error)
 {
-  if (!mTrayIcon)
-    return;
-
   mLastMessage = -1;
-  mTrayIcon->showMessage(tr("Upload error"), error);
+
+  if (mTrayIcon && !error.isEmpty()) {
+    mTrayIcon->showMessage(tr("Upload error"), error);
+  }
+
   updateUploadStatus();
 }
 
@@ -561,14 +559,10 @@ void LightscreenWindow::notify(Screenshot::Result result)
     setWindowTitle(tr("Failed!"));
 #ifdef Q_WS_WIN
     mTaskbarButton->SetOverlayIcon(QIcon(":/icons/no"), tr("Failed!"));
-    mTaskbarButton->SetState(STATE_ERROR);
 #endif
     break;
   case Screenshot::Cancel:
     setWindowTitle(tr("Cancelled!"));
-#ifdef Q_WS_WIN
-    mTaskbarButton->SetState(STATE_NOPROGRESS);
-#endif
     break;
   }
 
@@ -682,13 +676,10 @@ void LightscreenWindow::applySettings()
   os::setStartup(settings()->value("options/startup").toBool(), settings()->value("options/startupHide").toBool());
 }
 
-void LightscreenWindow::compressPng(QString fileName)
+void LightscreenWindow::optiPNG(QString fileName, bool upload)
 {
-#if defined(Q_OS_UNIX)
-  QProcess::startDetached("optipng " + fileName + " -quiet");
-#else
-  if (settings()->value("options/uploadAuto").toBool()) {
-    // If the user has chosen to automatically upload screenshots we have to track the progress of the optimization, so we use QProcess
+  if (upload) {
+    // If the user has chosen to upload the screenshots we have to track the progress of the optimization, so we use QProcess
     QProcess* optipng = new QProcess(this);
 
     // To be read by optimizationDone() (for uploading)
@@ -705,6 +696,9 @@ void LightscreenWindow::compressPng(QString fileName)
   else {
     // Otherwise start it detached from this process.
     ShellExecuteW(NULL, NULL, (LPCWSTR)QString("optipng.exe").toStdWString().data(), (LPCWSTR)fileName.toStdWString().data(), NULL, SW_HIDE);
+#if defined(Q_OS_UNIX)
+    QProcess::startDetached("optipng " + fileName + " -quiet");
+#else
   }
 #endif
 }
@@ -854,6 +848,7 @@ bool LightscreenWindow::eventFilter(QObject *object, QEvent *event)
 
         action = new QAction(iterator.peekPrevious().second, menu);
         action->setToolTip(QFileInfo(iterator.peekPrevious().first).fileName());
+        action->setWhatsThis(iterator.peekPrevious().first);
 
         if (iterator.previous().first == mLastScreenshot) {
           uploadAction->setEnabled(false);
@@ -943,7 +938,11 @@ void LightscreenWindow::uploadAction(QAction *upload)
   QString url = upload->text();
 
   if (url == tr("Uploading...")) {
-    //int confirm = QMessageBox::question()
+    int confirm = QMessageBox::question(this, tr("Upload cancel"), tr("Do you want to cancel the upload of %1").arg(upload->toolTip()), tr("Cancel"), tr("Don't Cancel"));
+
+    if (confirm == 0) {
+      Uploader::instance()->cancel(upload->whatsThis()); // Full path stored in the whatsThis
+    }
   }
   else {
     QDesktopServices::openUrl(QUrl(url));
@@ -976,6 +975,7 @@ void LightscreenWindow::updateUploadStatus()
     statusString = tr("Lightscreen");
 #ifdef Q_WS_WIN
     mTaskbarButton->SetProgresValue(0, 0);
+    mTaskbarButton->SetState(STATE_NOPROGRESS);
 #endif
   }
 
