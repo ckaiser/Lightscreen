@@ -71,13 +71,17 @@ void QtImgur::cancel(const QString &fileName)
 
 void QtImgur::reply(QNetworkReply *reply)
 {
-  reply->deleteLater();
-
   QString fileName = mFiles[reply];
   mFiles.remove(reply);
-  reply->deleteLater();
+
+  qDebug() << "Network is reply!";
 
   if (reply->error() != QNetworkReply::NoError) {
+    emit error(fileName, QtImgur::ErrorNetwork);
+    return;
+  }
+
+  if (reply->error() == QNetworkReply::OperationCanceledError) {
     emit error(fileName, QtImgur::ErrorCancel);
     return;
   }
@@ -98,14 +102,20 @@ void QtImgur::reply(QNetworkReply *reply)
       }
 
       if (reader.name() == "imgur_page") {
-        emit uploaded(fileName, reader.readElementText());
+        QString url = reader.readElementText();
+        qDebug() << "Emitting uploaded for " << fileName << ", url being " << url;
+        emit uploaded(fileName, url);
       }
     }
   }
+
+  reply->deleteLater();
 }
 
 void QtImgur::progress(qint64 bytesSent, qint64 bytesTotal)
 {
+  qDebug() << "Original progress: " << bytesSent << " - " << bytesTotal;
+
   qint64 totalSent, totalTotal;
 
   QNetworkReply *senderReply = qobject_cast<QNetworkReply*>(sender());
@@ -123,5 +133,6 @@ void QtImgur::progress(qint64 bytesSent, qint64 bytesTotal)
     }
   }
 
+  qDebug() << "Total progress: " << totalSent << " - " << totalTotal;
   emit uploadProgress(totalSent, totalTotal);
 }

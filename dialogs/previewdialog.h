@@ -43,6 +43,7 @@ public slots:
 
 signals:
   void acceptAll();
+  void uploadAll();
   void rejectAll();
 
 private slots:

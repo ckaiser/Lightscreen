@@ -729,6 +729,190 @@ Quality is related to file size and of course to readability and overall quality
             </widget>
            </item>
            <item>
+            <widget class="QGroupBox" name="previewGroupBox">
+             <property name="title">
+              <string>Screenshot Previews</string>
+             </property>
+             <property name="flat">
+              <bool>true</bool>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_4">
+              <item row="0" column="0" colspan="2">
+               <widget class="QLabel" name="previewSizeLabel">
+                <property name="text">
+                 <string>Maximum Size:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>previewSizeSpinBox</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2" colspan="2">
+               <widget class="QSpinBox" name="previewSizeSpinBox">
+                <property name="buttonSymbols">
+                 <enum>QAbstractSpinBox::PlusMinus</enum>
+                </property>
+                <property name="accelerated">
+                 <bool>true</bool>
+                </property>
+                <property name="correctionMode">
+                 <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
+                </property>
+                <property name="suffix">
+                 <string notr="true"> px</string>
+                </property>
+                <property name="minimum">
+                 <number>200</number>
+                </property>
+                <property name="maximum">
+                 <number>800</number>
+                </property>
+                <property name="singleStep">
+                 <number>10</number>
+                </property>
+                <property name="value">
+                 <number>300</number>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4" colspan="4">
+               <spacer name="horizontalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>41</width>
+                  <height>0</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="previewPositionLabel">
+                <property name="text">
+                 <string>Position:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>previewPositionComboBox</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1" colspan="3">
+               <widget class="QComboBox" name="previewPositionComboBox">
+                <property name="currentIndex">
+                 <number>3</number>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Top Left</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Top Right</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Bottom Left</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Bottom Right</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="1" column="4" colspan="4">
+               <spacer name="horizontalSpacer_5">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>4</width>
+                  <height>0</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="2" column="0" colspan="3">
+               <widget class="QCheckBox" name="previewAutocloseCheckBox">
+                <property name="text">
+                 <string>Auto-close after</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="3" colspan="2">
+               <widget class="QSpinBox" name="previewAutocloseTimeSpinBox">
+                <property name="suffix">
+                 <string> seconds</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="5">
+               <widget class="QLabel" name="andLabel">
+                <property name="minimumSize">
+                 <size>
+                  <width>20</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string> and </string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="6">
+               <widget class="QComboBox" name="previewAutocloseActionComboBox">
+                <property name="currentIndex">
+                 <number>0</number>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>save</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>upload</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>cancel</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="2" column="7">
+               <spacer name="horizontalSpacer_7">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>23</width>
+                  <height>0</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
             <widget class="QGroupBox" name="screenshotsGroupBox">
              <property name="title">
               <string>Screenshots</string>
@@ -926,185 +1110,6 @@ Quality is related to file size and of course to readability and overall quality
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="previewGroupBox">
-             <property name="title">
-              <string>Screenshot Previews</string>
-             </property>
-             <property name="flat">
-              <bool>true</bool>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-             <property name="checked">
-              <bool>false</bool>
-             </property>
-             <layout class="QGridLayout" name="gridLayout_4">
-              <item row="0" column="0" colspan="2">
-               <widget class="QLabel" name="previewSizeLabel">
-                <property name="text">
-                 <string>Maximum Size:</string>
-                </property>
-                <property name="buddy">
-                 <cstring>previewSizeSpinBox</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="2" colspan="2">
-               <widget class="QSpinBox" name="previewSizeSpinBox">
-                <property name="buttonSymbols">
-                 <enum>QAbstractSpinBox::PlusMinus</enum>
-                </property>
-                <property name="accelerated">
-                 <bool>true</bool>
-                </property>
-                <property name="correctionMode">
-                 <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
-                </property>
-                <property name="suffix">
-                 <string notr="true"> px</string>
-                </property>
-                <property name="minimum">
-                 <number>200</number>
-                </property>
-                <property name="maximum">
-                 <number>800</number>
-                </property>
-                <property name="singleStep">
-                 <number>10</number>
-                </property>
-                <property name="value">
-                 <number>300</number>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="4" colspan="4">
-               <spacer name="horizontalSpacer_6">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>41</width>
-                  <height>0</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="previewPositionLabel">
-                <property name="text">
-                 <string>Position:</string>
-                </property>
-                <property name="buddy">
-                 <cstring>previewPositionComboBox</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1" colspan="3">
-               <widget class="QComboBox" name="previewPositionComboBox">
-                <property name="currentIndex">
-                 <number>3</number>
-                </property>
-                <item>
-                 <property name="text">
-                  <string>Top Left</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Top Right</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Bottom Left</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Bottom Right</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-              <item row="1" column="4" colspan="4">
-               <spacer name="horizontalSpacer_5">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>4</width>
-                  <height>0</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item row="2" column="0" colspan="3">
-               <widget class="QCheckBox" name="previewAutocloseCheckBox">
-                <property name="text">
-                 <string>Auto-close after</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="3" colspan="2">
-               <widget class="QSpinBox" name="previewAutocloseTimeSpinBox">
-                <property name="suffix">
-                 <string> seconds</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="5">
-               <widget class="QLabel" name="andLabel">
-                <property name="minimumSize">
-                 <size>
-                  <width>20</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string> and </string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="6">
-               <widget class="QComboBox" name="previewAutocloseActionComboBox">
-                <property name="currentIndex">
-                 <number>0</number>
-                </property>
-                <item>
-                 <property name="text">
-                  <string>save</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>cancel</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-              <item row="2" column="7">
-               <spacer name="horizontalSpacer_7">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>23</width>
-                  <height>0</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
             <widget class="QGroupBox" name="updaterGroupBox">
              <property name="title">
               <string>Updater</string>
@@ -1248,7 +1253,6 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
   <tabstop>replaceCheckBox</tabstop>
   <tabstop>areaAutocloseCheckBox</tabstop>
   <tabstop>delaySpinBox</tabstop>
-  <tabstop>previewGroupBox</tabstop>
   <tabstop>previewSizeSpinBox</tabstop>
   <tabstop>previewPositionComboBox</tabstop>
   <tabstop>previewAutocloseCheckBox</tabstop>

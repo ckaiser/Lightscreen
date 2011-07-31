@@ -58,6 +58,8 @@ void Uploader::upload(const QString &fileName)
 
 void Uploader::uploaded(const QString &file, const QString &url)
 {
+  qDebug() << "Uploader::uploaded(" << file << ", " << url << ")";
+
   // Modifying uploaded list, adding url.
   for (int i = 0; i < mScreenshots.size(); ++i) {
     if (mScreenshots.at(i).first == file) {

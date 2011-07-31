@@ -878,6 +878,7 @@ bool LightscreenWindow::eventFilter(QObject *object, QEvent *event)
 bool LightscreenWindow::winEvent(MSG *message, long *result)
 {
   Taskbar::GetInstance()->winEvent(message, result);
+  return false;
 }
 #endif
 

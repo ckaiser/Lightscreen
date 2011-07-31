@@ -154,9 +154,10 @@ void PreviewDialog::add(Screenshot *screenshot)
     confirmMenu->setObjectName("confirmMenu");
 
     QAction *uploadAction = new QAction(QIcon(":/icons/imgur"), tr("Upload"), confirmPushButton);
-    connect(uploadAction, SIGNAL(triggered()), screenshot, SLOT(markUpload()));
-    connect(uploadAction, SIGNAL(triggered()), screenshot, SLOT(confirm()));
-    connect(uploadAction, SIGNAL(triggered()), this,       SLOT(closePreview()));
+    connect(uploadAction, SIGNAL(triggered()), screenshot,   SLOT(markUpload()));
+    connect(uploadAction, SIGNAL(triggered()), screenshot,   SLOT(confirm()));
+    connect(uploadAction, SIGNAL(triggered()), this,         SLOT(closePreview()));
+    connect(this,         SIGNAL(uploadAll()), uploadAction, SLOT(trigger()));
 
     confirmMenu->addAction(uploadAction);
     confirmPushButton->setMenu(confirmMenu);
@@ -350,6 +351,9 @@ void PreviewDialog::timerEvent(QTimerEvent *event)
   if (mAutoclose == 0) {
     if (mAutocloseAction == 0) {
       emit acceptAll();
+    }
+    else if (mAutocloseAction == 1) {
+      emit uploadAll();
     }
     else {
       emit rejectAll();

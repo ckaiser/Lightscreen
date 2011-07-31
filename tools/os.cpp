@@ -142,19 +142,12 @@ QPixmap os::grabWindow(WId winId)
   GetWindowRect(winId, &rcWindow);
 
   if (IsZoomed(winId)) {
-    if (QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA) {
-      // TODO: WTF!
-      rcWindow.right -= 8;
-      rcWindow.left += 8;
-      rcWindow.top += 8;
-      rcWindow.bottom -= 8;
-    }
-    else {
-      rcWindow.right += 4;
-      rcWindow.left -= 4;
-      rcWindow.top += 4;
-      rcWindow.bottom -= 4;
-    }
+    int margin = GetSystemMetrics(SM_CXSIZEFRAME);
+
+    rcWindow.right -= margin;
+    rcWindow.left += margin;
+    rcWindow.top += margin;
+    rcWindow.bottom -= margin;
   }
 
   int width, height;
@@ -173,44 +166,41 @@ QPixmap os::grabWindow(WId winId)
   // the window DC method has the disadvantage that it does not show Aero glass transparency,
   // so we'll avoid it for the screenshots that don't need it.
 
+  HDC hdcMem;
+  HBITMAP hbmCapture;
+
   if (EqualRect(&rcScreen, &rcResult)) {
     // Grabbing the window from the Screen DC.
     HDC hdcScreen = GetDC(NULL);
 
     BringWindowToTop(winId);
 
-    HDC hdcMem = CreateCompatibleDC(hdcScreen);
-    HBITMAP hbmCapture = CreateCompatibleBitmap(hdcScreen, width, height);
+    hdcMem = CreateCompatibleDC(hdcScreen);
+    hbmCapture = CreateCompatibleBitmap(hdcScreen, width, height);
     SelectObject(hdcMem, hbmCapture);
 
     BitBlt(hdcMem, 0, 0, width, height, hdcScreen, rcWindow.left, rcWindow.top, SRCCOPY);
-
-    ReleaseDC(winId, hdcMem);
-    DeleteDC(hdcMem);
-
-    pixmap = QPixmap::fromWinHBITMAP(hbmCapture);
-
-    DeleteObject(hbmCapture);
   }
   else {
     // Grabbing the window by its own DC
     HDC hdcWindow = GetWindowDC(winId);
 
-    HDC hdcMem = CreateCompatibleDC(hdcWindow);
-    HBITMAP hbmCapture = CreateCompatibleBitmap(hdcWindow, width, height);
+    hdcMem = CreateCompatibleDC(hdcWindow);
+    hbmCapture = CreateCompatibleBitmap(hdcWindow, width, height);
     SelectObject(hdcMem, hbmCapture);
 
     BitBlt(hdcMem, 0, 0, width, height, hdcWindow, 0, 0, SRCCOPY);
-
-    ReleaseDC(winId, hdcMem);
-    DeleteDC(hdcMem);
-
-    pixmap = QPixmap::fromWinHBITMAP(hbmCapture);
-
-    DeleteObject(hbmCapture);
   }
 
+  ReleaseDC(winId, hdcMem);
+  DeleteDC(hdcMem);
+
+  pixmap = QPixmap::fromWinHBITMAP(hbmCapture);
+
+  DeleteObject(hbmCapture);
+
   return pixmap;
+
 #else
   return QPixmap::grabWindow(winId);
 #endif
