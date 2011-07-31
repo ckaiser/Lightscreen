@@ -695,12 +695,13 @@ void LightscreenWindow::optiPNG(QString fileName, bool upload)
   }
   else {
     // Otherwise start it detached from this process.
+#ifdef Q_WS_WIN
     ShellExecuteW(NULL, NULL, (LPCWSTR)QString("optipng.exe").toStdWString().data(), (LPCWSTR)fileName.toStdWString().data(), NULL, SW_HIDE);
-#if defined(Q_OS_UNIX)
-    QProcess::startDetached("optipng " + fileName + " -quiet");
-#else
-  }
 #endif
+#ifdef Q_OS_UNIX
+    QProcess::startDetached("optipng " + fileName + " -quiet");
+#endif
+  }
 }
 
 void LightscreenWindow::connectHotkeys()
