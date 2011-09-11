@@ -140,26 +140,56 @@ void PreviewDialog::add(Screenshot *screenshot)
 
   label->resize(size);
 
-  QToolButton *confirmPushButton = new QToolButton(label);
   QPushButton *discardPushButton = new QPushButton(QIcon(":/icons/no")   , "", label);
   QPushButton *enlargePushButton = new QPushButton(QIcon(":/icons/zoom.in"), "", label);
+  QToolButton *confirmPushButton = new QToolButton(label);
 
-  confirmPushButton->setIcon(QIcon(":/icons/yes"));
   confirmPushButton->setIconSize(QSize(24, 24));
   confirmPushButton->setCursor(Qt::PointingHandCursor);
   confirmPushButton->setGraphicsEffect(os::shadow());
 
-  if (!ScreenshotManager::instance()->settings()->value("options/uploadAuto").toBool()) {
+  if (ScreenshotManager::instance()->settings()->value("options/previewDefaultAction", 0).toInt() == 0
+      || ScreenshotManager::instance()->settings()->value("options/uploadAuto").toBool()) {
+    // Default button, confirm & upload.
+    confirmPushButton->setIcon(QIcon(":/icons/yes"));
+
+    if (!ScreenshotManager::instance()->settings()->value("options/uploadAuto").toBool()) {
+      QMenu *confirmMenu = new QMenu(confirmPushButton);
+      confirmMenu->setObjectName("confirmMenu");
+
+      QAction *uploadAction = new QAction(QIcon(":/icons/imgur.yes"), tr("Upload"), confirmPushButton);
+      connect(uploadAction, SIGNAL(triggered()), screenshot,   SLOT(markUpload()));
+      connect(uploadAction, SIGNAL(triggered()), screenshot,   SLOT(confirm()));
+      connect(uploadAction, SIGNAL(triggered()), this,         SLOT(closePreview()));
+      connect(this,         SIGNAL(uploadAll()), uploadAction, SLOT(trigger()));
+
+      confirmMenu->addAction(uploadAction);
+      confirmPushButton->setMenu(confirmMenu);
+      confirmPushButton->setPopupMode(QToolButton::MenuButtonPopup);
+    }
+
+    connect(this, SIGNAL(acceptAll()), confirmPushButton, SLOT(click()));
+    connect(confirmPushButton, SIGNAL(clicked()), screenshot, SLOT(confirm()));
+    connect(confirmPushButton, SIGNAL(clicked()), this, SLOT(closePreview()));
+  }
+  else {
+    // Reversed button, upload & confirm.
+    confirmPushButton->setIcon(QIcon(":/icons/imgur.yes"));
+
     QMenu *confirmMenu = new QMenu(confirmPushButton);
     confirmMenu->setObjectName("confirmMenu");
 
-    QAction *uploadAction = new QAction(QIcon(":/icons/imgur"), tr("Upload"), confirmPushButton);
-    connect(uploadAction, SIGNAL(triggered()), screenshot,   SLOT(markUpload()));
-    connect(uploadAction, SIGNAL(triggered()), screenshot,   SLOT(confirm()));
-    connect(uploadAction, SIGNAL(triggered()), this,         SLOT(closePreview()));
-    connect(this,         SIGNAL(uploadAll()), uploadAction, SLOT(trigger()));
+    QAction *confirmAction = new QAction(QIcon(":/icons/yes"), tr("Save"), confirmPushButton);
+    connect(this, SIGNAL(acceptAll()), confirmAction, SLOT(trigger()));
+    connect(confirmAction, SIGNAL(triggered()), screenshot, SLOT(confirm()));
+    connect(confirmAction, SIGNAL(triggered()), this, SLOT(closePreview()));
 
-    confirmMenu->addAction(uploadAction);
+    connect(confirmPushButton, SIGNAL(clicked()), screenshot,   SLOT(markUpload()));
+    connect(confirmPushButton, SIGNAL(clicked()), screenshot,   SLOT(confirm()));
+    connect(confirmPushButton, SIGNAL(clicked()), this,         SLOT(closePreview()));
+    connect(this,         SIGNAL(uploadAll()), confirmPushButton, SLOT(click()));
+
+    confirmMenu->addAction(confirmAction);
     confirmPushButton->setMenu(confirmMenu);
     confirmPushButton->setPopupMode(QToolButton::MenuButtonPopup);
   }
@@ -181,11 +211,7 @@ void PreviewDialog::add(Screenshot *screenshot)
 
   enlargePushButton->setDisabled(small);
 
-  connect(this, SIGNAL(acceptAll()), confirmPushButton, SLOT(click()));
   connect(this, SIGNAL(rejectAll()), discardPushButton, SLOT(click()));
-
-  connect(confirmPushButton, SIGNAL(clicked()), screenshot, SLOT(confirm()));
-  connect(confirmPushButton, SIGNAL(clicked()), this, SLOT(closePreview()));
 
   connect(discardPushButton, SIGNAL(clicked()), screenshot, SLOT(discard()));
   connect(discardPushButton, SIGNAL(clicked()), this, SLOT(closePreview()));

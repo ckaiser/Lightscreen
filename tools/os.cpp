@@ -69,8 +69,7 @@ void os::addToRecentDocuments(QString fileName)
 
 bool os::aeroGlass(QWidget* target)
 {
-  if (QtWin::isCompositionEnabled()) {
-    QtWin::extendFrameIntoClientArea(target);
+  if (QtWin::isCompositionEnabled() && QtWin::extendFrameIntoClientArea(target)) {
     return true;
   }
 

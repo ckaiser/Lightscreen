@@ -127,12 +127,19 @@ void OptionsDialog::init()
   connect(ui.windowPickerCheckBox, SIGNAL(toggled(bool)), ui.windowPickerHotkeyWidget, SLOT(setEnabled(bool)));
   connect(ui.openCheckBox        , SIGNAL(toggled(bool)), ui.openHotkeyWidget     , SLOT(setEnabled(bool)));
   connect(ui.directoryCheckBox   , SIGNAL(toggled(bool)), ui.directoryHotkeyWidget, SLOT(setEnabled(bool)));
+
+  // "Save as" disables the file target input field.
   connect(ui.saveAsCheckBox      , SIGNAL(toggled(bool)), ui.targetLineEdit       , SLOT(setDisabled(bool)));
   connect(ui.saveAsCheckBox      , SIGNAL(toggled(bool)), ui.browsePushButton     , SLOT(setDisabled(bool)));
   connect(ui.saveAsCheckBox      , SIGNAL(toggled(bool)), ui.directoryLabel       , SLOT(setDisabled(bool)));
+
   connect(ui.startupCheckBox     , SIGNAL(toggled(bool)), ui.startupHideCheckBox  , SLOT(setEnabled(bool)));
   connect(ui.qualitySlider       , SIGNAL(valueChanged(int)), ui.qualityValueLabel, SLOT(setNum(int)));
   connect(ui.trayCheckBox        , SIGNAL(toggled(bool)), ui.messageCheckBox      , SLOT(setEnabled(bool)));
+
+  // Auto-upload disables the default action button in the previews.
+  connect(ui.uploadCheckBox      , SIGNAL(toggled(bool)), ui.previewDefaultActionLabel   , SLOT(setDisabled(bool)));
+  connect(ui.uploadCheckBox      , SIGNAL(toggled(bool)), ui.previewDefaultActionComboBox, SLOT(setDisabled(bool)));
 
   connect(ui.moreInformationLabel, SIGNAL(linkActivated(QString))      , this, SLOT(openUrl(QString)));
   connect(ui.languageComboBox    , SIGNAL(currentIndexChanged(QString)), this, SLOT(languageChange(QString)));
@@ -313,6 +320,7 @@ void OptionsDialog::saveSettings()
     settings()->setValue("previewAutoclose", ui.previewAutocloseCheckBox->isChecked());
     settings()->setValue("previewAutocloseTime", ui.previewAutocloseTimeSpinBox->value());
     settings()->setValue("previewAutocloseAction", ui.previewAutocloseActionComboBox->currentIndex());
+    settings()->setValue("previewDefaultAction", ui.previewDefaultActionComboBox->currentIndex());
     settings()->setValue("areaAutoclose", ui.areaAutocloseCheckBox->isChecked());
 
     // Advanced
@@ -410,6 +418,7 @@ void OptionsDialog::loadSettings()
     ui.previewAutocloseCheckBox->setChecked(settings()->value("previewAutoclose", false).toBool());
     ui.previewAutocloseTimeSpinBox->setValue(settings()->value("previewAutocloseTime", 15).toInt());
     ui.previewAutocloseActionComboBox->setCurrentIndex(settings()->value("previewAutocloseAction", 0).toInt());
+    ui.previewDefaultActionComboBox->setCurrentIndex(settings()->value("previewDefaultAction", 0).toInt());
     ui.areaAutocloseCheckBox->setChecked(settings()->value("areaAutoclose", false).toBool());
 
     // Advanced
