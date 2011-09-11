@@ -348,6 +348,7 @@ void AreaDialog::mouseMoveEvent(QMouseEvent* e)
 
     if (mNewSelection) {
       QRect r = rect();
+
       mSelection = QRect(mDragStartPoint, limitPointToRect(mMousePos, r)).normalized();
     }
     else if (mMouseOverHandle == 0) { // moving the whole selection
@@ -390,6 +391,12 @@ void AreaDialog::mouseMoveEvent(QMouseEvent* e)
       r.setTopLeft(limitPointToRect(r.topLeft(), rect()));
       r.setBottomRight(limitPointToRect(r.bottomRight(), rect()));
       mSelection = r;
+    }
+
+    if (qApp->keyboardModifiers() & Qt::ControlModifier)
+    {
+      // The lazy 1:1 aspect ratio approach!
+      mSelection.setHeight(mSelection.width());
     }
 
     if (mAcceptWidget) {
