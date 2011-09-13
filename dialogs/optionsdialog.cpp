@@ -140,6 +140,7 @@ void OptionsDialog::init()
   // Auto-upload disables the default action button in the previews.
   connect(ui.uploadCheckBox      , SIGNAL(toggled(bool)), ui.previewDefaultActionLabel   , SLOT(setDisabled(bool)));
   connect(ui.uploadCheckBox      , SIGNAL(toggled(bool)), ui.previewDefaultActionComboBox, SLOT(setDisabled(bool)));
+  connect(ui.directoryCheckBox   , SIGNAL(toggled(bool)), ui.directoryHotkeyWidget, SLOT(setEnabled(bool)));
 
   connect(ui.moreInformationLabel, SIGNAL(linkActivated(QString))      , this, SLOT(openUrl(QString)));
   connect(ui.languageComboBox    , SIGNAL(currentIndexChanged(QString)), this, SLOT(languageChange(QString)));
@@ -322,6 +323,7 @@ void OptionsDialog::saveSettings()
     settings()->setValue("previewAutocloseAction", ui.previewAutocloseActionComboBox->currentIndex());
     settings()->setValue("previewDefaultAction", ui.previewDefaultActionComboBox->currentIndex());
     settings()->setValue("areaAutoclose", ui.areaAutocloseCheckBox->isChecked());
+    settings()->setValue("history", ui.historyCheckBox->isChecked());
 
     // Advanced
     settings()->setValue("disableHideAlert", !ui.warnHideCheckBox->isChecked());
@@ -420,6 +422,7 @@ void OptionsDialog::loadSettings()
     ui.previewAutocloseActionComboBox->setCurrentIndex(settings()->value("previewAutocloseAction", 0).toInt());
     ui.previewDefaultActionComboBox->setCurrentIndex(settings()->value("previewDefaultAction", 0).toInt());
     ui.areaAutocloseCheckBox->setChecked(settings()->value("areaAutoclose", false).toBool());
+    ui.historyCheckBox->setChecked(settings()->value("history", true).toBool());
 
     // Advanced
     ui.clipboardCheckBox->setChecked(settings()->value("clipboard", true).toBool());

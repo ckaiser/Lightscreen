@@ -15,7 +15,9 @@ HEADERS += tools/os.h \
     tools/qtimgur.h \
     dialogs/updaterdialog.h \
     dialogs/screenshotdialog.h \
-    dialogs/namingdialog.h
+    dialogs/namingdialog.h \
+    dialogs/uploaddialog.h \
+    tools/qxtcsvmodel.h
 SOURCES += tools/os.cpp \
     updater/updater.cpp \
     dialogs/areadialog.cpp \
@@ -32,10 +34,13 @@ SOURCES += tools/os.cpp \
     tools/qtimgur.cpp \
     dialogs/updaterdialog.cpp \
     dialogs/screenshotdialog.cpp \
-    dialogs/namingdialog.cpp
+    dialogs/namingdialog.cpp \
+    dialogs/uploaddialog.cpp \
+    tools/qxtcsvmodel.cpp
 FORMS += dialogs/optionsdialog.ui \
     lightscreenwindow.ui \
-    dialogs/namingdialog.ui
+    dialogs/namingdialog.ui \
+    dialogs/uploaddialog.ui
 RESOURCES += lightscreen.qrc
 TRANSLATIONS += translations/untranslated.ts \
                 translations/spanish.ts \

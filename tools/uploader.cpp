@@ -18,11 +18,11 @@
  */
 #include "uploader.h"
 #include "qtimgur.h"
+#include "screenshotmanager.h"
 
 #include <QList>
 #include <QPair>
 #include <QDebug>
-
 
 Uploader::Uploader(QObject *parent) : QObject(parent), mUploading(0)
 {
@@ -69,6 +69,8 @@ void Uploader::uploaded(const QString &file, const QString &url)
   }
 
   mUploading--;
+
+  ScreenshotManager::instance()->saveHistory(file, url);
   emit done(file, url);
 }
 

@@ -47,6 +47,7 @@
 #include "lightscreenwindow.h"
 #include "dialogs/optionsdialog.h"
 #include "dialogs/previewdialog.h"
+#include "dialogs/uploaddialog.h"
 
 #include "tools/globalshortcut/globalshortcutmanager.h"
 #include "tools/os.h"
@@ -222,6 +223,9 @@ void LightscreenWindow::cleanup(Screenshot::Options &options)
   }
 
   if (options.result == Screenshot::Success && options.file)  {
+    if (!options.upload)
+      ScreenshotManager::instance()->saveHistory(options.fileName);
+
     mLastScreenshot = options.fileName;
   }
 }
@@ -321,7 +325,7 @@ void LightscreenWindow::quit()
                                    tr("Are you sure you want to quit?"),
                                    tr("Lightscreen is currently %1, this will finish momentarily, are you sure you want to quit?").arg(doing),
                                    tr("Quit"),
-                                   tr("Don't quit"));
+                                   tr("Don't Quit"));
   }
 
   if (answer == 0)
@@ -469,6 +473,12 @@ void LightscreenWindow::showScreenshotMessage(Screenshot::Result result, QString
   mTrayIcon->showMessage(title, message);
 }
 
+void LightscreenWindow::showUploadDialog()
+{
+  UploadDialog uploadDialog(this);
+  uploadDialog.exec();
+}
+
 void LightscreenWindow::showUploaderMessage(QString fileName, QString url)
 {
   if (!mTrayIcon)
@@ -511,8 +521,10 @@ void LightscreenWindow::showScreenshotMenu()
 
   QAction *uploadAction = new QAction(QIcon(":/icons/imgur"), tr("&Upload last"), buttonMenu);
   uploadAction->setToolTip(tr("Upload the last screenshot you took to imgur.com"));
-
   connect(uploadAction, SIGNAL(triggered()), this, SLOT(uploadLast()));
+
+  QAction *historyAction = new QAction(QIcon(":/icons/view-history"), tr("View History"), buttonMenu);
+  connect(historyAction, SIGNAL(triggered()), this, SLOT(showUploadDialog()));
 
   QAction *goAction = new QAction(QIcon(":/icons/folder"), tr("&Go to Folder"), buttonMenu);
   connect(goAction, SIGNAL(triggered()), this, SLOT(goToFolder()));
@@ -524,8 +536,8 @@ void LightscreenWindow::showScreenshotMenu()
   screenshotGroup->addAction(areaAction);
 
   QMenu* imgurMenu = new QMenu("Upload");
-  imgurMenu->installEventFilter(this);
   imgurMenu->addAction(uploadAction);
+  imgurMenu->addAction(historyAction);
   imgurMenu->addSeparator();
 
   connect(screenshotGroup, SIGNAL(triggered(QAction*)), this, SLOT(screenshotActionTriggered(QAction*)));
@@ -780,6 +792,10 @@ void LightscreenWindow::createTrayIcon()
   uploadAction->setToolTip(tr("Upload the last screenshot you took to imgur.com"));
   connect(uploadAction, SIGNAL(triggered()), this, SLOT(uploadLast()));
 
+  QAction *historyAction = new QAction(QIcon(":/icons/view-history"), tr("View History"), mTrayIcon);
+  connect(historyAction, SIGNAL(triggered()), this, SLOT(showUploadDialog()));
+  //
+
   QAction *optionsAction = new QAction(QIcon(":/icons/configure"), tr("View &Options"), mTrayIcon);
   connect(optionsAction, SIGNAL(triggered()), this, SLOT(showOptions()));
 
@@ -797,12 +813,9 @@ void LightscreenWindow::createTrayIcon()
 
   // Duplicated for the screenshot button :(
   QMenu* imgurMenu = new QMenu("Upload");
-  imgurMenu->installEventFilter(this);
   imgurMenu->addAction(uploadAction);
+  imgurMenu->addAction(historyAction);
   imgurMenu->addSeparator();
-
-  mUploadHistoryActions = new QActionGroup(imgurMenu);
-  connect(mUploadHistoryActions, SIGNAL(triggered(QAction*)), this, SLOT(uploadAction(QAction*)));
 
   QMenu* trayIconMenu = new QMenu;
   trayIconMenu->addAction(hideAction);
@@ -816,63 +829,6 @@ void LightscreenWindow::createTrayIcon()
   trayIconMenu->addAction(quitAction);
 
   mTrayIcon->setContextMenu(trayIconMenu);
-}
-
-bool LightscreenWindow::eventFilter(QObject *object, QEvent *event)
-{
-  // Filtering upload menu(s) for show events to populate them with links to imgur.
-  if (event->type() == QEvent::Show) {
-    QMenu* menu = qobject_cast<QMenu*>(object);
-
-    QAction* uploadAction = menu->actions().at(0);
-    uploadAction->setEnabled(true); // Later in the loop we check to see if the last screenshot is already uploaded and disable this.
-
-    if (Uploader::instance()->screenshots().count() > 0) {
-      QAction* action = 0;
-
-      foreach (action, mUploadHistoryActions->actions()) {
-        mUploadHistoryActions->removeAction(action);
-        menu->removeAction(action);
-        delete action;
-      }
-
-      // Iterating back to front for the first 10 screenshots in the uploader history.
-      QListIterator< QPair<QString, QString> > iterator(Uploader::instance()->screenshots());
-      iterator.toBack();
-
-      int limit = 0;
-
-      while (iterator.hasPrevious()) {
-        if (limit >= 10) {
-          break;
-        }
-
-        action = new QAction(iterator.peekPrevious().second, menu);
-        action->setToolTip(QFileInfo(iterator.peekPrevious().first).fileName());
-        action->setWhatsThis(iterator.peekPrevious().first);
-
-        if (iterator.previous().first == mLastScreenshot) {
-          uploadAction->setEnabled(false);
-        }
-
-        mUploadHistoryActions->addAction(action);
-        menu->addAction(action);
-
-        limit++;
-      }
-    }
-  }
-  else if (event->type() == QEvent::ToolTip) {
-    QHelpEvent* helpEvent = dynamic_cast<QHelpEvent*>(event);
-    QMenu* menu = qobject_cast<QMenu*>(object);
-    QAction* action = menu->actionAt(helpEvent->pos());
-
-    if (action) {
-      QToolTip::showText(helpEvent->globalPos(), action->toolTip(), this);
-    }
-  }
-
-  return QDialog::eventFilter(object, event);
 }
 
 #ifdef Q_WS_WIN

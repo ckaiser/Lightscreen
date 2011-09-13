@@ -565,7 +565,7 @@ Quality is related to file size and of course to readability and overall quality
             <x>0</x>
             <y>0</y>
             <width>385</width>
-            <height>666</height>
+            <height>689</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -1029,6 +1029,13 @@ Quality is related to file size and of course to readability and overall quality
                <widget class="QCheckBox" name="replaceCheckBox">
                 <property name="text">
                  <string>Replace screenshots when there's an existing file.</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="historyCheckBox">
+                <property name="text">
+                 <string>Save my screenshot history.</string>
                 </property>
                </widget>
               </item>

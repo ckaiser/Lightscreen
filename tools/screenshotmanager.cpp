@@ -23,21 +23,52 @@
 #include <QApplication>
 #include <QFile>
 #include <QDebug>
+#include <QDesktopServices>
 
 ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent), mCount(0)
 {
   if (QFile::exists(qApp->applicationDirPath() + "/config.ini")) {
-    // Portable edition :]
-    mSettings = new QSettings(qApp->applicationDirPath() + "/config.ini", QSettings::IniFormat);
+    mSettings = new QSettings(qApp->applicationDirPath() + QDir::separator() + "config.ini", QSettings::IniFormat);
+    mHistoryPath = qApp->applicationDirPath() + QDir::separator() + "history";
   }
   else {
     mSettings = new QSettings();
+    mHistoryPath = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QDir::separator() + "history";
   }
 }
 
 ScreenshotManager::~ScreenshotManager()
 {
   delete mSettings;
+}
+
+void ScreenshotManager::saveHistory(QString fileName, QString url)
+{
+  if (!mSettings->value("/options/history", true).toBool())
+    return;
+
+  QFile historyFile(mHistoryPath);
+  QTextStream out(&historyFile);
+
+  if (!historyFile.exists())
+  {
+    QString path = mHistoryPath;
+    path.chop(7);
+
+    if (!QDir().mkpath(path))
+      return;
+  }
+
+  if (historyFile.open(QFile::WriteOnly | QFile::Append)) {
+    out << fileName + '|' + url + "\n";
+  }
+
+  historyFile.close();
+}
+
+QString& ScreenshotManager::historyPath()
+{
+  return mHistoryPath;
 }
 
 void ScreenshotManager::take(Screenshot::Options &options)

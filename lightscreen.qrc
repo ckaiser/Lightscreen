@@ -21,6 +21,7 @@
         <file alias="window">images/window.png</file>
         <file alias="imgur">images/imgur.png</file>
         <file alias="imgur.yes">images/imgur.yes.png</file>
+        <file alias="view-history">images/view-history.png</file>
     </qresource>
     <qresource prefix="/backgrounds">
         <file alias="checkerboard">images/checkerboard.png</file>

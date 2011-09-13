@@ -23,6 +23,7 @@
 #include <QList>
 
 #include "screenshot.h"
+#include "qxtcsvmodel.h"
 
 class QSettings;
 class ScreenshotManager : public QObject
@@ -45,6 +46,8 @@ public:
   void setCount(const unsigned int c){ mCount = c; }
   unsigned int count() const { return mCount; }
   QSettings *settings() const { return mSettings; }
+  void saveHistory(QString fileName, QString url = QObject::tr("- not uploaded -"));
+  QString &historyPath();
 
 public slots:
   void take(Screenshot::Options &options);
@@ -58,6 +61,7 @@ signals:
 private:
   static ScreenshotManager* mInstance;
   QSettings *mSettings;
+  QString mHistoryPath;
   int mCount; // Concurrent screenshot count.
 
 };
