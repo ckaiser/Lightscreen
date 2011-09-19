@@ -44,7 +44,7 @@ PreviewDialog::PreviewDialog(QWidget *parent) :
 {
   setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
   os::aeroGlass(this);
-  setWindowTitle("Screenshot Preview");
+  setWindowTitle(tr("Screenshot Preview"));
 
   QSettings *settings = ScreenshotManager::instance()->settings();
 
@@ -320,6 +320,10 @@ void PreviewDialog::indexChanged(int i)
 
   if (mStack->widget(i)) {
     mStack->widget(i)->setFocus();
+  }
+
+  if (mStack->count() > 1) {
+    setWindowTitle(tr("Screenshot Preview (%1 of %2)").arg(mStack->currentIndex()+1).arg(mStack->count()));
   }
 }
 

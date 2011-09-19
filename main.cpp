@@ -41,9 +41,13 @@ int main(int argc, char *argv[])
   application.setQuitOnLastWindowClosed(false);
 
   if (application.isRunning()) {
+    qWarning() << "ARguments:" << application.arguments();
+
     if (application.arguments().size() > 1) {
       QStringList arguments = application.arguments();
       arguments.removeFirst();
+
+      qWarning() << "Sending message: " << arguments.join(" ");
       application.sendMessage(arguments.join(" "));
     }
     else {
@@ -78,7 +82,9 @@ int main(int argc, char *argv[])
 #endif
 
   if (application.arguments().size() > 1) {
-    lightscreen.messageReceived(application.arguments().at(1));
+    foreach (QString argument, application.arguments()) {
+      lightscreen.messageReceived(argument);
+    }
   }
   else {
     lightscreen.show();

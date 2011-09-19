@@ -254,6 +254,13 @@ void LightscreenWindow::goToFolder()
 
 void LightscreenWindow::messageReceived(const QString message)
 {
+  if (message.contains(' '))
+  {
+    foreach (QString argument, message.split(' ')) {
+      messageReceived(argument);
+    }
+  }
+
   if (message == "--wake") {
     show();
     qApp->alert(this, 500);
