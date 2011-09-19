@@ -26,13 +26,22 @@
      <property name="enabled">
       <bool>false</bool>
      </property>
+     <property name="whatsThis">
+      <string>Type here to filter through the screenshots in the list.</string>
+     </property>
      <property name="styleSheet">
       <string notr="true">color: palette(mid);</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QTableView" name="tableView"/>
+    <widget class="QTableView" name="tableView">
+     <property name="whatsThis">
+      <string>Double click the path to open the image with the default picture viewer, you can also double-click the URL to open it on your web browser.
+
+Right click items to get access to more options.</string>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">

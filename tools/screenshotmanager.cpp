@@ -24,6 +24,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QDesktopServices>
+#include <QDateTime>
 
 ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent), mCount(0)
 {
@@ -60,7 +61,7 @@ void ScreenshotManager::saveHistory(QString fileName, QString url)
   }
 
   if (historyFile.open(QFile::WriteOnly | QFile::Append)) {
-    out << fileName + '|' + url + "\n";
+    out << QString("%1|%2|%3\n").arg(fileName).arg(url).arg(QDateTime::currentMSecsSinceEpoch());
   }
 
   historyFile.close();

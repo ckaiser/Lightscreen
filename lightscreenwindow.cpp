@@ -254,26 +254,28 @@ void LightscreenWindow::goToFolder()
 
 void LightscreenWindow::messageReceived(const QString message)
 {
-  if (message == "-wake") {
+  if (message == "--wake") {
     show();
     qApp->alert(this, 500);
     return;
   }
 
-  if (message == "-screen")
+  if (message == "--screen")
     screenshotAction();
-
-  if (message == "-area")
+  else if (message == "--area")
     screenshotAction(2);
-
-  if (message == "-activewindow")
+  else if (message == "--activewindow")
     screenshotAction(1);
-
-  if (message == "-pickwindow")
+  else if (message == "--pickwindow")
     screenshotAction(3);
-
-  if (message == "-folder")
+  else if (message == "--folder")
     action(4);
+  else if (message == "--folder")
+    action(4);
+  else if (message == "--uploadlast")
+    uploadLast();
+  else if (message == "--viewhistory")
+    showUploadDialog();
 }
 
 void LightscreenWindow::messageClicked()

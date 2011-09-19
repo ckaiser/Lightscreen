@@ -153,6 +153,8 @@ void UploadDialog::reloadHistory()
 
   ui->tableView->setModel(mFilterModel);
 
+  ui->tableView->hideColumn(2); // No timestamp.
+
   ui->tableView->horizontalHeader()->setClickable(false);
   ui->tableView->horizontalHeader()->setMovable(false);
 
@@ -160,8 +162,6 @@ void UploadDialog::reloadHistory()
   ui->tableView->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
 
   ui->tableView->verticalHeader()->hide();
-
-  ui->tableView->scrollToBottom();
 }
 
 void UploadDialog::upload()
@@ -181,10 +181,7 @@ void UploadDialog::clear()
   }
 
   QFile::remove(ScreenshotManager::instance()->historyPath());
-
-  ui->tableView->model()->deleteLater();
-  ui->tableView->setEnabled(false);
-  ui->clearButton->setEnabled(false);
+  close();
 }
 
 bool UploadDialog::eventFilter(QObject *object, QEvent *event)
@@ -196,6 +193,7 @@ bool UploadDialog::eventFilter(QObject *object, QEvent *event)
         ui->filterEdit->setStyleSheet("");
         ui->filterEdit->setText("");
         mFilterModel->setFilterWildcard("");
+        mFilterModel->sort(2, Qt::DescendingOrder);
       }
     }
     else if (event->type() == QEvent::FocusOut)
@@ -203,15 +201,18 @@ bool UploadDialog::eventFilter(QObject *object, QEvent *event)
       if (ui->filterEdit->text() == "") {
         ui->filterEdit->setStyleSheet("color: palette(mid);");
         ui->filterEdit->setText(tr("Filter.."));
+        mFilterModel->sort(2, Qt::DescendingOrder);
       }
     }
     else if (event->type() == QEvent::KeyRelease)
     {
       if (ui->filterEdit->text() != tr("Filter..") && !ui->filterEdit->text().isEmpty()) {
         mFilterModel->setFilterWildcard(ui->filterEdit->text());
+        mFilterModel->sort(2, Qt::DescendingOrder);
       }
       else {
         mFilterModel->setFilterWildcard("");
+        mFilterModel->sort(2, Qt::DescendingOrder);
       }
     }
   }
