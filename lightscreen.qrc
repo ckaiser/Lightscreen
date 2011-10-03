@@ -27,13 +27,9 @@
         <file alias="checkerboard">images/checkerboard.png</file>
     </qresource>
     <qresource prefix="/translations">
-        <file alias="Chinese (Simplified)">translations/chinese_simplified.qm</file>
-        <file alias="Dutch">translations/dutch.qm</file>
-        <file alias="Japanese">translations/japanese.qm</file>
-        <file alias="Polish">translations/polish.qm</file>
-        <file alias="Russian">translations/russian.qm</file>
         <file alias="Spanish">translations/spanish.qm</file>
-        <file alias="Portuguese">translations/portuguese.qm</file>
-        <file alias="Italian">translations/italian.qm</file>
+    </qresource>
+    <qresource prefix="/translations_qt">
+        <file alias="Spanish">translations/qt/qt_es.qm</file>
     </qresource>
 </RCC>

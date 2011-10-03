@@ -38,7 +38,7 @@ public slots:
   void check();
 
 private slots:
-  void httpDone(bool result);
+  void httpDone(bool error);
 
 private:
   QHttp mHttp;

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>426</width>
-    <height>334</height>
+    <width>417</width>
+    <height>317</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,6 +24,9 @@
        <string>General</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="bottomMargin">
+        <number>6</number>
+       </property>
        <item>
         <widget class="QGroupBox" name="fileGroupBox">
          <property name="sizePolicy">
@@ -564,7 +567,7 @@ Quality is related to file size and of course to readability and overall quality
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>385</width>
+            <width>308</width>
             <height>689</height>
            </rect>
           </property>
@@ -1049,7 +1052,7 @@ Quality is related to file size and of course to readability and overall quality
               <item>
                <widget class="QCheckBox" name="uploadCheckBox">
                 <property name="text">
-                 <string>Upload my screenshots automatically.</string>
+                 <string>Upload all my screenshots automatically.</string>
                 </property>
                </widget>
               </item>
@@ -1182,9 +1185,6 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
            <weight>75</weight>
            <bold>true</bold>
           </font>
-         </property>
-         <property name="text">
-          <string/>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>

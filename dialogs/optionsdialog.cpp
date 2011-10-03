@@ -658,7 +658,23 @@ void OptionsDialog::updatePreview()
 bool OptionsDialog::event(QEvent* event)
 {
   if (event->type() == QEvent::LanguageChange) {
+
+    // ComboBoxes revert to the first index when translated:
+    int naming = ui.namingComboBox->currentIndex();
+    int format = ui.formatComboBox->currentIndex();
+    int previewPosition  = ui.previewPositionComboBox->currentIndex();
+    int previewAutoclose = ui.previewAutocloseActionComboBox->currentIndex();
+    int previewDefault   = ui.previewDefaultActionComboBox->currentIndex();
+
     ui.retranslateUi(this);
+
+    // Restoring comboboxes
+    ui.namingComboBox->setCurrentIndex(naming);
+    ui.formatComboBox->setCurrentIndex(format);
+    ui.previewPositionComboBox->setCurrentIndex(previewPosition);
+    ui.previewAutocloseActionComboBox->setCurrentIndex(previewAutoclose);
+    ui.previewDefaultActionComboBox->setCurrentIndex(previewDefault);
+
     updatePreview();
     resize(minimumSizeHint());
   }

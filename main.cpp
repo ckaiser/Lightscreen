@@ -41,13 +41,9 @@ int main(int argc, char *argv[])
   application.setQuitOnLastWindowClosed(false);
 
   if (application.isRunning()) {
-    qWarning() << "ARguments:" << application.arguments();
-
     if (application.arguments().size() > 1) {
       QStringList arguments = application.arguments();
       arguments.removeFirst();
-
-      qWarning() << "Sending message: " << arguments.join(" ");
       application.sendMessage(arguments.join(" "));
     }
     else {

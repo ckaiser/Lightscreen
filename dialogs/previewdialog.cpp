@@ -325,6 +325,9 @@ void PreviewDialog::indexChanged(int i)
   if (mStack->count() > 1) {
     setWindowTitle(tr("Screenshot Preview (%1 of %2)").arg(mStack->currentIndex()+1).arg(mStack->count()));
   }
+  else {
+    setWindowTitle(tr("Screenshot Preview"));
+  }
 }
 
 void PreviewDialog::previous()

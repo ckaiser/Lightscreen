@@ -19,6 +19,7 @@
 #include <QDate>
 #include <QHttp>
 #include <QApplication>
+#include <QDebug>
 
 #include "updater.h"
 #include "../dialogs/updaterdialog.cpp"
@@ -47,17 +48,14 @@ void Updater::checkWithFeedback()
   updaterDialog.exec();
 }
 
-void Updater::httpDone(bool result)
+void Updater::httpDone(bool error)
 {
-  if (result) {
-    QByteArray data = mHttp.readAll();
-    double version  = QString(data).toDouble();
+  Q_UNUSED(error)
 
-    emit done((version > qApp->applicationVersion().toDouble()));
-  }
-  else {
-    emit done(false);
-  }
+  QByteArray data = mHttp.readAll();
+  double version  = QString(data).toDouble();
+
+  emit done((version > qApp->applicationVersion().toDouble()));
 }
 
 Updater* Updater::mInstance = 0;

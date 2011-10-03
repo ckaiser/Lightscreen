@@ -36,9 +36,9 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
     <name>LightscreenWindow</name>
     <message>
         <location filename="../lightscreenwindow.cpp" line="142"/>
-        <location filename="../lightscreenwindow.cpp" line="619"/>
-        <location filename="../lightscreenwindow.cpp" line="869"/>
-        <location filename="../lightscreenwindow.cpp" line="933"/>
+        <location filename="../lightscreenwindow.cpp" line="634"/>
+        <location filename="../lightscreenwindow.cpp" line="883"/>
+        <location filename="../lightscreenwindow.cpp" line="947"/>
         <source>Lightscreen</source>
         <translation>Lightscreen</translation>
     </message>
@@ -63,223 +63,234 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
         <translation>Solo esconder</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="311"/>
+        <location filename="../lightscreenwindow.cpp" line="326"/>
         <source>uploading one or more screenshots</source>
         <translation>subiendo una o mas capturas</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="316"/>
+        <location filename="../lightscreenwindow.cpp" line="331"/>
         <source>optimizing and uploading screenshots</source>
         <translation>optimizando y subiendo capturas</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="319"/>
+        <location filename="../lightscreenwindow.cpp" line="334"/>
         <source>optimizing one or more screenshots</source>
         <translation>optimizando una o mas capturas</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="325"/>
+        <location filename="../lightscreenwindow.cpp" line="340"/>
         <source>Are you sure you want to quit?</source>
         <translation>Esta seguro que desea salir?</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="326"/>
+        <location filename="../lightscreenwindow.cpp" line="341"/>
         <source>Lightscreen is currently %1, this will finish momentarily, are you sure you want to quit?</source>
         <translation>Lightscreen esta %1, esto terminara momentaneamente, esta seguro que desea salir?</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="464"/>
+        <location filename="../lightscreenwindow.cpp" line="479"/>
         <source>Saved to &quot;%1&quot;</source>
         <translation>Guardada en &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="468"/>
+        <location filename="../lightscreenwindow.cpp" line="483"/>
         <source>The screenshot was not taken</source>
         <translation>La captura no fue realizada</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="490"/>
+        <location filename="../lightscreenwindow.cpp" line="505"/>
         <source>%1 uploaded</source>
         <translation>%1 subido</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="490"/>
+        <location filename="../lightscreenwindow.cpp" line="505"/>
         <source>Click here to go to %1</source>
         <translation>Haga click aqui para ir a %1</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="499"/>
+        <location filename="../lightscreenwindow.cpp" line="514"/>
         <source>Upload error</source>
         <translation>Error de subida</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="513"/>
-        <location filename="../lightscreenwindow.cpp" line="773"/>
+        <location filename="../lightscreenwindow.cpp" line="528"/>
+        <location filename="../lightscreenwindow.cpp" line="788"/>
         <source>Active &amp;Window</source>
         <translation>&amp;Ventana Activa</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="516"/>
-        <location filename="../lightscreenwindow.cpp" line="776"/>
+        <location filename="../lightscreenwindow.cpp" line="531"/>
+        <location filename="../lightscreenwindow.cpp" line="791"/>
         <source>&amp;Pick Window</source>
         <translation>&amp;Elegir Ventana</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="522"/>
-        <location filename="../lightscreenwindow.cpp" line="791"/>
+        <location filename="../lightscreenwindow.cpp" line="537"/>
+        <location filename="../lightscreenwindow.cpp" line="806"/>
         <source>&amp;Upload last</source>
         <translation>&amp;Subir ultima</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="523"/>
-        <location filename="../lightscreenwindow.cpp" line="792"/>
+        <location filename="../lightscreenwindow.cpp" line="538"/>
+        <location filename="../lightscreenwindow.cpp" line="807"/>
         <source>Upload the last screenshot you took to imgur.com</source>
         <translation>Subir la ultima captura que tomó a imgur.com</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="526"/>
-        <location filename="../lightscreenwindow.cpp" line="795"/>
+        <location filename="../lightscreenwindow.cpp" line="541"/>
+        <location filename="../lightscreenwindow.cpp" line="810"/>
         <source>View History</source>
         <translation>Ver Historial</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="565"/>
-        <location filename="../lightscreenwindow.cpp" line="567"/>
+        <location filename="../lightscreenwindow.cpp" line="553"/>
+        <location filename="../lightscreenwindow.cpp" line="830"/>
+        <source>Upload</source>
+        <translation>Subida</translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="580"/>
+        <location filename="../lightscreenwindow.cpp" line="582"/>
         <source>Success!</source>
         <translation>Éxito!</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="577"/>
+        <location filename="../lightscreenwindow.cpp" line="592"/>
         <source>Cancelled!</source>
         <translation>Cancelada!</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="601"/>
+        <location filename="../lightscreenwindow.cpp" line="616"/>
         <source>Some hotkeys could not be registered, they might already be in use</source>
         <translation>Algunos atajos no pudieron ser registrados, puede que ya estén en uso</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="616"/>
+        <location filename="../lightscreenwindow.cpp" line="631"/>
         <source>&lt;br&gt;&lt;i&gt;What do you want to do?&lt;/i&gt;</source>
         <translation>&lt;br&gt;&lt;i&gt;Que desea hacer?&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="767"/>
+        <location filename="../lightscreenwindow.cpp" line="782"/>
         <source>Show&amp;/Hide</source>
         <translation>Mostrar&amp;/Esconder</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="898"/>
+        <location filename="../lightscreenwindow.cpp" line="823"/>
+        <source>Screenshot</source>
+        <translation>Captura</translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="912"/>
         <source>Uploading...</source>
         <translation>Subiendo...</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="899"/>
+        <location filename="../lightscreenwindow.cpp" line="913"/>
         <source>Upload cancel</source>
         <translation>Cancelar subida</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="899"/>
+        <location filename="../lightscreenwindow.cpp" line="913"/>
         <source>Do you want to cancel the upload of %1</source>
         <translation>Desea cancelar la subida de %1</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="899"/>
+        <location filename="../lightscreenwindow.cpp" line="913"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="899"/>
+        <location filename="../lightscreenwindow.cpp" line="913"/>
         <source>Don&apos;t Cancel</source>
         <translation>No Cancelar</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="930"/>
+        <location filename="../lightscreenwindow.cpp" line="944"/>
         <source>Uploading %1 screenshot(s)</source>
         <translation>Subiendo %1 captura(s)</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="510"/>
-        <location filename="../lightscreenwindow.cpp" line="770"/>
+        <location filename="../lightscreenwindow.cpp" line="525"/>
+        <location filename="../lightscreenwindow.cpp" line="785"/>
         <source>&amp;Screen</source>
         <translation>&amp;Pantalla</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="328"/>
+        <location filename="../lightscreenwindow.cpp" line="343"/>
         <source>Don&apos;t Quit</source>
         <translation>No Salir</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="571"/>
-        <location filename="../lightscreenwindow.cpp" line="573"/>
+        <location filename="../lightscreenwindow.cpp" line="586"/>
+        <location filename="../lightscreenwindow.cpp" line="588"/>
         <source>Failed!</source>
         <translation>Error!</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="604"/>
+        <location filename="../lightscreenwindow.cpp" line="619"/>
         <source>&lt;br&gt;The failed hotkeys are the following:</source>
         <translation>&lt;br&gt;Las hotkeys en uso son las siguientes:</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="613"/>
+        <location filename="../lightscreenwindow.cpp" line="628"/>
         <source>&lt;br&gt;The failed hotkey is &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>&lt;br&gt;La hotkey que ha fallado es &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="622"/>
+        <location filename="../lightscreenwindow.cpp" line="637"/>
         <source>Change</source>
         <translation>Cambiar</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="623"/>
+        <location filename="../lightscreenwindow.cpp" line="638"/>
         <source>Disable</source>
         <translation>Deshabilitar</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="327"/>
-        <location filename="../lightscreenwindow.cpp" line="624"/>
+        <location filename="../lightscreenwindow.cpp" line="342"/>
+        <location filename="../lightscreenwindow.cpp" line="639"/>
         <source>Quit</source>
         <translation>Salir</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="519"/>
-        <location filename="../lightscreenwindow.cpp" line="779"/>
+        <location filename="../lightscreenwindow.cpp" line="534"/>
+        <location filename="../lightscreenwindow.cpp" line="794"/>
         <source>&amp;Area</source>
         <translation>&amp;Área</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="799"/>
+        <location filename="../lightscreenwindow.cpp" line="814"/>
         <source>View &amp;Options</source>
         <translation>Ver las &amp;Opciones</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="529"/>
-        <location filename="../lightscreenwindow.cpp" line="802"/>
+        <location filename="../lightscreenwindow.cpp" line="544"/>
+        <location filename="../lightscreenwindow.cpp" line="817"/>
         <source>&amp;Go to Folder</source>
         <translation>&amp;Ir a la carpeta</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="469"/>
+        <location filename="../lightscreenwindow.cpp" line="484"/>
         <source>An error occurred.</source>
         <translation>Ha ocurrido un error.</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="805"/>
+        <location filename="../lightscreenwindow.cpp" line="820"/>
         <source>&amp;Quit</source>
         <translation>&amp;Salir</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="870"/>
+        <location filename="../lightscreenwindow.cpp" line="884"/>
         <source>There&apos;s a new version of Lightscreen available.&lt;br&gt;Would you like to see more information?&lt;br&gt;(&lt;em&gt;You can turn this notification off&lt;/em&gt;)</source>
         <translation>Hay una nueva versión de Lightscreen disponible.&lt;br&gt;Desea ver más información?&lt;br&gt;(&lt;em&gt;Puede desactivar esta notificación&lt;/em&gt;)</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="874"/>
+        <location filename="../lightscreenwindow.cpp" line="888"/>
         <source>Turn Off</source>
         <translation>Desactivar</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="875"/>
+        <location filename="../lightscreenwindow.cpp" line="889"/>
         <source>Remind Me Later</source>
         <translation>Más Tarde</translation>
     </message>
@@ -413,12 +424,12 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
         <translation>General</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="94"/>
+        <location filename="../dialogs/optionsdialog.ui" line="97"/>
         <source>The prefix for the screenshot file</source>
         <translation>El prefijo para la captura</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="122"/>
+        <location filename="../dialogs/optionsdialog.ui" line="125"/>
         <source>The naming is inserted after the prefix and is what makes each screenshot file unique to avoid overwriting.&lt;br /&gt;
 &lt;b&gt;Numeric&lt;/b&gt;: inserts a number in sequence, 1, 2, 3..&lt;br /&gt;
 &lt;b&gt;Date&lt;/b&gt;: inserts the current date and time, in the form of dd-MM-yyyy, click the &quot;wrench&quot; button on the right to customize the format.&lt;br /&gt;
@@ -433,144 +444,144 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
 </translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="131"/>
+        <location filename="../dialogs/optionsdialog.ui" line="134"/>
         <source>(number)</source>
         <translation>(numero)</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="141"/>
+        <location filename="../dialogs/optionsdialog.ui" line="144"/>
         <source>(timestamp)</source>
         <translation>(tiempo unix)</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="167"/>
+        <location filename="../dialogs/optionsdialog.ui" line="170"/>
         <source>The file format for the screenshot</source>
         <translation>El formato de la captura</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="269"/>
+        <location filename="../dialogs/optionsdialog.ui" line="272"/>
         <source>&lt;i&gt;Preview&lt;/i&gt;:</source>
         <translation>&lt;i&gt;Vista Previa&lt;/i&gt;:</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="202"/>
+        <location filename="../dialogs/optionsdialog.ui" line="205"/>
         <source>&amp;Quality:</source>
         <translation>Cali&amp;dad:</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="146"/>
+        <location filename="../dialogs/optionsdialog.ui" line="149"/>
         <source>(none)</source>
         <translation>(ninguno)</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="308"/>
+        <location filename="../dialogs/optionsdialog.ui" line="311"/>
         <source>System Startup</source>
         <translation>Inicio del Sistema</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="361"/>
+        <location filename="../dialogs/optionsdialog.ui" line="364"/>
         <source>Hotkeys</source>
         <translation>Atajos</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="367"/>
+        <location filename="../dialogs/optionsdialog.ui" line="370"/>
         <source>Captures</source>
         <translation>Capturas</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="469"/>
+        <location filename="../dialogs/optionsdialog.ui" line="472"/>
         <source>Lightscreen Control</source>
         <translation>Control del Lightscreen</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="533"/>
+        <location filename="../dialogs/optionsdialog.ui" line="536"/>
         <source>Options</source>
         <translation>Opciones</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="581"/>
+        <location filename="../dialogs/optionsdialog.ui" line="584"/>
         <source>Interface</source>
         <translation>Interface</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="889"/>
+        <location filename="../dialogs/optionsdialog.ui" line="892"/>
         <source>Default action:</source>
         <translation>Acción por defecto:</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="913"/>
+        <location filename="../dialogs/optionsdialog.ui" line="916"/>
         <source>Screenshots</source>
         <translation>Capturas</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="922"/>
+        <location filename="../dialogs/optionsdialog.ui" line="925"/>
         <source>Choose where to save each screenshot (&quot;&amp;Save as&quot;).</source>
         <translation>Elegir cuando y &amp;donde guardar cada captura (&quot;Guardar como&quot;).</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1031"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1034"/>
         <source>Replace screenshots when there&apos;s an existing file.</source>
         <translation>Reemplazar captura cuando el archivo ya existe.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1038"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1041"/>
         <source>Save my screenshot history.</source>
         <translation>Guardar un historial de capturas.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1045"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1048"/>
         <source>Snap area screenshots automatically (no resizing).</source>
         <translation>Capturar áreas automaticamente (sin ajustar tamaño).</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1052"/>
-        <source>Upload my screenshots automatically.</source>
-        <translation>Subir mis capturas automaticamente.</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="749"/>
+        <location filename="../dialogs/optionsdialog.ui" line="752"/>
         <source>Maximum Size:</source>
         <translation>Tamaño Máximo:</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="800"/>
+        <location filename="../dialogs/optionsdialog.ui" line="803"/>
         <source>Position:</source>
         <translation>Posicion:</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="857"/>
+        <location filename="../dialogs/optionsdialog.ui" line="860"/>
         <source> and </source>
         <translation> y </translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="871"/>
-        <location filename="../dialogs/optionsdialog.ui" line="897"/>
+        <location filename="../dialogs/optionsdialog.ui" line="874"/>
+        <location filename="../dialogs/optionsdialog.ui" line="900"/>
         <source>save</source>
         <translation>guardar</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="876"/>
-        <location filename="../dialogs/optionsdialog.ui" line="902"/>
+        <location filename="../dialogs/optionsdialog.ui" line="879"/>
+        <location filename="../dialogs/optionsdialog.ui" line="905"/>
         <source>upload</source>
         <translation>subir</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="881"/>
+        <location filename="../dialogs/optionsdialog.ui" line="884"/>
         <source>cancel</source>
         <translation>cancelar</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1146"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1055"/>
+        <source>Upload all my screenshots automatically.</source>
+        <translation>Subir todas mis capturas automaticamente.</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="1149"/>
         <source>Chec&amp;k Now</source>
         <translation>Buscar A&amp;hora</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1161"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1164"/>
         <source>About</source>
         <translation>Acerca De</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1167"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1170"/>
         <source>Lightscreen is a simple tool to take screenshots, designed to be customizable and lightweight.&lt;br&gt;&lt;br&gt;
 Created by &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/a&gt;, using the &lt;a href=&quot;#aboutqt&quot;&gt;Qt toolkit&lt;/a&gt; for the graphical user interface.&lt;br&gt;&lt;br&gt;
 Released under the &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.html&quot;&gt;GNU General Public License&lt;/a&gt;.&lt;br&gt;&lt;br&gt;
@@ -581,7 +592,7 @@ Liberado bajo la &lt;a href=&quot;http://www.garaitia.com/new/gpl-spanish.php&qu
 Un agradecimiento especial a los &lt;a href=&quot;http://lightscreen.sourceforge.net/about&quot;&gt;Donadores y Traductores&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1197"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1200"/>
         <source>&lt;a href=&quot;https://sourceforge.net/projects/lightscreen/&quot;&gt;Visit Sourceforge project site&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://lightscreen.sourceforge.net/&quot;&gt;Visit Lightscreen home page&lt;/a&gt;</source>
         <translation>&lt;a href=&quot;https://sourceforge.net/projects/lightscreen/&quot;&gt;Visite la pagina del proyecto en SourceForge&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://lightscreen.sourceforge.net/&quot;&gt;Visite la pagina principal del Lightscreen&lt;/a&gt;</translation>
     </message>
@@ -601,226 +612,232 @@ Un agradecimiento especial a los &lt;a href=&quot;http://lightscreen.sourceforge
         <translation>No Restablecer</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="844"/>
-        <location filename="../dialogs/optionsdialog.ui" line="1086"/>
+        <location filename="../dialogs/optionsdialog.ui" line="847"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1089"/>
         <source> seconds</source>
         <translation> segundos</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="490"/>
+        <location filename="../dialogs/optionsdialog.ui" line="493"/>
         <source>Open the program window</source>
         <translation>Abrir la ventana del programa</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="506"/>
+        <location filename="../dialogs/optionsdialog.ui" line="509"/>
         <source>Open the directory</source>
         <translation>Abrir el directorio</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="593"/>
+        <location filename="../dialogs/optionsdialog.ui" line="596"/>
         <source>Sho&amp;w a system tray icon.</source>
         <translation>Mo&amp;strar un ícono en la barra de tareas.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="600"/>
+        <location filename="../dialogs/optionsdialog.ui" line="603"/>
         <source>&amp;Hide Lightscreen while taking a screenshot.</source>
         <translation>Esconder Lig&amp;htscreen mientras se captura.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="706"/>
+        <location filename="../dialogs/optionsdialog.ui" line="709"/>
         <source>Click here to go to the Lightscreen homepage to learn more about translations.</source>
         <translation>Haz click aquí para ir a la página del Lightscreen y aprender mas sobre traducciones.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="709"/>
+        <location filename="../dialogs/optionsdialog.ui" line="712"/>
         <source>&lt;a href=&quot;http://lightscreen.sourceforge.net/translation&quot;&gt;More information..&lt;/a&gt;</source>
         <translation>&lt;a href=&quot;http://lightscreen.sourceforge.net/translation&quot;&gt;Más información..&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="215"/>
+        <location filename="../dialogs/optionsdialog.ui" line="218"/>
         <source>This slider goes from 0 to 100. 100 being the highest quality and 0 the lowest.&lt;br&gt;
 Quality is related to file size and of course to readability and overall quality of the image.</source>
         <translation>Este slider va desde a 0 a 100. 100 siendo la mayor calidad y 0 la más baja.&lt;br&gt;
 La calidad tiene relacion con el tamaño del archivo y la legibilidad/calidad general de la imagen.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="115"/>
+        <location filename="../dialogs/optionsdialog.ui" line="118"/>
         <source>The prefix will be inserted before the &lt;em&gt;Naming&lt;/em&gt; in the screenshot file and it is usually used to distinguish files. It can be left blank.</source>
         <translation>El prefijo sera insertado antes del &lt;em&gt;Nombre&lt;/em&gt; en la captura y es generalmente usado para distinguir los archivos. Puede ser dejado en blanco.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1074"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1077"/>
         <source>Selecting anything other than 0 in this option will cause the program to &lt;b&gt;wait&lt;/b&gt; that amount of seconds before taking the screenshot.</source>
         <translation>Seleccionar algo que no sea 0 causara que el programa &lt;b&gt;espere&lt;/b&gt; esa cantidad de segundos antes de sacar la captura.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="950"/>
+        <location filename="../dialogs/optionsdialog.ui" line="953"/>
         <source>&amp;Magnify around the mouse in Area mode.</source>
         <translation>Aumentar alrededor del &amp;mouse en modo Área.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="689"/>
+        <location filename="../dialogs/optionsdialog.ui" line="692"/>
         <source>&amp;Language:</source>
         <translation>&amp;Idioma:</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="675"/>
+        <location filename="../dialogs/optionsdialog.ui" line="678"/>
         <source>&amp;Notify with:</source>
         <translation>&amp;Noficar con:</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="625"/>
+        <location filename="../dialogs/optionsdialog.ui" line="628"/>
         <source>Tray icon Popup</source>
         <translation>Popup en el ícono de barra de tareas</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="632"/>
+        <location filename="../dialogs/optionsdialog.ui" line="635"/>
         <source>&amp;Sound cue</source>
         <translation>&amp;Sonido</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="36"/>
+        <location filename="../dialogs/optionsdialog.ui" line="39"/>
         <source>File</source>
         <translation>Archivo</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="54"/>
+        <location filename="../dialogs/optionsdialog.ui" line="57"/>
         <source>&amp;Directory:</source>
         <translation>&amp;Directorio:</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="97"/>
+        <location filename="../dialogs/optionsdialog.ui" line="100"/>
         <source>&amp;Filename:</source>
         <translation>&amp;Archivo:</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="136"/>
+        <location filename="../dialogs/optionsdialog.ui" line="139"/>
         <source>(date)</source>
         <translation>(fecha)</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="170"/>
+        <location filename="../dialogs/optionsdialog.ui" line="173"/>
         <source>F&amp;ormat:</source>
         <translation>F&amp;ormato:</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1061"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1064"/>
         <source>D&amp;elay:</source>
         <translation>R&amp;etraso:</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1077"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1080"/>
         <source>none</source>
         <translation>ninguno</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="320"/>
+        <location filename="../dialogs/optionsdialog.ui" line="323"/>
         <source>&amp;Run Lightscreen at system startup.</source>
         <translation>Ejecuta&amp;r Lightscreen cuando inicia el sistema.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="348"/>
+        <location filename="../dialogs/optionsdialog.ui" line="351"/>
         <source>H&amp;ide the main window.</source>
         <translation>Esconder la ventana pr&amp;incipal.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="929"/>
+        <location filename="../dialogs/optionsdialog.ui" line="932"/>
         <source>&amp;Copy the screenshot to the clipboard.</source>
         <translation>&amp;Copiar la captura al portapeles.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="943"/>
+        <location filename="../dialogs/optionsdialog.ui" line="946"/>
         <source>Inc&amp;lude the cursor in the screenshot.</source>
         <translation>Inc&amp;luir el cursor en la captura.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="965"/>
+        <location filename="../dialogs/optionsdialog.ui" line="968"/>
         <source>O&amp;ptimize PNG screenshots.</source>
         <translation>O&amp;ptimizar capturas PNG.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="607"/>
+        <location filename="../dialogs/optionsdialog.ui" line="610"/>
         <source>Warn when hiding without a tra&amp;y icon.</source>
         <translation>A&amp;visar al esconder sin un ícono de sistema.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="388"/>
+        <location filename="../dialogs/optionsdialog.ui" line="391"/>
         <source>Fullscreen</source>
         <translation>Pantalla completa</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="411"/>
+        <location filename="../dialogs/optionsdialog.ui" line="414"/>
         <source>Window Picker</source>
         <translation>&amp;Elegir ventana</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="440"/>
+        <location filename="../dialogs/optionsdialog.ui" line="443"/>
         <source>Active Window</source>
         <translation>&amp;Ventana activa</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="456"/>
+        <location filename="../dialogs/optionsdialog.ui" line="459"/>
         <source>Screen Area</source>
         <translation>Área de p&amp;antalla</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="936"/>
+        <location filename="../dialogs/optionsdialog.ui" line="939"/>
         <source>&amp;Grab only the active monitor.</source>
         <translation>&amp;Tomar solo el monitor activo</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="962"/>
+        <location filename="../dialogs/optionsdialog.ui" line="965"/>
         <source>Runs OptiPNG which reduces screenshot file size.</source>
         <translation>Ejecuta OptiPNG el cual reduce el peso de las capturas.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="734"/>
+        <location filename="../dialogs/optionsdialog.ui" line="737"/>
         <source>Screenshot Previews</source>
         <translation>Vista Previa de Capturas</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="814"/>
+        <location filename="../dialogs/optionsdialog.ui" line="817"/>
         <source>Top Left</source>
         <translation>Arriba-Izquierda</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="819"/>
+        <location filename="../dialogs/optionsdialog.ui" line="822"/>
         <source>Top Right</source>
         <translation>Abajo-Derecha</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="824"/>
+        <location filename="../dialogs/optionsdialog.ui" line="827"/>
         <source>Bottom Left</source>
         <translation>Abajo-Izquierda</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="829"/>
+        <location filename="../dialogs/optionsdialog.ui" line="832"/>
         <source>Bottom Right</source>
         <translation>Abajo-Derecha</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="837"/>
+        <location filename="../dialogs/optionsdialog.ui" line="840"/>
         <source>Auto-close after</source>
         <translation>Cerrar despues de</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1117"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1120"/>
         <source>Updater</source>
         <translation>Actualizador</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1126"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1129"/>
         <source>Check for updates regularly.</source>
         <translation>Buscar actualizaciones periodicamente.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="622"/>
+        <location filename="../dialogs/optionsdialog.ui" line="625"/>
         <source>Shows a completion message once the screenshot is saved, clicking this message takes you to the directory where the screenshot was saved.</source>
         <translation>Muestra un mensaje al completar una captura, clickear en este mensaje lleva al directorio donde la misma fue guardada.</translation>
     </message>
 </context>
 <context>
     <name>PreviewDialog</name>
+    <message>
+        <location filename="../dialogs/previewdialog.cpp" line="47"/>
+        <location filename="../dialogs/previewdialog.cpp" line="329"/>
+        <source>Screenshot Preview</source>
+        <translation>Vista Previa de Captura</translation>
+    </message>
     <message>
         <location filename="../dialogs/previewdialog.cpp" line="160"/>
         <source>Upload</source>
@@ -832,7 +849,12 @@ La calidad tiene relacion con el tamaño del archivo y la legibilidad/calidad ge
         <translation>Guardar</translation>
     </message>
     <message>
-        <location filename="../dialogs/previewdialog.cpp" line="392"/>
+        <location filename="../dialogs/previewdialog.cpp" line="326"/>
+        <source>Screenshot Preview (%1 of %2)</source>
+        <translation>Vista Previa de Captura (%1 de %2)</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/previewdialog.cpp" line="399"/>
         <source>Preview: Closing in %1</source>
         <translation>Vista Previa: Cerrando en %1</translation>
     </message>
@@ -906,9 +928,9 @@ Haga click con el botón derecho para acceder a mas opciones.</translation>
     </message>
     <message>
         <location filename="../dialogs/uploaddialog.cpp" line="31"/>
-        <location filename="../dialogs/uploaddialog.cpp" line="195"/>
-        <location filename="../dialogs/uploaddialog.cpp" line="205"/>
-        <location filename="../dialogs/uploaddialog.cpp" line="210"/>
+        <location filename="../dialogs/uploaddialog.cpp" line="192"/>
+        <location filename="../dialogs/uploaddialog.cpp" line="203"/>
+        <location filename="../dialogs/uploaddialog.cpp" line="209"/>
         <source>Filter..</source>
         <translation>Filtrar..</translation>
     </message>
@@ -963,28 +985,28 @@ No podra volver atras.</translation>
 <context>
     <name>Uploader</name>
     <message>
-        <location filename="../tools/uploader.cpp" line="52"/>
-        <location filename="../tools/uploader.cpp" line="137"/>
+        <location filename="../tools/uploader.cpp" line="53"/>
+        <location filename="../tools/uploader.cpp" line="138"/>
         <source>Uploading...</source>
         <translation>Subiendo...</translation>
     </message>
     <message>
-        <location filename="../tools/uploader.cpp" line="110"/>
+        <location filename="../tools/uploader.cpp" line="111"/>
         <source>Screenshot file not found.</source>
         <translation>Archivo de captura no encontrado.</translation>
     </message>
     <message>
-        <location filename="../tools/uploader.cpp" line="113"/>
+        <location filename="../tools/uploader.cpp" line="114"/>
         <source>Could not reach imgur.com</source>
         <translation>No se pudo conectar  a imgur.com</translation>
     </message>
     <message>
-        <location filename="../tools/uploader.cpp" line="116"/>
+        <location filename="../tools/uploader.cpp" line="117"/>
         <source>You have exceeded your upload quota.</source>
         <translation>Ha excedido su cuota de subida.</translation>
     </message>
     <message>
-        <location filename="../tools/uploader.cpp" line="119"/>
+        <location filename="../tools/uploader.cpp" line="120"/>
         <source>Upload failed.</source>
         <translation>La subida ha fallado.</translation>
     </message>

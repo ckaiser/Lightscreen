@@ -52,25 +52,25 @@ public slots:
   bool closingWithoutTray();
   void goToFolder();
   void messageClicked();
-  void messageReceived(const QString message);
-  void notify(Screenshot::Result result);
+  void messageReceived(const QString &message);
+  void notify(const Screenshot::Result &result);
   void optimizationDone();
   void preview(Screenshot* screenshot);
   void quit();
   void restoreNotification();
   void screenshotAction(int mode = 0);
   void screenshotActionTriggered(QAction* action);
-  void showHotkeyError(QStringList hotkeys);
+  void showHotkeyError(const QStringList &hotkeys);
   void showOptions();
   void showScreenshotMenu();
-  void showScreenshotMessage(Screenshot::Result result, QString fileName);
+  void showScreenshotMessage(const Screenshot::Result &result, const QString &fileName);
   void showUploadDialog();
-  void showUploaderError(QString error);
+  void showUploaderError(const QString &error);
   void showUploaderMessage(QString fileName, QString url);
   void toggleVisibility(QSystemTrayIcon::ActivationReason reason = QSystemTrayIcon::DoubleClick);
   void updateUploadStatus();
   void updaterDone(bool result);
-  void upload(QString fileName);
+  void upload(const QString &fileName);
   void uploadAction(QAction* upload);
   void uploadProgress(qint64 sent, qint64 total);
   void uploadLast();
@@ -81,7 +81,7 @@ private slots:
   void applySettings();
 
 private:
-  void optiPNG(QString fileName, bool upload);
+  void optiPNG(const QString &fileName, bool upload);
   void connectHotkeys();
   void createTrayIcon();
 #ifdef Q_WS_WIN

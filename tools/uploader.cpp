@@ -27,6 +27,7 @@
 Uploader::Uploader(QObject *parent) : QObject(parent), mUploading(0)
 {
   mImgur = new QtImgur("6920a141451d125b3e1357ce0e432409", this);
+
   connect(mImgur, SIGNAL(uploaded(QString, QString)), this, SLOT(uploaded(QString, QString)));
   connect(mImgur, SIGNAL(error(QString, QtImgur::Error)), this, SLOT(imgurError(QString, QtImgur::Error)));
   connect(mImgur, SIGNAL(uploadProgress(qint64,qint64)), this, SIGNAL(progress(qint64,qint64)));
@@ -58,8 +59,6 @@ void Uploader::upload(const QString &fileName)
 
 void Uploader::uploaded(const QString &file, const QString &url)
 {
-  qDebug() << "Uploader::uploaded(" << file << ", " << url << ")";
-
   // Modifying uploaded list, adding url.
   for (int i = 0; i < mScreenshots.size(); ++i) {
     if (mScreenshots.at(i).first == file) {
@@ -86,8 +85,6 @@ int Uploader::uploading()
 
 void Uploader::imgurError(const QString &file, const QtImgur::Error e)
 {
-  qDebug() << "Uploader::imgurError(" << file << ", " << e << ")";
-
   mUploading--;
 
   // Removing the screenshot.

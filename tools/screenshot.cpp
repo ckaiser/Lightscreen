@@ -143,7 +143,7 @@ QString Screenshot::getName(NamingOptions options, QString prefix, QDir director
 
   break;
   case  Screenshot::Date: // Date
-    naming = naming.arg(QDateTime::currentDateTime().toString(options.dateFormat));
+    naming = naming.arg(QLocale().toString(QDateTime::currentDateTime(), options.dateFormat));
     break;
   case  Screenshot::Timestamp: // Timestamp
     naming = naming.arg(QDateTime::currentDateTime().toTime_t());

@@ -28,6 +28,7 @@
 QtImgur::QtImgur(const QString &APIKey, QObject *parent) : QObject(parent), mAPIKey(APIKey)
 {
   mNetworkManager = new QNetworkAccessManager(this);
+
   connect(mNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(reply(QNetworkReply*)));
 }
 

@@ -211,23 +211,31 @@ void LightscreenWindow::cleanup(Screenshot::Options &options)
       QSound::play("sounds/ls.screenshot.wav");
     }
     else {
+#ifdef Q_WS_WIN
       QSound::play("afakepathtomakewindowsplaythedefaultsoundtheresprobablyabetterwaybuticantbebothered");
+#else
+      QSound::play("sound/ls.error.wav");
+#endif
     }
   }
 
-  if (options.result == Screenshot::Success
-   && settings()->value("options/optipng").toBool()
-   && options.format == Screenshot::PNG)
-  {
+  if (options.result != Screenshot::Success
+      || !options.file)
+    return;
+
+  if (settings()->value("options/optipng").toBool()
+      && options.format == Screenshot::PNG) {
     optiPNG(options.fileName, options.upload);
   }
-
-  if (options.result == Screenshot::Success && options.file)  {
-    if (!options.upload)
-      ScreenshotManager::instance()->saveHistory(options.fileName);
-
-    mLastScreenshot = options.fileName;
+  else if (options.upload)
+  {
+    upload(options.fileName);
   }
+  else {
+    ScreenshotManager::instance()->saveHistory(options.fileName);
+  }
+
+  mLastScreenshot = options.fileName;
 }
 
 void LightscreenWindow::goToFolder()
@@ -252,7 +260,7 @@ void LightscreenWindow::goToFolder()
 #endif
 }
 
-void LightscreenWindow::messageReceived(const QString message)
+void LightscreenWindow::messageReceived(const QString &message)
 {
   if (message.contains(' '))
   {
@@ -275,8 +283,6 @@ void LightscreenWindow::messageReceived(const QString message)
     screenshotAction(1);
   else if (message == "--pickwindow")
     screenshotAction(3);
-  else if (message == "--folder")
-    action(4);
   else if (message == "--folder")
     action(4);
   else if (message == "--uploadlast")
@@ -453,7 +459,7 @@ void LightscreenWindow::showOptions()
   applySettings();
 }
 
-void LightscreenWindow::showScreenshotMessage(Screenshot::Result result, QString fileName)
+void LightscreenWindow::showScreenshotMessage(const Screenshot::Result &result, const QString &fileName)
 {
   if (result == Screenshot::Cancel
       || mPreviewDialog)
@@ -500,7 +506,7 @@ void LightscreenWindow::showUploaderMessage(QString fileName, QString url)
   updateUploadStatus();
 }
 
-void LightscreenWindow::showUploaderError(QString error)
+void LightscreenWindow::showUploaderError(const QString &error)
 {
   mLastMessage = -1;
 
@@ -544,7 +550,7 @@ void LightscreenWindow::showScreenshotMenu()
   screenshotGroup->addAction(windowPickerAction);
   screenshotGroup->addAction(areaAction);
 
-  QMenu* imgurMenu = new QMenu("Upload");
+  QMenu* imgurMenu = new QMenu(tr("Upload"));
   imgurMenu->addAction(uploadAction);
   imgurMenu->addAction(historyAction);
   imgurMenu->addSeparator();
@@ -564,7 +570,7 @@ void LightscreenWindow::showScreenshotMenu()
   ui.screenshotPushButton->showMenu();
 }
 
-void LightscreenWindow::notify(Screenshot::Result result)
+void LightscreenWindow::notify(const Screenshot::Result &result)
 {
   switch (result)
   {
@@ -598,7 +604,7 @@ void LightscreenWindow::optimizationDone()
   upload(screenshot);
 }
 
-void LightscreenWindow::showHotkeyError(QStringList hotkeys)
+void LightscreenWindow::showHotkeyError(const QStringList &hotkeys)
 {
    static bool dontShow = false;
 
@@ -697,7 +703,7 @@ void LightscreenWindow::applySettings()
   os::setStartup(settings()->value("options/startup").toBool(), settings()->value("options/startupHide").toBool());
 }
 
-void LightscreenWindow::optiPNG(QString fileName, bool upload)
+void LightscreenWindow::optiPNG(const QString &fileName, bool upload)
 {
   if (upload) {
     // If the user has chosen to upload the screenshots we have to track the progress of the optimization, so we use QProcess
@@ -814,14 +820,14 @@ void LightscreenWindow::createTrayIcon()
   QAction *quitAction = new QAction(tr("&Quit"), mTrayIcon);
   connect(quitAction, SIGNAL(triggered()), this, SLOT(quit()));
 
-  QMenu* screenshotMenu = new QMenu("Screenshot");
+  QMenu* screenshotMenu = new QMenu(tr("Screenshot"));
   screenshotMenu->addAction(screenAction);  
   screenshotMenu->addAction(areaAction);
   screenshotMenu->addAction(windowAction);
   screenshotMenu->addAction(windowPickerAction);
 
   // Duplicated for the screenshot button :(
-  QMenu* imgurMenu = new QMenu("Upload");
+  QMenu* imgurMenu = new QMenu(tr("Upload"));
   imgurMenu->addAction(uploadAction);
   imgurMenu->addAction(historyAction);
   imgurMenu->addSeparator();
@@ -866,7 +872,6 @@ void LightscreenWindow::checkForUpdates()
   Updater::instance()->check();
 }
 
-
 void LightscreenWindow::updaterDone(bool result)
 {
   settings()->setValue("lastUpdateCheck", QDate::currentDate().dayOfYear());
@@ -888,14 +893,14 @@ void LightscreenWindow::updaterDone(bool result)
   msgBox.exec();
 
   if (msgBox.clickedButton() == yesButton) {
-    QDesktopServices::openUrl(QUrl("http://lightscreen.sourceforge.net/new-version"));
+    QDesktopServices::openUrl(QUrl("http://localhost/whatsnew/?from=" + qApp->applicationVersion()));
   }
   else if (msgBox.clickedButton() == turnOffButton) {
-    settings()->setValue("disableUpdater", true);
+    settings()->setValue("options/disableUpdater", true);
   }
 }
 
-void LightscreenWindow::upload(QString fileName)
+void LightscreenWindow::upload(const QString &fileName)
 {
   Uploader::instance()->upload(fileName);
 }

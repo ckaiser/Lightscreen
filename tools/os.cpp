@@ -278,20 +278,34 @@ QPixmap os::cursor()
 void os::translate(QString language)
 {
   static QTranslator *translator = 0;
+  static QTranslator *translator_qt = 0;
 
   if ((language.compare("English", Qt::CaseInsensitive) == 0
       || language.isEmpty()) && translator) {
     qApp->removeTranslator(translator);
+    qApp->removeTranslator(translator_qt);
+    QLocale::setDefault(QLocale::c());
     return;
   }
 
-  if (translator)
+  if (translator) {
     delete translator;
+    delete translator_qt;
+  }
 
-  translator = new QTranslator(qApp);
+  translator    = new QTranslator(qApp);
+  translator_qt = new QTranslator(qApp);
 
-  if (translator->load(language, ":/translations"))
+  if (language == "Spanish")
+    QLocale::setDefault(QLocale::Spanish);
+
+  if (translator->load(language, ":/translations")) {
     qApp->installTranslator(translator);
+  }
+
+  if (translator_qt->load(language, ":/translations_qt")) {
+    qApp->installTranslator(translator_qt);
+  }
 }
 
 void os::effect(QObject* target, const char *slot, int frames, int duration, const char* cleanup)
