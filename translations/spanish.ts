@@ -36,7 +36,7 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
     <name>LightscreenWindow</name>
     <message>
         <location filename="../lightscreenwindow.cpp" line="142"/>
-        <location filename="../lightscreenwindow.cpp" line="634"/>
+        <location filename="../lightscreenwindow.cpp" line="632"/>
         <location filename="../lightscreenwindow.cpp" line="883"/>
         <location filename="../lightscreenwindow.cpp" line="947"/>
         <source>Lightscreen</source>
@@ -63,109 +63,113 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
         <translation>Solo esconder</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="326"/>
+        <location filename="../lightscreenwindow.cpp" line="324"/>
         <source>uploading one or more screenshots</source>
         <translation>subiendo una o mas capturas</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="331"/>
+        <location filename="../lightscreenwindow.cpp" line="329"/>
         <source>optimizing and uploading screenshots</source>
         <translation>optimizando y subiendo capturas</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="334"/>
+        <location filename="../lightscreenwindow.cpp" line="332"/>
         <source>optimizing one or more screenshots</source>
         <translation>optimizando una o mas capturas</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="340"/>
+        <location filename="../lightscreenwindow.cpp" line="338"/>
         <source>Are you sure you want to quit?</source>
         <translation>Esta seguro que desea salir?</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="341"/>
+        <location filename="../lightscreenwindow.cpp" line="339"/>
         <source>Lightscreen is currently %1, this will finish momentarily, are you sure you want to quit?</source>
         <translation>Lightscreen esta %1, esto terminara momentaneamente, esta seguro que desea salir?</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="479"/>
+        <location filename="../lightscreenwindow.cpp" line="477"/>
         <source>Saved to &quot;%1&quot;</source>
         <translation>Guardada en &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="483"/>
+        <location filename="../lightscreenwindow.cpp" line="481"/>
         <source>The screenshot was not taken</source>
         <translation>La captura no fue realizada</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="505"/>
+        <location filename="../lightscreenwindow.cpp" line="503"/>
         <source>%1 uploaded</source>
         <translation>%1 subido</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="505"/>
+        <location filename="../lightscreenwindow.cpp" line="503"/>
         <source>Click here to go to %1</source>
         <translation>Haga click aqui para ir a %1</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="514"/>
+        <location filename="../lightscreenwindow.cpp" line="512"/>
         <source>Upload error</source>
         <translation>Error de subida</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="528"/>
+        <location filename="../lightscreenwindow.cpp" line="526"/>
         <location filename="../lightscreenwindow.cpp" line="788"/>
         <source>Active &amp;Window</source>
         <translation>&amp;Ventana Activa</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="531"/>
+        <location filename="../lightscreenwindow.cpp" line="529"/>
         <location filename="../lightscreenwindow.cpp" line="791"/>
         <source>&amp;Pick Window</source>
         <translation>&amp;Elegir Ventana</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="537"/>
+        <location filename="../lightscreenwindow.cpp" line="535"/>
         <location filename="../lightscreenwindow.cpp" line="806"/>
         <source>&amp;Upload last</source>
         <translation>&amp;Subir ultima</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="538"/>
+        <location filename="../lightscreenwindow.cpp" line="536"/>
         <location filename="../lightscreenwindow.cpp" line="807"/>
         <source>Upload the last screenshot you took to imgur.com</source>
         <translation>Subir la ultima captura que tomó a imgur.com</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="541"/>
+        <location filename="../lightscreenwindow.cpp" line="539"/>
+        <source>View &amp;History</source>
+        <translation>Ver Historial</translation>
+    </message>
+    <message>
         <location filename="../lightscreenwindow.cpp" line="810"/>
         <source>View History</source>
         <translation>Ver Historial</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="553"/>
+        <location filename="../lightscreenwindow.cpp" line="551"/>
         <location filename="../lightscreenwindow.cpp" line="830"/>
         <source>Upload</source>
         <translation>Subida</translation>
     </message>
     <message>
+        <location filename="../lightscreenwindow.cpp" line="578"/>
         <location filename="../lightscreenwindow.cpp" line="580"/>
-        <location filename="../lightscreenwindow.cpp" line="582"/>
         <source>Success!</source>
         <translation>Éxito!</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="592"/>
+        <location filename="../lightscreenwindow.cpp" line="590"/>
         <source>Cancelled!</source>
         <translation>Cancelada!</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="616"/>
+        <location filename="../lightscreenwindow.cpp" line="614"/>
         <source>Some hotkeys could not be registered, they might already be in use</source>
         <translation>Algunos atajos no pudieron ser registrados, puede que ya estén en uso</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="631"/>
+        <location filename="../lightscreenwindow.cpp" line="629"/>
         <source>&lt;br&gt;&lt;i&gt;What do you want to do?&lt;/i&gt;</source>
         <translation>&lt;br&gt;&lt;i&gt;Que desea hacer?&lt;/i&gt;</translation>
     </message>
@@ -210,50 +214,50 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
         <translation>Subiendo %1 captura(s)</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="525"/>
+        <location filename="../lightscreenwindow.cpp" line="523"/>
         <location filename="../lightscreenwindow.cpp" line="785"/>
         <source>&amp;Screen</source>
         <translation>&amp;Pantalla</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="343"/>
+        <location filename="../lightscreenwindow.cpp" line="341"/>
         <source>Don&apos;t Quit</source>
         <translation>No Salir</translation>
     </message>
     <message>
+        <location filename="../lightscreenwindow.cpp" line="584"/>
         <location filename="../lightscreenwindow.cpp" line="586"/>
-        <location filename="../lightscreenwindow.cpp" line="588"/>
         <source>Failed!</source>
         <translation>Error!</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="619"/>
+        <location filename="../lightscreenwindow.cpp" line="617"/>
         <source>&lt;br&gt;The failed hotkeys are the following:</source>
         <translation>&lt;br&gt;Las hotkeys en uso son las siguientes:</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="628"/>
+        <location filename="../lightscreenwindow.cpp" line="626"/>
         <source>&lt;br&gt;The failed hotkey is &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>&lt;br&gt;La hotkey que ha fallado es &lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation>&lt;br&gt;El atajo que ha fallado es &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="637"/>
+        <location filename="../lightscreenwindow.cpp" line="635"/>
         <source>Change</source>
         <translation>Cambiar</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="638"/>
+        <location filename="../lightscreenwindow.cpp" line="636"/>
         <source>Disable</source>
         <translation>Deshabilitar</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="342"/>
-        <location filename="../lightscreenwindow.cpp" line="639"/>
+        <location filename="../lightscreenwindow.cpp" line="340"/>
+        <location filename="../lightscreenwindow.cpp" line="637"/>
         <source>Quit</source>
         <translation>Salir</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="534"/>
+        <location filename="../lightscreenwindow.cpp" line="532"/>
         <location filename="../lightscreenwindow.cpp" line="794"/>
         <source>&amp;Area</source>
         <translation>&amp;Área</translation>
@@ -264,13 +268,13 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
         <translation>Ver las &amp;Opciones</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="544"/>
+        <location filename="../lightscreenwindow.cpp" line="542"/>
         <location filename="../lightscreenwindow.cpp" line="817"/>
         <source>&amp;Go to Folder</source>
         <translation>&amp;Ir a la carpeta</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="484"/>
+        <location filename="../lightscreenwindow.cpp" line="482"/>
         <source>An error occurred.</source>
         <translation>Ha ocurrido un error.</translation>
     </message>
@@ -592,7 +596,7 @@ Liberado bajo la &lt;a href=&quot;http://www.garaitia.com/new/gpl-spanish.php&qu
 Un agradecimiento especial a los &lt;a href=&quot;http://lightscreen.sourceforge.net/about&quot;&gt;Donadores y Traductores&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1200"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1197"/>
         <source>&lt;a href=&quot;https://sourceforge.net/projects/lightscreen/&quot;&gt;Visit Sourceforge project site&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://lightscreen.sourceforge.net/&quot;&gt;Visit Lightscreen home page&lt;/a&gt;</source>
         <translation>&lt;a href=&quot;https://sourceforge.net/projects/lightscreen/&quot;&gt;Visite la pagina del proyecto en SourceForge&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://lightscreen.sourceforge.net/&quot;&gt;Visite la pagina principal del Lightscreen&lt;/a&gt;</translation>
     </message>
@@ -868,6 +872,41 @@ La calidad tiene relacion con el tamaño del archivo y la legibilidad/calidad ge
         <source>- not uploaded -</source>
         <translation>- no subida -</translation>
     </message>
+    <message>
+        <location filename="../main.cpp" line="65"/>
+        <source>Screen</source>
+        <translation>Pantalla</translation>
+    </message>
+    <message>
+        <location filename="../main.cpp" line="66"/>
+        <source>Area</source>
+        <translation>Área</translation>
+    </message>
+    <message>
+        <location filename="../main.cpp" line="67"/>
+        <source>Active Window</source>
+        <translation>Ventana Activa</translation>
+    </message>
+    <message>
+        <location filename="../main.cpp" line="68"/>
+        <source>Pick Window</source>
+        <translation>Elegir Ventana</translation>
+    </message>
+    <message>
+        <location filename="../main.cpp" line="70"/>
+        <source>Upload Last</source>
+        <translation>Subir Ultima</translation>
+    </message>
+    <message>
+        <location filename="../main.cpp" line="71"/>
+        <source>View History</source>
+        <translation>Ver Historial</translation>
+    </message>
+    <message>
+        <location filename="../main.cpp" line="73"/>
+        <source>Go to Folder</source>
+        <translation>Ir a la carpeta</translation>
+    </message>
 </context>
 <context>
     <name>Screenshot</name>
@@ -986,27 +1025,27 @@ No podra volver atras.</translation>
     <name>Uploader</name>
     <message>
         <location filename="../tools/uploader.cpp" line="53"/>
-        <location filename="../tools/uploader.cpp" line="138"/>
+        <location filename="../tools/uploader.cpp" line="134"/>
         <source>Uploading...</source>
         <translation>Subiendo...</translation>
     </message>
     <message>
-        <location filename="../tools/uploader.cpp" line="111"/>
+        <location filename="../tools/uploader.cpp" line="107"/>
         <source>Screenshot file not found.</source>
         <translation>Archivo de captura no encontrado.</translation>
     </message>
     <message>
-        <location filename="../tools/uploader.cpp" line="114"/>
+        <location filename="../tools/uploader.cpp" line="110"/>
         <source>Could not reach imgur.com</source>
         <translation>No se pudo conectar  a imgur.com</translation>
     </message>
     <message>
-        <location filename="../tools/uploader.cpp" line="117"/>
+        <location filename="../tools/uploader.cpp" line="113"/>
         <source>You have exceeded your upload quota.</source>
         <translation>Ha excedido su cuota de subida.</translation>
     </message>
     <message>
-        <location filename="../tools/uploader.cpp" line="120"/>
+        <location filename="../tools/uploader.cpp" line="116"/>
         <source>Upload failed.</source>
         <translation>La subida ha fallado.</translation>
     </message>

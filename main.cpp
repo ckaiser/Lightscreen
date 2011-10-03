@@ -62,15 +62,15 @@ int main(int argc, char *argv[])
   JumpList jumpList("Lightscreen");
 
   QList<JumpListItem> tasks;
-  tasks.append(JumpListItem(application.applicationFilePath(), "--screen"      , lightscreen.tr("Screen")       , "", "", 0, application.applicationDirPath()));
-  tasks.append(JumpListItem(application.applicationFilePath(), "--area"        , lightscreen.tr("Area")         , "", "", 0, application.applicationDirPath()));
-  tasks.append(JumpListItem(application.applicationFilePath(), "--activewindow", lightscreen.tr("Active Window"), "", "", 0, application.applicationDirPath()));
-  tasks.append(JumpListItem(application.applicationFilePath(), "--pickwindow"  , lightscreen.tr("Pick Window")  , "", "", 0, application.applicationDirPath()));
+  tasks.append(JumpListItem(application.applicationFilePath(), "--screen"      , QObject::tr("Screen")       , "", "", 0, application.applicationDirPath()));
+  tasks.append(JumpListItem(application.applicationFilePath(), "--area"        , QObject::tr("Area")         , "", "", 0, application.applicationDirPath()));
+  tasks.append(JumpListItem(application.applicationFilePath(), "--activewindow", QObject::tr("Active Window"), "", "", 0, application.applicationDirPath()));
+  tasks.append(JumpListItem(application.applicationFilePath(), "--pickwindow"  , QObject::tr("Pick Window")  , "", "", 0, application.applicationDirPath()));
   tasks.append(JumpListItem());
-  tasks.append(JumpListItem(application.applicationFilePath(), "--uploadlast"  , lightscreen.tr("Upload Last")  , "", "", 0, application.applicationDirPath()));
-  tasks.append(JumpListItem(application.applicationFilePath(), "--viewhistory" , lightscreen.tr("View History") , "", "", 0, application.applicationDirPath()));
+  tasks.append(JumpListItem(application.applicationFilePath(), "--uploadlast"  , QObject::tr("Upload Last")  , "", "", 0, application.applicationDirPath()));
+  tasks.append(JumpListItem(application.applicationFilePath(), "--viewhistory" , QObject::tr("View History") , "", "", 0, application.applicationDirPath()));
   tasks.append(JumpListItem());
-  tasks.append(JumpListItem(application.applicationFilePath(), "--folder"      , lightscreen.tr("Go to Folder") , "", "", 0, application.applicationDirPath()));
+  tasks.append(JumpListItem(application.applicationFilePath(), "--folder"      , QObject::tr("Go to Folder") , "", "", 0, application.applicationDirPath()));
 
   jumpList.Begin();
   jumpList.AddUserTasks(tasks);

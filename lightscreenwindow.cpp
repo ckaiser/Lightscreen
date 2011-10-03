@@ -227,8 +227,7 @@ void LightscreenWindow::cleanup(Screenshot::Options &options)
       && options.format == Screenshot::PNG) {
     optiPNG(options.fileName, options.upload);
   }
-  else if (options.upload)
-  {
+  else if (options.upload) {
     upload(options.fileName);
   }
   else {
@@ -262,8 +261,7 @@ void LightscreenWindow::goToFolder()
 
 void LightscreenWindow::messageReceived(const QString &message)
 {
-  if (message.contains(' '))
-  {
+  if (message.contains(' ')) {
     foreach (QString argument, message.split(' ')) {
       messageReceived(argument);
     }
@@ -538,7 +536,7 @@ void LightscreenWindow::showScreenshotMenu()
   uploadAction->setToolTip(tr("Upload the last screenshot you took to imgur.com"));
   connect(uploadAction, SIGNAL(triggered()), this, SLOT(uploadLast()));
 
-  QAction *historyAction = new QAction(QIcon(":/icons/view-history"), tr("View History"), buttonMenu);
+  QAction *historyAction = new QAction(QIcon(":/icons/view-history"), tr("View &History"), buttonMenu);
   connect(historyAction, SIGNAL(triggered()), this, SLOT(showUploadDialog()));
 
   QAction *goAction = new QAction(QIcon(":/icons/folder"), tr("&Go to Folder"), buttonMenu);
@@ -725,6 +723,7 @@ void LightscreenWindow::optiPNG(const QString &fileName, bool upload)
 #ifdef Q_WS_WIN
     ShellExecuteW(NULL, NULL, (LPCWSTR)QString("optipng.exe").toStdWString().data(), (LPCWSTR)fileName.toStdWString().data(), NULL, SW_HIDE);
 #endif
+
 #ifdef Q_OS_UNIX
     QProcess::startDetached("optipng " + fileName + " -quiet");
 #endif
@@ -734,7 +733,7 @@ void LightscreenWindow::optiPNG(const QString &fileName, bool upload)
 void LightscreenWindow::connectHotkeys()
 {
   // Set to true because if the hotkey is disabled it will show an error.
-  bool screen = true, area = true, window = true, open = true, directory = true;
+  bool screen = true, area = true, window = true, windowPicker = true, open = true, directory = true;
 
   if (settings()->value("actions/screen/enabled").toBool())
     screen = GlobalShortcutManager::instance()->connect(settings()->value(
@@ -749,7 +748,7 @@ void LightscreenWindow::connectHotkeys()
         "actions/window/hotkey").value<QKeySequence> (), this, SLOT(windowHotkey()));
 
   if (settings()->value("actions/windowPicker/enabled").toBool())
-    window = GlobalShortcutManager::instance()->connect(settings()->value(
+    windowPicker = GlobalShortcutManager::instance()->connect(settings()->value(
         "actions/windowPicker/hotkey").value<QKeySequence> (), this, SLOT(windowPickerHotkey()));
 
   if (settings()->value("actions/open/enabled").toBool())
@@ -761,11 +760,12 @@ void LightscreenWindow::connectHotkeys()
         "actions/directory/hotkey").value<QKeySequence> (), this, SLOT(goToFolder()));
 
   QStringList failed;
-  if (!screen)    failed << "screen";
-  if (!area)      failed << "area";
-  if (!window)    failed << "window";
-  if (!open)      failed << "open";
-  if (!directory) failed << "directory";
+  if (!screen)       failed << "screen";
+  if (!area)         failed << "area";
+  if (!window)       failed << "window";
+  if (!windowPicker) failed << "window picker";
+  if (!open)         failed << "open";
+  if (!directory)    failed << "directory";
 
   if (!failed.isEmpty())
     showHotkeyError(failed);
@@ -893,7 +893,7 @@ void LightscreenWindow::updaterDone(bool result)
   msgBox.exec();
 
   if (msgBox.clickedButton() == yesButton) {
-    QDesktopServices::openUrl(QUrl("http://localhost/whatsnew/?from=" + qApp->applicationVersion()));
+    QDesktopServices::openUrl(QUrl("http://lightscreen.sourceforge.net/whatsnew/?from=" + qApp->applicationVersion()));
   }
   else if (msgBox.clickedButton() == turnOffButton) {
     settings()->setValue("options/disableUpdater", true);
