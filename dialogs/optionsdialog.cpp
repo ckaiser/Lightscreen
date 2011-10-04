@@ -84,6 +84,9 @@ void OptionsDialog::init()
   optionsPalette.setColor(QPalette::Window,  ui.tabWidget->palette().color(QPalette::Base));
   ui.optionsScrollArea->setPalette(optionsPalette);
 
+  // Big logo time!
+  ui.logoLabel->setPixmap(QIcon(":/icons/lightscreen").pixmap(64, 64));
+
   ui.buttonBox->addButton(new QPushButton(" " + tr("Restore Defaults") + " ", this), QDialogButtonBox::ResetRole);
 
   // Set up the autocomplete for the directory.
@@ -257,13 +260,13 @@ void OptionsDialog::flipToggled(bool checked)
     ui.filenameLayout->addWidget(ui.namingComboBox);
   }
 
-  if (ui.prefixLineEdit->text() == "screenshot."
+  if (ui.prefixLineEdit->text() == tr("screenshot.")
    && checked)
-    ui.prefixLineEdit->setText(".screenshot");
+    ui.prefixLineEdit->setText(tr(".screenshot"));
 
-  if (ui.prefixLineEdit->text() == ".screenshot"
+  if (ui.prefixLineEdit->text() == tr(".screenshot")
    && !checked)
-    ui.prefixLineEdit->setText("screenshot.");
+    ui.prefixLineEdit->setText(tr("screenshot."));
 
   setUpdatesEnabled(true); // Avoids flicker
 }
@@ -394,9 +397,9 @@ void OptionsDialog::loadSettings()
 
   settings()->beginGroup("file");
     ui.formatComboBox->setCurrentIndex(settings()->value("format", 1).toInt());
-    ui.prefixLineEdit->setText(settings()->value("prefix", "screenshot.").toString());
+    ui.prefixLineEdit->setText(settings()->value("prefix", tr("screenshot.")).toString());
     ui.namingComboBox->setCurrentIndex(settings()->value("naming", 0).toInt());
-    ui.targetLineEdit->setText(settings()->value("target", os::getDocumentsPath() + QDir::separator() + "Screenshots").toString()); // Defaults to $HOME$/screenshots
+    ui.targetLineEdit->setText(settings()->value("target", os::getDocumentsPath() + QDir::separator() + tr("Screenshots")).toString()); // Defaults to $HOME$/screenshots
     ui.fileGroupBox->setChecked(settings()->value("enabled", true).toBool());
   settings()->endGroup();
 
@@ -433,9 +436,8 @@ void OptionsDialog::loadSettings()
     ui.uploadCheckBox->setChecked(settings()->value("uploadAuto", false).toBool());
 
 #ifdef Q_WS_WIN
-  if (!QFile::exists("optipng.exe")) {
+  if (!QFile::exists(qApp->applicationDirPath() + QDir::separator() + "optipng.exe")) {
     ui.optiPngCheckBox->setEnabled(false);
-    ui.optiPngCheckBox->setChecked(false);
     ui.optiPngLabel->setText("optipng.exe not found");
   }
 #elif defined(Q_WS_X11)

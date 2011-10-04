@@ -363,57 +363,70 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
 <context>
     <name>OptionsDialog</name>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="87"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="90"/>
         <source>Restore Defaults</source>
         <translation>Restablecer por defecto</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="103"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="106"/>
         <source>Version %1</source>
         <translation>Versión %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="185"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="188"/>
         <source>Hotkey conflict</source>
         <translation>Conflicto de atajos</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="185"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="188"/>
         <source>You have assigned the same hotkeys to more than one action.</source>
         <translation>Has asignado el mismo atajo a más de una acción.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="190"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="193"/>
         <source>Filename character error</source>
         <translation>Error de nombre de archivo</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="190"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="193"/>
         <source>The filename can&apos;t contain any of the following characters: ? : \ / * &quot; &lt; &gt; |</source>
         <translation>El nombre de archivo no puede contener ninguno de los siguientes caracteres: ? : \ / * &quot; &lt; &gt; |</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="195"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="198"/>
         <source>Final Destination</source>
         <translation>Destino Final</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="195"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="198"/>
         <source>You can&apos;t take screenshots unless you enable either file saving or the clipboard.</source>
         <translation>No puede realizar capturas a menos que active guardar archivos o copiar al portapeles.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="206"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="209"/>
         <source>Select where you want to save the screenshots</source>
         <translation>Seleccione donde quiere guardar las capturas</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="224"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="227"/>
         <source>Lightscreen - Restore Default Options</source>
         <translation>Lightscreen - Restablecer Opciones por Defecto</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="445"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="263"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="269"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="400"/>
+        <source>screenshot.</source>
+        <translation>captura.</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.cpp" line="265"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="267"/>
+        <source>.screenshot</source>
+        <translation>.captura</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.cpp" line="448"/>
         <source>Install &apos;OptiPNG&apos;</source>
         <translation>Instale &apos;OptiPNG&apos;</translation>
     </message>
@@ -463,11 +476,6 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
         <translation>El formato de la captura</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="272"/>
-        <source>&lt;i&gt;Preview&lt;/i&gt;:</source>
-        <translation>&lt;i&gt;Vista Previa&lt;/i&gt;:</translation>
-    </message>
-    <message>
         <location filename="../dialogs/optionsdialog.ui" line="205"/>
         <source>&amp;Quality:</source>
         <translation>Cali&amp;dad:</translation>
@@ -476,6 +484,11 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
         <location filename="../dialogs/optionsdialog.ui" line="149"/>
         <source>(none)</source>
         <translation>(ninguno)</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="272"/>
+        <source>&lt;i&gt;Preview:&lt;/i&gt;</source>
+        <translation>&lt;i&gt;Vista Previa:&lt;/i&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="311"/>
@@ -514,6 +527,7 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="916"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="402"/>
         <source>Screenshots</source>
         <translation>Capturas</translation>
     </message>
@@ -536,6 +550,20 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
         <location filename="../dialogs/optionsdialog.ui" line="1048"/>
         <source>Snap area screenshots automatically (no resizing).</source>
         <translation>Capturar áreas automaticamente (sin ajustar tamaño).</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="1172"/>
+        <source>Lightscreen is a simple tool to take screenshots, designed to be customizable and lightweight.&lt;br&gt;&lt;br&gt;
+Created by &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/a&gt;, using the &lt;a href=&quot;#aboutqt&quot;&gt;Qt toolkit&lt;/a&gt; for the graphical user interface.</source>
+        <translation>Lightscreen es una herramienta simple para sacar capturas de pantalla, diseñada para ser configurable y liviana.&lt;br&gt;&lt;br&gt;
+Creada por &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/a&gt;, usando las &lt;a href=&quot;#aboutqt&quot;&gt;herramientas Qt&lt;/a&gt; para la interface grafica.</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="1201"/>
+        <source>Released under the &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.html&quot;&gt;GNU General Public License&lt;/a&gt;.&lt;br&gt;&lt;br&gt;
+Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/about&quot;&gt;Donators and Translators&lt;/a&gt;.</source>
+        <translation>Bajo la licencia  &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.html&quot;&gt;GNU General Public License&lt;/a&gt;.&lt;br&gt;&lt;br&gt;
+Un agradecimiento especial a los&lt;a href=&quot;http://lightscreen.sourceforge.net/about&quot;&gt;Donadores  y Traductores&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="752"/>
@@ -585,33 +613,22 @@ Presione cualquier tecla o el botón derecho del mouse para salir.</translation>
         <translation>Acerca De</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1170"/>
-        <source>Lightscreen is a simple tool to take screenshots, designed to be customizable and lightweight.&lt;br&gt;&lt;br&gt;
-Created by &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/a&gt;, using the &lt;a href=&quot;#aboutqt&quot;&gt;Qt toolkit&lt;/a&gt; for the graphical user interface.&lt;br&gt;&lt;br&gt;
-Released under the &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.html&quot;&gt;GNU General Public License&lt;/a&gt;.&lt;br&gt;&lt;br&gt;
-Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/about&quot;&gt;Donators and Translators&lt;/a&gt;.</source>
-        <translation>Lightscreen es una simple herramienta para tomar capturas de pantalla, diseñada para ser liviana y configurable.&lt;br&gt;&lt;br&gt;
-Creada por &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/a&gt;, usando las &lt;a href=&quot;#aboutqt&quot;&gt;herramientas Qt&lt;/a&gt; para la interface gráfica.&lt;br&gt;&lt;br&gt;
-Liberado bajo la &lt;a href=&quot;http://www.garaitia.com/new/gpl-spanish.php&quot;&gt;licencia GNU GPL&lt;/a&gt;.&lt;br&gt;&lt;br&gt;
-Un agradecimiento especial a los &lt;a href=&quot;http://lightscreen.sourceforge.net/about&quot;&gt;Donadores y Traductores&lt;/a&gt;.</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1197"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1223"/>
         <source>&lt;a href=&quot;https://sourceforge.net/projects/lightscreen/&quot;&gt;Visit Sourceforge project site&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://lightscreen.sourceforge.net/&quot;&gt;Visit Lightscreen home page&lt;/a&gt;</source>
         <translation>&lt;a href=&quot;https://sourceforge.net/projects/lightscreen/&quot;&gt;Visite la pagina del proyecto en SourceForge&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://lightscreen.sourceforge.net/&quot;&gt;Visite la pagina principal del Lightscreen&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="225"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="228"/>
         <source>Restoring the default options will cause you to lose all of your current configuration.</source>
         <translation>Restablecer las opciones por defecto hara que pierda toda su configuración actual.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="228"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="231"/>
         <source>Restore</source>
         <translation>Restablecer</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="229"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="232"/>
         <source>Don&apos;t Restore</source>
         <translation>No Restablecer</translation>
     </message>

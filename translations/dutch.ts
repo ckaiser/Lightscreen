@@ -361,72 +361,85 @@ Press any key or right click to exit.</source>
 <context>
     <name>OptionsDialog</name>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="87"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="90"/>
         <source>Restore Defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="103"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="106"/>
         <source>Version %1</source>
         <translation type="unfinished">Versie %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="185"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="188"/>
         <source>Hotkey conflict</source>
         <translation>Conflicterende sneltoetsen</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="185"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="188"/>
         <source>You have assigned the same hotkeys to more than one action.</source>
         <translation>U hebt dezelfde sneltoetsen toegewezen aan verschillende acties.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="190"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="193"/>
         <source>Filename character error</source>
         <translation>Tekenfout in bestandsnaam</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="190"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="193"/>
         <source>The filename can&apos;t contain any of the following characters: ? : \ / * &quot; &lt; &gt; |</source>
         <translation>De bestandsnaam kan volgende tekens niet bevatten: ? : \ / * &quot; &lt; &gt; |</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="195"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="198"/>
         <source>Final Destination</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="195"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="198"/>
         <source>You can&apos;t take screenshots unless you enable either file saving or the clipboard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="206"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="209"/>
         <source>Select where you want to save the screenshots</source>
         <translation>Selecteer waar u de schermafdrukken wilt opslaan</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="224"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="227"/>
         <source>Lightscreen - Restore Default Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="225"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="228"/>
         <source>Restoring the default options will cause you to lose all of your current configuration.</source>
         <translation>U zult uw huidige voorkeuren verliezen als u de standaardwaarden herstelt.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="228"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="231"/>
         <source>Restore</source>
         <translation>Herstellen</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="229"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="232"/>
         <source>Don&apos;t Restore</source>
         <translation>Niet herstellen</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="445"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="263"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="269"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="400"/>
+        <source>screenshot.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.cpp" line="265"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="267"/>
+        <source>.screenshot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.cpp" line="448"/>
         <source>Install &apos;OptiPNG&apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -486,11 +499,6 @@ Press any key or right click to exit.</source>
         <translation>&amp;Formaat:</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="272"/>
-        <source>&lt;i&gt;Preview&lt;/i&gt;:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../dialogs/optionsdialog.ui" line="205"/>
         <source>&amp;Quality:</source>
         <translation type="unfinished"></translation>
@@ -498,6 +506,11 @@ Press any key or right click to exit.</source>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="149"/>
         <source>(none)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="272"/>
+        <source>&lt;i&gt;Preview:&lt;/i&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -537,6 +550,7 @@ Press any key or right click to exit.</source>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="916"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="402"/>
         <source>Screenshots</source>
         <translation type="unfinished"></translation>
     </message>
@@ -584,6 +598,18 @@ Press any key or right click to exit.</source>
         <location filename="../dialogs/optionsdialog.ui" line="1080"/>
         <source>none</source>
         <translation>geen</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="1172"/>
+        <source>Lightscreen is a simple tool to take screenshots, designed to be customizable and lightweight.&lt;br&gt;&lt;br&gt;
+Created by &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/a&gt;, using the &lt;a href=&quot;#aboutqt&quot;&gt;Qt toolkit&lt;/a&gt; for the graphical user interface.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="1201"/>
+        <source>Released under the &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.html&quot;&gt;GNU General Public License&lt;/a&gt;.&lt;br&gt;&lt;br&gt;
+Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/about&quot;&gt;Donators and Translators&lt;/a&gt;.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="847"/>
@@ -634,15 +660,7 @@ Press any key or right click to exit.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1170"/>
-        <source>Lightscreen is a simple tool to take screenshots, designed to be customizable and lightweight.&lt;br&gt;&lt;br&gt;
-Created by &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/a&gt;, using the &lt;a href=&quot;#aboutqt&quot;&gt;Qt toolkit&lt;/a&gt; for the graphical user interface.&lt;br&gt;&lt;br&gt;
-Released under the &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.html&quot;&gt;GNU General Public License&lt;/a&gt;.&lt;br&gt;&lt;br&gt;
-Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/about&quot;&gt;Donators and Translators&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1197"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1223"/>
         <source>&lt;a href=&quot;https://sourceforge.net/projects/lightscreen/&quot;&gt;Visit Sourceforge project site&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://lightscreen.sourceforge.net/&quot;&gt;Visit Lightscreen home page&lt;/a&gt;</source>
         <translation type="unfinished">&lt;a href=&quot;https://sourceforge.net/projects/lightscreen/&quot;&gt;Projectsite op Sourceforge bezoeken&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://lightscreen.sourceforge.net/&quot;&gt;Website van Lightscreen bezoeken&lt;/a&gt;</translation>
     </message>

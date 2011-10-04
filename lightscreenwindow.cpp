@@ -714,14 +714,18 @@ void LightscreenWindow::optiPNG(const QString &fileName, bool upload)
     connect(optipng, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(optimizationDone()));
     connect(optipng, SIGNAL(finished(int, QProcess::ExitStatus)), optipng, SLOT(deleteLater()));
 
+#ifdef Q_OS_UNIX
     optipng->start("optipng", QStringList() << fileName);
+#else
+    optipng->start(qApp->applicationDirPath() + QDir::separator() + "optipng.exe", QStringList() << fileName);
+#endif
 
     mOptimizeCount++;
   }
   else {
     // Otherwise start it detached from this process.
 #ifdef Q_WS_WIN
-    ShellExecuteW(NULL, NULL, (LPCWSTR)QString("optipng.exe").toStdWString().data(), (LPCWSTR)fileName.toStdWString().data(), NULL, SW_HIDE);
+    ShellExecuteW(NULL, NULL, (LPCWSTR)QString(qApp->applicationDirPath() + QDir::separator() + "optipng.exe").toStdWString().data(), (LPCWSTR)fileName.toStdWString().data(), NULL, SW_HIDE);
 #endif
 
 #ifdef Q_OS_UNIX
