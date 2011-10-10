@@ -53,6 +53,7 @@ AreaDialog::AreaDialog(Screenshot *screenshot) :
   mMouseOverHandle = 0;
 
   setMouseTracking(true);
+  setWindowTitle(tr("Lightscreen Area Mode"));
   setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
 
   setCursor(Qt::CrossCursor);

@@ -219,10 +219,11 @@ QPixmap os::cursor()
 {
 #ifdef Q_WS_WIN
   /*
-   * Taken from: git://github.com/arrai/mumble-record.git › src › mumble › Overlay.cpp
-   * BSD License.
-   */
-  QPixmap pm;
+  * Taken from: git://github.com/arrai/mumble-record.git › src › mumble › Overlay.cpp
+  * BSD License.
+  */
+
+  QPixmap pixmap;
 
   CURSORINFO cursorInfo;
   cursorInfo.cbSize = sizeof(cursorInfo);
@@ -232,44 +233,46 @@ QPixmap os::cursor()
 
   ICONINFO info;
   ZeroMemory(&info, sizeof(info));
+
   if (::GetIconInfo(c, &info)) {
-          if (info.hbmColor) {
-                  pm = QPixmap::fromWinHBITMAP(info.hbmColor);
-                  pm.setMask(QBitmap(QPixmap::fromWinHBITMAP(info.hbmMask)));
-          }
-          else {
-                  QBitmap orig(QPixmap::fromWinHBITMAP(info.hbmMask));
-                  QImage img = orig.toImage();
+    if (info.hbmColor) {
+      pixmap = QPixmap::fromWinHBITMAP(info.hbmColor);
+      pixmap.setMask(QBitmap(QPixmap::fromWinHBITMAP(info.hbmMask)));
+    }
+    else {
+      QBitmap orig(QPixmap::fromWinHBITMAP(info.hbmMask));
+      QImage img = orig.toImage();
 
-                  int h = img.height() / 2;
-                  int w = img.bytesPerLine() / sizeof(quint32);
+      int h = img.height() / 2;
+      int w = img.bytesPerLine() / sizeof(quint32);
 
-                  QImage out(img.width(), h, QImage::Format_MonoLSB);
-                  QImage outmask(img.width(), h, QImage::Format_MonoLSB);
+      QImage out(img.width(), h, QImage::Format_MonoLSB);
+      QImage outmask(img.width(), h, QImage::Format_MonoLSB);
 
-                  for (int i=0;i<h; ++i) {
-                          const quint32 *srcimg = reinterpret_cast<const quint32 *>(img.scanLine(i + h));
-                          const quint32 *srcmask = reinterpret_cast<const quint32 *>(img.scanLine(i));
+      for (int i=0;i<h; ++i) {
+        const quint32 *srcimg = reinterpret_cast<const quint32 *>(img.scanLine(i + h));
+        const quint32 *srcmask = reinterpret_cast<const quint32 *>(img.scanLine(i));
 
-                          quint32 *dstimg = reinterpret_cast<quint32 *>(out.scanLine(i));
-                          quint32 *dstmask = reinterpret_cast<quint32 *>(outmask.scanLine(i));
+        quint32 *dstimg = reinterpret_cast<quint32 *>(out.scanLine(i));
+        quint32 *dstmask = reinterpret_cast<quint32 *>(outmask.scanLine(i));
 
-                          for (int j=0;j<w;++j) {
-                                  dstmask[j] = srcmask[j];
-                                  dstimg[j] = srcimg[j];
-                          }
-                  }
-                  pm = QBitmap::fromImage(out);
-          }
+        for (int j=0;j<w;++j) {
+          dstmask[j] = srcmask[j];
+          dstimg[j] = srcimg[j];
+        }
+      }
 
-          if (info.hbmMask)
-                  ::DeleteObject(info.hbmMask);
+      pixmap = QBitmap::fromImage(out, Qt::ColorOnly);
+    }
 
-          if (info.hbmColor)
-                  ::DeleteObject(info.hbmColor);
+    if (info.hbmMask)
+      ::DeleteObject(info.hbmMask);
+
+    if (info.hbmColor)
+      ::DeleteObject(info.hbmColor);
   }
 
-  return pm;
+  return pixmap;
 #else
   return QPixmap();
 #endif
@@ -296,7 +299,7 @@ void os::translate(QString language)
   translator    = new QTranslator(qApp);
   translator_qt = new QTranslator(qApp);
 
-  if (language == "Spanish")
+  if (language == "Español")
     QLocale::setDefault(QLocale::Spanish);
 
   if (translator->load(language, ":/translations")) {

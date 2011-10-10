@@ -32,6 +32,8 @@
 #include <QtSingleApplication>
 #include "lightscreenwindow.h"
 
+#include <QMessageBox>
+
 int main(int argc, char *argv[])
 {
   QtSingleApplication application(argc, argv);
@@ -57,24 +59,26 @@ int main(int argc, char *argv[])
 
 #ifdef Q_WS_WIN
   // Windows 7 jumplists.
-  AppUserModel::SetCurrentProcessExplicitAppUserModelID("Lightscreen");
+  if (QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS7) {
+    AppUserModel::SetCurrentProcessExplicitAppUserModelID("Lightscreen");
 
-  JumpList jumpList("Lightscreen");
+    JumpList jumpList("Lightscreen");
 
-  QList<JumpListItem> tasks;
-  tasks.append(JumpListItem(application.applicationFilePath(), "--screen"      , QObject::tr("Screen")       , "", "", 0, application.applicationDirPath()));
-  tasks.append(JumpListItem(application.applicationFilePath(), "--area"        , QObject::tr("Area")         , "", "", 0, application.applicationDirPath()));
-  tasks.append(JumpListItem(application.applicationFilePath(), "--activewindow", QObject::tr("Active Window"), "", "", 0, application.applicationDirPath()));
-  tasks.append(JumpListItem(application.applicationFilePath(), "--pickwindow"  , QObject::tr("Pick Window")  , "", "", 0, application.applicationDirPath()));
-  tasks.append(JumpListItem());
-  tasks.append(JumpListItem(application.applicationFilePath(), "--uploadlast"  , QObject::tr("Upload Last")  , "", "", 0, application.applicationDirPath()));
-  tasks.append(JumpListItem(application.applicationFilePath(), "--viewhistory" , QObject::tr("View History") , "", "", 0, application.applicationDirPath()));
-  tasks.append(JumpListItem());
-  tasks.append(JumpListItem(application.applicationFilePath(), "--folder"      , QObject::tr("Go to Folder") , "", "", 0, application.applicationDirPath()));
+    QList<JumpListItem> tasks;
+    tasks.append(JumpListItem(application.applicationFilePath(), "--screen"      , QObject::tr("Screen")       , "", "", 0, application.applicationDirPath()));
+    tasks.append(JumpListItem(application.applicationFilePath(), "--area"        , QObject::tr("Area")         , "", "", 0, application.applicationDirPath()));
+    tasks.append(JumpListItem(application.applicationFilePath(), "--activewindow", QObject::tr("Active Window"), "", "", 0, application.applicationDirPath()));
+    tasks.append(JumpListItem(application.applicationFilePath(), "--pickwindow"  , QObject::tr("Pick Window")  , "", "", 0, application.applicationDirPath()));
+    tasks.append(JumpListItem());
+    tasks.append(JumpListItem(application.applicationFilePath(), "--uploadlast"  , QObject::tr("Upload Last")  , "", "", 0, application.applicationDirPath()));
+    tasks.append(JumpListItem(application.applicationFilePath(), "--viewhistory" , QObject::tr("View History") , "", "", 0, application.applicationDirPath()));
+    tasks.append(JumpListItem());
+    tasks.append(JumpListItem(application.applicationFilePath(), "--folder"      , QObject::tr("Go to Folder") , "", "", 0, application.applicationDirPath()));
 
-  jumpList.Begin();
-  jumpList.AddUserTasks(tasks);
-  jumpList.Commit();
+    jumpList.Begin();
+    jumpList.AddUserTasks(tasks);
+    jumpList.Commit();
+  }
 #endif
 
   if (application.arguments().size() > 1) {

@@ -48,6 +48,7 @@ public:
   QSettings *settings() const { return mSettings; }
   void saveHistory(QString fileName, QString url = QObject::tr("- not uploaded -"));
   QString &historyPath();
+  bool portableMode();
 
 public slots:
   void take(Screenshot::Options &options);
@@ -62,6 +63,7 @@ private:
   static ScreenshotManager* mInstance;
   QSettings *mSettings;
   QString mHistoryPath;
+  bool mPortableMode;
   int mCount; // Concurrent screenshot count.
 
 };

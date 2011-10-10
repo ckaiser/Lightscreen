@@ -84,9 +84,6 @@ void OptionsDialog::init()
   optionsPalette.setColor(QPalette::Window,  ui.tabWidget->palette().color(QPalette::Base));
   ui.optionsScrollArea->setPalette(optionsPalette);
 
-  // Big logo time!
-  ui.logoLabel->setPixmap(QIcon(":/icons/lightscreen").pixmap(64, 64));
-
   ui.buttonBox->addButton(new QPushButton(" " + tr("Restore Defaults") + " ", this), QDialogButtonBox::ResetRole);
 
   // Set up the autocomplete for the directory.
@@ -146,10 +143,12 @@ void OptionsDialog::init()
   connect(ui.directoryCheckBox   , SIGNAL(toggled(bool)), ui.directoryHotkeyWidget, SLOT(setEnabled(bool)));
 
   connect(ui.moreInformationLabel, SIGNAL(linkActivated(QString))      , this, SLOT(openUrl(QString)));
+
   connect(ui.languageComboBox    , SIGNAL(currentIndexChanged(QString)), this, SLOT(languageChange(QString)));
 
-  connect(ui.mainLabel ,    SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
-  connect(ui.linksLabel,    SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
+  connect(ui.mainLabel ,        SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
+  connect(ui.licenseAboutLabel, SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
+  connect(ui.linksLabel,        SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
 
   //
   // Languages
@@ -380,6 +379,7 @@ void OptionsDialog::saveSettings()
 void OptionsDialog::loadSettings()
 {
   settings()->sync();
+  os::translate(settings()->value("options/language").toString()); // Why? Don't ask me, I'm just the programmer.
 
   if (!settings()->contains("file/format")) {
     // If there are no settings, get rid of the cancel button so that the user is forced to save them
@@ -395,11 +395,20 @@ void OptionsDialog::loadSettings()
   ui.trayCheckBox->toggle();
   ui.previewAutocloseCheckBox->toggle();
 
+  QString targetDefault;
+
+  if (ScreenshotManager::instance()->portableMode()) {
+    targetDefault = tr("Screenshots");
+  }
+  else {
+    targetDefault = os::getDocumentsPath() + QDir::separator() + tr("Screenshots");
+  }
+
   settings()->beginGroup("file");
     ui.formatComboBox->setCurrentIndex(settings()->value("format", 1).toInt());
     ui.prefixLineEdit->setText(settings()->value("prefix", tr("screenshot.")).toString());
     ui.namingComboBox->setCurrentIndex(settings()->value("naming", 0).toInt());
-    ui.targetLineEdit->setText(settings()->value("target", os::getDocumentsPath() + QDir::separator() + tr("Screenshots")).toString()); // Defaults to $HOME$/screenshots
+    ui.targetLineEdit->setText(settings()->value("target", targetDefault).toString());
     ui.fileGroupBox->setChecked(settings()->value("enabled", true).toBool());
   settings()->endGroup();
 
@@ -415,7 +424,7 @@ void OptionsDialog::loadSettings()
     ui.playSoundCheckBox->setChecked(settings()->value("playSound", false).toBool());
     ui.updaterCheckBox->setChecked(!settings()->value("disableUpdater", false).toBool());
     ui.magnifyCheckBox->setChecked(settings()->value("magnify", true).toBool());
-    ui.cursorCheckBox->setChecked(settings()->value("cursor", true).toBool());
+    ui.cursorCheckBox->setChecked(settings()->value("cursor", false).toBool());
     ui.saveAsCheckBox->setChecked(settings()->value("saveAs", false).toBool());
     ui.previewGroupBox->setChecked(settings()->value("preview", false).toBool());
     ui.previewSizeSpinBox->setValue(settings()->value("previewSize", 300).toInt());

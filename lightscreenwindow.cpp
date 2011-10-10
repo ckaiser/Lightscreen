@@ -70,7 +70,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   mLastMessage(0),
   mLastScreenshot()
 {
-  os::translate(settings()->value("options/language").toString());
+  os::translate(settings()->value("options/language", "English").toString());
 
   ui.setupUi(this);
 
@@ -85,7 +85,9 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   setWindowFlags(windowFlags() ^ Qt::WindowContextHelpButtonHint); // Remove the what's this button, no real use in the main window.
 
 #ifdef Q_WS_WIN
-  mTaskbarButton = new TaskbarButton(this);
+  if (QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS7) {
+    mTaskbarButton = new TaskbarButton(this);
+  }
 #endif
 
   // Actions
@@ -351,7 +353,8 @@ void LightscreenWindow::restoreNotification()
     mTrayIcon->setIcon(QIcon(":/icons/lightscreen.small"));
 
 #ifdef Q_WS_WIN
-  mTaskbarButton->SetOverlayIcon(QIcon(), "");
+  if (mTaskbarButton)
+    mTaskbarButton->SetOverlayIcon(QIcon(), "");
 #endif
 
   updateUploadStatus();
@@ -574,16 +577,20 @@ void LightscreenWindow::notify(const Screenshot::Result &result)
   {
   case Screenshot::Success:
     mTrayIcon->setIcon(QIcon(":/icons/lightscreen.yes"));
+
 #ifdef Q_WS_WIN
-    mTaskbarButton->SetOverlayIcon(QIcon(":/icons/yes"), tr("Success!"));
+    if (mTaskbarButton)
+      mTaskbarButton->SetOverlayIcon(QIcon(":/icons/yes"), tr("Success!"));
 #endif
+
     setWindowTitle(tr("Success!"));
     break;
   case Screenshot::Fail:
     mTrayIcon->setIcon(QIcon(":/icons/lightscreen.no"));
     setWindowTitle(tr("Failed!"));
 #ifdef Q_WS_WIN
-    mTaskbarButton->SetOverlayIcon(QIcon(":/icons/no"), tr("Failed!"));
+    if (mTaskbarButton)
+      mTaskbarButton->SetOverlayIcon(QIcon(":/icons/no"), tr("Failed!"));
 #endif
     break;
   case Screenshot::Cancel:
@@ -731,6 +738,8 @@ void LightscreenWindow::optiPNG(const QString &fileName, bool upload)
 #ifdef Q_OS_UNIX
     QProcess::startDetached("optipng " + fileName + " -quiet");
 #endif
+
+    ScreenshotManager::instance()->saveHistory(fileName);
   }
 }
 
@@ -928,7 +937,8 @@ void LightscreenWindow::uploadAction(QAction *upload)
 void LightscreenWindow::uploadProgress(qint64 sent, qint64 total)
 {
 #ifdef Q_WS_WIN
-  mTaskbarButton->SetProgresValue(sent, total);
+  if (mTaskbarButton)
+    mTaskbarButton->SetProgresValue(sent, total);
 #endif
   //TODO: Update mTrayIcon & windowTitle()
 }
@@ -950,8 +960,10 @@ void LightscreenWindow::updateUploadStatus()
   else {
     statusString = tr("Lightscreen");
 #ifdef Q_WS_WIN
-    mTaskbarButton->SetProgresValue(0, 0);
-    mTaskbarButton->SetState(STATE_NOPROGRESS);
+    if (mTaskbarButton) {
+      mTaskbarButton->SetProgresValue(0, 0);
+      mTaskbarButton->SetState(STATE_NOPROGRESS);
+    }
 #endif
   }
 

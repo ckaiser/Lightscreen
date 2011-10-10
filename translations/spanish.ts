@@ -563,7 +563,7 @@ Creada por &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/
         <source>Released under the &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.html&quot;&gt;GNU General Public License&lt;/a&gt;.&lt;br&gt;&lt;br&gt;
 Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/about&quot;&gt;Donators and Translators&lt;/a&gt;.</source>
         <translation>Bajo la licencia  &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.html&quot;&gt;GNU General Public License&lt;/a&gt;.&lt;br&gt;&lt;br&gt;
-Un agradecimiento especial a los&lt;a href=&quot;http://lightscreen.sourceforge.net/about&quot;&gt;Donadores  y Traductores&lt;/a&gt;.</translation>
+Un agradecimiento especial a los &lt;a href=&quot;http://lightscreen.sourceforge.net/about&quot;&gt;Donadores  y Traductores&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="752"/>

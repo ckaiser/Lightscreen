@@ -29,12 +29,14 @@
 ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent), mCount(0)
 {
   if (QFile::exists(qApp->applicationDirPath() + "/config.ini")) {
-    mSettings = new QSettings(qApp->applicationDirPath() + QDir::separator() + "config.ini", QSettings::IniFormat);
-    mHistoryPath = qApp->applicationDirPath() + QDir::separator() + "history";
+    mSettings     = new QSettings(qApp->applicationDirPath() + QDir::separator() + "config.ini", QSettings::IniFormat);
+    mHistoryPath  = qApp->applicationDirPath() + QDir::separator() + "history";
+    mPortableMode = true;
   }
   else {
-    mSettings = new QSettings();
-    mHistoryPath = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QDir::separator() + "history";
+    mSettings     = new QSettings();
+    mHistoryPath  = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QDir::separator() + "history";
+    mPortableMode = false;
   }
 }
 
@@ -61,7 +63,7 @@ void ScreenshotManager::saveHistory(QString fileName, QString url)
   }
 
   if (historyFile.open(QFile::WriteOnly | QFile::Append)) {
-    out << QString("%1|%2|%3\n").arg(fileName).arg(url).arg(QDateTime::currentMSecsSinceEpoch());
+    out << QString("%1|%2|%3").arg(fileName).arg(url).arg(QDateTime::currentMSecsSinceEpoch()) << "\n";
   }
 
   historyFile.close();
@@ -70,6 +72,11 @@ void ScreenshotManager::saveHistory(QString fileName, QString url)
 QString& ScreenshotManager::historyPath()
 {
   return mHistoryPath;
+}
+
+bool ScreenshotManager::portableMode()
+{
+  return mPortableMode;
 }
 
 void ScreenshotManager::take(Screenshot::Options &options)

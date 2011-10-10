@@ -35,8 +35,16 @@ void Updater::check()
   if (mHttp.hasPendingRequests())
     return;
 
+  QString platform = "unknown";
+
+#ifdef Q_WS_WIN
+  platform = QString("Windows_%1").arg(QSysInfo::windowsVersion());
+#else
+  platform = "Linux";
+#endif
+
   mHttp.setHost("lightscreen.sourceforge.net");
-  mHttp.get("/version");
+  mHttp.get("/version?from=" + qApp->applicationVersion() + "&platform=" + platform);
 }
 
 void Updater::checkWithFeedback()
