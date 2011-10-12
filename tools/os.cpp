@@ -229,12 +229,12 @@ QPixmap os::cursor()
   cursorInfo.cbSize = sizeof(cursorInfo);
   ::GetCursorInfo(&cursorInfo);
 
-  HICON c = cursorInfo.hCursor;
+  HICON cursor = (HICON) cursorInfo.hCursor;
 
   ICONINFO info;
   ZeroMemory(&info, sizeof(info));
 
-  if (::GetIconInfo(c, &info)) {
+  if (::GetIconInfo(cursor, &info)) {
     if (info.hbmColor) {
       pixmap = QPixmap::fromWinHBITMAP(info.hbmColor);
       pixmap.setMask(QBitmap(QPixmap::fromWinHBITMAP(info.hbmMask)));

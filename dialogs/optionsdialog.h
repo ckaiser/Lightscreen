@@ -41,6 +41,7 @@ public slots:
   void saveSettings();
   void updatePreview();
   void loadSettings();
+  void viewHistory();
 
 protected:
   bool event(QEvent *event);

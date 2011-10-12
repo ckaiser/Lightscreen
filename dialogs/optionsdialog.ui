@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>417</width>
+    <width>399</width>
     <height>317</height>
    </rect>
   </property>
@@ -567,8 +567,8 @@ Quality is related to file size and of course to readability and overall quality
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>376</width>
-            <height>689</height>
+            <width>358</width>
+            <height>726</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -1036,13 +1036,6 @@ Quality is related to file size and of course to readability and overall quality
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="historyCheckBox">
-                <property name="text">
-                 <string>Save my screenshot history.</string>
-                </property>
-               </widget>
-              </item>
-              <item>
                <widget class="QCheckBox" name="areaAutocloseCheckBox">
                 <property name="text">
                  <string>Snap area screenshots automatically (no resizing).</string>
@@ -1115,6 +1108,45 @@ Quality is related to file size and of course to readability and overall quality
             </widget>
            </item>
            <item>
+            <widget class="QGroupBox" name="historyGroupBox">
+             <property name="title">
+              <string>History</string>
+             </property>
+             <property name="flat">
+              <bool>true</bool>
+             </property>
+             <layout class="QHBoxLayout" name="historyLayout">
+              <item>
+               <widget class="QCheckBox" name="historyCheckBox">
+                <property name="text">
+                 <string>Save my screenshot history.</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>95</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="historyPushButton">
+                <property name="text">
+                 <string>View History</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
             <widget class="QGroupBox" name="updaterGroupBox">
              <property name="title">
               <string>Updater</string>
@@ -1122,7 +1154,7 @@ Quality is related to file size and of course to readability and overall quality
              <property name="flat">
               <bool>true</bool>
              </property>
-             <layout class="QHBoxLayout" name="horizontalLayout">
+             <layout class="QHBoxLayout" name="updaterLayout">
               <item>
                <widget class="QCheckBox" name="updaterCheckBox">
                 <property name="text">

@@ -4,19 +4,18 @@
 #include <QDialog>
 #include <QItemSelection>
 
-
 namespace Ui {
-    class UploadDialog;
+    class HistoryDialog;
 }
 
 class QSortFilterProxyModel;
-class UploadDialog : public QDialog
+class HistoryDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-  explicit UploadDialog(QWidget *parent = 0);
-  ~UploadDialog();
+  explicit HistoryDialog(QWidget *parent = 0);
+  ~HistoryDialog();
 
 private slots:
   void copy();
@@ -32,7 +31,7 @@ protected:
   bool eventFilter(QObject *object, QEvent *event);
 
 private:
-    Ui::UploadDialog *ui;
+    Ui::HistoryDialog *ui;
     QSortFilterProxyModel *mFilterModel;
     QString mSelectedScreenshot;
     QModelIndex mContextIndex;

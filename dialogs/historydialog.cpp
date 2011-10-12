@@ -1,5 +1,5 @@
-#include "uploaddialog.h"
-#include "ui_uploaddialog.h"
+#include "historydialog.h"
+#include "ui_historydialog.h"
 
 #include "../tools/os.h"
 #include "../tools/qxtcsvmodel.h"
@@ -18,9 +18,9 @@
 #include <QSortFilterProxyModel>
 #include <QDebug>
 
-UploadDialog::UploadDialog(QWidget *parent) :
+HistoryDialog::HistoryDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::UploadDialog)
+    ui(new Ui::HistoryDialog)
 {
     ui->setupUi(this);
 
@@ -64,12 +64,12 @@ UploadDialog::UploadDialog(QWidget *parent) :
     connect(ui->tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
 }
 
-UploadDialog::~UploadDialog()
+HistoryDialog::~HistoryDialog()
 {
     delete ui;
 }
 
-void UploadDialog::contextMenu(QPoint point)
+void HistoryDialog::contextMenu(QPoint point)
 {
   mContextIndex = ui->tableView->indexAt(point);;
 
@@ -93,17 +93,17 @@ void UploadDialog::contextMenu(QPoint point)
   contextMenu.exec(QCursor::pos());
 }
 
-void UploadDialog::copy()
+void HistoryDialog::copy()
 {
   qApp->clipboard()->setText(mContextIndex.data().toString());
 }
 
-void UploadDialog::location()
+void HistoryDialog::location()
 {
   QDesktopServices::openUrl("file:///" + QFileInfo(mContextIndex.data().toString()).absolutePath());
 }
 
-void UploadDialog::selectionChanged(QItemSelection selected, QItemSelection deselected)
+void HistoryDialog::selectionChanged(QItemSelection selected, QItemSelection deselected)
 {
   Q_UNUSED(deselected);
 
@@ -125,7 +125,7 @@ void UploadDialog::selectionChanged(QItemSelection selected, QItemSelection dese
   ui->uploadButton->setEnabled((url == QObject::tr("- not uploaded -") && QFile::exists(screenshot)));
 }
 
-void UploadDialog::open(QModelIndex index)
+void HistoryDialog::open(QModelIndex index)
 {
   if (index.column() == 0) {
     QDesktopServices::openUrl(QUrl("file:///" + index.data().toString()));
@@ -135,7 +135,7 @@ void UploadDialog::open(QModelIndex index)
   }
 }
 
-void UploadDialog::reloadHistory()
+void HistoryDialog::reloadHistory()
 {
   if (ui->tableView->model()) {
     ui->tableView->model()->deleteLater();
@@ -163,13 +163,13 @@ void UploadDialog::reloadHistory()
   ui->tableView->verticalHeader()->hide();
 }
 
-void UploadDialog::upload()
+void HistoryDialog::upload()
 {
   Uploader::instance()->upload(mSelectedScreenshot);
   ui->uploadButton->setEnabled(false);
 }
 
-void UploadDialog::clear()
+void HistoryDialog::clear()
 {
   if (QMessageBox::question(this,
                             tr("Clearing the screenshot history"),
@@ -183,7 +183,7 @@ void UploadDialog::clear()
   close();
 }
 
-bool UploadDialog::eventFilter(QObject *object, QEvent *event)
+bool HistoryDialog::eventFilter(QObject *object, QEvent *event)
 {
   if (object == ui->filterEdit) {
     if (event->type() == QEvent::FocusIn)

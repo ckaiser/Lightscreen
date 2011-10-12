@@ -37,6 +37,7 @@
 
 #include "optionsdialog.h"
 #include "namingdialog.h"
+#include "historydialog.h"
 #include "../tools/os.h"
 #include "../tools/screenshot.h"
 #include "../tools/screenshotmanager.h"
@@ -120,6 +121,7 @@ void OptionsDialog::init()
 
   connect(ui.browsePushButton       , SIGNAL(clicked())                , this    , SLOT(browse()));
   connect(ui.checkUpdatesPushButton , SIGNAL(clicked())                , this    , SLOT(checkUpdatesNow()));
+  connect(ui.historyPushButton      , SIGNAL(clicked())                , this    , SLOT(viewHistory()));
 
   connect(ui.screenCheckBox      , SIGNAL(toggled(bool)), ui.screenHotkeyWidget   , SLOT(setEnabled(bool)));
   connect(ui.areaCheckBox        , SIGNAL(toggled(bool)), ui.areaHotkeyWidget     , SLOT(setEnabled(bool)));
@@ -238,7 +240,11 @@ void OptionsDialog::dialogButtonClicked(QAbstractButton *button)
     if (msgBox.clickedButton() == dontRestoreButton)
       return;
 
+    QString language = settings()->value("options/language").toString(); // Only mantain language.
+
     settings()->clear();
+    settings()->setValue("options/language", language);
+
     loadSettings();
   }
 }
@@ -522,6 +528,12 @@ void OptionsDialog::loadSettings()
 
   setEnabled(true);
   setUpdatesEnabled(true);
+}
+
+void OptionsDialog::viewHistory()
+{
+    HistoryDialog historyDialog(this);
+    historyDialog.exec();
 }
 
 bool OptionsDialog::hotkeyCollision()

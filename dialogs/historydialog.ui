@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>UploadDialog</class>
- <widget class="QDialog" name="UploadDialog">
+ <class>HistoryDialog</class>
+ <widget class="QDialog" name="HistoryDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -99,7 +99,7 @@ Right click items to get access to more options.</string>
   <connection>
    <sender>closeButton</sender>
    <signal>clicked()</signal>
-   <receiver>UploadDialog</receiver>
+   <receiver>HistoryDialog</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">

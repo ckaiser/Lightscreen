@@ -16,8 +16,8 @@ HEADERS += tools/os.h \
     dialogs/updaterdialog.h \
     dialogs/screenshotdialog.h \
     dialogs/namingdialog.h \
-    dialogs/uploaddialog.h \
-    tools/qxtcsvmodel.h
+    tools/qxtcsvmodel.h \
+    dialogs/historydialog.h
 SOURCES += tools/os.cpp \
     updater/updater.cpp \
     dialogs/areadialog.cpp \
@@ -35,12 +35,12 @@ SOURCES += tools/os.cpp \
     dialogs/updaterdialog.cpp \
     dialogs/screenshotdialog.cpp \
     dialogs/namingdialog.cpp \
-    dialogs/uploaddialog.cpp \
-    tools/qxtcsvmodel.cpp
+    tools/qxtcsvmodel.cpp \
+    dialogs/historydialog.cpp
 FORMS += dialogs/optionsdialog.ui \
     lightscreenwindow.ui \
     dialogs/namingdialog.ui \
-    dialogs/uploaddialog.ui
+    dialogs/historydialog.ui
 RESOURCES += lightscreen.qrc
 TRANSLATIONS += translations/untranslated.ts \
                 translations/spanish.ts \
@@ -62,3 +62,11 @@ win32:LIBS += libgdi32 libgcc libuser32 libole32 libshell32 libshlwapi libcomctl
 
 QMAKE_CXXFLAGS = -Wextra -Wall -Wpointer-arith
 OTHER_FILES += TODO.txt
+
+
+
+
+
+
+
+

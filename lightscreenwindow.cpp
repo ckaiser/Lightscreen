@@ -47,7 +47,7 @@
 #include "lightscreenwindow.h"
 #include "dialogs/optionsdialog.h"
 #include "dialogs/previewdialog.h"
-#include "dialogs/uploaddialog.h"
+#include "dialogs/historydialog.h"
 
 #include "tools/globalshortcut/globalshortcutmanager.h"
 #include "tools/os.h"
@@ -491,8 +491,8 @@ void LightscreenWindow::showScreenshotMessage(const Screenshot::Result &result, 
 
 void LightscreenWindow::showUploadDialog()
 {
-  UploadDialog uploadDialog(this);
-  uploadDialog.exec();
+  HistoryDialog historyDialog(this);
+  historyDialog.exec();
 }
 
 void LightscreenWindow::showUploaderMessage(QString fileName, QString url)
