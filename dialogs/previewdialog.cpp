@@ -23,19 +23,19 @@
 #include "../tools/os.h"
 
 #include <QApplication>
-#include <QObject>
-#include <QList>
-#include <QHBoxLayout>
-#include <QIcon>
-#include <QPushButton>
-#include <QPalette>
 #include <QDesktopWidget>
 #include <QGraphicsDropShadowEffect>
+#include <QHBoxLayout>
+#include <QIcon>
 #include <QLabel>
-#include <QStackedLayout>
-#include <QSettings>
-#include <QToolButton>
+#include <QList>
 #include <QMenu>
+#include <QObject>
+#include <QPalette>
+#include <QPushButton>
+#include <QSettings>
+#include <QStackedLayout>
+#include <QToolButton>
 
 #include <QDebug>
 
@@ -251,36 +251,7 @@ int PreviewDialog::count() const
   return mStack->count();
 }
 
-void PreviewDialog::relocate()
-{
-  updateGeometry();
-  resize(minimumSizeHint());
-  QApplication::sendEvent(this, new QEvent(QEvent::Enter)); // Ensures the buttons are visible.
-
-  QPoint where;
-  switch (mPosition)
-  {
-  case 0:
-    where = QApplication::desktop()->availableGeometry(this).topLeft();
-    break;
-  case 1:
-    where = QApplication::desktop()->availableGeometry(this).topRight();
-    where.setX(where.x() - frameGeometry().width());
-    break;
-  case 2:
-    where = QApplication::desktop()->availableGeometry(this).bottomLeft();
-    where.setY(where.y() - frameGeometry().height());
-    break;
-  case 3:
-  default:
-    where = QApplication::desktop()->availableGeometry(this).bottomRight();
-    where.setX(where.x() - frameGeometry().width());
-    where.setY(where.y() - frameGeometry().height());
-    break;
-  }
-
-  move(where);
-}
+//
 
 void PreviewDialog::closePreview()
 {
@@ -293,6 +264,15 @@ void PreviewDialog::closePreview()
   }
   else {
     relocate();
+  }
+}
+
+void PreviewDialog::enlargePreview()
+{
+  Screenshot *screenshot = qobject_cast<Screenshot*>(ScreenshotManager::instance()->children().at(mStack->currentIndex()));
+
+  if (screenshot) {
+    new ScreenshotDialog(screenshot, this);
   }
 }
 
@@ -330,26 +310,51 @@ void PreviewDialog::indexChanged(int i)
   }
 }
 
-void PreviewDialog::previous()
-{
-  mStack->setCurrentIndex(mStack->currentIndex()-1);
-  relocate();
-}
-
 void PreviewDialog::next()
 {
   mStack->setCurrentIndex(mStack->currentIndex()+1);
   relocate();
 }
 
-void PreviewDialog::enlargePreview()
+void PreviewDialog::previous()
 {
-  Screenshot *screenshot = qobject_cast<Screenshot*>(ScreenshotManager::instance()->children().at(mStack->currentIndex()));
-
-  if (screenshot) {
-    new ScreenshotDialog(screenshot, this);
-  }
+  mStack->setCurrentIndex(mStack->currentIndex()-1);
+  relocate();
 }
+
+
+void PreviewDialog::relocate()
+{
+  updateGeometry();
+  resize(minimumSizeHint());
+  QApplication::sendEvent(this, new QEvent(QEvent::Enter)); // Ensures the buttons are visible.
+
+  QPoint where;
+  switch (mPosition)
+  {
+  case 0:
+    where = QApplication::desktop()->availableGeometry(this).topLeft();
+    break;
+  case 1:
+    where = QApplication::desktop()->availableGeometry(this).topRight();
+    where.setX(where.x() - frameGeometry().width());
+    break;
+  case 2:
+    where = QApplication::desktop()->availableGeometry(this).bottomLeft();
+    where.setY(where.y() - frameGeometry().height());
+    break;
+  case 3:
+  default:
+    where = QApplication::desktop()->availableGeometry(this).bottomRight();
+    where.setX(where.x() - frameGeometry().width());
+    where.setY(where.y() - frameGeometry().height());
+    break;
+  }
+
+  move(where);
+}
+
+//
 
 bool PreviewDialog::event(QEvent *event)
 {

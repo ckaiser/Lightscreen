@@ -24,10 +24,10 @@
 #include <QFileDialog>
 #include <QKeyEvent>
 #include <QMessageBox>
-#include <QSettings>
-#include <QUrl>
-#include <QTimer>
 #include <QProcess>
+#include <QSettings>
+#include <QTimer>
+#include <QUrl>
 
 #include <QDebug>
 
@@ -78,111 +78,6 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
   QTimer::singleShot(1, this, SLOT(loadSettings()));
 }
 
-void OptionsDialog::init()
-{
-  // Make the scroll area share the Tab Widget background color
-  QPalette optionsPalette = ui.optionsScrollArea->palette();
-  optionsPalette.setColor(QPalette::Window,  ui.tabWidget->palette().color(QPalette::Base));
-  ui.optionsScrollArea->setPalette(optionsPalette);
-
-  ui.buttonBox->addButton(new QPushButton(" " + tr("Restore Defaults") + " ", this), QDialogButtonBox::ResetRole);
-
-  // Set up the autocomplete for the directory.
-  QCompleter *completer = new QCompleter(this);
-  completer->setModel(new QDirModel(QStringList(), QDir::Dirs, QDir::Name, completer));
-  ui.targetLineEdit->setCompleter(completer);
-
-  // HotkeyWidget icons.
-  ui.screenHotkeyWidget->setIcon      (QIcon(":/icons/screen"));
-  ui.windowHotkeyWidget->setIcon      (QIcon(":/icons/window"));
-  ui.windowPickerHotkeyWidget->setIcon(QIcon(":/icons/picker"));
-  ui.areaHotkeyWidget->setIcon        (QIcon(":/icons/area"));
-  ui.openHotkeyWidget->setIcon        (QIcon(":/icons/lightscreen.small"));
-  ui.directoryHotkeyWidget->setIcon   (QIcon(":/icons/folder"));
-
-  // Version
-  ui.versionLabel->setText(tr("Version %1").arg(qApp->applicationVersion()));
-
-  setEnabled(false); // We disable the widgets to prevent any user interaction until the settings have loaded.
-  setUpdatesEnabled(false);
-
-  //
-  // Connections
-  //
-
-  connect(ui.buttonBox              , SIGNAL(clicked(QAbstractButton*)), this    , SLOT(dialogButtonClicked(QAbstractButton*)));
-  connect(ui.buttonBox              , SIGNAL(accepted())               , this    , SLOT(accepted()));
-  connect(ui.buttonBox              , SIGNAL(rejected())               , this    , SLOT(rejected()));
-  connect(ui.namingOptionsButton    , SIGNAL(clicked())                , this    , SLOT(namingOptions()));
-
-  connect(ui.prefixLineEdit         , SIGNAL(textChanged(QString))     , this    , SLOT(updatePreview()));
-  connect(ui.formatComboBox         , SIGNAL(currentIndexChanged(int)) , this    , SLOT(updatePreview()));
-  connect(ui.namingComboBox         , SIGNAL(currentIndexChanged(int)) , this    , SLOT(updatePreview()));
-
-  connect(ui.browsePushButton       , SIGNAL(clicked())                , this    , SLOT(browse()));
-  connect(ui.checkUpdatesPushButton , SIGNAL(clicked())                , this    , SLOT(checkUpdatesNow()));
-  connect(ui.historyPushButton      , SIGNAL(clicked())                , this    , SLOT(viewHistory()));
-
-  connect(ui.screenCheckBox      , SIGNAL(toggled(bool)), ui.screenHotkeyWidget   , SLOT(setEnabled(bool)));
-  connect(ui.areaCheckBox        , SIGNAL(toggled(bool)), ui.areaHotkeyWidget     , SLOT(setEnabled(bool)));
-  connect(ui.windowCheckBox      , SIGNAL(toggled(bool)), ui.windowHotkeyWidget   , SLOT(setEnabled(bool)));
-  connect(ui.windowPickerCheckBox, SIGNAL(toggled(bool)), ui.windowPickerHotkeyWidget, SLOT(setEnabled(bool)));
-  connect(ui.openCheckBox        , SIGNAL(toggled(bool)), ui.openHotkeyWidget     , SLOT(setEnabled(bool)));
-  connect(ui.directoryCheckBox   , SIGNAL(toggled(bool)), ui.directoryHotkeyWidget, SLOT(setEnabled(bool)));
-
-  // "Save as" disables the file target input field.
-  connect(ui.saveAsCheckBox      , SIGNAL(toggled(bool)), ui.targetLineEdit       , SLOT(setDisabled(bool)));
-  connect(ui.saveAsCheckBox      , SIGNAL(toggled(bool)), ui.browsePushButton     , SLOT(setDisabled(bool)));
-  connect(ui.saveAsCheckBox      , SIGNAL(toggled(bool)), ui.directoryLabel       , SLOT(setDisabled(bool)));
-
-  connect(ui.startupCheckBox     , SIGNAL(toggled(bool)), ui.startupHideCheckBox  , SLOT(setEnabled(bool)));
-  connect(ui.qualitySlider       , SIGNAL(valueChanged(int)), ui.qualityValueLabel, SLOT(setNum(int)));
-  connect(ui.trayCheckBox        , SIGNAL(toggled(bool)), ui.messageCheckBox      , SLOT(setEnabled(bool)));
-
-  // Auto-upload disables the default action button in the previews.
-  connect(ui.uploadCheckBox      , SIGNAL(toggled(bool)), ui.previewDefaultActionLabel   , SLOT(setDisabled(bool)));
-  connect(ui.uploadCheckBox      , SIGNAL(toggled(bool)), ui.previewDefaultActionComboBox, SLOT(setDisabled(bool)));
-  connect(ui.directoryCheckBox   , SIGNAL(toggled(bool)), ui.directoryHotkeyWidget, SLOT(setEnabled(bool)));
-
-  connect(ui.moreInformationLabel, SIGNAL(linkActivated(QString))      , this, SLOT(openUrl(QString)));
-
-  connect(ui.languageComboBox    , SIGNAL(currentIndexChanged(QString)), this, SLOT(languageChange(QString)));
-
-  connect(ui.mainLabel ,        SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
-  connect(ui.licenseAboutLabel, SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
-  connect(ui.linksLabel,        SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
-
-  //
-  // Languages
-  //
-
-  QDir languages(":/translations");
-
-  ui.languageComboBox->addItem("English");
-
-  foreach (QString language, languages.entryList()) {
-    ui.languageComboBox->addItem(language);
-  }
-}
-
-void OptionsDialog::namingOptions()
-{
-  NamingDialog namingDialog((Screenshot::Naming) ui.namingComboBox->currentIndex());
-
-  namingDialog.exec();
-  flipToggled(settings()->value("options/flip").toBool());
-  updatePreview();
-}
-
-QSettings *OptionsDialog::settings() const
-{
-  return ScreenshotManager::instance()->settings();
-}
-
-/*
- * Slots
- */
-
 void OptionsDialog::accepted()
 {
   if (hotkeyCollision()) {
@@ -204,76 +99,9 @@ void OptionsDialog::accepted()
   accept();
 }
 
-void OptionsDialog::browse()
-{
-  QString fileName = QFileDialog::getExistingDirectory(this,
-                                                       tr("Select where you want to save the screenshots"),
-                                                       ui.targetLineEdit->text());
-
-  if (fileName.isEmpty())
-    return;
-
-  ui.targetLineEdit->setText(fileName);
-}
-
 void OptionsDialog::checkUpdatesNow()
 {
   Updater::instance()->checkWithFeedback();
-}
-
-void OptionsDialog::dialogButtonClicked(QAbstractButton *button)
-{
-  if (ui.buttonBox->buttonRole(button) == QDialogButtonBox::ResetRole) {
-    QMessageBox msgBox;
-    msgBox.setWindowTitle(tr("Lightscreen - Restore Default Options"));
-    msgBox.setText(tr("Restoring the default options will cause you to lose all of your current configuration."));
-    msgBox.setIcon(QMessageBox::Warning);
-
-    QPushButton *restoreButton     = msgBox.addButton(tr("Restore"), QMessageBox::ActionRole);
-    QPushButton *dontRestoreButton = msgBox.addButton(tr("Don't Restore"), QMessageBox::ActionRole);
-
-    msgBox.setDefaultButton(dontRestoreButton);
-    msgBox.exec();
-
-    Q_UNUSED(restoreButton)
-
-    if (msgBox.clickedButton() == dontRestoreButton)
-      return;
-
-    QString language = settings()->value("options/language").toString(); // Only mantain language.
-
-    settings()->clear();
-    settings()->setValue("options/language", language);
-
-    loadSettings();
-  }
-}
-
-void OptionsDialog::flipToggled(bool checked)
-{
-  setUpdatesEnabled(false);
-
-  ui.filenameLayout->removeWidget(ui.prefixLineEdit);
-  ui.filenameLayout->removeWidget(ui.namingComboBox);
-
-  if (checked) {
-    ui.filenameLayout->addWidget(ui.namingComboBox);
-    ui.filenameLayout->addWidget(ui.prefixLineEdit);
-  }
-  else {
-    ui.filenameLayout->addWidget(ui.prefixLineEdit);
-    ui.filenameLayout->addWidget(ui.namingComboBox);
-  }
-
-  if (ui.prefixLineEdit->text() == tr("screenshot.")
-   && checked)
-    ui.prefixLineEdit->setText(tr(".screenshot"));
-
-  if (ui.prefixLineEdit->text() == tr(".screenshot")
-   && !checked)
-    ui.prefixLineEdit->setText(tr("screenshot."));
-
-  setUpdatesEnabled(true); // Avoids flicker
 }
 
 void OptionsDialog::languageChange(QString language)
@@ -281,107 +109,6 @@ void OptionsDialog::languageChange(QString language)
   os::translate(language);
 }
 
-void OptionsDialog::openUrl(QString url)
-{
-  if (url == "#aboutqt") {
-    qApp->aboutQt();
-  }
-  else {
-    QDesktopServices::openUrl(QUrl(url));
-  }
-}
-
-void OptionsDialog::rejected()
-{
-  languageChange(settings()->value("options/language").toString()); // Revert language to default.
-}
-
-void OptionsDialog::saveSettings()
-{
-  settings()->beginGroup("file");
-    settings()->setValue("format", ui.formatComboBox->currentIndex());
-    settings()->setValue("prefix", ui.prefixLineEdit->text());
-    settings()->setValue("naming", ui.namingComboBox->currentIndex());
-    settings()->setValue("target", ui.targetLineEdit->text());
-    settings()->setValue("enabled", ui.fileGroupBox->isChecked());
-  settings()->endGroup();
-
-  settings()->beginGroup("options");
-
-    settings()->setValue("startup", ui.startupCheckBox->isChecked());
-    settings()->setValue("startupHide", ui.startupHideCheckBox->isChecked());
-    settings()->setValue("hide", ui.hideCheckBox->isChecked());
-    settings()->setValue("delay", ui.delaySpinBox->value());
-    settings()->setValue("tray", ui.trayCheckBox->isChecked());
-    settings()->setValue("message", ui.messageCheckBox->isChecked());
-    settings()->setValue("quality", ui.qualitySlider->value());
-    settings()->setValue("playSound", ui.playSoundCheckBox->isChecked());
-    // We save the explicit string because addition/removal of language files can cause it to change
-    settings()->setValue("language", ui.languageComboBox->currentText());
-    // This settings is inverted because the first iteration of the Updater did not have a settings but instead relied on the messagebox choice of the user.
-    settings()->setValue("disableUpdater", !ui.updaterCheckBox->isChecked());
-    settings()->setValue("magnify", ui.magnifyCheckBox->isChecked());
-    settings()->setValue("cursor", ui.cursorCheckBox->isChecked());
-    settings()->setValue("saveAs", ui.saveAsCheckBox->isChecked());
-    settings()->setValue("preview", ui.previewGroupBox->isChecked());
-    settings()->setValue("previewSize", ui.previewSizeSpinBox->value());
-    settings()->setValue("previewPosition", ui.previewPositionComboBox->currentIndex());
-    settings()->setValue("previewAutoclose", ui.previewAutocloseCheckBox->isChecked());
-    settings()->setValue("previewAutocloseTime", ui.previewAutocloseTimeSpinBox->value());
-    settings()->setValue("previewAutocloseAction", ui.previewAutocloseActionComboBox->currentIndex());
-    settings()->setValue("previewDefaultAction", ui.previewDefaultActionComboBox->currentIndex());
-    settings()->setValue("areaAutoclose", ui.areaAutocloseCheckBox->isChecked());
-    settings()->setValue("history", ui.historyCheckBox->isChecked());
-
-    // Advanced
-    settings()->setValue("disableHideAlert", !ui.warnHideCheckBox->isChecked());
-    settings()->setValue("clipboard", ui.clipboardCheckBox->isChecked());
-    settings()->setValue("optipng", ui.optiPngCheckBox->isChecked());
-    settings()->setValue("currentMonitor", ui.currentMonitorCheckBox->isChecked());
-    settings()->setValue("replace", ui.replaceCheckBox->isChecked());
-
-    //Upload
-    settings()->setValue("uploadAuto", ui.uploadCheckBox->isChecked());
-  settings()->endGroup();
-
-  settings()->beginGroup("actions");
-
-    settings()->beginGroup("screen");
-      settings()->setValue("enabled", ui.screenCheckBox->isChecked());
-      settings()->setValue("hotkey", ui.screenHotkeyWidget->hotkey());
-    settings()->endGroup();
-
-    settings()->beginGroup("area");
-      settings()->setValue("enabled", ui.areaCheckBox->isChecked());
-      settings()->setValue("hotkey", ui.areaHotkeyWidget->hotkey());
-    settings()->endGroup();
-
-    settings()->beginGroup("window");
-      settings()->setValue("enabled", ui.windowCheckBox->isChecked());
-      settings()->setValue("hotkey", ui.windowHotkeyWidget->hotkey());
-    settings()->endGroup();
-
-    settings()->beginGroup("windowPicker");
-      settings()->setValue("enabled", ui.windowPickerCheckBox->isChecked());
-      settings()->setValue("hotkey", ui.windowPickerHotkeyWidget->hotkey());
-    settings()->endGroup();
-
-    settings()->beginGroup("open");
-      settings()->setValue("enabled", ui.openCheckBox->isChecked());
-      settings()->setValue("hotkey", ui.openHotkeyWidget->hotkey());
-    settings()->endGroup();
-
-    settings()->beginGroup("directory");
-      settings()->setValue("enabled", ui.directoryCheckBox->isChecked());
-      settings()->setValue("hotkey", ui.directoryHotkeyWidget->hotkey());
-    settings()->endGroup();
-
-  settings()->endGroup();
-}
-
-/*
- * Private
- */
 void OptionsDialog::loadSettings()
 {
   settings()->sync();
@@ -530,11 +257,350 @@ void OptionsDialog::loadSettings()
   setUpdatesEnabled(true);
 }
 
+void OptionsDialog::openUrl(QString url)
+{
+  if (url == "#aboutqt") {
+    qApp->aboutQt();
+  }
+  else {
+    QDesktopServices::openUrl(QUrl(url));
+  }
+}
+
+void OptionsDialog::rejected()
+{
+  languageChange(settings()->value("options/language").toString()); // Revert language to default.
+}
+
+void OptionsDialog::saveSettings()
+{
+  settings()->beginGroup("file");
+    settings()->setValue("format", ui.formatComboBox->currentIndex());
+    settings()->setValue("prefix", ui.prefixLineEdit->text());
+    settings()->setValue("naming", ui.namingComboBox->currentIndex());
+    settings()->setValue("target", ui.targetLineEdit->text());
+    settings()->setValue("enabled", ui.fileGroupBox->isChecked());
+  settings()->endGroup();
+
+  settings()->beginGroup("options");
+
+    settings()->setValue("startup", ui.startupCheckBox->isChecked());
+    settings()->setValue("startupHide", ui.startupHideCheckBox->isChecked());
+    settings()->setValue("hide", ui.hideCheckBox->isChecked());
+    settings()->setValue("delay", ui.delaySpinBox->value());
+    settings()->setValue("tray", ui.trayCheckBox->isChecked());
+    settings()->setValue("message", ui.messageCheckBox->isChecked());
+    settings()->setValue("quality", ui.qualitySlider->value());
+    settings()->setValue("playSound", ui.playSoundCheckBox->isChecked());
+    // We save the explicit string because addition/removal of language files can cause it to change
+    settings()->setValue("language", ui.languageComboBox->currentText());
+    // This settings is inverted because the first iteration of the Updater did not have a settings but instead relied on the messagebox choice of the user.
+    settings()->setValue("disableUpdater", !ui.updaterCheckBox->isChecked());
+    settings()->setValue("magnify", ui.magnifyCheckBox->isChecked());
+    settings()->setValue("cursor", ui.cursorCheckBox->isChecked());
+    settings()->setValue("saveAs", ui.saveAsCheckBox->isChecked());
+    settings()->setValue("preview", ui.previewGroupBox->isChecked());
+    settings()->setValue("previewSize", ui.previewSizeSpinBox->value());
+    settings()->setValue("previewPosition", ui.previewPositionComboBox->currentIndex());
+    settings()->setValue("previewAutoclose", ui.previewAutocloseCheckBox->isChecked());
+    settings()->setValue("previewAutocloseTime", ui.previewAutocloseTimeSpinBox->value());
+    settings()->setValue("previewAutocloseAction", ui.previewAutocloseActionComboBox->currentIndex());
+    settings()->setValue("previewDefaultAction", ui.previewDefaultActionComboBox->currentIndex());
+    settings()->setValue("areaAutoclose", ui.areaAutocloseCheckBox->isChecked());
+    settings()->setValue("history", ui.historyCheckBox->isChecked());
+
+    // Advanced
+    settings()->setValue("disableHideAlert", !ui.warnHideCheckBox->isChecked());
+    settings()->setValue("clipboard", ui.clipboardCheckBox->isChecked());
+    settings()->setValue("optipng", ui.optiPngCheckBox->isChecked());
+    settings()->setValue("currentMonitor", ui.currentMonitorCheckBox->isChecked());
+    settings()->setValue("replace", ui.replaceCheckBox->isChecked());
+
+    //Upload
+    settings()->setValue("uploadAuto", ui.uploadCheckBox->isChecked());
+  settings()->endGroup();
+
+  settings()->beginGroup("actions");
+
+    settings()->beginGroup("screen");
+      settings()->setValue("enabled", ui.screenCheckBox->isChecked());
+      settings()->setValue("hotkey", ui.screenHotkeyWidget->hotkey());
+    settings()->endGroup();
+
+    settings()->beginGroup("area");
+      settings()->setValue("enabled", ui.areaCheckBox->isChecked());
+      settings()->setValue("hotkey", ui.areaHotkeyWidget->hotkey());
+    settings()->endGroup();
+
+    settings()->beginGroup("window");
+      settings()->setValue("enabled", ui.windowCheckBox->isChecked());
+      settings()->setValue("hotkey", ui.windowHotkeyWidget->hotkey());
+    settings()->endGroup();
+
+    settings()->beginGroup("windowPicker");
+      settings()->setValue("enabled", ui.windowPickerCheckBox->isChecked());
+      settings()->setValue("hotkey", ui.windowPickerHotkeyWidget->hotkey());
+    settings()->endGroup();
+
+    settings()->beginGroup("open");
+      settings()->setValue("enabled", ui.openCheckBox->isChecked());
+      settings()->setValue("hotkey", ui.openHotkeyWidget->hotkey());
+    settings()->endGroup();
+
+    settings()->beginGroup("directory");
+      settings()->setValue("enabled", ui.directoryCheckBox->isChecked());
+      settings()->setValue("hotkey", ui.directoryHotkeyWidget->hotkey());
+    settings()->endGroup();
+
+  settings()->endGroup();
+}
+
+void OptionsDialog::updatePreview()
+{
+  Screenshot::NamingOptions options;
+
+  options.naming       = (Screenshot::Naming)ui.namingComboBox->currentIndex();
+  options.flip         = settings()->value("options/flip").toBool();
+  options.leadingZeros = settings()->value("options/naming/leadingZeros").toInt();
+  options.dateFormat   = settings()->value("options/naming/dateFormat").toString();
+
+  ui.namingOptionsButton->setDisabled((options.naming == Screenshot::Empty));
+
+  QString preview = Screenshot::getName(options,
+                                        ui.prefixLineEdit->text(),
+                                        QDir(ui.targetLineEdit->text()));
+
+  preview = QString("%1.%2").arg(preview).arg(ui.formatComboBox->currentText().toLower());
+
+  if (preview.length() >= 40) {
+    preview.truncate(37);
+    preview.append("...");
+  }
+
+  ui.previewLabel->setText(preview);
+}
+
 void OptionsDialog::viewHistory()
 {
     HistoryDialog historyDialog(this);
     historyDialog.exec();
 }
+
+//
+
+bool OptionsDialog::event(QEvent* event)
+{
+  if (event->type() == QEvent::LanguageChange) {
+
+    // ComboBoxes revert to the first index when translated:
+    int naming = ui.namingComboBox->currentIndex();
+    int format = ui.formatComboBox->currentIndex();
+    int previewPosition  = ui.previewPositionComboBox->currentIndex();
+    int previewAutoclose = ui.previewAutocloseActionComboBox->currentIndex();
+    int previewDefault   = ui.previewDefaultActionComboBox->currentIndex();
+
+    ui.retranslateUi(this);
+
+    // Restoring comboboxes
+    ui.namingComboBox->setCurrentIndex(naming);
+    ui.formatComboBox->setCurrentIndex(format);
+    ui.previewPositionComboBox->setCurrentIndex(previewPosition);
+    ui.previewAutocloseActionComboBox->setCurrentIndex(previewAutoclose);
+    ui.previewDefaultActionComboBox->setCurrentIndex(previewDefault);
+
+    updatePreview();
+    resize(minimumSizeHint());
+  }
+  else if (event->type() == QEvent::Close) {
+    if (!settings()->contains("file/format")) {
+      // I'm afraid I can't let you do that, Dave.
+      event->ignore();
+      return false;
+    }
+  }
+
+  return QDialog::event(event);
+}
+
+#ifdef Q_WS_WIN
+// Qt does not send the print screen key as a regular QKeyPress event, so we must use the Windows API
+bool OptionsDialog::winEvent(MSG *message, long *result)
+{
+  if ((message->message == WM_KEYUP || message->message == WM_SYSKEYUP)
+      && message->wParam == VK_SNAPSHOT) {
+        qApp->postEvent(qApp->focusWidget(), new QKeyEvent(QEvent::KeyPress, Qt::Key_Print,  qApp->keyboardModifiers()));
+  }
+
+  return QDialog::winEvent(message, result);
+}
+#endif
+
+//
+
+void OptionsDialog::browse()
+{
+  QString fileName = QFileDialog::getExistingDirectory(this,
+                                                       tr("Select where you want to save the screenshots"),
+                                                       ui.targetLineEdit->text());
+
+  if (fileName.isEmpty())
+    return;
+
+  ui.targetLineEdit->setText(fileName);
+}
+
+void OptionsDialog::dialogButtonClicked(QAbstractButton *button)
+{
+  if (ui.buttonBox->buttonRole(button) == QDialogButtonBox::ResetRole) {
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(tr("Lightscreen - Restore Default Options"));
+    msgBox.setText(tr("Restoring the default options will cause you to lose all of your current configuration."));
+    msgBox.setIcon(QMessageBox::Warning);
+
+    QPushButton *restoreButton     = msgBox.addButton(tr("Restore"), QMessageBox::ActionRole);
+    QPushButton *dontRestoreButton = msgBox.addButton(tr("Don't Restore"), QMessageBox::ActionRole);
+
+    msgBox.setDefaultButton(dontRestoreButton);
+    msgBox.exec();
+
+    Q_UNUSED(restoreButton)
+
+    if (msgBox.clickedButton() == dontRestoreButton)
+      return;
+
+    QString language = settings()->value("options/language").toString(); // Only mantain language.
+
+    settings()->clear();
+    settings()->setValue("options/language", language);
+
+    loadSettings();
+  }
+}
+
+void OptionsDialog::flipToggled(bool checked)
+{
+  setUpdatesEnabled(false);
+
+  ui.filenameLayout->removeWidget(ui.prefixLineEdit);
+  ui.filenameLayout->removeWidget(ui.namingComboBox);
+
+  if (checked) {
+    ui.filenameLayout->addWidget(ui.namingComboBox);
+    ui.filenameLayout->addWidget(ui.prefixLineEdit);
+  }
+  else {
+    ui.filenameLayout->addWidget(ui.prefixLineEdit);
+    ui.filenameLayout->addWidget(ui.namingComboBox);
+  }
+
+  if (ui.prefixLineEdit->text() == tr("screenshot.")
+   && checked)
+    ui.prefixLineEdit->setText(tr(".screenshot"));
+
+  if (ui.prefixLineEdit->text() == tr(".screenshot")
+   && !checked)
+    ui.prefixLineEdit->setText(tr("screenshot."));
+
+  setUpdatesEnabled(true); // Avoids flicker
+}
+
+void OptionsDialog::init()
+{
+  // Make the scroll area share the Tab Widget background color
+  QPalette optionsPalette = ui.optionsScrollArea->palette();
+  optionsPalette.setColor(QPalette::Window,  ui.tabWidget->palette().color(QPalette::Base));
+  ui.optionsScrollArea->setPalette(optionsPalette);
+
+  ui.buttonBox->addButton(new QPushButton(" " + tr("Restore Defaults") + " ", this), QDialogButtonBox::ResetRole);
+
+  // Set up the autocomplete for the directory.
+  QCompleter *completer = new QCompleter(this);
+  completer->setModel(new QDirModel(QStringList(), QDir::Dirs, QDir::Name, completer));
+  ui.targetLineEdit->setCompleter(completer);
+
+  // HotkeyWidget icons.
+  ui.screenHotkeyWidget->setIcon      (QIcon(":/icons/screen"));
+  ui.windowHotkeyWidget->setIcon      (QIcon(":/icons/window"));
+  ui.windowPickerHotkeyWidget->setIcon(QIcon(":/icons/picker"));
+  ui.areaHotkeyWidget->setIcon        (QIcon(":/icons/area"));
+  ui.openHotkeyWidget->setIcon        (QIcon(":/icons/lightscreen.small"));
+  ui.directoryHotkeyWidget->setIcon   (QIcon(":/icons/folder"));
+
+  // Version
+  ui.versionLabel->setText(tr("Version %1").arg(qApp->applicationVersion()));
+
+  setEnabled(false); // We disable the widgets to prevent any user interaction until the settings have loaded.
+  setUpdatesEnabled(false);
+
+  //
+  // Connections
+  //
+
+  connect(ui.buttonBox              , SIGNAL(clicked(QAbstractButton*)), this    , SLOT(dialogButtonClicked(QAbstractButton*)));
+  connect(ui.buttonBox              , SIGNAL(accepted())               , this    , SLOT(accepted()));
+  connect(ui.buttonBox              , SIGNAL(rejected())               , this    , SLOT(rejected()));
+  connect(ui.namingOptionsButton    , SIGNAL(clicked())                , this    , SLOT(namingOptions()));
+
+  connect(ui.prefixLineEdit         , SIGNAL(textChanged(QString))     , this    , SLOT(updatePreview()));
+  connect(ui.formatComboBox         , SIGNAL(currentIndexChanged(int)) , this    , SLOT(updatePreview()));
+  connect(ui.namingComboBox         , SIGNAL(currentIndexChanged(int)) , this    , SLOT(updatePreview()));
+
+  connect(ui.browsePushButton       , SIGNAL(clicked())                , this    , SLOT(browse()));
+  connect(ui.checkUpdatesPushButton , SIGNAL(clicked())                , this    , SLOT(checkUpdatesNow()));
+  connect(ui.historyPushButton      , SIGNAL(clicked())                , this    , SLOT(viewHistory()));
+
+  connect(ui.screenCheckBox      , SIGNAL(toggled(bool)), ui.screenHotkeyWidget   , SLOT(setEnabled(bool)));
+  connect(ui.areaCheckBox        , SIGNAL(toggled(bool)), ui.areaHotkeyWidget     , SLOT(setEnabled(bool)));
+  connect(ui.windowCheckBox      , SIGNAL(toggled(bool)), ui.windowHotkeyWidget   , SLOT(setEnabled(bool)));
+  connect(ui.windowPickerCheckBox, SIGNAL(toggled(bool)), ui.windowPickerHotkeyWidget, SLOT(setEnabled(bool)));
+  connect(ui.openCheckBox        , SIGNAL(toggled(bool)), ui.openHotkeyWidget     , SLOT(setEnabled(bool)));
+  connect(ui.directoryCheckBox   , SIGNAL(toggled(bool)), ui.directoryHotkeyWidget, SLOT(setEnabled(bool)));
+
+  // "Save as" disables the file target input field.
+  connect(ui.saveAsCheckBox      , SIGNAL(toggled(bool)), ui.targetLineEdit       , SLOT(setDisabled(bool)));
+  connect(ui.saveAsCheckBox      , SIGNAL(toggled(bool)), ui.browsePushButton     , SLOT(setDisabled(bool)));
+  connect(ui.saveAsCheckBox      , SIGNAL(toggled(bool)), ui.directoryLabel       , SLOT(setDisabled(bool)));
+
+  connect(ui.startupCheckBox     , SIGNAL(toggled(bool)), ui.startupHideCheckBox  , SLOT(setEnabled(bool)));
+  connect(ui.qualitySlider       , SIGNAL(valueChanged(int)), ui.qualityValueLabel, SLOT(setNum(int)));
+  connect(ui.trayCheckBox        , SIGNAL(toggled(bool)), ui.messageCheckBox      , SLOT(setEnabled(bool)));
+
+  // Auto-upload disables the default action button in the previews.
+  connect(ui.uploadCheckBox      , SIGNAL(toggled(bool)), ui.previewDefaultActionLabel   , SLOT(setDisabled(bool)));
+  connect(ui.uploadCheckBox      , SIGNAL(toggled(bool)), ui.previewDefaultActionComboBox, SLOT(setDisabled(bool)));
+  connect(ui.directoryCheckBox   , SIGNAL(toggled(bool)), ui.directoryHotkeyWidget, SLOT(setEnabled(bool)));
+
+  connect(ui.moreInformationLabel, SIGNAL(linkActivated(QString))      , this, SLOT(openUrl(QString)));
+
+  connect(ui.languageComboBox    , SIGNAL(currentIndexChanged(QString)), this, SLOT(languageChange(QString)));
+
+  connect(ui.mainLabel ,        SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
+  connect(ui.licenseAboutLabel, SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
+  connect(ui.linksLabel,        SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
+
+  //
+  // Languages
+  //
+
+  QDir languages(":/translations");
+
+  ui.languageComboBox->addItem("English");
+
+  foreach (QString language, languages.entryList()) {
+    ui.languageComboBox->addItem(language);
+  }
+}
+
+void OptionsDialog::namingOptions()
+{
+  NamingDialog namingDialog((Screenshot::Naming) ui.namingComboBox->currentIndex());
+
+  namingDialog.exec();
+  flipToggled(settings()->value("options/flip").toBool());
+  updatePreview();
+}
+
+//
 
 bool OptionsDialog::hotkeyCollision()
 {
@@ -653,74 +719,7 @@ bool OptionsDialog::hotkeyCollision()
   return false;
 }
 
-void OptionsDialog::updatePreview()
+QSettings *OptionsDialog::settings() const
 {
-  Screenshot::NamingOptions options;
-
-  options.naming       = (Screenshot::Naming)ui.namingComboBox->currentIndex();
-  options.flip         = settings()->value("options/flip").toBool();
-  options.leadingZeros = settings()->value("options/naming/leadingZeros").toInt();
-  options.dateFormat   = settings()->value("options/naming/dateFormat").toString();
-
-  ui.namingOptionsButton->setDisabled((options.naming == Screenshot::Empty));
-
-  QString preview = Screenshot::getName(options,
-                                        ui.prefixLineEdit->text(),
-                                        QDir(ui.targetLineEdit->text()));
-
-  preview = QString("%1.%2").arg(preview).arg(ui.formatComboBox->currentText().toLower());
-
-  if (preview.length() >= 40) {
-    preview.truncate(37);
-    preview.append("...");
-  }
-
-  ui.previewLabel->setText(preview);
+  return ScreenshotManager::instance()->settings();
 }
-
-bool OptionsDialog::event(QEvent* event)
-{
-  if (event->type() == QEvent::LanguageChange) {
-
-    // ComboBoxes revert to the first index when translated:
-    int naming = ui.namingComboBox->currentIndex();
-    int format = ui.formatComboBox->currentIndex();
-    int previewPosition  = ui.previewPositionComboBox->currentIndex();
-    int previewAutoclose = ui.previewAutocloseActionComboBox->currentIndex();
-    int previewDefault   = ui.previewDefaultActionComboBox->currentIndex();
-
-    ui.retranslateUi(this);
-
-    // Restoring comboboxes
-    ui.namingComboBox->setCurrentIndex(naming);
-    ui.formatComboBox->setCurrentIndex(format);
-    ui.previewPositionComboBox->setCurrentIndex(previewPosition);
-    ui.previewAutocloseActionComboBox->setCurrentIndex(previewAutoclose);
-    ui.previewDefaultActionComboBox->setCurrentIndex(previewDefault);
-
-    updatePreview();
-    resize(minimumSizeHint());
-  }
-  else if (event->type() == QEvent::Close) {
-    if (!settings()->contains("file/format")) {
-      // I'm afraid I can't let you do that, Dave.
-      event->ignore();
-      return false;
-    }
-  }
-
-  return QDialog::event(event);
-}
-
-#ifdef Q_WS_WIN
-// Qt does not send the print screen key as a regular QKeyPress event, so we must use the Windows API
-bool OptionsDialog::winEvent(MSG *message, long *result)
-{
-  if ((message->message == WM_KEYUP || message->message == WM_SYSKEYUP)
-      && message->wParam == VK_SNAPSHOT) {
-        qApp->postEvent(qApp->focusWidget(), new QKeyEvent(QEvent::KeyPress, Qt::Key_Print,  qApp->keyboardModifiers()));
-  }
-
-  return QDialog::winEvent(message, result);
-}
-#endif

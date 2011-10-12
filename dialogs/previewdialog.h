@@ -34,40 +34,36 @@ public:
   void add(Screenshot* screenshot);
   int count() const;
 
-  static PreviewDialog *instance();
-  static bool isActive();
-
 public slots:
   void setWidth(int w)  { resize(w, height()); }
   void setHeight(int h) { resize(width(), h);  }
 
 signals:
   void acceptAll();
-  void uploadAll();
   void rejectAll();
+  void uploadAll();
 
 private slots:
   void closePreview();
-  void relocate();
-  void previous();
-  void next();
-  void indexChanged(int i);
   void enlargePreview();
+  void indexChanged(int i);
+  void next();
+  void previous();
+  void relocate();
 
 protected:
-  void timerEvent(QTimerEvent *event);
   bool event(QEvent *event);
+  void timerEvent(QTimerEvent *event);
 
 private:
-  static PreviewDialog* mInstance;
-  int mSize;
-  int mPosition; //0: top left, 1: top right, 2: bottom left, 3: bottom rigth (default)
   int mAutoclose;
-  int mAutocloseReset;
   int mAutocloseAction;
-  QStackedLayout* mStack;
+  int mAutocloseReset;
+  int mPosition; //0: top left, 1: top right, 2: bottom left, 3: bottom rigth (default)
+  int mSize;
   QPushButton*    mNextButton;
   QPushButton*    mPrevButton;
+  QStackedLayout* mStack;
 };
 
 #endif // PREVIEWDIALOG_H

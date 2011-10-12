@@ -6,16 +6,17 @@
 #include "../tools/uploader.h"
 #include "../tools/screenshotmanager.h"
 
-#include <QMessageBox>
-#include <QFile>
-#include <QDesktopServices>
-#include <QFileSystemWatcher>
-#include <QUrl>
-#include <QMenu>
-#include <QFileInfo>
 #include <QClipboard>
+#include <QDesktopServices>
 #include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QFileSystemWatcher>
+#include <QMenu>
+#include <QMessageBox>
 #include <QSortFilterProxyModel>
+#include <QUrl>
+
 #include <QDebug>
 
 HistoryDialog::HistoryDialog(QWidget *parent) :
@@ -69,6 +70,20 @@ HistoryDialog::~HistoryDialog()
     delete ui;
 }
 
+void HistoryDialog::clear()
+{
+  if (QMessageBox::question(this,
+                            tr("Clearing the screenshot history"),
+                            tr("Are you sure you want to clear your entire screenshot history?\nThis cannot be undone."),
+                            tr("Clear History"),
+                            tr("Don't Clear")) == 1) {
+    return;
+  }
+
+  QFile::remove(ScreenshotManager::instance()->historyPath());
+  close();
+}
+
 void HistoryDialog::contextMenu(QPoint point)
 {
   mContextIndex = ui->tableView->indexAt(point);;
@@ -101,28 +116,6 @@ void HistoryDialog::copy()
 void HistoryDialog::location()
 {
   QDesktopServices::openUrl("file:///" + QFileInfo(mContextIndex.data().toString()).absolutePath());
-}
-
-void HistoryDialog::selectionChanged(QItemSelection selected, QItemSelection deselected)
-{
-  Q_UNUSED(deselected);
-
-  QModelIndex index = selected.indexes().at(0);
-
-  QString screenshot, url;
-
-  if (index.column() == 0) {
-    screenshot = index.data().toString();
-    url = ui->tableView->model()->index(index.row(), 1).data().toString();
-  }
-  else {
-    screenshot = ui->tableView->model()->index(index.row(), 0).data().toString();
-    url = index.data().toString();
-  }
-
-  mSelectedScreenshot = screenshot;
-
-  ui->uploadButton->setEnabled((url == QObject::tr("- not uploaded -") && QFile::exists(screenshot)));
 }
 
 void HistoryDialog::open(QModelIndex index)
@@ -163,24 +156,33 @@ void HistoryDialog::reloadHistory()
   ui->tableView->verticalHeader()->hide();
 }
 
+void HistoryDialog::selectionChanged(QItemSelection selected, QItemSelection deselected)
+{
+  Q_UNUSED(deselected);
+
+  QModelIndex index = selected.indexes().at(0);
+
+  QString screenshot, url;
+
+  if (index.column() == 0) {
+    screenshot = index.data().toString();
+    url = ui->tableView->model()->index(index.row(), 1).data().toString();
+  }
+  else {
+    screenshot = ui->tableView->model()->index(index.row(), 0).data().toString();
+    url = index.data().toString();
+  }
+
+  mSelectedScreenshot = screenshot;
+
+  ui->uploadButton->setEnabled((url == QObject::tr("- not uploaded -") && QFile::exists(screenshot)));
+}
+
+
 void HistoryDialog::upload()
 {
   Uploader::instance()->upload(mSelectedScreenshot);
   ui->uploadButton->setEnabled(false);
-}
-
-void HistoryDialog::clear()
-{
-  if (QMessageBox::question(this,
-                            tr("Clearing the screenshot history"),
-                            tr("Are you sure you want to clear your entire screenshot history?\nThis cannot be undone."),
-                            tr("Clear History"),
-                            tr("Don't Clear")) == 1) {
-    return;
-  }
-
-  QFile::remove(ScreenshotManager::instance()->historyPath());
-  close();
 }
 
 bool HistoryDialog::eventFilter(QObject *object, QEvent *event)

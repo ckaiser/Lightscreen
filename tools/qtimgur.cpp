@@ -18,11 +18,12 @@
  */
 #include "qtimgur.h"
 
+#include <QFile>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
-#include <QFile>
 #include <QXmlStreamReader>
+
 #include <QDebug>
 
 QtImgur::QtImgur(const QString &APIKey, QObject *parent) : QObject(parent), mAPIKey(APIKey)
@@ -30,6 +31,19 @@ QtImgur::QtImgur(const QString &APIKey, QObject *parent) : QObject(parent), mAPI
   mNetworkManager = new QNetworkAccessManager(this);
 
   connect(mNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(reply(QNetworkReply*)));
+}
+
+void QtImgur::cancel(const QString &fileName)
+{
+  QNetworkReply *reply = mFiles.key(fileName);
+
+  if (!reply) {
+    return;
+  }
+
+  reply->abort();
+  mFiles.remove(reply);
+  reply->deleteLater();
 }
 
 void QtImgur::upload(const QString &fileName)
@@ -57,17 +71,26 @@ void QtImgur::upload(const QString &fileName)
   mFiles.insert(reply, fileName);
 }
 
-void QtImgur::cancel(const QString &fileName)
+void QtImgur::progress(qint64 bytesSent, qint64 bytesTotal)
 {
-  QNetworkReply *reply = mFiles.key(fileName);
+  qint64 totalSent, totalTotal;
 
-  if (!reply) {
-    return;
+  QNetworkReply *senderReply = qobject_cast<QNetworkReply*>(sender());
+
+  senderReply->setProperty("bytesSent", bytesSent);
+  senderReply->setProperty("bytesTotal", bytesTotal);
+
+  totalSent = bytesSent;
+  totalTotal = bytesTotal;
+
+  foreach (QNetworkReply *reply, mFiles.keys()) {
+    if (reply != senderReply) {
+      totalSent  += reply->property("bytesSent").toLongLong();
+      totalTotal += reply->property("bytesTotal").toLongLong();
+    }
   }
 
-  reply->abort();
-  mFiles.remove(reply);
-  reply->deleteLater();
+  emit uploadProgress(totalSent, totalTotal);
 }
 
 void QtImgur::reply(QNetworkReply *reply)
@@ -108,26 +131,4 @@ void QtImgur::reply(QNetworkReply *reply)
   }
 
   reply->deleteLater();
-}
-
-void QtImgur::progress(qint64 bytesSent, qint64 bytesTotal)
-{
-  qint64 totalSent, totalTotal;
-
-  QNetworkReply *senderReply = qobject_cast<QNetworkReply*>(sender());
-
-  senderReply->setProperty("bytesSent", bytesSent);
-  senderReply->setProperty("bytesTotal", bytesTotal);
-
-  totalSent = bytesSent;
-  totalTotal = bytesTotal;
-
-  foreach (QNetworkReply *reply, mFiles.keys()) {
-    if (reply != senderReply) {
-      totalSent  += reply->property("bytesSent").toLongLong();
-      totalTotal += reply->property("bytesTotal").toLongLong();
-    }
-  }
-
-  emit uploadProgress(totalSent, totalTotal);
 }

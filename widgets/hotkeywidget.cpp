@@ -20,8 +20,8 @@
 #include <QFocusEvent>
 #include <QKeyEvent>
 #include <QKeySequence>
-#include <QTimer>
 #include <QStyle>
+#include <QTimer>
 
 #include <QDebug>
 
@@ -53,6 +53,17 @@ void HotkeyWidget::setHotkey(QKeySequence hotkey)
 QKeySequence &HotkeyWidget::hotkey()
 {
   return mHotkey;
+}
+
+void HotkeyWidget::showError()
+{
+  if (mShowingError)
+    return;
+
+  mShowingError = true;
+
+  setStyleSheet(mDefaultStyleSheet + "color: #d90000;");
+  QTimer::singleShot(1000, this, SLOT(hideError()));
 }
 
 void HotkeyWidget::setHotkeyText()
@@ -112,17 +123,6 @@ void HotkeyWidget::keyPressEvent(QKeyEvent *event)
   setHotkeyText();
 }
 
-void HotkeyWidget::showError()
-{
-  if (mShowingError)
-    return;
-
-  mShowingError = true;
-
-  setStyleSheet(mDefaultStyleSheet + "color: #d90000;");
-  QTimer::singleShot(1000, this, SLOT(hideError()));
-}
-
 void HotkeyWidget::hideError()
 {
   setStyleSheet(mDefaultStyleSheet);
@@ -146,15 +146,16 @@ bool HotkeyWidget::isModifier(int key) const
 {
   switch (key)
   {
-  case Qt::Key_Shift:
-  case Qt::Key_Control:
-  case Qt::Key_Meta:
-  case Qt::Key_Alt:
-  case Qt::Key_AltGr:
-  case Qt::Key_Super_L:
-  case Qt::Key_Super_R:
-  case Qt::Key_Menu:
-    return true;
+      case Qt::Key_Shift:
+      case Qt::Key_Control:
+      case Qt::Key_Meta:
+      case Qt::Key_Alt:
+      case Qt::Key_AltGr:
+      case Qt::Key_Super_L:
+      case Qt::Key_Super_R:
+      case Qt::Key_Menu:
+        return true;
   }
+
   return false;
 }

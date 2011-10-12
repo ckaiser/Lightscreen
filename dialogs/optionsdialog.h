@@ -36,11 +36,11 @@ public slots:
   void accepted();
   void checkUpdatesNow();
   void languageChange(QString language);
+  void loadSettings();
   void openUrl(QString url);
   void rejected();
   void saveSettings();
   void updatePreview();
-  void loadSettings();
   void viewHistory();
 
 protected:
@@ -51,11 +51,11 @@ protected:
 #endif
 
 private slots:
-  void namingOptions();
-  void flipToggled(bool checked);
-  void dialogButtonClicked(QAbstractButton *button);
   void browse();
+  void dialogButtonClicked(QAbstractButton *button);
+  void flipToggled(bool checked);
   void init();
+  void namingOptions();
 
 private:
   bool hotkeyCollision();

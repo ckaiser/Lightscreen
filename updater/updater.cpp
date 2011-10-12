@@ -16,19 +16,32 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+#include <QApplication>
 #include <QDate>
 #include <QHttp>
-#include <QApplication>
+
 #include <QDebug>
 
 #include "updater.h"
 #include "../dialogs/updaterdialog.cpp"
+
+Updater* Updater::mInstance = 0;
 
 Updater::Updater(QObject *parent) :
   QObject(parent)
 {
   connect(&mHttp, SIGNAL(done(bool)), this, SLOT(httpDone(bool)));
 }
+
+Updater *Updater::instance()
+{
+  if (!mInstance)
+    mInstance = new Updater();
+
+  return mInstance;
+}
+
+//
 
 void Updater::check()
 {
@@ -56,6 +69,8 @@ void Updater::checkWithFeedback()
   updaterDialog.exec();
 }
 
+//
+
 void Updater::httpDone(bool error)
 {
   Q_UNUSED(error)
@@ -64,14 +79,4 @@ void Updater::httpDone(bool error)
   double version  = QString(data).toDouble();
 
   emit done((version > qApp->applicationVersion().toDouble()));
-}
-
-Updater* Updater::mInstance = 0;
-
-Updater *Updater::instance()
-{
-  if (!mInstance)
-    mInstance = new Updater();
-
-  return mInstance;
 }

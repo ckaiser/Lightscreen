@@ -46,45 +46,44 @@ public:
     QRect &resultRect();
 
 protected slots:
+    void animationTick(int frame);
+    void cancel();
     void displayHelp();
     void grabRect();
-    void cancel();
-    void animationTick(int frame);
 
 signals:
     void regionGrabbed( const QPixmap & );
 
 protected:
+    void keyPressEvent( QKeyEvent* e );
+    void mouseDoubleClickEvent( QMouseEvent* );
+    void mouseMoveEvent( QMouseEvent* e );
+    void mousePressEvent( QMouseEvent* e );
+    void mouseReleaseEvent( QMouseEvent* e );
     void paintEvent( QPaintEvent* e );
     void resizeEvent( QResizeEvent* e );
-    void mousePressEvent( QMouseEvent* e );
-    void mouseMoveEvent( QMouseEvent* e );
-    void mouseReleaseEvent( QMouseEvent* e );
-    void mouseDoubleClickEvent( QMouseEvent* );
-    void keyPressEvent( QKeyEvent* e );
     void showEvent( QShowEvent* e );
 
     void updateHandles();
-
     QRegion handleMask() const;
+
     QPoint limitPointToRect( const QPoint &p, const QRect &r ) const;
 
-    Screenshot *mScreenshot;
-    QPoint mMousePos;
-    QRect  mSelection;
-    bool   mMouseDown;
-    bool   mMouseMagnifier;
-    bool   mNewSelection;
-    const int mHandleSize;
-    QRect *mMouseOverHandle;
+    bool   mAutoclose;
     QPoint mDragStartPoint;
-    QRect  mSelectionBeforeDrag;
+    bool   mGrabbing;
+    const int mHandleSize;
     QTimer mIdleTimer;
-    bool mShowHelp;
-    bool mGrabbing;
+    bool mMouseDown;
+    bool mMouseMagnifier;
+    QRect *mMouseOverHandle;
+    QPoint mMousePos;
+    bool mNewSelection;
     int  mOverlayAlpha;
-    bool mAutoclose;
-
+    Screenshot *mScreenshot;
+    QRect mSelection;
+    QRect mSelectionBeforeDrag;
+    bool  mShowHelp;
 
     // naming convention for handles
     // T top, B bottom, R Right, L left
@@ -93,7 +92,7 @@ protected:
     QRect mTLHandle, mTRHandle, mBLHandle, mBRHandle;
     QRect mLHandle, mTHandle, mRHandle, mBHandle;
 
-    QVector<QRect*> mHandles;
+    QVector<QRect*>   mHandles;
     QPointer<QWidget> mAcceptWidget;
 };
 

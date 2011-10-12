@@ -40,17 +40,17 @@ public:
   QtImgur(const QString &APIKey, QObject *parent);
 
 public slots:
-  void upload(const QString &fileName);
   void cancel(const QString &fileName);
+  void upload(const QString &fileName);
 
 protected slots:
-  void reply(QNetworkReply* reply);
   void progress(qint64, qint64);
+  void reply(QNetworkReply* reply);
 
 signals:
-  void uploaded(QString file, QString url);
   void error(QString, QtImgur::Error);
   void uploadProgress(qint64, qint64);
+  void uploaded(QString file, QString url);
 
 private:
   QString mAPIKey;

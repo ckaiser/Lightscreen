@@ -99,26 +99,26 @@ public:
   static QString getName(NamingOptions options, QString prefix, QDir directory);
 
 public slots:
-  void take();
   void confirm(bool result = true);
+  void confirmation();
   void discard();
+  void markUpload();
   void save();
   void setPixmap(QPixmap pixmap);
-  void confirmation();
-  void markUpload();
+  void take();
 
 signals:
   void askConfirmation();
   void finished();
 
 private:
-  void    activeWindow();
+  void activeWindow();
+  QString extension() const;
+  void grabDesktop();
   QString newFileName() const;
-  QString extension()   const;
-  void    selectedArea();
-  void    selectedWindow();
-  void    wholeScreen();
-  void    grabDesktop();
+  void selectedArea();
+  void selectedWindow();
+  void wholeScreen();
 
 private:
   Screenshot::Options mOptions;

@@ -21,10 +21,10 @@
 #include "../tools/os.h"
 #include "../tools/screenshotmanager.h"
 
-#include <QSettings>
-#include <QKeyEvent>
-#include <QUrl>
 #include <QDesktopServices>
+#include <QKeyEvent>
+#include <QSettings>
+#include <QUrl>
 
 NamingDialog::NamingDialog(Screenshot::Naming naming,QWidget *parent) :
     QDialog(parent)
@@ -68,17 +68,17 @@ NamingDialog::NamingDialog(Screenshot::Naming naming,QWidget *parent) :
   resize(minimumSizeHint());
 }
 
+void NamingDialog::openUrl(QString url)
+{
+  QDesktopServices::openUrl(QUrl(url));
+}
+
 void NamingDialog::saveSettings()
 {
   QSettings *s = ScreenshotManager::instance()->settings();
   s->setValue("options/flip"               , ui.flipNamingCheckBox->isChecked());
   s->setValue("options/naming/dateFormat"  , ui.dateFormatComboBox->currentText());
   s->setValue("options/naming/leadingZeros", ui.leadingZerosSpinBox->value());
-}
-
-void NamingDialog::openUrl(QString url)
-{
-  QDesktopServices::openUrl(QUrl(url));
 }
 
 bool NamingDialog::eventFilter(QObject *object, QEvent *event)

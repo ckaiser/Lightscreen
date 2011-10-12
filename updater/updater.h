@@ -34,8 +34,8 @@ signals:
   void done(bool result);
 
 public slots:
-  void checkWithFeedback();
   void check();
+  void checkWithFeedback();
 
 private slots:
   void httpDone(bool error);

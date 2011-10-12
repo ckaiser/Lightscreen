@@ -26,15 +26,15 @@
 #include "../tools/screenshot.h"
 #include "../tools/screenshotmanager.h"
 
-#include <QPainter>
-#include <QMouseEvent>
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QToolTip>
+#include <QHBoxLayout>
+#include <QMouseEvent>
+#include <QPainter>
 #include <QPushButton>
 #include <QSettings>
-#include <QHBoxLayout>
 #include <QTimer>
+#include <QToolTip>
 
 #include <QDebug>
 
@@ -100,9 +100,230 @@ QRect &AreaDialog::resultRect()
   return mSelection;
 }
 
+void AreaDialog::animationTick(int frame)
+{
+  mOverlayAlpha = frame;
+  update();
+}
+
+void AreaDialog::cancel()
+{
+  reject();
+}
+
 void AreaDialog::displayHelp()
 {
   mShowHelp = true;
+  update();
+}
+
+void AreaDialog::grabRect()
+{
+  QRect r = mSelection.normalized();
+  if (!r.isNull() && r.isValid()) {
+    mGrabbing = true;
+    accept();
+  }
+}
+
+void AreaDialog::keyPressEvent(QKeyEvent* e)
+{
+  if (e->key() == Qt::Key_Escape) {
+    cancel();
+  }
+  else if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) {
+    grabRect();
+  }
+  else {
+    e->ignore();
+  }
+}
+
+void AreaDialog::mouseDoubleClickEvent(QMouseEvent*)
+{
+  grabRect();
+}
+
+void AreaDialog::mouseMoveEvent(QMouseEvent* e)
+{
+  mMouseMagnifier = false;
+
+  if (mMouseDown) {
+
+    mMousePos = e->pos();
+
+    if (mNewSelection) {
+      QRect r = rect();
+
+      mSelection = QRect(mDragStartPoint, limitPointToRect(mMousePos, r)).normalized();
+    }
+    else if (mMouseOverHandle == 0) { // moving the whole selection
+      QRect r = rect().normalized(), s = mSelectionBeforeDrag.normalized();
+      QPoint p = s.topLeft() + e->pos() - mDragStartPoint;
+      r.setBottomRight(r.bottomRight() - QPoint(s.width(), s.height()));
+
+      if (!r.isNull() && r.isValid())
+        mSelection.moveTo(limitPointToRect(p, r));
+    }
+    else {// dragging a handle
+      QRect r = mSelectionBeforeDrag;
+      QPoint offset = e->pos() - mDragStartPoint;
+
+      if (mMouseOverHandle == &mTLHandle || mMouseOverHandle == &mTHandle
+       || mMouseOverHandle == &mTRHandle) // dragging one of the top handles
+      {
+        r.setTop(r.top() + offset.y());
+      }
+
+      if (mMouseOverHandle == &mTLHandle || mMouseOverHandle == &mLHandle
+       || mMouseOverHandle == &mBLHandle) // dragging one of the left handles
+      {
+        r.setLeft(r.left() + offset.x());
+      }
+
+      if (mMouseOverHandle == &mBLHandle || mMouseOverHandle == &mBHandle
+       || mMouseOverHandle == &mBRHandle) // dragging one of the bottom handles
+      {
+        r.setBottom(r.bottom() + offset.y());
+      }
+
+      if (mMouseOverHandle == &mTRHandle || mMouseOverHandle == &mRHandle
+       || mMouseOverHandle == &mBRHandle) // dragging one of the right handles
+      {
+        r.setRight(r.right() + offset.x());
+      }
+
+      r = r.normalized();
+      r.setTopLeft(limitPointToRect(r.topLeft(), rect()));
+      r.setBottomRight(limitPointToRect(r.bottomRight(), rect()));
+      mSelection = r;
+    }
+
+    if (qApp->keyboardModifiers() & Qt::ControlModifier)
+    {
+      // The lazy 1:1 aspect ratio approach!
+      mSelection.setHeight(mSelection.width());
+    }
+
+    if (mAcceptWidget) {
+      QPoint acceptPos = e->pos();
+      QRect  acceptRect = QRect(acceptPos, QSize(120, 70));
+
+      if ((acceptPos.x()+120) > mScreenshot->pixmap().rect().width())
+        acceptPos.setX(acceptPos.x()-120);
+
+      if ((acceptPos.y()+70) > mScreenshot->pixmap().rect().height())
+        acceptPos.setY(acceptPos.y()-70);
+
+      // Prevent the widget from overlapping the handles
+      if (acceptRect.intersects(mTLHandle)) {
+        acceptPos = mTLHandle.bottomRight() + QPoint(2, 2); // Corner case
+      }
+
+      if (acceptRect.intersects(mBRHandle)) {
+        acceptPos = mBRHandle.bottomRight();
+      }
+
+      if (acceptRect.intersects(mBHandle)) {
+        acceptPos = mBHandle.bottomRight();
+      }
+
+      if (acceptRect.intersects(mRHandle)) {
+        acceptPos = mRHandle.topRight();
+      }
+
+      mAcceptWidget->move(acceptPos);
+    }
+
+    update();
+  }
+  else
+  {
+    if (mSelection.isNull()) {
+      mMouseMagnifier = true;
+      update();
+      return;
+    }
+
+    bool found = false;
+    foreach(QRect* r, mHandles) {
+
+      if (r->contains(e->pos())) {
+        mMouseOverHandle = r;
+        found = true;
+        break;
+      }
+
+    }
+
+    if (!found) {
+      mMouseOverHandle = 0;
+      if (mSelection.contains(e->pos()))
+        setCursor(Qt::OpenHandCursor);
+      else if (mAcceptWidget && QRect(mAcceptWidget->mapToParent(mAcceptWidget->pos()), QSize(100, 60)).contains(e->pos()))
+        setCursor(Qt::PointingHandCursor);
+      else
+        setCursor(Qt::CrossCursor);
+    }
+    else {
+      if (mMouseOverHandle == &mTLHandle || mMouseOverHandle == &mBRHandle)
+        setCursor(Qt::SizeFDiagCursor);
+      if (mMouseOverHandle == &mTRHandle || mMouseOverHandle == &mBLHandle)
+        setCursor(Qt::SizeBDiagCursor);
+      if (mMouseOverHandle == &mLHandle || mMouseOverHandle == &mRHandle)
+        setCursor(Qt::SizeHorCursor);
+      if (mMouseOverHandle == &mTHandle || mMouseOverHandle == &mBHandle)
+        setCursor(Qt::SizeVerCursor);
+    }
+  }
+}
+
+void AreaDialog::mousePressEvent(QMouseEvent* e)
+{
+  mShowHelp = false;
+  mIdleTimer.stop();
+
+  if (mAcceptWidget)
+    mAcceptWidget->hide();
+
+  if (e->button() == Qt::LeftButton) {
+    mMouseDown = true;
+    mDragStartPoint = e->pos();
+    mSelectionBeforeDrag = mSelection;
+    if (!mSelection.contains(e->pos())) {
+      mNewSelection = true;
+      mSelection = QRect();
+      mShowHelp = true;
+      setCursor(Qt::CrossCursor);
+    }
+    else {
+      setCursor(Qt::ClosedHandCursor);
+    }
+  }
+  else if (e->button() == Qt::RightButton
+       || e->button() == Qt::MidButton)
+  {
+    cancel();
+  }
+
+  update();
+}
+
+void AreaDialog::mouseReleaseEvent(QMouseEvent* e)
+{
+  if (mAutoclose)
+    grabRect();
+
+  if (!mSelection.isNull() && mAcceptWidget)
+    mAcceptWidget->show();
+
+  mMouseDown = false;
+  mNewSelection = false;
+  mIdleTimer.start();
+
+  if (mMouseOverHandle == 0 && mSelection.contains(e->pos()))
+    setCursor(Qt::OpenHandCursor);
+
   update();
 }
 
@@ -308,209 +529,6 @@ void AreaDialog::resizeEvent(QResizeEvent* e)
   mSelection = r;
 }
 
-void AreaDialog::mousePressEvent(QMouseEvent* e)
-{
-  mShowHelp = false;
-  mIdleTimer.stop();
-
-  if (mAcceptWidget)
-    mAcceptWidget->hide();
-
-  if (e->button() == Qt::LeftButton) {
-    mMouseDown = true;
-    mDragStartPoint = e->pos();
-    mSelectionBeforeDrag = mSelection;
-    if (!mSelection.contains(e->pos())) {
-      mNewSelection = true;
-      mSelection = QRect();
-      mShowHelp = true;
-      setCursor(Qt::CrossCursor);
-    }
-    else {
-      setCursor(Qt::ClosedHandCursor);
-    }
-  }
-  else if (e->button() == Qt::RightButton
-       || e->button() == Qt::MidButton)
-  {
-    cancel();
-  }
-
-  update();
-}
-
-void AreaDialog::mouseMoveEvent(QMouseEvent* e)
-{
-  mMouseMagnifier = false;
-
-  if (mMouseDown) {
-
-    mMousePos = e->pos();
-
-    if (mNewSelection) {
-      QRect r = rect();
-
-      mSelection = QRect(mDragStartPoint, limitPointToRect(mMousePos, r)).normalized();
-    }
-    else if (mMouseOverHandle == 0) { // moving the whole selection
-      QRect r = rect().normalized(), s = mSelectionBeforeDrag.normalized();
-      QPoint p = s.topLeft() + e->pos() - mDragStartPoint;
-      r.setBottomRight(r.bottomRight() - QPoint(s.width(), s.height()));
-
-      if (!r.isNull() && r.isValid())
-        mSelection.moveTo(limitPointToRect(p, r));
-    }
-    else {// dragging a handle
-      QRect r = mSelectionBeforeDrag;
-      QPoint offset = e->pos() - mDragStartPoint;
-
-      if (mMouseOverHandle == &mTLHandle || mMouseOverHandle == &mTHandle
-       || mMouseOverHandle == &mTRHandle) // dragging one of the top handles
-      {
-        r.setTop(r.top() + offset.y());
-      }
-
-      if (mMouseOverHandle == &mTLHandle || mMouseOverHandle == &mLHandle
-       || mMouseOverHandle == &mBLHandle) // dragging one of the left handles
-      {
-        r.setLeft(r.left() + offset.x());
-      }
-
-      if (mMouseOverHandle == &mBLHandle || mMouseOverHandle == &mBHandle
-       || mMouseOverHandle == &mBRHandle) // dragging one of the bottom handles
-      {
-        r.setBottom(r.bottom() + offset.y());
-      }
-
-      if (mMouseOverHandle == &mTRHandle || mMouseOverHandle == &mRHandle
-       || mMouseOverHandle == &mBRHandle) // dragging one of the right handles
-      {
-        r.setRight(r.right() + offset.x());
-      }
-
-      r = r.normalized();
-      r.setTopLeft(limitPointToRect(r.topLeft(), rect()));
-      r.setBottomRight(limitPointToRect(r.bottomRight(), rect()));
-      mSelection = r;
-    }
-
-    if (qApp->keyboardModifiers() & Qt::ControlModifier)
-    {
-      // The lazy 1:1 aspect ratio approach!
-      mSelection.setHeight(mSelection.width());
-    }
-
-    if (mAcceptWidget) {
-      QPoint acceptPos = e->pos();
-      QRect  acceptRect = QRect(acceptPos, QSize(120, 70));
-
-      if ((acceptPos.x()+120) > mScreenshot->pixmap().rect().width())
-        acceptPos.setX(acceptPos.x()-120);
-
-      if ((acceptPos.y()+70) > mScreenshot->pixmap().rect().height())
-        acceptPos.setY(acceptPos.y()-70);
-
-      // Prevent the widget from overlapping the handles
-      if (acceptRect.intersects(mTLHandle)) {
-        acceptPos = mTLHandle.bottomRight() + QPoint(2, 2); // Corner case
-      }
-
-      if (acceptRect.intersects(mBRHandle)) {
-        acceptPos = mBRHandle.bottomRight();
-      }
-
-      if (acceptRect.intersects(mBHandle)) {
-        acceptPos = mBHandle.bottomRight();
-      }
-
-      if (acceptRect.intersects(mRHandle)) {
-        acceptPos = mRHandle.topRight();
-      }
-
-      mAcceptWidget->move(acceptPos);
-    }
-
-    update();
-  }
-  else
-  {
-    if (mSelection.isNull()) {
-      mMouseMagnifier = true;
-      update();
-      return;
-    }
-
-    bool found = false;
-    foreach(QRect* r, mHandles) {
-
-      if (r->contains(e->pos())) {
-        mMouseOverHandle = r;
-        found = true;
-        break;
-      }
-
-    }
-
-    if (!found) {
-      mMouseOverHandle = 0;
-      if (mSelection.contains(e->pos()))
-        setCursor(Qt::OpenHandCursor);
-      else if (mAcceptWidget && QRect(mAcceptWidget->mapToParent(mAcceptWidget->pos()), QSize(100, 60)).contains(e->pos()))
-        setCursor(Qt::PointingHandCursor);
-      else
-        setCursor(Qt::CrossCursor);
-    }
-    else {
-      if (mMouseOverHandle == &mTLHandle || mMouseOverHandle == &mBRHandle)
-        setCursor(Qt::SizeFDiagCursor);
-      if (mMouseOverHandle == &mTRHandle || mMouseOverHandle == &mBLHandle)
-        setCursor(Qt::SizeBDiagCursor);
-      if (mMouseOverHandle == &mLHandle || mMouseOverHandle == &mRHandle)
-        setCursor(Qt::SizeHorCursor);
-      if (mMouseOverHandle == &mTHandle || mMouseOverHandle == &mBHandle)
-        setCursor(Qt::SizeVerCursor);
-    }
-
-
-  }
-}
-
-void AreaDialog::mouseReleaseEvent(QMouseEvent* e)
-{
-  if (mAutoclose)
-    grabRect();
-
-  if (!mSelection.isNull() && mAcceptWidget)
-    mAcceptWidget->show();
-
-  mMouseDown = false;
-  mNewSelection = false;
-  mIdleTimer.start();
-
-  if (mMouseOverHandle == 0 && mSelection.contains(e->pos()))
-    setCursor(Qt::OpenHandCursor);
-
-  update();
-}
-
-void AreaDialog::mouseDoubleClickEvent(QMouseEvent*)
-{
-  grabRect();
-}
-
-void AreaDialog::keyPressEvent(QKeyEvent* e)
-{
-  if (e->key() == Qt::Key_Escape) {
-    cancel();
-  }
-  else if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) {
-    grabRect();
-  }
-  else {
-    e->ignore();
-  }
-}
-
 void AreaDialog::showEvent(QShowEvent* e)
 {
   Q_UNUSED(e)
@@ -532,26 +550,6 @@ void AreaDialog::showEvent(QShowEvent* e)
   }
 
   setMouseTracking(true);
-}
-
-void AreaDialog::grabRect()
-{
-  QRect r = mSelection.normalized();
-  if (!r.isNull() && r.isValid()) {
-    mGrabbing = true;
-    accept();
-  }
-}
-
-void AreaDialog::cancel()
-{
-  reject();
-}
-
-void AreaDialog::animationTick(int frame)
-{
-  mOverlayAlpha = frame;
-  update();
 }
 
 void AreaDialog::updateHandles()

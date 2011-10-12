@@ -31,12 +31,12 @@ class NamingDialog : public QDialog
 public:
     explicit NamingDialog(Screenshot::Naming naming, QWidget *parent = 0);
 
-protected:
-  bool eventFilter(QObject *object, QEvent *event);
-
 private slots:
   void openUrl(QString url);
   void saveSettings();
+
+protected:
+  bool eventFilter(QObject *object, QEvent *event);
 
 private:
     Ui::NamingDialog ui;

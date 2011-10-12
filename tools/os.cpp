@@ -18,23 +18,24 @@
  */
 #include <QApplication>
 #include <QBitmap>
+#include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QDialog>
 #include <QDir>
-#include <QSettings>
+#include <QGraphicsDropShadowEffect>
 #include <QLibrary>
 #include <QPixmap>
-#include <QTextEdit>
-#include <QTranslator>
-#include <QTimer>
-#include <QTimeLine>
-#include <QWidget>
-#include <QGraphicsDropShadowEffect>
-#include <string>
-#include <QDesktopServices>
 #include <QPointer>
 #include <QProcess>
+#include <QSettings>
+#include <QTextEdit>
+#include <QTimeLine>
+#include <QTimer>
+#include <QTranslator>
 #include <QUrl>
+#include <QWidget>
+#include <string>
+
 #include <QDebug>
 
 #include <QMessageBox>
@@ -76,40 +77,83 @@ bool os::aeroGlass(QWidget* target)
   return false;
 }
 
-void os::setStartup(bool startup, bool hide)
+QPixmap os::cursor()
 {
-  QString lightscreen = QDir::toNativeSeparators(qApp->applicationFilePath());
-
-  if (hide)
-    lightscreen.append(" -h");
-
 #ifdef Q_WS_WIN
-  // Windows startup settings
-  QSettings init("Microsoft", "Windows");
-  init.beginGroup("CurrentVersion");
-  init.beginGroup("Run");
+  /*
+  * Taken from: git://github.com/arrai/mumble-record.git › src › mumble › Overlay.cpp
+  * BSD License.
+  */
 
-  if (startup) {
-    init.setValue("Lightscreen", lightscreen);
-  }
-  else {
-    init.remove("Lightscreen");
+  QPixmap pixmap;
+
+  CURSORINFO cursorInfo;
+  cursorInfo.cbSize = sizeof(cursorInfo);
+  ::GetCursorInfo(&cursorInfo);
+
+  HICON cursor = (HICON) cursorInfo.hCursor;
+
+  ICONINFO info;
+  ZeroMemory(&info, sizeof(info));
+
+  if (::GetIconInfo(cursor, &info)) {
+    if (info.hbmColor) {
+      pixmap = QPixmap::fromWinHBITMAP(info.hbmColor);
+      pixmap.setMask(QBitmap(QPixmap::fromWinHBITMAP(info.hbmMask)));
+    }
+    else {
+      QBitmap orig(QPixmap::fromWinHBITMAP(info.hbmMask));
+      QImage img = orig.toImage();
+
+      int h = img.height() / 2;
+      int w = img.bytesPerLine() / sizeof(quint32);
+
+      QImage out(img.width(), h, QImage::Format_MonoLSB);
+      QImage outmask(img.width(), h, QImage::Format_MonoLSB);
+
+      for (int i=0;i<h; ++i) {
+        const quint32 *srcimg = reinterpret_cast<const quint32 *>(img.scanLine(i + h));
+        const quint32 *srcmask = reinterpret_cast<const quint32 *>(img.scanLine(i));
+
+        quint32 *dstimg = reinterpret_cast<quint32 *>(out.scanLine(i));
+        quint32 *dstmask = reinterpret_cast<quint32 *>(outmask.scanLine(i));
+
+        for (int j=0;j<w;++j) {
+          dstmask[j] = srcmask[j];
+          dstimg[j] = srcimg[j];
+        }
+      }
+
+      pixmap = QBitmap::fromImage(out, Qt::ColorOnly);
+    }
+
+    if (info.hbmMask)
+      ::DeleteObject(info.hbmMask);
+
+    if (info.hbmColor)
+      ::DeleteObject(info.hbmColor);
   }
 
-  init.endGroup();
-  init.endGroup();
+  return pixmap;
+#else
+  return QPixmap();
 #endif
+}
 
-#if defined(Q_WS_X11)
-  QFile desktopFile(QDir::homePath() + "/.config/autostart/lightscreen.desktop");
+void os::effect(QObject* target, const char *slot, int frames, int duration, const char* cleanup)
+{
+  QTimeLine* timeLine = new QTimeLine(duration);
+  timeLine->setFrameRange(0, frames);
 
-  desktopFile.remove();
+  timeLine->connect(timeLine, SIGNAL(frameChanged(int)), target, slot);
 
-  if (startup) {
-    desktopFile.open(QIODevice::WriteOnly);
-    desktopFile.write(QString("[Desktop Entry]\nExec=%1\nType=Application").arg(lightscreen).toAscii());
-  }
-#endif
+  if (cleanup != 0)
+    timeLine->connect(timeLine, SIGNAL(finished()), target, SLOT(cleanup()));
+
+  timeLine->connect(timeLine, SIGNAL(finished()), timeLine, SLOT(deleteLater()));
+
+
+  timeLine->start();
 }
 
 QString os::getDocumentsPath()
@@ -215,67 +259,49 @@ void os::setForegroundWindow(QWidget *window)
 #endif
 }
 
-QPixmap os::cursor()
+void os::setStartup(bool startup, bool hide)
 {
+  QString lightscreen = QDir::toNativeSeparators(qApp->applicationFilePath());
+
+  if (hide)
+    lightscreen.append(" -h");
+
 #ifdef Q_WS_WIN
-  /*
-  * Taken from: git://github.com/arrai/mumble-record.git › src › mumble › Overlay.cpp
-  * BSD License.
-  */
+  // Windows startup settings
+  QSettings init("Microsoft", "Windows");
+  init.beginGroup("CurrentVersion");
+  init.beginGroup("Run");
 
-  QPixmap pixmap;
-
-  CURSORINFO cursorInfo;
-  cursorInfo.cbSize = sizeof(cursorInfo);
-  ::GetCursorInfo(&cursorInfo);
-
-  HICON cursor = (HICON) cursorInfo.hCursor;
-
-  ICONINFO info;
-  ZeroMemory(&info, sizeof(info));
-
-  if (::GetIconInfo(cursor, &info)) {
-    if (info.hbmColor) {
-      pixmap = QPixmap::fromWinHBITMAP(info.hbmColor);
-      pixmap.setMask(QBitmap(QPixmap::fromWinHBITMAP(info.hbmMask)));
-    }
-    else {
-      QBitmap orig(QPixmap::fromWinHBITMAP(info.hbmMask));
-      QImage img = orig.toImage();
-
-      int h = img.height() / 2;
-      int w = img.bytesPerLine() / sizeof(quint32);
-
-      QImage out(img.width(), h, QImage::Format_MonoLSB);
-      QImage outmask(img.width(), h, QImage::Format_MonoLSB);
-
-      for (int i=0;i<h; ++i) {
-        const quint32 *srcimg = reinterpret_cast<const quint32 *>(img.scanLine(i + h));
-        const quint32 *srcmask = reinterpret_cast<const quint32 *>(img.scanLine(i));
-
-        quint32 *dstimg = reinterpret_cast<quint32 *>(out.scanLine(i));
-        quint32 *dstmask = reinterpret_cast<quint32 *>(outmask.scanLine(i));
-
-        for (int j=0;j<w;++j) {
-          dstmask[j] = srcmask[j];
-          dstimg[j] = srcimg[j];
-        }
-      }
-
-      pixmap = QBitmap::fromImage(out, Qt::ColorOnly);
-    }
-
-    if (info.hbmMask)
-      ::DeleteObject(info.hbmMask);
-
-    if (info.hbmColor)
-      ::DeleteObject(info.hbmColor);
+  if (startup) {
+    init.setValue("Lightscreen", lightscreen);
+  }
+  else {
+    init.remove("Lightscreen");
   }
 
-  return pixmap;
-#else
-  return QPixmap();
+  init.endGroup();
+  init.endGroup();
 #endif
+
+#if defined(Q_WS_X11)
+  QFile desktopFile(QDir::homePath() + "/.config/autostart/lightscreen.desktop");
+
+  desktopFile.remove();
+
+  if (startup) {
+    desktopFile.open(QIODevice::WriteOnly);
+    desktopFile.write(QString("[Desktop Entry]\nExec=%1\nType=Application").arg(lightscreen).toAscii());
+  }
+#endif
+}
+
+QGraphicsEffect* os::shadow(QColor color, int blurRadius, int offset) {
+  QGraphicsDropShadowEffect* shadowEffect = new QGraphicsDropShadowEffect;
+  shadowEffect->setBlurRadius(blurRadius);
+  shadowEffect->setOffset(offset);
+  shadowEffect->setColor(color);
+
+  return shadowEffect;
 }
 
 void os::translate(QString language)
@@ -309,31 +335,6 @@ void os::translate(QString language)
   if (translator_qt->load(language, ":/translations_qt")) {
     qApp->installTranslator(translator_qt);
   }
-}
-
-void os::effect(QObject* target, const char *slot, int frames, int duration, const char* cleanup)
-{
-  QTimeLine* timeLine = new QTimeLine(duration);
-  timeLine->setFrameRange(0, frames);
-
-  timeLine->connect(timeLine, SIGNAL(frameChanged(int)), target, slot);
-
-  if (cleanup != 0)
-    timeLine->connect(timeLine, SIGNAL(finished()), target, SLOT(cleanup()));
-
-  timeLine->connect(timeLine, SIGNAL(finished()), timeLine, SLOT(deleteLater()));
-
-
-  timeLine->start();
-}
-
-QGraphicsEffect* os::shadow(QColor color, int blurRadius, int offset) {
-  QGraphicsDropShadowEffect* shadowEffect = new QGraphicsDropShadowEffect;
-  shadowEffect->setBlurRadius(blurRadius);
-  shadowEffect->setOffset(offset);
-  shadowEffect->setColor(color);
-
-  return shadowEffect;
 }
 
 #ifdef Q_WS_X11

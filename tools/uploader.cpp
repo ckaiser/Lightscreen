@@ -22,7 +22,11 @@
 
 #include <QList>
 #include <QPair>
+
 #include <QDebug>
+
+Uploader* Uploader::mInstance = 0;
+
 
 Uploader::Uploader(QObject *parent) : QObject(parent), mUploading(0)
 {
@@ -31,6 +35,75 @@ Uploader::Uploader(QObject *parent) : QObject(parent), mUploading(0)
   connect(mImgur, SIGNAL(uploaded(QString, QString)), this, SLOT(uploaded(QString, QString)));
   connect(mImgur, SIGNAL(error(QString, QtImgur::Error)), this, SLOT(imgurError(QString, QtImgur::Error)));
   connect(mImgur, SIGNAL(uploadProgress(qint64,qint64)), this, SIGNAL(progress(qint64,qint64)));
+}
+
+Uploader *Uploader::instance()
+{
+  if (!mInstance)
+    mInstance = new Uploader();
+
+  return mInstance;
+}
+
+QString Uploader::lastUrl() const
+{
+  QListIterator< QPair<QString, QString> >  i(mScreenshots);
+  i.toBack();
+
+  QString url;
+
+  while (i.hasPrevious()) {
+    url = i.previous().second;
+
+    if (!url.contains(tr("Uploading..."))) {
+      return url;
+    }
+  }
+
+  return url;
+}
+
+void Uploader::cancel(const QString &fileName)
+{
+  mImgur->cancel(fileName);
+}
+
+void Uploader::imgurError(const QString &file, const QtImgur::Error e)
+{
+  mUploading--;
+
+  // Removing the screenshot.
+  for (int i = 0; i < mScreenshots.size(); ++i) {
+    if (mScreenshots.at(i).first == file) {
+      mScreenshots.removeAt(i);
+      break;
+    }
+  }
+
+  if (e == mLastError) {
+    // Fail silently? Really? FINE
+    return;
+  }
+
+  QString errorString;
+
+  switch (e) {
+    case QtImgur::ErrorFile:
+      errorString = tr("Screenshot file not found.");
+    break;
+    case QtImgur::ErrorNetwork:
+      errorString = tr("Could not reach imgur.com");
+    break;
+    case QtImgur::ErrorCredits:
+      errorString = tr("You have exceeded your upload quota.");
+    break;
+    case QtImgur::ErrorUpload:
+      errorString = tr("Upload failed.");
+    break;
+  }
+
+  mLastError = e;
+  emit error(errorString);
 }
 
 void Uploader::upload(const QString &fileName)
@@ -73,79 +146,7 @@ void Uploader::uploaded(const QString &file, const QString &url)
   emit done(file, url);
 }
 
-void Uploader::cancel(const QString &fileName)
-{
-  mImgur->cancel(fileName);
-}
-
 int Uploader::uploading()
 {
   return mUploading;
-}
-
-void Uploader::imgurError(const QString &file, const QtImgur::Error e)
-{
-  mUploading--;
-
-  // Removing the screenshot.
-  for (int i = 0; i < mScreenshots.size(); ++i) {
-    if (mScreenshots.at(i).first == file) {
-      mScreenshots.removeAt(i);
-      break;
-    }
-  }
-
-  if (e == mLastError) {
-    // Fail silently? Really? FINE
-    return;
-  }
-
-  QString errorString;
-
-  switch (e) {
-    case QtImgur::ErrorFile:
-      errorString = tr("Screenshot file not found.");
-    break;
-    case QtImgur::ErrorNetwork:
-      errorString = tr("Could not reach imgur.com");
-    break;
-    case QtImgur::ErrorCredits:
-      errorString = tr("You have exceeded your upload quota.");
-    break;
-    case QtImgur::ErrorUpload:
-      errorString = tr("Upload failed.");
-    break;
-  }
-
-  mLastError = e;
-  emit error(errorString);
-}
-
-QString Uploader::lastUrl() const
-{
-  QListIterator< QPair<QString, QString> >  i(mScreenshots);
-  i.toBack();
-
-  QString url;
-
-  while (i.hasPrevious()) {
-    url = i.previous().second;
-
-    if (!url.contains(tr("Uploading..."))) {
-      return url;
-    }
-  }
-
-  return url;
-}
-
-// Singleton
-Uploader* Uploader::mInstance = 0;
-
-Uploader *Uploader::instance()
-{
-  if (!mInstance)
-    mInstance = new Uploader();
-
-  return mInstance;
 }

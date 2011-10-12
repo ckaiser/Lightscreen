@@ -43,17 +43,17 @@ public:
   ~ScreenshotManager();
   static ScreenshotManager *instance();
 
-  void setCount(const unsigned int c){ mCount = c; }
   unsigned int count() const { return mCount; }
-  QSettings *settings() const { return mSettings; }
-  void saveHistory(QString fileName, QString url = QObject::tr("- not uploaded -"));
   QString &historyPath();
   bool portableMode();
+  void saveHistory(QString fileName, QString url = QObject::tr("- not uploaded -"));
+  void setCount(const unsigned int c){ mCount = c; }
+  QSettings *settings() const { return mSettings; }
 
 public slots:
-  void take(Screenshot::Options &options);
   void askConfirmation();
   void cleanup();
+  void take(Screenshot::Options &options);
 
 signals:
   void confirm(Screenshot* screenshot);
@@ -64,8 +64,7 @@ private:
   QSettings *mSettings;
   QString mHistoryPath;
   bool mPortableMode;
-  int mCount; // Concurrent screenshot count.
-
+  int  mCount; // Concurrent screenshot count.
 };
 
 #endif // SCREENSHOTMANAGER_H

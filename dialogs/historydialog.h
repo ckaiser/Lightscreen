@@ -18,23 +18,23 @@ public:
   ~HistoryDialog();
 
 private slots:
+  void clear();
+  void contextMenu(QPoint point);
   void copy();
   void location();
-  void contextMenu(QPoint point);
-  void selectionChanged(QItemSelection selected, QItemSelection deselected);
   void open(QModelIndex index);
   void reloadHistory();
+  void selectionChanged(QItemSelection selected, QItemSelection deselected);
   void upload();
-  void clear();
 
 protected:
   bool eventFilter(QObject *object, QEvent *event);
 
 private:
-    Ui::HistoryDialog *ui;
-    QSortFilterProxyModel *mFilterModel;
-    QString mSelectedScreenshot;
-    QModelIndex mContextIndex;
+  Ui::HistoryDialog *ui;
+  QSortFilterProxyModel *mFilterModel;
+  QString     mSelectedScreenshot;
+  QModelIndex mContextIndex;
 };
 
 #endif // UPLOADDIALOG_H

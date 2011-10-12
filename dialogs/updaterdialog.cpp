@@ -18,9 +18,9 @@
  */
 #include <QApplication>
 #include <QDesktopServices>
-#include <QProgressBar>
 #include <QLabel>
 #include <QLayout>
+#include <QProgressBar>
 #include <QUrl>
 
 #include "updaterdialog.h"

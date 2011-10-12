@@ -19,12 +19,12 @@
 #include "screenshotmanager.h"
 #include "screenshot.h"
 
-#include <QSettings>
 #include <QApplication>
-#include <QFile>
+#include <QDateTime>
 #include <QDebug>
 #include <QDesktopServices>
-#include <QDateTime>
+#include <QFile>
+#include <QSettings>
 
 ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent), mCount(0)
 {
@@ -43,6 +43,16 @@ ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent), mCo
 ScreenshotManager::~ScreenshotManager()
 {
   delete mSettings;
+}
+
+QString& ScreenshotManager::historyPath()
+{
+  return mHistoryPath;
+}
+
+bool ScreenshotManager::portableMode()
+{
+  return mPortableMode;
 }
 
 void ScreenshotManager::saveHistory(QString fileName, QString url)
@@ -69,25 +79,7 @@ void ScreenshotManager::saveHistory(QString fileName, QString url)
   historyFile.close();
 }
 
-QString& ScreenshotManager::historyPath()
-{
-  return mHistoryPath;
-}
-
-bool ScreenshotManager::portableMode()
-{
-  return mPortableMode;
-}
-
-void ScreenshotManager::take(Screenshot::Options &options)
-{
-  Screenshot* newScreenshot = new Screenshot(this, options);
-
-  connect(newScreenshot, SIGNAL(askConfirmation()), this, SLOT(askConfirmation()));
-  connect(newScreenshot, SIGNAL(finished())       , this, SLOT(cleanup()));
-
-  newScreenshot->take();
-}
+//
 
 void ScreenshotManager::askConfirmation()
 {
@@ -100,6 +92,16 @@ void ScreenshotManager::cleanup()
   Screenshot* s = qobject_cast<Screenshot*>(sender());
   emit windowCleanup(s->options());
   s->deleteLater();
+}
+
+void ScreenshotManager::take(Screenshot::Options &options)
+{
+  Screenshot* newScreenshot = new Screenshot(this, options);
+
+  connect(newScreenshot, SIGNAL(askConfirmation()), this, SLOT(askConfirmation()));
+  connect(newScreenshot, SIGNAL(finished())       , this, SLOT(cleanup()));
+
+  newScreenshot->take();
 }
 
 // Singleton

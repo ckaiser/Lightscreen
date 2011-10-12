@@ -17,15 +17,16 @@
  *
  */
 #include <QApplication>
-#include <QWidget>
 #include <QDesktopWidget>
-#include <QMouseEvent>
-#include <QVBoxLayout>
 #include <QLabel>
-#include <QDebug>
-#include <QRubberBand>
+#include <QMouseEvent>
 #include <QPushButton>
 #include <QRubberBand>
+#include <QRubberBand>
+#include <QVBoxLayout>
+#include <QWidget>
+
+#include <QDebug>
 
 #include "windowpicker.h"
 #include "os.h"
@@ -119,48 +120,13 @@ void WindowPicker::cancel() {
   qApp->restoreOverrideCursor();
 }
 
-void WindowPicker::mouseReleaseEvent(QMouseEvent *event)
+void WindowPicker::closeEvent(QCloseEvent*)
 {
-  if (event->button() == Qt::LeftButton) {
-#if defined(Q_OS_WIN)
-     POINT mousePos;
-     mousePos.x = event->globalX();
-     mousePos.y = event->globalY();
+  if (!mTaken)
+    emit pixmap(QPixmap());
 
-     HWND window = GetAncestor(WindowFromPoint(mousePos), GA_ROOT);
-#elif defined(Q_WS_X11)
-    Window window = os::windowUnderCursor(false);
-#endif
-
-     if (window == winId()) {
-       cancel();
-       return;
-     }
-
-     mTaken = true;
-
-     setWindowFlags(windowFlags() ^ Qt::WindowStaysOnTopHint);
-     close();
-
-#ifdef Q_WS_X11
-     emit pixmap(QPixmap::grabWindow(mCurrentWindow));
-#else
-     emit pixmap(os::grabWindow(window));
-#endif
-
-     return;
-  }
-
-  close();
-}
-
-void WindowPicker::mousePressEvent(QMouseEvent *event)
-{
-  qApp->setOverrideCursor(QCursor(mCrosshair));
-  mCrosshairLabel->setMinimumWidth(mCrosshairLabel->width());
-  mCrosshairLabel->setMinimumHeight(mCrosshairLabel->height());
-  mCrosshairLabel->setPixmap(QPixmap());
-  QWidget::mousePressEvent(event);
+  qApp->restoreOverrideCursor();
+  deleteLater();
 }
 
 void WindowPicker::mouseMoveEvent(QMouseEvent *event)
@@ -292,11 +258,47 @@ void WindowPicker::mouseMoveEvent(QMouseEvent *event)
   }
 }
 
-void WindowPicker::closeEvent(QCloseEvent*)
+void WindowPicker::mousePressEvent(QMouseEvent *event)
 {
-  if (!mTaken)
-    emit pixmap(QPixmap());
-
-  qApp->restoreOverrideCursor();
-  deleteLater();
+  qApp->setOverrideCursor(QCursor(mCrosshair));
+  mCrosshairLabel->setMinimumWidth(mCrosshairLabel->width());
+  mCrosshairLabel->setMinimumHeight(mCrosshairLabel->height());
+  mCrosshairLabel->setPixmap(QPixmap());
+  QWidget::mousePressEvent(event);
 }
+
+void WindowPicker::mouseReleaseEvent(QMouseEvent *event)
+{
+  if (event->button() == Qt::LeftButton) {
+#if defined(Q_OS_WIN)
+     POINT mousePos;
+     mousePos.x = event->globalX();
+     mousePos.y = event->globalY();
+
+     HWND window = GetAncestor(WindowFromPoint(mousePos), GA_ROOT);
+#elif defined(Q_WS_X11)
+    Window window = os::windowUnderCursor(false);
+#endif
+
+     if (window == winId()) {
+       cancel();
+       return;
+     }
+
+     mTaken = true;
+
+     setWindowFlags(windowFlags() ^ Qt::WindowStaysOnTopHint);
+     close();
+
+#ifdef Q_WS_X11
+     emit pixmap(QPixmap::grabWindow(mCurrentWindow));
+#else
+     emit pixmap(os::grabWindow(window));
+#endif
+
+     return;
+  }
+
+  close();
+}
+

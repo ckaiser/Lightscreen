@@ -19,14 +19,13 @@
 #include "screenshotdialog.h"
 #include "../tools/screenshot.h"
 
-
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QMouseEvent>
 #include <QScrollArea>
 #include <QScrollBar>
-#include <QLabel>
-#include <QHBoxLayout>
-#include <QMouseEvent>
 
 #include <QDebug>
 
@@ -92,11 +91,40 @@ void ScreenshotDialog::zoom(int offset)
   }
 }
 
+//
+
+bool ScreenshotDialog::eventFilter(QObject *obj, QEvent *event)
+{
+  if (event->type() == QEvent::Wheel
+   && qApp->keyboardModifiers() & Qt::ControlModifier) {
+    QWheelEvent *wheelEvent = static_cast<QWheelEvent *>(event);
+    zoom(wheelEvent->delta());
+    return true;
+  }
+
+  return QObject::eventFilter(obj, event);
+}
+
+void ScreenshotDialog::closeEvent(QCloseEvent *event)
+{
+  Q_UNUSED(event)
+  deleteLater();
+}
+
 void ScreenshotDialog::keyPressEvent(QKeyEvent *event)
 {
   if (event->key() == Qt::Key_0 && event->modifiers() & Qt::ControlModifier) {
     zoom(0);
   }
+}
+
+void ScreenshotDialog::mouseMoveEvent(QMouseEvent *event)
+{
+  QPoint diff = event->pos() - mMousePos;
+  mMousePos = event->pos();
+
+  mScrollArea->verticalScrollBar()->setValue(mScrollArea->verticalScrollBar()->value() - diff.y());
+  mScrollArea->horizontalScrollBar()->setValue(mScrollArea->horizontalScrollBar()->value() - diff.x());
 }
 
 void ScreenshotDialog::mousePressEvent(QMouseEvent *event)
@@ -109,31 +137,4 @@ void ScreenshotDialog::mouseReleaseEvent(QMouseEvent *event)
 {
   Q_UNUSED(event)
   setCursor(Qt::OpenHandCursor);
-}
-
-void ScreenshotDialog::mouseMoveEvent(QMouseEvent *event)
-{
-  QPoint diff = event->pos() - mMousePos;
-  mMousePos = event->pos();
-
-  mScrollArea->verticalScrollBar()->setValue(mScrollArea->verticalScrollBar()->value() - diff.y());
-  mScrollArea->horizontalScrollBar()->setValue(mScrollArea->horizontalScrollBar()->value() - diff.x());
-}
-
-void ScreenshotDialog::closeEvent(QCloseEvent *event)
-{
-  Q_UNUSED(event)
-  deleteLater();
-}
-
-bool ScreenshotDialog::eventFilter(QObject *obj, QEvent *event)
-{
-  if (event->type() == QEvent::Wheel
-   && qApp->keyboardModifiers() & Qt::ControlModifier) {
-    QWheelEvent *wheelEvent = static_cast<QWheelEvent *>(event);
-    zoom(wheelEvent->delta());
-    return true;
-  }
-
-  return QObject::eventFilter(obj, event);
 }

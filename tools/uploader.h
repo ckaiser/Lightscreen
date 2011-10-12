@@ -35,11 +35,11 @@ public:
   QList< QPair<QString, QString> > &screenshots() { return mScreenshots; }
 
 public slots:
+  void cancel(const QString &fileName);
+  void imgurError(const QString &file, const QtImgur::Error e);
   void upload(const QString &fileName);
   void uploaded(const QString &fileName, const QString &url);
-  void cancel(const QString &fileName);
   int  uploading();
-  void imgurError(const QString &file, const QtImgur::Error e);
 
 signals:
   void done(QString, QString);
@@ -55,7 +55,6 @@ private:
   QtImgur::Error mLastError;
 
   int mUploading;
-
 };
 
 #endif // UPLOADER_H

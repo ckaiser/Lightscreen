@@ -19,6 +19,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QLocale>
+
 #include <QDebug>
 
 #ifdef Q_WS_WIN
@@ -31,8 +32,6 @@
 #include "tools/os.h"
 #include <QtSingleApplication>
 #include "lightscreenwindow.h"
-
-#include <QMessageBox>
 
 int main(int argc, char *argv[])
 {

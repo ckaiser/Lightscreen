@@ -72,8 +72,8 @@ public slots:
   void updaterDone(bool result);
   void upload(const QString &fileName);
   void uploadAction(QAction* upload);
-  void uploadProgress(qint64 sent, qint64 total);
   void uploadLast();
+  void uploadProgress(qint64 sent, qint64 total);
   void windowHotkey();
   void windowPickerHotkey();
 
@@ -81,9 +81,10 @@ private slots:
   void applySettings();
 
 private:
-  void optiPNG(const QString &fileName, bool upload);
   void connectHotkeys();
   void createTrayIcon();
+  void optiPNG(const QString &fileName, bool upload);
+
 #ifdef Q_WS_WIN
   bool winEvent(MSG *message, long *result);
 #endif
@@ -98,9 +99,9 @@ private:
   bool mHideTrigger;
   bool mReviveMain;
   bool mWasVisible;
-  int  mOptimizeCount;
-  int  mLastMode;
   int  mLastMessage;
+  int  mLastMode;
+  int  mOptimizeCount;
   QString mLastScreenshot;
   QPointer<QSystemTrayIcon> mTrayIcon;
   QPointer<PreviewDialog> mPreviewDialog;

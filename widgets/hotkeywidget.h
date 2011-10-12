@@ -54,7 +54,6 @@ private:
 
   bool isValid(int key) const;
   bool isModifier(int key) const;
-
 };
 
 #endif // HOTKEYWIDGET_H

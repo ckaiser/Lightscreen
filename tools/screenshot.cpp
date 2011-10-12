@@ -23,6 +23,7 @@
 #include <QFileDialog>
 #include <QPainter>
 #include <QPixmap>
+
 #include <QDebug>
 
 #include "windowpicker.h"
@@ -57,49 +58,6 @@ Screenshot::~Screenshot()
   if (mUnloaded) {
     QFile::remove(mUnloadFilename);
   }
-}
-
-Screenshot::Options &Screenshot::options()
-{
-  return mOptions;
-}
-
-QPixmap &Screenshot::pixmap()
-{
-  if (mUnloaded) {
-    // A local reference.. what could go wrong? Nothing! Right guys? Guys?
-    QPixmap p;
-    p.load(mUnloadFilename);
-    return p;
-  }
-
-  return mPixmap;
-}
-
-void Screenshot::activeWindow()
-{
-#ifdef Q_WS_WIN
-  HWND fWindow = GetForegroundWindow();
-
-  if (fWindow == NULL)
-    return;
-
-  if (fWindow == GetDesktopWindow()) {
-   wholeScreen();
-   return;
-  }
-
-  mPixmap = os::grabWindow(GetForegroundWindow());
-#endif
-
-#if defined(Q_WS_X11)
-  Window focus;
-  int revert;
-
-  XGetInputFocus(QX11Info::display(), &focus, &revert);
-
-  mPixmap = QPixmap::grabWindow(focus);
-#endif
 }
 
 QString Screenshot::getName(NamingOptions options, QString prefix, QDir directory)
@@ -156,130 +114,24 @@ QString Screenshot::getName(NamingOptions options, QString prefix, QDir director
   return naming;
 }
 
-QString Screenshot::newFileName() const
+Screenshot::Options &Screenshot::options()
 {
-  if (!mOptions.directory.exists())
-    mOptions.directory.mkpath(mOptions.directory.path());
-
-  QString naming = Screenshot::getName(mOptions.namingOptions, mOptions.prefix, mOptions.directory);
-
-  QString fileName;
-
-  QString path = QDir::toNativeSeparators(mOptions.directory.path());
-
-  // Cleanup
-  if (path.at(path.size()-1) != QDir::separator() && !path.isEmpty())
-    path.append(QDir::separator());
-
-  fileName.append(path);
-  fileName.append(naming);
-
-  return fileName;
+  return mOptions;
 }
 
-void Screenshot::markUpload()
+QPixmap &Screenshot::pixmap()
 {
-  mOptions.upload = true;
+  if (mUnloaded) {
+    // A local reference.. what could go wrong? Nothing! Right guys? Guys?
+    QPixmap p;
+    p.load(mUnloadFilename);
+    return p;
+  }
+
+  return mPixmap;
 }
 
-QString Screenshot::extension() const
-{
-  switch (mOptions.format) {
-    case Screenshot::PNG:
-      return ".png";
-      break;
-    case Screenshot::BMP:
-      return ".bmp";
-      break;
-    case Screenshot::JPEG:
-    default:
-      return ".jpg";
-      break;
-  }
-}
-
-void Screenshot::selectedArea()
-{
-  grabDesktop();
-
-  if (mPixmap.isNull())
-    return;
-
-  AreaDialog selector(this);
-  int result = selector.exec();
-
-  if (result == QDialog::Accepted) {
-    mPixmap = mPixmap.copy(selector.resultRect());
-  }
-  else {
-    mPixmap = QPixmap();
-  }
-}
-
-
-void Screenshot::selectedWindow()
-{
-  WindowPicker* windowPicker = new WindowPicker;
-  mPixmapDelay = true;
-
-  connect(windowPicker, SIGNAL(pixmap(QPixmap)), this, SLOT(setPixmap(QPixmap)));
-}
-
-void Screenshot::wholeScreen()
-{
-  grabDesktop();
-}
-
-void Screenshot::grabDesktop()
-{
-  QRect geometry;
-
-  if (mOptions.currentMonitor) {
-    geometry = qApp->desktop()->screenGeometry(QCursor::pos());
-  }
-  else {
-    geometry = qApp->desktop()->geometry();
-  }
-
-  mPixmap = QPixmap::grabWindow(qApp->desktop()->winId(), geometry.x(), geometry.y(), geometry.width(), geometry.height());
-
-  if (mOptions.cursor && !mPixmap.isNull()) {
-    QPainter painter(&mPixmap);
-    painter.drawPixmap(QCursor::pos(), os::cursor());
-  }
-}
-
-void Screenshot::take()
-{
-  switch (mOptions.mode)
-  {
-  case Screenshot::WholeScreen:
-    wholeScreen();
-    break;
-
-  case Screenshot::SelectedArea:
-    selectedArea();
-    break;
-
-  case Screenshot::ActiveWindow:
-    activeWindow();
-    break;
-
-  case Screenshot::SelectedWindow:
-    selectedWindow();
-    break;
-  }
-
-  if (mPixmapDelay)
-    return;
-
-  if (mPixmap.isNull()) {
-    confirm(false);
-  }
-  else {
-    confirmation();
-  }
-}
+//
 
 void Screenshot::confirm(bool result)
 {
@@ -294,9 +146,31 @@ void Screenshot::confirm(bool result)
   emit finished();
 }
 
+void Screenshot::confirmation()
+{
+  emit askConfirmation();
+
+  if (!mOptions.file) {
+    return;
+  }
+
+  // Unloading the pixmap to reduce memory usage during previews
+  mUnloadFilename = mOptions.directory.path() + QDir::separator() + QString(".lstemp.%1%2").arg(qrand() * qrand() + QDateTime::currentDateTime().toTime_t()).arg(extension());
+  mUnloaded = mPixmap.save(mUnloadFilename, 0, mOptions.quality);
+
+  if (mUnloaded) {
+    mPixmap = QPixmap();
+  }
+}
+
 void Screenshot::discard()
 {
   confirm(false);
+}
+
+void Screenshot::markUpload()
+{
+  mOptions.upload = true;
 }
 
 void Screenshot::save()
@@ -382,19 +256,152 @@ void Screenshot::setPixmap(QPixmap pixmap)
   }
 }
 
-void Screenshot::confirmation()
+void Screenshot::take()
 {
-  emit askConfirmation();
+  switch (mOptions.mode)
+  {
+  case Screenshot::WholeScreen:
+    wholeScreen();
+    break;
 
-  if (!mOptions.file) {
-    return;
+  case Screenshot::SelectedArea:
+    selectedArea();
+    break;
+
+  case Screenshot::ActiveWindow:
+    activeWindow();
+    break;
+
+  case Screenshot::SelectedWindow:
+    selectedWindow();
+    break;
   }
 
-  // Unloading the pixmap to reduce memory usage during previews
-  mUnloadFilename = mOptions.directory.path() + QDir::separator() + QString(".lstemp.%1%2").arg(qrand() * qrand() + QDateTime::currentDateTime().toTime_t()).arg(extension());
-  mUnloaded = mPixmap.save(mUnloadFilename, 0, mOptions.quality);
+  if (mPixmapDelay)
+    return;
 
-  if (mUnloaded) {
+  if (mPixmap.isNull()) {
+    confirm(false);
+  }
+  else {
+    confirmation();
+  }
+}
+
+//
+
+void Screenshot::activeWindow()
+{
+#ifdef Q_WS_WIN
+  HWND fWindow = GetForegroundWindow();
+
+  if (fWindow == NULL)
+    return;
+
+  if (fWindow == GetDesktopWindow()) {
+   wholeScreen();
+   return;
+  }
+
+  mPixmap = os::grabWindow(GetForegroundWindow());
+#endif
+
+#if defined(Q_WS_X11)
+  Window focus;
+  int revert;
+
+  XGetInputFocus(QX11Info::display(), &focus, &revert);
+
+  mPixmap = QPixmap::grabWindow(focus);
+#endif
+}
+
+QString Screenshot::extension() const
+{
+  switch (mOptions.format) {
+    case Screenshot::PNG:
+      return ".png";
+      break;
+    case Screenshot::BMP:
+      return ".bmp";
+      break;
+    case Screenshot::JPEG:
+    default:
+      return ".jpg";
+      break;
+  }
+}
+
+void Screenshot::grabDesktop()
+{
+  QRect geometry;
+
+  if (mOptions.currentMonitor) {
+    geometry = qApp->desktop()->screenGeometry(QCursor::pos());
+  }
+  else {
+    geometry = qApp->desktop()->geometry();
+  }
+
+  mPixmap = QPixmap::grabWindow(qApp->desktop()->winId(), geometry.x(), geometry.y(), geometry.width(), geometry.height());
+
+  if (mOptions.cursor && !mPixmap.isNull()) {
+    QPainter painter(&mPixmap);
+    painter.drawPixmap(QCursor::pos(), os::cursor());
+  }
+}
+
+QString Screenshot::newFileName() const
+{
+  if (!mOptions.directory.exists())
+    mOptions.directory.mkpath(mOptions.directory.path());
+
+  QString naming = Screenshot::getName(mOptions.namingOptions, mOptions.prefix, mOptions.directory);
+
+  QString fileName;
+
+  QString path = QDir::toNativeSeparators(mOptions.directory.path());
+
+  // Cleanup
+  if (path.at(path.size()-1) != QDir::separator() && !path.isEmpty())
+    path.append(QDir::separator());
+
+  fileName.append(path);
+  fileName.append(naming);
+
+  return fileName;
+}
+
+void Screenshot::selectedArea()
+{
+  grabDesktop();
+
+  if (mPixmap.isNull())
+    return;
+
+  AreaDialog selector(this);
+  int result = selector.exec();
+
+  if (result == QDialog::Accepted) {
+    mPixmap = mPixmap.copy(selector.resultRect());
+  }
+  else {
     mPixmap = QPixmap();
   }
 }
+
+void Screenshot::selectedWindow()
+{
+  WindowPicker* windowPicker = new WindowPicker;
+  mPixmapDelay = true;
+
+  connect(windowPicker, SIGNAL(pixmap(QPixmap)), this, SLOT(setPixmap(QPixmap)));
+}
+
+void Screenshot::wholeScreen()
+{
+  grabDesktop();
+}
+
+
+

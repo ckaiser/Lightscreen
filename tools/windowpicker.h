@@ -29,28 +29,28 @@ class WindowPicker : public QWidget
   Q_OBJECT
 
 public:
-    WindowPicker();
-    ~WindowPicker();
+  WindowPicker();
+  ~WindowPicker();
 
 signals:
-    void pixmap(QPixmap pixmap);
+  void pixmap(QPixmap pixmap);
 
 protected:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void closeEvent(QCloseEvent*);
+  void closeEvent(QCloseEvent*);
+  void mouseMoveEvent(QMouseEvent *event);
+  void mousePressEvent(QMouseEvent *event);
+  void mouseReleaseEvent(QMouseEvent *event);
 
 private:
-    void cancel();
+  void cancel();
 
 private:
-    QPixmap mCrosshair;
-    QLabel *mWindowLabel;
-    QLabel *mWindowIcon;
-    QLabel *mCrosshairLabel;
-    WId mCurrentWindow;
-    bool mTaken;
+  QPixmap mCrosshair;
+  QLabel *mCrosshairLabel;
+  QLabel *mWindowIcon;
+  QLabel *mWindowLabel;
+  WId mCurrentWindow;
+  bool mTaken;
 };
 
 #endif // WINDOWPICKER_H

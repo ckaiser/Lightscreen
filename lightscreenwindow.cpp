@@ -20,6 +20,7 @@
 #include <QDesktopServices>
 #include <QFileInfo>
 #include <QHttp>
+#include <QKeyEvent>
 #include <QMenu>
 #include <QMessageBox>
 #include <QPointer>
@@ -28,9 +29,8 @@
 #include <QSound>
 #include <QSystemTrayIcon>
 #include <QTimer>
-#include <QUrl>
-#include <QKeyEvent>
 #include <QToolTip>
+#include <QUrl>
 
 #include <QDebug>
 
@@ -121,10 +121,6 @@ LightscreenWindow::~LightscreenWindow()
   delete mTrayIcon;
 }
 
-/*
- * Slots
- */
-
 void LightscreenWindow::action(int mode)
 {
   if (mode == 4) {
@@ -135,45 +131,22 @@ void LightscreenWindow::action(int mode)
   }
 }
 
-bool LightscreenWindow::closingWithoutTray()
+void LightscreenWindow::areaHotkey()
 {
-  if (settings()->value("options/disableHideAlert", false).toBool())
-    return false;
+    screenshotAction(2);
+}
 
-  QMessageBox msgBox;
-  msgBox.setWindowTitle(tr("Lightscreen"));
-  msgBox.setText(tr("You have chosen to hide Lightscreen when there's no system tray icon, so you will not be able to access the program <b>unless you have selected a hotkey to do so</b>.<br>What do you want to do?"));
-  msgBox.setIcon(QMessageBox::Warning);
+void LightscreenWindow::checkForUpdates()
+{
+  if (settings()->value("options/disableUpdater", false).toBool())
+    return;
 
-  msgBox.setStyleSheet("QPushButton { padding: 4px 8px; }");
+  if (settings()->value("lastUpdateCheck").toInt() + 7
+      > QDate::currentDate().dayOfYear())
+    return; // If 7 days have not passed since the last update check.
 
-  QPushButton *enableButton = msgBox.addButton(tr("Hide but enable tray"),
-      QMessageBox::ActionRole);
-  QPushButton *enableAndDenotifyButton = msgBox.addButton(tr("Hide and don't warn"),
-      QMessageBox::ActionRole);
-  QPushButton *hideButton = msgBox.addButton(tr("Just hide"),
-      QMessageBox::ActionRole);
-  QPushButton *abortButton = msgBox.addButton(QMessageBox::Cancel);
-
-  Q_UNUSED(abortButton);
-
-  msgBox.exec();
-
-  if (msgBox.clickedButton() == hideButton) {
-    return false;
-  }
-  else if (msgBox.clickedButton() == enableAndDenotifyButton) {
-    settings()->setValue("options/disableHideAlert", true);
-    applySettings();
-    return false;
-  }
-  else if (msgBox.clickedButton() == enableButton) {
-    settings()->setValue("options/tray", true);
-    applySettings();
-    return false;
-  }
-
-  return true; // Cancel
+  connect(Updater::instance(), SIGNAL(done(bool)), this, SLOT(updaterDone(bool)));
+  Updater::instance()->check();
 }
 
 void LightscreenWindow::cleanup(Screenshot::Options &options)
@@ -239,6 +212,47 @@ void LightscreenWindow::cleanup(Screenshot::Options &options)
   mLastScreenshot = options.fileName;
 }
 
+bool LightscreenWindow::closingWithoutTray()
+{
+  if (settings()->value("options/disableHideAlert", false).toBool())
+    return false;
+
+  QMessageBox msgBox;
+  msgBox.setWindowTitle(tr("Lightscreen"));
+  msgBox.setText(tr("You have chosen to hide Lightscreen when there's no system tray icon, so you will not be able to access the program <b>unless you have selected a hotkey to do so</b>.<br>What do you want to do?"));
+  msgBox.setIcon(QMessageBox::Warning);
+
+  msgBox.setStyleSheet("QPushButton { padding: 4px 8px; }");
+
+  QPushButton *enableButton = msgBox.addButton(tr("Hide but enable tray"),
+      QMessageBox::ActionRole);
+  QPushButton *enableAndDenotifyButton = msgBox.addButton(tr("Hide and don't warn"),
+      QMessageBox::ActionRole);
+  QPushButton *hideButton = msgBox.addButton(tr("Just hide"),
+      QMessageBox::ActionRole);
+  QPushButton *abortButton = msgBox.addButton(QMessageBox::Cancel);
+
+  Q_UNUSED(abortButton);
+
+  msgBox.exec();
+
+  if (msgBox.clickedButton() == hideButton) {
+    return false;
+  }
+  else if (msgBox.clickedButton() == enableAndDenotifyButton) {
+    settings()->setValue("options/disableHideAlert", true);
+    applySettings();
+    return false;
+  }
+  else if (msgBox.clickedButton() == enableButton) {
+    settings()->setValue("options/tray", true);
+    applySettings();
+    return false;
+  }
+
+  return true; // Cancel
+}
+
 void LightscreenWindow::goToFolder()
 {
 #ifdef Q_WS_WIN
@@ -259,6 +273,16 @@ void LightscreenWindow::goToFolder()
 #ifdef Q_WS_WIN
   }
 #endif
+}
+
+void LightscreenWindow::messageClicked()
+{
+  if (mLastMessage == 1) {
+    goToFolder();
+  }
+  else {
+    QDesktopServices::openUrl(QUrl(Uploader::instance()->lastUrl()));
+  }
 }
 
 void LightscreenWindow::messageReceived(const QString &message)
@@ -291,14 +315,42 @@ void LightscreenWindow::messageReceived(const QString &message)
     showUploadDialog();
 }
 
-void LightscreenWindow::messageClicked()
+void LightscreenWindow::notify(const Screenshot::Result &result)
 {
-  if (mLastMessage == 1) {
-    goToFolder();
+  switch (result)
+  {
+  case Screenshot::Success:
+    mTrayIcon->setIcon(QIcon(":/icons/lightscreen.yes"));
+
+#ifdef Q_WS_WIN
+    if (mTaskbarButton)
+      mTaskbarButton->SetOverlayIcon(QIcon(":/icons/yes"), tr("Success!"));
+#endif
+
+    setWindowTitle(tr("Success!"));
+    break;
+  case Screenshot::Fail:
+    mTrayIcon->setIcon(QIcon(":/icons/lightscreen.no"));
+    setWindowTitle(tr("Failed!"));
+#ifdef Q_WS_WIN
+    if (mTaskbarButton)
+      mTaskbarButton->SetOverlayIcon(QIcon(":/icons/no"), tr("Failed!"));
+#endif
+    break;
+  case Screenshot::Cancel:
+    setWindowTitle(tr("Cancelled!"));
+    break;
   }
-  else {
-    QDesktopServices::openUrl(QUrl(Uploader::instance()->lastUrl()));
-  }
+
+  QTimer::singleShot(2000, this, SLOT(restoreNotification()));
+}
+
+void LightscreenWindow::optimizationDone()
+{
+  // A mouthful :D
+  mOptimizeCount--;
+  QString screenshot = (qobject_cast<QProcess*>(sender()))->property("screenshot").toString();
+  upload(screenshot);
 }
 
 void LightscreenWindow::preview(Screenshot* screenshot)
@@ -448,6 +500,57 @@ void LightscreenWindow::screenshotActionTriggered(QAction* action)
   screenshotAction(action->data().toInt());
 }
 
+void LightscreenWindow::showHotkeyError(const QStringList &hotkeys)
+{
+   static bool dontShow = false;
+
+   if (dontShow)
+    return;
+
+   QString messageText;
+
+   messageText = tr("Some hotkeys could not be registered, they might already be in use");
+
+   if (hotkeys.count() > 1) {
+     messageText += tr("<br>The failed hotkeys are the following:") + "<ul>";
+
+     foreach(const QString &hotkey, hotkeys) {
+       messageText += QString("%1%2%3").arg("<li><b>").arg(hotkey).arg("</b></li>");
+     }
+
+    messageText += "</ul>";
+   }
+   else {
+    messageText += tr("<br>The failed hotkey is <b>%1</b>").arg(hotkeys[0]);
+   }
+
+   messageText += tr("<br><i>What do you want to do?</i>");
+
+   QMessageBox msgBox(this);
+   msgBox.setWindowTitle(tr("Lightscreen"));
+   msgBox.setText(messageText);
+
+   QPushButton *changeButton  = msgBox.addButton(tr("Change") , QMessageBox::ActionRole);
+   QPushButton *disableButton = msgBox.addButton(tr("Disable"), QMessageBox::ActionRole);
+   QPushButton *exitButton    = msgBox.addButton(tr("Quit")   , QMessageBox::ActionRole);
+
+   msgBox.exec();
+
+   if (msgBox.clickedButton() == exitButton) {
+     dontShow = true;
+     QTimer::singleShot(10, this, SLOT(quit()));
+   }
+   else if (msgBox.clickedButton() == changeButton) {
+    showOptions();
+   }
+   else if (msgBox.clickedButton() == disableButton) {
+     foreach(const QString &hotkey, hotkeys) {
+      settings()->setValue(QString("actions/%1/enabled").arg(hotkey), false);
+     }
+   }
+
+}
+
 void LightscreenWindow::showOptions()
 {
   GlobalShortcutManager::clear();
@@ -458,64 +561,6 @@ void LightscreenWindow::showOptions()
   optionsDialog->deleteLater();
 
   applySettings();
-}
-
-void LightscreenWindow::showScreenshotMessage(const Screenshot::Result &result, const QString &fileName)
-{
-  if (result == Screenshot::Cancel
-      || mPreviewDialog)
-    return;
-
-  // Showing message.
-  QString title;
-  QString message;
-
-  if (result == Screenshot::Success) {
-    title = QFileInfo(fileName).fileName();
-
-    if (settings()->value("file/target").toString().isEmpty()) {
-      message = QDir::toNativeSeparators(QCoreApplication::applicationDirPath());
-    }
-    else {
-      message = tr("Saved to \"%1\"").arg(settings()->value("file/target").toString());
-    }
-  }
-  else {
-    title   = tr("The screenshot was not taken");
-    message = tr("An error occurred.");
-  }
-
-  mLastMessage = 1;
-  mTrayIcon->showMessage(title, message);
-}
-
-void LightscreenWindow::showUploadDialog()
-{
-  HistoryDialog historyDialog(this);
-  historyDialog.exec();
-}
-
-void LightscreenWindow::showUploaderMessage(QString fileName, QString url)
-{
-  if (!mTrayIcon)
-    return;
-
-  QString screenshot = QFileInfo(fileName).fileName();
-
-  mLastMessage = 2;
-  mTrayIcon->showMessage(tr("%1 uploaded").arg(screenshot), tr("Click here to go to %1").arg(url));
-  updateUploadStatus();
-}
-
-void LightscreenWindow::showUploaderError(const QString &error)
-{
-  mLastMessage = -1;
-
-  if (mTrayIcon && !error.isEmpty()) {
-    mTrayIcon->showMessage(tr("Upload error"), error);
-  }
-
-  updateUploadStatus();
 }
 
 void LightscreenWindow::showScreenshotMenu()
@@ -571,93 +616,62 @@ void LightscreenWindow::showScreenshotMenu()
   ui.screenshotPushButton->showMenu();
 }
 
-void LightscreenWindow::notify(const Screenshot::Result &result)
+void LightscreenWindow::showScreenshotMessage(const Screenshot::Result &result, const QString &fileName)
 {
-  switch (result)
-  {
-  case Screenshot::Success:
-    mTrayIcon->setIcon(QIcon(":/icons/lightscreen.yes"));
-
-#ifdef Q_WS_WIN
-    if (mTaskbarButton)
-      mTaskbarButton->SetOverlayIcon(QIcon(":/icons/yes"), tr("Success!"));
-#endif
-
-    setWindowTitle(tr("Success!"));
-    break;
-  case Screenshot::Fail:
-    mTrayIcon->setIcon(QIcon(":/icons/lightscreen.no"));
-    setWindowTitle(tr("Failed!"));
-#ifdef Q_WS_WIN
-    if (mTaskbarButton)
-      mTaskbarButton->SetOverlayIcon(QIcon(":/icons/no"), tr("Failed!"));
-#endif
-    break;
-  case Screenshot::Cancel:
-    setWindowTitle(tr("Cancelled!"));
-    break;
-  }
-
-  QTimer::singleShot(2000, this, SLOT(restoreNotification()));
-}
-
-void LightscreenWindow::optimizationDone()
-{
-  // A mouthful :D
-  mOptimizeCount--;
-  QString screenshot = (qobject_cast<QProcess*>(sender()))->property("screenshot").toString();
-  upload(screenshot);
-}
-
-void LightscreenWindow::showHotkeyError(const QStringList &hotkeys)
-{
-   static bool dontShow = false;
-
-   if (dontShow)
+  if (result == Screenshot::Cancel
+      || mPreviewDialog)
     return;
 
-   QString messageText;
+  // Showing message.
+  QString title;
+  QString message;
 
-   messageText = tr("Some hotkeys could not be registered, they might already be in use");
+  if (result == Screenshot::Success) {
+    title = QFileInfo(fileName).fileName();
 
-   if (hotkeys.count() > 1) {
-     messageText += tr("<br>The failed hotkeys are the following:") + "<ul>";
+    if (settings()->value("file/target").toString().isEmpty()) {
+      message = QDir::toNativeSeparators(QCoreApplication::applicationDirPath());
+    }
+    else {
+      message = tr("Saved to \"%1\"").arg(settings()->value("file/target").toString());
+    }
+  }
+  else {
+    title   = tr("The screenshot was not taken");
+    message = tr("An error occurred.");
+  }
 
-     foreach(const QString &hotkey, hotkeys) {
-       messageText += QString("%1%2%3").arg("<li><b>").arg(hotkey).arg("</b></li>");
-     }
+  mLastMessage = 1;
+  mTrayIcon->showMessage(title, message);
+}
 
-    messageText += "</ul>";
-   }
-   else {
-    messageText += tr("<br>The failed hotkey is <b>%1</b>").arg(hotkeys[0]);
-   }
+void LightscreenWindow::showUploadDialog()
+{
+  HistoryDialog historyDialog(this);
+  historyDialog.exec();
+}
 
-   messageText += tr("<br><i>What do you want to do?</i>");
+void LightscreenWindow::showUploaderError(const QString &error)
+{
+  mLastMessage = -1;
 
-   QMessageBox msgBox(this);
-   msgBox.setWindowTitle(tr("Lightscreen"));
-   msgBox.setText(messageText);
+  if (mTrayIcon && !error.isEmpty()) {
+    mTrayIcon->showMessage(tr("Upload error"), error);
+  }
 
-   QPushButton *changeButton  = msgBox.addButton(tr("Change") , QMessageBox::ActionRole);
-   QPushButton *disableButton = msgBox.addButton(tr("Disable"), QMessageBox::ActionRole);
-   QPushButton *exitButton    = msgBox.addButton(tr("Quit")   , QMessageBox::ActionRole);
+  updateUploadStatus();
+}
 
-   msgBox.exec();
+void LightscreenWindow::showUploaderMessage(QString fileName, QString url)
+{
+  if (!mTrayIcon)
+    return;
 
-   if (msgBox.clickedButton() == exitButton) {
-     dontShow = true;
-     QTimer::singleShot(10, this, SLOT(quit()));
-   }
-   else if (msgBox.clickedButton() == changeButton) {
-    showOptions();
-   }
-   else if (msgBox.clickedButton() == disableButton) {
-     foreach(const QString &hotkey, hotkeys) {
-      settings()->setValue(QString("actions/%1/enabled").arg(hotkey), false);
-     }
-   }
+  QString screenshot = QFileInfo(fileName).fileName();
 
+  mLastMessage = 2;
+  mTrayIcon->showMessage(tr("%1 uploaded").arg(screenshot), tr("Click here to go to %1").arg(url));
+  updateUploadStatus();
 }
 
 void LightscreenWindow::toggleVisibility(QSystemTrayIcon::ActivationReason reason)
@@ -677,14 +691,106 @@ void LightscreenWindow::toggleVisibility(QSystemTrayIcon::ActivationReason reaso
   }
 }
 
-// Aliases
-void LightscreenWindow::windowHotkey()       { screenshotAction(1); }
-void LightscreenWindow::windowPickerHotkey() { screenshotAction(3); }
-void LightscreenWindow::areaHotkey()         { screenshotAction(2); }
+void LightscreenWindow::updateUploadStatus()
+{
+  int uploading = Uploader::instance()->uploading();
+  QString statusString;
 
-/*
- * Private
- */
+  if (uploading > 0) {
+    statusString = tr("Uploading %1 screenshot(s)").arg(uploading);
+  }
+  else {
+    statusString = tr("Lightscreen");
+#ifdef Q_WS_WIN
+    if (mTaskbarButton) {
+      mTaskbarButton->SetProgresValue(0, 0);
+      mTaskbarButton->SetState(STATE_NOPROGRESS);
+    }
+#endif
+  }
+
+  if (mTrayIcon) {
+    mTrayIcon->setToolTip(statusString);
+  }
+
+  setWindowTitle(statusString);
+}
+
+void LightscreenWindow::updaterDone(bool result)
+{
+  settings()->setValue("lastUpdateCheck", QDate::currentDate().dayOfYear());
+
+  if (!result)
+    return;
+
+  QMessageBox msgBox;
+  msgBox.setWindowTitle(tr("Lightscreen"));
+  msgBox.setText(tr("There's a new version of Lightscreen available.<br>Would you like to see more information?<br>(<em>You can turn this notification off</em>)"));
+  msgBox.setIcon(QMessageBox::Information);
+
+  QPushButton *yesButton     = msgBox.addButton(QMessageBox::Yes);
+  QPushButton *turnOffButton = msgBox.addButton(tr("Turn Off"), QMessageBox::ActionRole);
+  QPushButton *remindButton  = msgBox.addButton(tr("Remind Me Later"), QMessageBox::RejectRole);
+
+  Q_UNUSED(remindButton);
+
+  msgBox.exec();
+
+  if (msgBox.clickedButton() == yesButton) {
+    QDesktopServices::openUrl(QUrl("http://lightscreen.sourceforge.net/whatsnew/?from=" + qApp->applicationVersion()));
+  }
+  else if (msgBox.clickedButton() == turnOffButton) {
+    settings()->setValue("options/disableUpdater", true);
+  }
+}
+
+void LightscreenWindow::upload(const QString &fileName)
+{
+  Uploader::instance()->upload(fileName);
+}
+
+void LightscreenWindow::uploadAction(QAction *upload)
+{
+  QString url = upload->text();
+
+  if (url == tr("Uploading...")) {
+    int confirm = QMessageBox::question(this, tr("Upload cancel"), tr("Do you want to cancel the upload of %1").arg(upload->toolTip()), tr("Cancel"), tr("Don't Cancel"));
+
+    if (confirm == 0) {
+      Uploader::instance()->cancel(upload->whatsThis()); // Full path stored in the whatsThis
+    }
+  }
+  else {
+    QDesktopServices::openUrl(QUrl(url));
+  }
+}
+
+void LightscreenWindow::uploadLast()
+{
+  upload(mLastScreenshot);
+  updateUploadStatus();
+}
+
+void LightscreenWindow::uploadProgress(qint64 sent, qint64 total)
+{
+#ifdef Q_WS_WIN
+  if (mTaskbarButton)
+    mTaskbarButton->SetProgresValue(sent, total);
+#endif
+  //TODO: Update mTrayIcon & windowTitle()
+}
+
+void LightscreenWindow::windowHotkey()
+{
+  screenshotAction(1);
+}
+
+void LightscreenWindow::windowPickerHotkey()
+{
+  screenshotAction(3);
+}
+
+//
 
 void LightscreenWindow::applySettings()
 {
@@ -708,40 +814,8 @@ void LightscreenWindow::applySettings()
   os::setStartup(settings()->value("options/startup").toBool(), settings()->value("options/startupHide").toBool());
 }
 
-void LightscreenWindow::optiPNG(const QString &fileName, bool upload)
-{
-  if (upload) {
-    // If the user has chosen to upload the screenshots we have to track the progress of the optimization, so we use QProcess
-    QProcess* optipng = new QProcess(this);
+//
 
-    // To be read by optimizationDone() (for uploading)
-    optipng->setProperty("screenshot", fileName);
-
-    // Delete the QProcess once it's done.
-    connect(optipng, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(optimizationDone()));
-    connect(optipng, SIGNAL(finished(int, QProcess::ExitStatus)), optipng, SLOT(deleteLater()));
-
-#ifdef Q_OS_UNIX
-    optipng->start("optipng", QStringList() << fileName);
-#else
-    optipng->start(qApp->applicationDirPath() + QDir::separator() + "optipng.exe", QStringList() << fileName);
-#endif
-
-    mOptimizeCount++;
-  }
-  else {
-    // Otherwise start it detached from this process.
-#ifdef Q_WS_WIN
-    ShellExecuteW(NULL, NULL, (LPCWSTR)QString(qApp->applicationDirPath() + QDir::separator() + "optipng.exe").toStdWString().data(), (LPCWSTR)fileName.toStdWString().data(), NULL, SW_HIDE);
-#endif
-
-#ifdef Q_OS_UNIX
-    QProcess::startDetached("optipng " + fileName + " -quiet");
-#endif
-
-    ScreenshotManager::instance()->saveHistory(fileName);
-  }
-}
 
 void LightscreenWindow::connectHotkeys()
 {
@@ -834,7 +908,7 @@ void LightscreenWindow::createTrayIcon()
   connect(quitAction, SIGNAL(triggered()), this, SLOT(quit()));
 
   QMenu* screenshotMenu = new QMenu(tr("Screenshot"));
-  screenshotMenu->addAction(screenAction);  
+  screenshotMenu->addAction(screenAction);
   screenshotMenu->addAction(areaAction);
   screenshotMenu->addAction(windowAction);
   screenshotMenu->addAction(windowPickerAction);
@@ -859,6 +933,41 @@ void LightscreenWindow::createTrayIcon()
   mTrayIcon->setContextMenu(trayIconMenu);
 }
 
+void LightscreenWindow::optiPNG(const QString &fileName, bool upload)
+{
+  if (upload) {
+    // If the user has chosen to upload the screenshots we have to track the progress of the optimization, so we use QProcess
+    QProcess* optipng = new QProcess(this);
+
+    // To be read by optimizationDone() (for uploading)
+    optipng->setProperty("screenshot", fileName);
+
+    // Delete the QProcess once it's done.
+    connect(optipng, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(optimizationDone()));
+    connect(optipng, SIGNAL(finished(int, QProcess::ExitStatus)), optipng, SLOT(deleteLater()));
+
+#ifdef Q_OS_UNIX
+    optipng->start("optipng", QStringList() << fileName);
+#else
+    optipng->start(qApp->applicationDirPath() + QDir::separator() + "optipng.exe", QStringList() << fileName);
+#endif
+
+    mOptimizeCount++;
+  }
+  else {
+    // Otherwise start it detached from this process.
+#ifdef Q_WS_WIN
+    ShellExecuteW(NULL, NULL, (LPCWSTR)QString(qApp->applicationDirPath() + QDir::separator() + "optipng.exe").toStdWString().data(), (LPCWSTR)fileName.toStdWString().data(), NULL, SW_HIDE);
+#endif
+
+#ifdef Q_OS_UNIX
+    QProcess::startDetached("optipng " + fileName + " -quiet");
+#endif
+
+    ScreenshotManager::instance()->saveHistory(fileName);
+  }
+}
+
 #ifdef Q_WS_WIN
 bool LightscreenWindow::winEvent(MSG *message, long *result)
 {
@@ -870,108 +979,6 @@ bool LightscreenWindow::winEvent(MSG *message, long *result)
 QSettings *LightscreenWindow::settings() const
 {
   return ScreenshotManager::instance()->settings();
-}
-
-void LightscreenWindow::checkForUpdates()
-{
-  if (settings()->value("options/disableUpdater", false).toBool())
-    return;
-
-  if (settings()->value("lastUpdateCheck").toInt() + 7
-      > QDate::currentDate().dayOfYear())
-    return; // If 7 days have not passed since the last update check.
-
-  connect(Updater::instance(), SIGNAL(done(bool)), this, SLOT(updaterDone(bool)));
-  Updater::instance()->check();
-}
-
-void LightscreenWindow::updaterDone(bool result)
-{
-  settings()->setValue("lastUpdateCheck", QDate::currentDate().dayOfYear());
-
-  if (!result)
-    return;
-
-  QMessageBox msgBox;
-  msgBox.setWindowTitle(tr("Lightscreen"));
-  msgBox.setText(tr("There's a new version of Lightscreen available.<br>Would you like to see more information?<br>(<em>You can turn this notification off</em>)"));
-  msgBox.setIcon(QMessageBox::Information);
-
-  QPushButton *yesButton     = msgBox.addButton(QMessageBox::Yes);
-  QPushButton *turnOffButton = msgBox.addButton(tr("Turn Off"), QMessageBox::ActionRole);
-  QPushButton *remindButton  = msgBox.addButton(tr("Remind Me Later"), QMessageBox::RejectRole);
-
-  Q_UNUSED(remindButton);
-
-  msgBox.exec();
-
-  if (msgBox.clickedButton() == yesButton) {
-    QDesktopServices::openUrl(QUrl("http://lightscreen.sourceforge.net/whatsnew/?from=" + qApp->applicationVersion()));
-  }
-  else if (msgBox.clickedButton() == turnOffButton) {
-    settings()->setValue("options/disableUpdater", true);
-  }
-}
-
-void LightscreenWindow::upload(const QString &fileName)
-{
-  Uploader::instance()->upload(fileName);
-}
-
-void LightscreenWindow::uploadAction(QAction *upload)
-{
-  QString url = upload->text();
-
-  if (url == tr("Uploading...")) {
-    int confirm = QMessageBox::question(this, tr("Upload cancel"), tr("Do you want to cancel the upload of %1").arg(upload->toolTip()), tr("Cancel"), tr("Don't Cancel"));
-
-    if (confirm == 0) {
-      Uploader::instance()->cancel(upload->whatsThis()); // Full path stored in the whatsThis
-    }
-  }
-  else {
-    QDesktopServices::openUrl(QUrl(url));
-  }
-}
-
-void LightscreenWindow::uploadProgress(qint64 sent, qint64 total)
-{
-#ifdef Q_WS_WIN
-  if (mTaskbarButton)
-    mTaskbarButton->SetProgresValue(sent, total);
-#endif
-  //TODO: Update mTrayIcon & windowTitle()
-}
-
-void LightscreenWindow::uploadLast()
-{
-  upload(mLastScreenshot);
-  updateUploadStatus();
-}
-
-void LightscreenWindow::updateUploadStatus()
-{
-  int uploading = Uploader::instance()->uploading();
-  QString statusString;
-
-  if (uploading > 0) {
-    statusString = tr("Uploading %1 screenshot(s)").arg(uploading);
-  }
-  else {
-    statusString = tr("Lightscreen");
-#ifdef Q_WS_WIN
-    if (mTaskbarButton) {
-      mTaskbarButton->SetProgresValue(0, 0);
-      mTaskbarButton->SetState(STATE_NOPROGRESS);
-    }
-#endif
-  }
-
-  if (mTrayIcon) {
-    mTrayIcon->setToolTip(statusString);
-  }
-
-  setWindowTitle(statusString);
 }
 
 // Event handling
@@ -1018,5 +1025,3 @@ bool LightscreenWindow::event(QEvent *event)
 
   return QDialog::event(event);
 }
-
-

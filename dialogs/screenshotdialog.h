@@ -31,21 +31,21 @@ public:
     ScreenshotDialog(Screenshot *screenshot, QWidget *parent = 0);
 
 private:
-    void zoom(int offset);
+  void zoom(int offset);
 
 protected:
-    void keyPressEvent(QKeyEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void closeEvent(QCloseEvent *event);
-    bool eventFilter(QObject *obj, QEvent *event);
+  bool eventFilter(QObject *obj, QEvent *event);
+  void closeEvent(QCloseEvent *event);
+  void keyPressEvent(QKeyEvent *event);
+  void mouseMoveEvent(QMouseEvent *event);
+  void mousePressEvent(QMouseEvent *event);
+  void mouseReleaseEvent(QMouseEvent *event);
 
 private:
-    QScrollArea *mScrollArea;
-    QLabel *mLabel;
-    QPoint mMousePos;
-    QSize mOriginalSize;
+  QLabel *mLabel;
+  QPoint mMousePos;
+  QScrollArea *mScrollArea;
+  QSize mOriginalSize;
 };
 
 #endif // SCREENSHOTDIALOG_H
