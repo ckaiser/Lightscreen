@@ -65,9 +65,9 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   mHideTrigger(false),
   mReviveMain(false),
   mWasVisible(true),
-  mOptimizeCount(0),
-  mLastMode(-1),
   mLastMessage(0),
+  mLastMode(-1),
+  mOptimizeCount(0),
   mLastScreenshot()
 {
   os::translate(settings()->value("options/language", "English").toString());
@@ -390,7 +390,7 @@ void LightscreenWindow::quit()
   if (!doing.isNull()) {
     answer = QMessageBox::question(this,
                                    tr("Are you sure you want to quit?"),
-                                   tr("Lightscreen is currently %1, this will finish momentarily, are you sure you want to quit?").arg(doing),
+                                   tr("Lightscreen is currently %1, this will finish momentarily.<br>Are you sure you want to quit?").arg(doing),
                                    tr("Quit"),
                                    tr("Don't Quit"));
   }
@@ -961,7 +961,7 @@ void LightscreenWindow::optiPNG(const QString &fileName, bool upload)
 #endif
 
 #ifdef Q_OS_UNIX
-    QProcess::startDetached("optipng " + fileName + " -quiet");
+    QProcess::startDetached("optipng \"" + fileName + "\" -quiet");
 #endif
 
     ScreenshotManager::instance()->saveHistory(fileName);

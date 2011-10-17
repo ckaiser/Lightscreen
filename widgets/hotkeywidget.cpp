@@ -44,15 +44,15 @@ HotkeyWidget::HotkeyWidget(QWidget *parent) :
   }
 }
 
-void HotkeyWidget::setHotkey(QKeySequence hotkey)
+void HotkeyWidget::setHotkey(QString hotkeyString)
 {
-  mHotkey = hotkey;
+  mHotkey = QKeySequence().fromString(hotkeyString, QKeySequence::NativeText);
   setHotkeyText();
 }
 
-QKeySequence &HotkeyWidget::hotkey()
+QString HotkeyWidget::hotkey() const
 {
-  return mHotkey;
+  return mHotkey.toString(QKeySequence::PortableText);
 }
 
 void HotkeyWidget::showError()

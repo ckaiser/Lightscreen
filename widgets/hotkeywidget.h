@@ -28,8 +28,8 @@ class HotkeyWidget : public QPushButton
 public:
   HotkeyWidget(QWidget *parent = 0);
 
-  void setHotkey(QKeySequence hotkey);
-  QKeySequence &hotkey();
+  void setHotkey(QString hotkey);
+  QString hotkey() const;
 
 signals:
   void invalidHotkeyError();

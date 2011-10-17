@@ -267,9 +267,14 @@ Quality is related to file size and of course to readability and overall quality
            </layout>
           </item>
           <item row="5" column="0">
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="previewTextLabel">
+            <property name="font">
+             <font>
+              <underline>true</underline>
+             </font>
+            </property>
             <property name="text">
-             <string>&lt;i&gt;Preview:&lt;/i&gt;</string>
+             <string>Preview:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -388,7 +393,7 @@ Quality is related to file size and of course to readability and overall quality
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Fullscreen</string>
+             <string>&amp;Fullscreen</string>
             </property>
            </widget>
           </item>
@@ -411,7 +416,7 @@ Quality is related to file size and of course to readability and overall quality
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Window Picker</string>
+             <string>Window &amp;Picker</string>
             </property>
            </widget>
           </item>
@@ -440,7 +445,7 @@ Quality is related to file size and of course to readability and overall quality
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Active Window</string>
+             <string>Active &amp;Window</string>
             </property>
            </widget>
           </item>
@@ -456,7 +461,7 @@ Quality is related to file size and of course to readability and overall quality
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Screen Area</string>
+             <string>Screen &amp;Area</string>
             </property>
            </widget>
           </item>
@@ -490,7 +495,7 @@ Quality is related to file size and of course to readability and overall quality
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Open the program window</string>
+             <string>&amp;Open the program window</string>
             </property>
            </widget>
           </item>
@@ -506,7 +511,7 @@ Quality is related to file size and of course to readability and overall quality
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Open the directory</string>
+             <string>Open the &amp;directory</string>
             </property>
            </widget>
           </item>
@@ -862,6 +867,9 @@ Quality is related to file size and of course to readability and overall quality
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
                 </property>
+                <property name="buddy">
+                 <cstring>previewAutocloseActionComboBox</cstring>
+                </property>
                </widget>
               </item>
               <item row="2" column="3">
@@ -890,6 +898,9 @@ Quality is related to file size and of course to readability and overall quality
                <widget class="QLabel" name="previewDefaultActionLabel">
                 <property name="text">
                  <string>Default action:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>previewDefaultActionComboBox</cstring>
                 </property>
                </widget>
               </item>
@@ -1139,7 +1150,7 @@ Quality is related to file size and of course to readability and overall quality
               <item>
                <widget class="QPushButton" name="historyPushButton">
                 <property name="text">
-                 <string>View History</string>
+                 <string>View &amp;History</string>
                 </property>
                </widget>
               </item>
@@ -1205,6 +1216,9 @@ Created by &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/
          <property name="wordWrap">
           <bool>true</bool>
          </property>
+         <property name="textInteractionFlags">
+          <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
+         </property>
         </widget>
        </item>
        <item>
@@ -1212,6 +1226,9 @@ Created by &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/
          <property name="text">
           <string>Released under the &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.html&quot;&gt;GNU General Public License&lt;/a&gt;.&lt;br&gt;&lt;br&gt;
 Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/about&quot;&gt;Donators and Translators&lt;/a&gt;.</string>
+         </property>
+         <property name="textInteractionFlags">
+          <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
          </property>
         </widget>
        </item>
@@ -1236,6 +1253,9 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
+         </property>
+         <property name="textInteractionFlags">
+          <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
          </property>
         </widget>
        </item>
@@ -1272,6 +1292,8 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
   <tabstop>startupHideCheckBox</tabstop>
   <tabstop>screenCheckBox</tabstop>
   <tabstop>screenHotkeyWidget</tabstop>
+  <tabstop>areaCheckBox</tabstop>
+  <tabstop>areaHotkeyWidget</tabstop>
   <tabstop>windowCheckBox</tabstop>
   <tabstop>windowHotkeyWidget</tabstop>
   <tabstop>windowPickerCheckBox</tabstop>
@@ -1280,10 +1302,19 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
   <tabstop>openHotkeyWidget</tabstop>
   <tabstop>directoryCheckBox</tabstop>
   <tabstop>directoryHotkeyWidget</tabstop>
+  <tabstop>optionsScrollArea</tabstop>
   <tabstop>trayCheckBox</tabstop>
   <tabstop>hideCheckBox</tabstop>
   <tabstop>warnHideCheckBox</tabstop>
-  <tabstop>languageComboBox</tabstop>
+  <tabstop>messageCheckBox</tabstop>
+  <tabstop>playSoundCheckBox</tabstop>
+  <tabstop>previewGroupBox</tabstop>
+  <tabstop>previewSizeSpinBox</tabstop>
+  <tabstop>previewPositionComboBox</tabstop>
+  <tabstop>previewAutocloseCheckBox</tabstop>
+  <tabstop>previewAutocloseTimeSpinBox</tabstop>
+  <tabstop>previewAutocloseActionComboBox</tabstop>
+  <tabstop>previewDefaultActionComboBox</tabstop>
   <tabstop>saveAsCheckBox</tabstop>
   <tabstop>clipboardCheckBox</tabstop>
   <tabstop>currentMonitorCheckBox</tabstop>
@@ -1292,15 +1323,14 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
   <tabstop>optiPngCheckBox</tabstop>
   <tabstop>replaceCheckBox</tabstop>
   <tabstop>areaAutocloseCheckBox</tabstop>
+  <tabstop>uploadCheckBox</tabstop>
   <tabstop>delaySpinBox</tabstop>
-  <tabstop>previewSizeSpinBox</tabstop>
-  <tabstop>previewPositionComboBox</tabstop>
-  <tabstop>previewAutocloseCheckBox</tabstop>
-  <tabstop>previewAutocloseTimeSpinBox</tabstop>
-  <tabstop>previewAutocloseActionComboBox</tabstop>
+  <tabstop>historyCheckBox</tabstop>
+  <tabstop>historyPushButton</tabstop>
   <tabstop>updaterCheckBox</tabstop>
   <tabstop>checkUpdatesPushButton</tabstop>
   <tabstop>buttonBox</tabstop>
+  <tabstop>tabWidget</tabstop>
  </tabstops>
  <resources>
   <include location="../lightscreen.qrc"/>

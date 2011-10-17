@@ -221,32 +221,32 @@ void OptionsDialog::loadSettings()
 
   settings()->beginGroup("screen");
     ui.screenCheckBox->setChecked(settings()->value("enabled", true).toBool());
-    ui.screenHotkeyWidget->setHotkey(settings()->value("hotkey", QKeySequence(Qt::Key_Print)).value<QKeySequence> ());
+    ui.screenHotkeyWidget->setHotkey(settings()->value("hotkey", "Print").toString());
   settings()->endGroup();
 
   settings()->beginGroup("area");
     ui.areaCheckBox->setChecked(settings()->value("enabled").toBool());
-    ui.areaHotkeyWidget->setHotkey(settings()->value("hotkey", QKeySequence(Qt::CTRL + Qt::Key_Print)).value<QKeySequence> ());
+    ui.areaHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl+Print").toString());
   settings()->endGroup();
 
   settings()->beginGroup("window");
     ui.windowCheckBox->setChecked(settings()->value("enabled").toBool());
-    ui.windowHotkeyWidget->setHotkey(settings()->value("hotkey", QKeySequence(Qt::ALT + Qt::Key_Print)).value<QKeySequence> ());
+    ui.windowHotkeyWidget->setHotkey(settings()->value("hotkey", "Alt + Print").toString());
   settings()->endGroup();
 
   settings()->beginGroup("windowPicker");
     ui.windowPickerCheckBox->setChecked(settings()->value("enabled").toBool());
-    ui.windowPickerHotkeyWidget->setHotkey(settings()->value("hotkey", QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_Print)).value<QKeySequence> ());
+    ui.windowPickerHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl + Alt + Print").toString());
   settings()->endGroup();
 
   settings()->beginGroup("open");
     ui.openCheckBox->setChecked(settings()->value("enabled").toBool());
-    ui.openHotkeyWidget->setHotkey(settings()->value("hotkey", QKeySequence(Qt::CTRL + Qt::Key_PageUp)).value<QKeySequence> ());
+    ui.openHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl + PgUp").toString());
   settings()->endGroup();
 
   settings()->beginGroup("directory");
     ui.directoryCheckBox->setChecked(settings()->value("enabled").toBool());
-    ui.directoryHotkeyWidget->setHotkey(settings()->value("hotkey", QKeySequence(Qt::SHIFT + Qt::Key_PageUp)).value<QKeySequence> ());
+    ui.directoryHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl + PgDown").toString());
   settings()->endGroup();
 
   settings()->endGroup();

@@ -30,6 +30,6 @@
         <file alias="Español">translations/spanish.qm</file>
     </qresource>
     <qresource prefix="/translations_qt">
-        <file alias="Spanish">translations/qt/qt_es.qm</file>
+        <file alias="Español">translations/qt/qt_es.qm</file>
     </qresource>
 </RCC>

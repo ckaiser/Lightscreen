@@ -33,11 +33,11 @@ ScreenshotDialog::ScreenshotDialog(Screenshot *screenshot, QWidget *parent) :
     QDialog(parent)
 {
   setWindowTitle(tr("Lightscreen Screenshot Viewer"));
-  setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint | Qt::WindowContextHelpButtonHint);
-  setWhatsThis(tr("You can zoom using the mouse wheel while holding the CTRL key. To return to the default zoom press \"Ctrl-0\"."));
+  setWindowFlags(windowFlags() | Qt::WindowMinMaxButtonsHint);
 
   mScrollArea = new QScrollArea(this);
   mScrollArea->verticalScrollBar()->installEventFilter(this);
+  mScrollArea->setToolTip(tr("You can zoom in and out using the mouse wheel while holding the CTRL key. To return to the default zoom press \"Ctrl-0\"."));
 
   QPalette newPalette = mScrollArea->palette();
   newPalette.setBrush(QPalette::Background, QBrush(QPixmap(":/backgrounds/checkerboard")));
@@ -71,6 +71,7 @@ ScreenshotDialog::ScreenshotDialog(Screenshot *screenshot, QWidget *parent) :
   }
 
   resize(size);
+  move(qApp->desktop()->screen(qApp->desktop()->primaryScreen())->rect().center()-QPoint(size.width()/2, size.height()/2));
   show();
 }
 
@@ -81,7 +82,7 @@ void ScreenshotDialog::zoom(int offset)
   }
   else {
     QSize newSize = mLabel->size();
-    newSize.scale(mLabel->size() + QSize(offset, offset),  Qt::KeepAspectRatio);
+    newSize.scale(mLabel->size() + QSize(offset, offset), Qt::KeepAspectRatio);
 
     if (offset < 0 && (newSize.width() < 200 || newSize.height() < 200)) {
       return;
