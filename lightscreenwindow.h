@@ -54,24 +54,23 @@ public slots:
   void messageClicked();
   void messageReceived(const QString &message);
   void notify(const Screenshot::Result &result);
-  void optimizationDone();
   void preview(Screenshot* screenshot);
   void quit();
   void restoreNotification();
   void screenshotAction(int mode = 0);
   void screenshotActionTriggered(QAction* action);
   void showHotkeyError(const QStringList &hotkeys);
+  void showHistoryDialog();
   void showOptions();
   void showScreenshotMenu();
   void showScreenshotMessage(const Screenshot::Result &result, const QString &fileName);
-  void showUploadDialog();
   void showUploaderError(const QString &error);
   void showUploaderMessage(QString fileName, QString url);
   void toggleVisibility(QSystemTrayIcon::ActivationReason reason = QSystemTrayIcon::DoubleClick);
   void updateUploadStatus();
   void updaterDone(bool result);
   void upload(const QString &fileName);
-  void uploadAction(QAction* upload);
+  void uploadCancel();
   void uploadLast();
   void uploadProgress(qint64 sent, qint64 total);
   void windowHotkey();
@@ -80,10 +79,12 @@ public slots:
 private slots:
   void applySettings();
 
+signals:
+  void uploading(bool uploading);
+
 private:
   void connectHotkeys();
   void createTrayIcon();
-  void optiPNG(const QString &fileName, bool upload);
 
 #ifdef Q_WS_WIN
   bool winEvent(MSG *message, long *result);
@@ -101,7 +102,6 @@ private:
   bool mWasVisible;
   int  mLastMessage;
   int  mLastMode;
-  int  mOptimizeCount;
   QString mLastScreenshot;
   QPointer<QSystemTrayIcon> mTrayIcon;
   QPointer<PreviewDialog> mPreviewDialog;

@@ -33,13 +33,16 @@ public:
   static Uploader* instance();
   QString lastUrl() const;
   QList< QPair<QString, QString> > &screenshots() { return mScreenshots; }
+  qint64 progressSent() const  { return mProgressSent; }
+  qint64 progressTotal() const { return mProgressTotal; }
 
 public slots:
-  void cancel(const QString &fileName);
+  void cancel();
   void imgurError(const QString &file, const QtImgur::Error e);
   void upload(const QString &fileName);
   void uploaded(const QString &fileName, const QString &url);
   int  uploading();
+  void reportProgress(qint64 sent, qint64 total);
 
 signals:
   void done(QString, QString);
@@ -53,6 +56,9 @@ private:
   QList< QPair<QString, QString> > mScreenshots;
   QtImgur *mImgur;
   QtImgur::Error mLastError;
+
+  qint64 mProgressSent;
+  qint64 mProgressTotal;
 
   int mUploading;
 };

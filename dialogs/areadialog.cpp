@@ -209,12 +209,6 @@ void AreaDialog::mouseMoveEvent(QMouseEvent* e)
       QPoint acceptPos = e->pos();
       QRect  acceptRect = QRect(acceptPos, QSize(120, 70));
 
-      if ((acceptPos.x()+120) > mScreenshot->pixmap().rect().width())
-        acceptPos.setX(acceptPos.x()-120);
-
-      if ((acceptPos.y()+70) > mScreenshot->pixmap().rect().height())
-        acceptPos.setY(acceptPos.y()-70);
-
       // Prevent the widget from overlapping the handles
       if (acceptRect.intersects(mTLHandle)) {
         acceptPos = mTLHandle.bottomRight() + QPoint(2, 2); // Corner case
@@ -232,6 +226,16 @@ void AreaDialog::mouseMoveEvent(QMouseEvent* e)
         acceptPos = mRHandle.topRight();
       }
 
+      if (acceptRect.intersects(mTHandle)) {
+        acceptPos = mTHandle.bottomRight();
+      }
+
+      if ((acceptPos.x()+120) > mScreenshot->pixmap().rect().width())
+        acceptPos.setX(acceptPos.x()-120);
+
+      if ((acceptPos.y()+70) > mScreenshot->pixmap().rect().height())
+        acceptPos.setY(acceptPos.y()-70);
+
       mAcceptWidget->move(acceptPos);
     }
 
@@ -247,13 +251,11 @@ void AreaDialog::mouseMoveEvent(QMouseEvent* e)
 
     bool found = false;
     foreach(QRect* r, mHandles) {
-
       if (r->contains(e->pos())) {
         mMouseOverHandle = r;
         found = true;
         break;
       }
-
     }
 
     if (!found) {

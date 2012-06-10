@@ -23,51 +23,61 @@ HistoryDialog::HistoryDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::HistoryDialog)
 {
-    ui->setupUi(this);
+  ui->setupUi(this);
 
-    if (os::aeroGlass(this)) {
-      layout()->setMargin(2);
-    }
+  if (os::aeroGlass(this)) {
+    layout()->setMargin(2);
+  }
 
-    ui->filterEdit->setText(tr("Filter.."));
-    ui->filterEdit->installEventFilter(this);
+  ui->filterEdit->setText(tr("Filter.."));
+  ui->filterEdit->installEventFilter(this);
 
-    QFile historyFile(ScreenshotManager::instance()->historyPath());
+  QFile historyFile(ScreenshotManager::instance()->historyPath());
 
-    if (!historyFile.exists())
-    {
-      ui->tableView->setEnabled(false);
-      return;
-    }
+  if (!historyFile.exists())
+  {
+    ui->tableView->setEnabled(false);
+    return;
+  }
 
-    QFileSystemWatcher *watcher = new QFileSystemWatcher(QStringList() << historyFile.fileName(), this);
-    connect(watcher, SIGNAL(fileChanged(QString)), this, SLOT(reloadHistory()));
+  QFileSystemWatcher *watcher = new QFileSystemWatcher(QStringList() << historyFile.fileName(), this);
+  connect(watcher, SIGNAL(fileChanged(QString)), this, SLOT(reloadHistory()));
 
-    reloadHistory();
+  reloadHistory();
 
-    ui->tableView->setTextElideMode(Qt::ElideLeft);
-    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->tableView->setAlternatingRowColors(true);
-    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->tableView->setSortingEnabled(true);
+  ui->uploadProgressBar->setValue  (Uploader::instance()->progressSent());
 
-    if (ui->tableView->model()->rowCount() > 0)
-    {
-      ui->clearButton->setEnabled(true);
-      ui->filterEdit->setEnabled(true);
-    }
+  if (Uploader::instance()->progressTotal() == 0) {
+    ui->uploadProgressBar->setMaximum(1);
+  }
+  else {
+    ui->uploadProgressBar->setMaximum(Uploader::instance()->progressTotal());
+  }
 
-    connect(ui->uploadButton, SIGNAL(clicked()), this, SLOT(upload()));
-    connect(ui->clearButton , SIGNAL(clicked()), this, SLOT(clear()));
-    connect(ui->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(selectionChanged(QItemSelection,QItemSelection)));
-    connect(ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(open(QModelIndex)));
-    connect(ui->tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
+  ui->tableView->setTextElideMode(Qt::ElideLeft);
+  ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+  ui->tableView->setAlternatingRowColors(true);
+  ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+  ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
+  ui->tableView->setSortingEnabled(true);
+
+  if (ui->tableView->model()->rowCount() > 0)
+  {
+    ui->clearButton->setEnabled(true);
+    ui->filterEdit->setEnabled(true);
+  }
+
+  connect(Uploader::instance(), SIGNAL(progress(qint64,qint64)), this, SLOT(uploadProgress(qint64, qint64)));
+  connect(ui->uploadButton, SIGNAL(clicked()), this, SLOT(upload()));
+  connect(ui->clearButton , SIGNAL(clicked()), this, SLOT(clear()));
+  connect(ui->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(selectionChanged(QItemSelection,QItemSelection)));
+  connect(ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(open(QModelIndex)));
+  connect(ui->tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
 }
 
 HistoryDialog::~HistoryDialog()
 {
-    delete ui;
+  delete ui;
 }
 
 void HistoryDialog::clear()
@@ -131,7 +141,10 @@ void HistoryDialog::open(QModelIndex index)
 void HistoryDialog::reloadHistory()
 {
   if (ui->tableView->model()) {
-    ui->tableView->model()->deleteLater();
+    // Double cast all the way across the sky!
+    QxtCsvModel* csv = qobject_cast<QxtCsvModel*>(qobject_cast<QSortFilterProxyModel*>(ui->tableView->model())->sourceModel());
+    csv->setSource(ScreenshotManager::instance()->historyPath(), false, '|');
+    return;
   }
 
   QFile historyFile(ScreenshotManager::instance()->historyPath());
@@ -142,6 +155,9 @@ void HistoryDialog::reloadHistory()
   mFilterModel = new QSortFilterProxyModel(model);
   mFilterModel->setSourceModel(model);
   mFilterModel->setDynamicSortFilter(true);
+  mFilterModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+  mFilterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+  mFilterModel->setFilterKeyColumn(-1);
 
   ui->tableView->setModel(mFilterModel);
 
@@ -178,11 +194,18 @@ void HistoryDialog::selectionChanged(QItemSelection selected, QItemSelection des
   ui->uploadButton->setEnabled((url == QObject::tr("- not uploaded -") && QFile::exists(screenshot)));
 }
 
-
 void HistoryDialog::upload()
 {
   Uploader::instance()->upload(mSelectedScreenshot);
   ui->uploadButton->setEnabled(false);
+}
+
+void HistoryDialog::uploadProgress(qint64 sent, qint64 total)
+{
+  ui->uploadProgressBar->setEnabled(true);
+
+  ui->uploadProgressBar->setMaximum(total);
+  ui->uploadProgressBar->setValue(sent);
 }
 
 bool HistoryDialog::eventFilter(QObject *object, QEvent *event)

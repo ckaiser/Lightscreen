@@ -33,6 +33,15 @@ QtImgur::QtImgur(const QString &APIKey, QObject *parent) : QObject(parent), mAPI
   connect(mNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(reply(QNetworkReply*)));
 }
 
+void QtImgur::cancelAll()
+{
+  foreach (QNetworkReply *reply, mFiles.keys()) {
+    reply->abort();
+    mFiles.remove(reply);
+    reply->deleteLater();
+  }
+}
+
 void QtImgur::cancel(const QString &fileName)
 {
   QNetworkReply *reply = mFiles.key(fileName);
@@ -41,8 +50,9 @@ void QtImgur::cancel(const QString &fileName)
     return;
   }
 
-  reply->abort();
   mFiles.remove(reply);
+
+  reply->abort();
   reply->deleteLater();
 }
 
@@ -65,7 +75,10 @@ void QtImgur::upload(const QString &fileName)
   data.append(QString("&image=").toUtf8());
   data.append(QUrl::toPercentEncoding(image));
 
-  QNetworkReply *reply = mNetworkManager->post(QNetworkRequest(QUrl("http://api.imgur.com/2/upload.xml")), data);
+  QNetworkRequest request(QUrl("http://api.imgur.com/2/upload"));
+  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+  QNetworkReply *reply = mNetworkManager->post(request, data);
   connect(reply, SIGNAL(uploadProgress(qint64, qint64)), this, SLOT(progress(qint64, qint64)));
 
   mFiles.insert(reply, fileName);
@@ -96,19 +109,17 @@ void QtImgur::progress(qint64 bytesSent, qint64 bytesTotal)
 void QtImgur::reply(QNetworkReply *reply)
 {
   QString fileName = mFiles[reply];
+
   mFiles.remove(reply);
 
-  if (reply->error() != QNetworkReply::NoError) {
-    emit error(fileName, QtImgur::ErrorNetwork);
-    return;
-  }
-
   if (reply->error() == QNetworkReply::OperationCanceledError) {
+    qDebug() << "Error: " << reply->errorString();
     emit error(fileName, QtImgur::ErrorCancel);
     return;
   }
 
   if (reply->rawHeader("X-RateLimit-Remaining") == "0") {
+
     emit error(fileName, QtImgur::ErrorCredits);
     return;
   }
@@ -120,6 +131,7 @@ void QtImgur::reply(QNetworkReply *reply)
 
     if (reader.isStartElement()) {
       if (reader.name() == "error") {
+        qDebug() << "Error: " << reply->errorString();
         emit error(fileName, QtImgur::ErrorUpload);
       }
 

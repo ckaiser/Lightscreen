@@ -40,6 +40,7 @@ public:
   QtImgur(const QString &APIKey, QObject *parent);
 
 public slots:
+  void cancelAll();
   void cancel(const QString &fileName);
   void upload(const QString &fileName);
 

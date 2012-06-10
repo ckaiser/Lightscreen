@@ -18,6 +18,7 @@
  */
 #include "screenshotmanager.h"
 #include "screenshot.h"
+#include "uploader.h"
 
 #include <QApplication>
 #include <QDateTime>
@@ -26,7 +27,7 @@
 #include <QFile>
 #include <QSettings>
 
-ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent), mCount(0)
+ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent)
 {
   if (QFile::exists(qApp->applicationDirPath() + "/config.ini")) {
     mSettings     = new QSettings(qApp->applicationDirPath() + QDir::separator() + "config.ini", QSettings::IniFormat);
@@ -38,11 +39,18 @@ ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent), mCo
     mHistoryPath  = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QDir::separator() + "history";
     mPortableMode = false;
   }
+
+  connect(Uploader::instance(), SIGNAL(done(QString, QString)), this, SLOT(uploadDone(QString, QString)));
 }
 
 ScreenshotManager::~ScreenshotManager()
 {
   delete mSettings;
+}
+
+int ScreenshotManager::activeCount() const
+{
+  return mScreenshots.count();
 }
 
 QString& ScreenshotManager::historyPath()
@@ -74,9 +82,8 @@ void ScreenshotManager::saveHistory(QString fileName, QString url)
 
   if (historyFile.open(QFile::WriteOnly | QFile::Append)) {
     out << QString("%1|%2|%3").arg(fileName).arg(url).arg(QDateTime::currentMSecsSinceEpoch()) << "\n";
+    historyFile.close();
   }
-
-  historyFile.close();
 }
 
 //
@@ -89,19 +96,44 @@ void ScreenshotManager::askConfirmation()
 
 void ScreenshotManager::cleanup()
 {
-  Screenshot* s = qobject_cast<Screenshot*>(sender());
-  emit windowCleanup(s->options());
-  s->deleteLater();
+  Screenshot* screenshot = qobject_cast<Screenshot*>(sender());
+  emit windowCleanup(screenshot->options());
+}
+
+void ScreenshotManager::finished()
+{
+  Screenshot* screenshot = qobject_cast<Screenshot*>(sender());
+  mScreenshots.removeOne(screenshot);
+  screenshot->deleteLater();
 }
 
 void ScreenshotManager::take(Screenshot::Options &options)
 {
   Screenshot* newScreenshot = new Screenshot(this, options);
+  mScreenshots.append(newScreenshot);
 
   connect(newScreenshot, SIGNAL(askConfirmation()), this, SLOT(askConfirmation()));
-  connect(newScreenshot, SIGNAL(finished())       , this, SLOT(cleanup()));
+  connect(newScreenshot, SIGNAL(cleanup())        , this, SLOT(cleanup()));
+  connect(newScreenshot, SIGNAL(finished())       , this, SLOT(finished()));
 
   newScreenshot->take();
+}
+
+void ScreenshotManager::uploadDone(QString fileName, QString url)
+{
+  foreach (Screenshot* screenshot, mScreenshots) {
+    if (screenshot->options().fileName == fileName
+        || screenshot->unloadedFileName() == fileName) {
+      screenshot->uploadDone(url);
+
+      if (screenshot->options().file) {
+        saveHistory(fileName, url);
+      }
+      else {
+        saveHistory(QObject::tr("- no file -"), url);
+      }
+    }
+  }
 }
 
 // Singleton

@@ -268,13 +268,8 @@ Quality is related to file size and of course to readability and overall quality
           </item>
           <item row="5" column="0">
            <widget class="QLabel" name="previewTextLabel">
-            <property name="font">
-             <font>
-              <underline>true</underline>
-             </font>
-            </property>
             <property name="text">
-             <string>Preview:</string>
+             <string>&lt;u&gt;Preview&lt;/u&gt;:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -571,9 +566,9 @@ Quality is related to file size and of course to readability and overall quality
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>0</y>
+            <y>-442</y>
             <width>358</width>
-            <height>726</height>
+            <height>778</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -938,13 +933,6 @@ Quality is related to file size and of course to readability and overall quality
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="clipboardCheckBox">
-                <property name="text">
-                 <string>&amp;Copy the screenshot to the clipboard.</string>
-                </property>
-               </widget>
-              </item>
-              <item>
                <widget class="QCheckBox" name="currentMonitorCheckBox">
                 <property name="text">
                  <string>&amp;Grab only the active monitor.</string>
@@ -1114,6 +1102,32 @@ Quality is related to file size and of course to readability and overall quality
                  </spacer>
                 </item>
                </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="clipboardGroupBox">
+             <property name="title">
+              <string>Clipboard</string>
+             </property>
+             <property name="flat">
+              <bool>true</bool>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_10">
+              <item>
+               <widget class="QCheckBox" name="clipboardCheckBox">
+                <property name="text">
+                 <string>&amp;Copy the screenshot to the clipboard.</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="imgurClipboardCheckBox">
+                <property name="text">
+                 <string>After uploading, copy the imgur URL to the clipboard.</string>
+                </property>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -1316,7 +1330,6 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
   <tabstop>previewAutocloseActionComboBox</tabstop>
   <tabstop>previewDefaultActionComboBox</tabstop>
   <tabstop>saveAsCheckBox</tabstop>
-  <tabstop>clipboardCheckBox</tabstop>
   <tabstop>currentMonitorCheckBox</tabstop>
   <tabstop>cursorCheckBox</tabstop>
   <tabstop>magnifyCheckBox</tabstop>
@@ -1330,7 +1343,6 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
   <tabstop>updaterCheckBox</tabstop>
   <tabstop>checkUpdatesPushButton</tabstop>
   <tabstop>buttonBox</tabstop>
-  <tabstop>tabWidget</tabstop>
  </tabstops>
  <resources>
   <include location="../lightscreen.qrc"/>

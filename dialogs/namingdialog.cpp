@@ -58,7 +58,7 @@ NamingDialog::NamingDialog(Screenshot::Naming naming,QWidget *parent) :
   ui.leadingZerosSpinBox->setValue(s->value("options/naming/leadingZeros", 0).toInt());
 
   // Signals/Slots
-  connect(ui.buttonBox, SIGNAL(accepted()), this, SLOT(saveSettings()));
+  connect(ui.buttonBox    , SIGNAL(accepted()),             this, SLOT(saveSettings()));
   connect(ui.dateHelpLabel, SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
 
   // Stack & window size adjustments

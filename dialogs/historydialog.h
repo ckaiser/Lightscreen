@@ -26,6 +26,7 @@ private slots:
   void reloadHistory();
   void selectionChanged(QItemSelection selected, QItemSelection deselected);
   void upload();
+  void uploadProgress(qint64 sent, qint64 total);
 
 protected:
   bool eventFilter(QObject *object, QEvent *event);

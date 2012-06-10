@@ -67,7 +67,6 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   mWasVisible(true),
   mLastMessage(0),
   mLastMode(-1),
-  mOptimizeCount(0),
   mLastScreenshot()
 {
   os::translate(settings()->value("options/language", "English").toString());
@@ -194,20 +193,8 @@ void LightscreenWindow::cleanup(Screenshot::Options &options)
     }
   }
 
-  if (options.result != Screenshot::Success
-      || !options.file)
+  if (options.result != Screenshot::Success)
     return;
-
-  if (settings()->value("options/optipng").toBool()
-      && options.format == Screenshot::PNG) {
-    optiPNG(options.fileName, options.upload);
-  }
-  else if (options.upload) {
-    upload(options.fileName);
-  }
-  else {
-    ScreenshotManager::instance()->saveHistory(options.fileName);
-  }
 
   mLastScreenshot = options.fileName;
 }
@@ -312,7 +299,7 @@ void LightscreenWindow::messageReceived(const QString &message)
   else if (message == "--uploadlast")
     uploadLast();
   else if (message == "--viewhistory")
-    showUploadDialog();
+    showHistoryDialog();
 }
 
 void LightscreenWindow::notify(const Screenshot::Result &result)
@@ -345,14 +332,6 @@ void LightscreenWindow::notify(const Screenshot::Result &result)
   QTimer::singleShot(2000, this, SLOT(restoreNotification()));
 }
 
-void LightscreenWindow::optimizationDone()
-{
-  // A mouthful :D
-  mOptimizeCount--;
-  QString screenshot = (qobject_cast<QProcess*>(sender()))->property("screenshot").toString();
-  upload(screenshot);
-}
-
 void LightscreenWindow::preview(Screenshot* screenshot)
 {
   if (screenshot->options().preview) {
@@ -371,26 +350,26 @@ void LightscreenWindow::quit()
 {
   settings()->setValue("position", pos());
 
-  QString doing;
   int answer = 0;
+  QString doing;
+
+  if (ScreenshotManager::instance()->activeCount() > 0) {
+    doing = tr("processing");
+  }
 
   if (Uploader::instance()->uploading() > 0) {
-    doing = tr("uploading one or more screenshots");
-  }
-
-  if (mOptimizeCount > 0) {
-    if (!doing.isNull()) {
-      doing = tr("optimizing and uploading screenshots");
+    if (doing.isEmpty()) {
+      doing = tr("uploading");
     }
     else {
-      doing = tr("optimizing one or more screenshots");
+      doing = tr("processing and uploading");
     }
   }
 
-  if (!doing.isNull()) {
+  if (!doing.isEmpty()) {
     answer = QMessageBox::question(this,
                                    tr("Are you sure you want to quit?"),
-                                   tr("Lightscreen is currently %1, this will finish momentarily.<br>Are you sure you want to quit?").arg(doing),
+                                   tr("Lightscreen is currently %1 screenshots. Are you sure you want to quit?").arg(doing),
                                    tr("Quit"),
                                    tr("Don't Quit"));
   }
@@ -467,17 +446,24 @@ void LightscreenWindow::screenshotAction(int mode)
     options.file           = settings()->value("file/enabled").toBool();
     options.format         = (Screenshot::Format) settings()->value("file/format").toInt();
     options.prefix         = settings()->value("file/prefix").toString();
-    options.directory      = QDir(settings()->value("file/target").toString());
+
+    QDir dir(settings()->value("file/target").toString());
+    dir.makeAbsolute();
+
+    options.directory      = dir;
+
     options.quality        = settings()->value("options/quality", 100).toInt();
     options.currentMonitor = settings()->value("options/currentMonitor", false).toBool();
-    options.clipboard      = settings()->value("options/clipboard", true).toBool();
-    options.preview        = settings()->value("options/preview", false).toBool();
-    options.magnify        = settings()->value("options/magnify", false).toBool();
-    options.cursor         = settings()->value("options/cursor" , false).toBool();
-    options.saveAs         = settings()->value("options/saveAs" , false).toBool();
-    options.animations     = settings()->value("options/animations" , true).toBool();
-    options.replace        = settings()->value("options/replace", false).toBool();
-    options.upload         = settings()->value("options/uploadAuto", false).toBool();
+    options.clipboard      = settings()->value("options/clipboard",      true).toBool();
+    options.imgurClipboard = settings()->value("options/imgurClipboard", false).toBool();
+    options.preview        = settings()->value("options/preview",        false).toBool();
+    options.magnify        = settings()->value("options/magnify",        false).toBool();
+    options.cursor         = settings()->value("options/cursor",         false).toBool();
+    options.saveAs         = settings()->value("options/saveAs",         false).toBool();
+    options.animations     = settings()->value("options/animations",     true).toBool();
+    options.replace        = settings()->value("options/replace",        false).toBool();
+    options.upload         = settings()->value("options/uploadAuto",     false).toBool();
+    options.optimize       = settings()->value("options/optipng",        false).toBool();
 
     Screenshot::NamingOptions namingOptions;
     namingOptions.naming       = (Screenshot::Naming) settings()->value("file/naming").toInt();
@@ -545,10 +531,17 @@ void LightscreenWindow::showHotkeyError(const QStringList &hotkeys)
    }
    else if (msgBox.clickedButton() == disableButton) {
      foreach(const QString &hotkey, hotkeys) {
-      settings()->setValue(QString("actions/%1/enabled").arg(hotkey), false);
+       settings()->setValue(QString("actions/%1/enabled").arg(hotkey), false);
      }
    }
+}
 
+void LightscreenWindow::showHistoryDialog()
+{
+  HistoryDialog historyDialog(this);
+  historyDialog.exec();
+
+  updateUploadStatus();
 }
 
 void LightscreenWindow::showOptions()
@@ -584,8 +577,14 @@ void LightscreenWindow::showScreenshotMenu()
   uploadAction->setToolTip(tr("Upload the last screenshot you took to imgur.com"));
   connect(uploadAction, SIGNAL(triggered()), this, SLOT(uploadLast()));
 
+  QAction *cancelAction = new QAction(QIcon(":/icons/no"), tr("&Cancel upload"), buttonMenu);
+  cancelAction->setToolTip(tr("Cancel the currently uploading screenshots"));
+  cancelAction->setEnabled(false);
+  connect(this, SIGNAL(uploading(bool)), cancelAction, SLOT(setEnabled(bool)));
+  connect(cancelAction, SIGNAL(triggered()), this, SLOT(uploadCancel()));
+
   QAction *historyAction = new QAction(QIcon(":/icons/view-history"), tr("View &History"), buttonMenu);
-  connect(historyAction, SIGNAL(triggered()), this, SLOT(showUploadDialog()));
+  connect(historyAction, SIGNAL(triggered()), this, SLOT(showHistoryDialog()));
 
   QAction *goAction = new QAction(QIcon(":/icons/folder"), tr("&Go to Folder"), buttonMenu);
   connect(goAction, SIGNAL(triggered()), this, SLOT(goToFolder()));
@@ -598,6 +597,7 @@ void LightscreenWindow::showScreenshotMenu()
 
   QMenu* imgurMenu = new QMenu(tr("Upload"));
   imgurMenu->addAction(uploadAction);
+  imgurMenu->addAction(cancelAction);
   imgurMenu->addAction(historyAction);
   imgurMenu->addSeparator();
 
@@ -645,12 +645,6 @@ void LightscreenWindow::showScreenshotMessage(const Screenshot::Result &result, 
   mTrayIcon->showMessage(title, message);
 }
 
-void LightscreenWindow::showUploadDialog()
-{
-  HistoryDialog historyDialog(this);
-  historyDialog.exec();
-}
-
 void LightscreenWindow::showUploaderError(const QString &error)
 {
   mLastMessage = -1;
@@ -668,6 +662,9 @@ void LightscreenWindow::showUploaderMessage(QString fileName, QString url)
     return;
 
   QString screenshot = QFileInfo(fileName).fileName();
+
+  if (screenshot.startsWith(".lstemp."))
+    screenshot = tr("Screenshot");
 
   mLastMessage = 2;
   mTrayIcon->showMessage(tr("%1 uploaded").arg(screenshot), tr("Click here to go to %1").arg(url));
@@ -693,14 +690,17 @@ void LightscreenWindow::toggleVisibility(QSystemTrayIcon::ActivationReason reaso
 
 void LightscreenWindow::updateUploadStatus()
 {
-  int uploading = Uploader::instance()->uploading();
+  int uploadCount = Uploader::instance()->uploading();
   QString statusString;
 
-  if (uploading > 0) {
-    statusString = tr("Uploading %1 screenshot(s)").arg(uploading);
+  if (uploadCount > 0) {
+    statusString = tr("Uploading %1 screenshot(s)").arg(uploadCount);
+    emit uploading(true);
   }
   else {
     statusString = tr("Lightscreen");
+    emit uploading(false);
+
 #ifdef Q_WS_WIN
     if (mTaskbarButton) {
       mTaskbarButton->SetProgresValue(0, 0);
@@ -749,19 +749,17 @@ void LightscreenWindow::upload(const QString &fileName)
   Uploader::instance()->upload(fileName);
 }
 
-void LightscreenWindow::uploadAction(QAction *upload)
+void LightscreenWindow::uploadCancel()
 {
-  QString url = upload->text();
-
-  if (url == tr("Uploading...")) {
-    int confirm = QMessageBox::question(this, tr("Upload cancel"), tr("Do you want to cancel the upload of %1").arg(upload->toolTip()), tr("Cancel"), tr("Don't Cancel"));
-
-    if (confirm == 0) {
-      Uploader::instance()->cancel(upload->whatsThis()); // Full path stored in the whatsThis
-    }
+  if (Uploader::instance()->uploading() <= 0) {
+    return;
   }
-  else {
-    QDesktopServices::openUrl(QUrl(url));
+
+  int confirm = QMessageBox::question(this, tr("Upload cancel"), tr("Do you want to cancel all screenshot uploads?"), tr("Cancel"), tr("Don't Cancel"));
+
+  if (confirm == 0) {
+    Uploader::instance()->cancel();
+    updateUploadStatus();
   }
 }
 
@@ -803,6 +801,8 @@ void LightscreenWindow::applySettings()
   else if (!tray && mTrayIcon) {
     mTrayIcon->deleteLater();
   }
+
+  os::aeroGlass(this);
 
   connectHotkeys();
 
@@ -894,8 +894,14 @@ void LightscreenWindow::createTrayIcon()
   uploadAction->setToolTip(tr("Upload the last screenshot you took to imgur.com"));
   connect(uploadAction, SIGNAL(triggered()), this, SLOT(uploadLast()));
 
+  QAction *cancelAction = new QAction(QIcon(":/icons/no"), tr("&Cancel upload"), mTrayIcon);
+  cancelAction->setToolTip(tr("Cancel the currently uploading screenshots"));
+  cancelAction->setEnabled(false);
+  connect(this, SIGNAL(uploading(bool)), cancelAction, SLOT(setEnabled(bool)));
+  connect(cancelAction, SIGNAL(triggered()), this, SLOT(uploadCancel()));
+
   QAction *historyAction = new QAction(QIcon(":/icons/view-history"), tr("View History"), mTrayIcon);
-  connect(historyAction, SIGNAL(triggered()), this, SLOT(showUploadDialog()));
+  connect(historyAction, SIGNAL(triggered()), this, SLOT(showHistoryDialog()));
   //
 
   QAction *optionsAction = new QAction(QIcon(":/icons/configure"), tr("View &Options"), mTrayIcon);
@@ -916,6 +922,7 @@ void LightscreenWindow::createTrayIcon()
   // Duplicated for the screenshot button :(
   QMenu* imgurMenu = new QMenu(tr("Upload"));
   imgurMenu->addAction(uploadAction);
+  imgurMenu->addAction(cancelAction);
   imgurMenu->addAction(historyAction);
   imgurMenu->addSeparator();
 
@@ -931,41 +938,6 @@ void LightscreenWindow::createTrayIcon()
   trayIconMenu->addAction(quitAction);
 
   mTrayIcon->setContextMenu(trayIconMenu);
-}
-
-void LightscreenWindow::optiPNG(const QString &fileName, bool upload)
-{
-  if (upload) {
-    // If the user has chosen to upload the screenshots we have to track the progress of the optimization, so we use QProcess
-    QProcess* optipng = new QProcess(this);
-
-    // To be read by optimizationDone() (for uploading)
-    optipng->setProperty("screenshot", fileName);
-
-    // Delete the QProcess once it's done.
-    connect(optipng, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(optimizationDone()));
-    connect(optipng, SIGNAL(finished(int, QProcess::ExitStatus)), optipng, SLOT(deleteLater()));
-
-#ifdef Q_OS_UNIX
-    optipng->start("optipng", QStringList() << fileName);
-#else
-    optipng->start(qApp->applicationDirPath() + QDir::separator() + "optipng.exe", QStringList() << fileName);
-#endif
-
-    mOptimizeCount++;
-  }
-  else {
-    // Otherwise start it detached from this process.
-#ifdef Q_WS_WIN
-    ShellExecuteW(NULL, NULL, (LPCWSTR)QString(qApp->applicationDirPath() + QDir::separator() + "optipng.exe").toStdWString().data(), (LPCWSTR)fileName.toStdWString().data(), NULL, SW_HIDE);
-#endif
-
-#ifdef Q_OS_UNIX
-    QProcess::startDetached("optipng \"" + fileName + "\" -quiet");
-#endif
-
-    ScreenshotManager::instance()->saveHistory(fileName);
-  }
 }
 
 #ifdef Q_WS_WIN
@@ -990,9 +962,7 @@ bool LightscreenWindow::event(QEvent *event)
   else if (event->type() == QEvent::Close) {
     quit();
   }
-  else if (event->type() == QEvent::Show) {    
-    os::aeroGlass(this);
-
+  else if (event->type() == QEvent::Show) {
     if (!settings()->value("position").toPoint().isNull())
       move(settings()->value("position").toPoint());
   }

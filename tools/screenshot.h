@@ -73,21 +73,24 @@ public:
     Result result;
 
     Format format;
-    QString prefix;
     NamingOptions namingOptions;
     QDir directory;
+    QString prefix;
+
     int mode;
     int quality;
 
-    bool currentMonitor;
-    bool clipboard;
-    bool file;
-    bool preview;
-    bool magnify;
-    bool cursor;
-    bool saveAs;
     bool animations;
+    bool clipboard;
+    bool imgurClipboard;
+    bool currentMonitor;
+    bool cursor;
+    bool file;
+    bool magnify;
+    bool optimize;
+    bool preview;
     bool replace;
+    bool saveAs;
     bool upload;
   };
 
@@ -97,18 +100,24 @@ public:
   Screenshot::Options &options();
   QPixmap &pixmap();
   static QString getName(NamingOptions options, QString prefix, QDir directory);
+  QString &unloadedFileName();
 
 public slots:
   void confirm(bool result = true);
   void confirmation();
   void discard();
   void markUpload();
+  void optimize();
+  void optimizationDone();
   void save();
   void setPixmap(QPixmap pixmap);
   void take();
+  void upload();
+  void uploadDone(QString url);
 
 signals:
   void askConfirmation();
+  void cleanup();
   void finished();
 
 private:
@@ -118,6 +127,7 @@ private:
   QString newFileName() const;
   void selectedArea();
   void selectedWindow();
+  bool unloadPixmap();
   void wholeScreen();
 
 private:

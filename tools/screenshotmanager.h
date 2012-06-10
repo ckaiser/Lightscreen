@@ -43,17 +43,18 @@ public:
   ~ScreenshotManager();
   static ScreenshotManager *instance();
 
-  unsigned int count() const { return mCount; }
+  int activeCount() const;
   QString &historyPath();
   bool portableMode();
-  void saveHistory(QString fileName, QString url = QObject::tr("- not uploaded -"));
-  void setCount(const unsigned int c){ mCount = c; }
+  void saveHistory(QString fileName, QString url = QObject::tr("- not uploaded -"));// TODO: No TR?
   QSettings *settings() const { return mSettings; }
 
 public slots:
   void askConfirmation();
   void cleanup();
+  void finished();
   void take(Screenshot::Options &options);
+  void uploadDone(QString fileName, QString url);
 
 signals:
   void confirm(Screenshot* screenshot);
@@ -61,10 +62,10 @@ signals:
 
 private:
   static ScreenshotManager* mInstance;
+  QList<Screenshot*> mScreenshots;
   QSettings *mSettings;
   QString mHistoryPath;
   bool mPortableMode;
-  int  mCount; // Concurrent screenshot count.
 };
 
 #endif // SCREENSHOTMANAGER_H

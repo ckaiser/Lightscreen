@@ -9,7 +9,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/areadialog.cpp" line="364"/>
+        <location filename="../dialogs/areadialog.cpp" line="366"/>
         <source>Lightscreen area mode:
 Use your mouse to draw a rectangle to capture.
 Press any key or right click to exit.</source>
@@ -36,71 +36,71 @@ Right click items to get access to more options.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/historydialog.ui" line="54"/>
+        <location filename="../dialogs/historydialog.ui" line="67"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/historydialog.ui" line="77"/>
+        <location filename="../dialogs/historydialog.ui" line="90"/>
         <source>Upload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/historydialog.ui" line="84"/>
+        <location filename="../dialogs/historydialog.ui" line="97"/>
         <source>Close</source>
         <translation type="unfinished">Chiudi</translation>
     </message>
     <message>
         <location filename="../dialogs/historydialog.cpp" line="32"/>
-        <location filename="../dialogs/historydialog.cpp" line="193"/>
-        <location filename="../dialogs/historydialog.cpp" line="204"/>
         <location filename="../dialogs/historydialog.cpp" line="210"/>
+        <location filename="../dialogs/historydialog.cpp" line="221"/>
+        <location filename="../dialogs/historydialog.cpp" line="227"/>
         <source>Filter..</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/historydialog.cpp" line="76"/>
+        <location filename="../dialogs/historydialog.cpp" line="86"/>
         <source>Clearing the screenshot history</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/historydialog.cpp" line="77"/>
+        <location filename="../dialogs/historydialog.cpp" line="87"/>
         <source>Are you sure you want to clear your entire screenshot history?
 This cannot be undone.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/historydialog.cpp" line="78"/>
+        <location filename="../dialogs/historydialog.cpp" line="88"/>
         <source>Clear History</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/historydialog.cpp" line="79"/>
+        <location filename="../dialogs/historydialog.cpp" line="89"/>
         <source>Don&apos;t Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/historydialog.cpp" line="93"/>
+        <location filename="../dialogs/historydialog.cpp" line="103"/>
         <source>Copy Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/historydialog.cpp" line="93"/>
+        <location filename="../dialogs/historydialog.cpp" line="103"/>
         <source>Copy URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/historydialog.cpp" line="97"/>
+        <location filename="../dialogs/historydialog.cpp" line="107"/>
         <source>Open Location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/historydialog.cpp" line="140"/>
+        <location filename="../dialogs/historydialog.cpp" line="150"/>
         <source>Screenshot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/historydialog.cpp" line="140"/>
+        <location filename="../dialogs/historydialog.cpp" line="150"/>
         <source>URL</source>
         <translation type="unfinished"></translation>
     </message>
@@ -127,36 +127,68 @@ This cannot be undone.</source>
 <context>
     <name>LightscreenWindow</name>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="221"/>
-        <location filename="../lightscreenwindow.cpp" line="530"/>
-        <location filename="../lightscreenwindow.cpp" line="703"/>
-        <location filename="../lightscreenwindow.cpp" line="727"/>
+        <location filename="../lightscreenwindow.cpp" line="209"/>
+        <location filename="../lightscreenwindow.cpp" line="516"/>
+        <location filename="../lightscreenwindow.cpp" line="698"/>
+        <location filename="../lightscreenwindow.cpp" line="724"/>
         <source>Lightscreen</source>
         <translation>Lightscreen</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="222"/>
+        <location filename="../lightscreenwindow.cpp" line="210"/>
         <source>You have chosen to hide Lightscreen when there&apos;s no system tray icon, so you will not be able to access the program &lt;b&gt;unless you have selected a hotkey to do so&lt;/b&gt;.&lt;br&gt;What do you want to do?</source>
         <translation>Hai scelto di nascondere Lightscreen quando non c&apos;è nessuna icona nel tray, perciò non potrai accedere al programma &lt;b&gt;a meno che non hai selezionato una scorciatoia per fare ciò&lt;/b&gt;.&lt;br&gt;Cosa vuoi fare?</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="227"/>
+        <location filename="../lightscreenwindow.cpp" line="215"/>
         <source>Hide but enable tray</source>
         <translation>Nascondi ma abilita tray</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="229"/>
+        <location filename="../lightscreenwindow.cpp" line="217"/>
         <source>Hide and don&apos;t warn</source>
         <translation>Nascondi e non avvisare</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="231"/>
+        <location filename="../lightscreenwindow.cpp" line="219"/>
         <source>Just hide</source>
         <translation>Nascondi</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="395"/>
+        <location filename="../lightscreenwindow.cpp" line="358"/>
+        <source>processing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="363"/>
+        <source>uploading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="366"/>
+        <source>processing and uploading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="373"/>
+        <source>Lightscreen is currently %1 screenshots. Are you sure you want to quit?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="375"/>
         <source>Don&apos;t Quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="580"/>
+        <location filename="../lightscreenwindow.cpp" line="892"/>
+        <source>&amp;Cancel upload</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="581"/>
+        <location filename="../lightscreenwindow.cpp" line="893"/>
+        <source>Cancel the currently uploading screenshots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -165,14 +197,14 @@ This cannot be undone.</source>
         <translation>Lo screenshot non è stato creato</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="574"/>
-        <location filename="../lightscreenwindow.cpp" line="875"/>
+        <location filename="../lightscreenwindow.cpp" line="567"/>
+        <location filename="../lightscreenwindow.cpp" line="870"/>
         <source>Active &amp;Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="577"/>
-        <location filename="../lightscreenwindow.cpp" line="878"/>
+        <location filename="../lightscreenwindow.cpp" line="570"/>
+        <location filename="../lightscreenwindow.cpp" line="873"/>
         <source>&amp;Pick Window</source>
         <translation type="unfinished"></translation>
     </message>
@@ -182,22 +214,7 @@ This cannot be undone.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="378"/>
-        <source>uploading one or more screenshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="383"/>
-        <source>optimizing and uploading screenshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="386"/>
-        <source>optimizing one or more screenshots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="392"/>
+        <location filename="../lightscreenwindow.cpp" line="372"/>
         <source>Are you sure you want to quit?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -207,186 +224,176 @@ This cannot be undone.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="673"/>
+        <location filename="../lightscreenwindow.cpp" line="667"/>
         <source>%1 uploaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="673"/>
+        <location filename="../lightscreenwindow.cpp" line="667"/>
         <source>Click here to go to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="659"/>
+        <location filename="../lightscreenwindow.cpp" line="653"/>
         <source>Upload error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="583"/>
-        <location filename="../lightscreenwindow.cpp" line="893"/>
+        <location filename="../lightscreenwindow.cpp" line="576"/>
+        <location filename="../lightscreenwindow.cpp" line="888"/>
         <source>&amp;Upload last</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="584"/>
-        <location filename="../lightscreenwindow.cpp" line="894"/>
+        <location filename="../lightscreenwindow.cpp" line="577"/>
+        <location filename="../lightscreenwindow.cpp" line="889"/>
         <source>Upload the last screenshot you took to imgur.com</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="897"/>
+        <location filename="../lightscreenwindow.cpp" line="898"/>
         <source>View History</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="599"/>
-        <location filename="../lightscreenwindow.cpp" line="917"/>
+        <location filename="../lightscreenwindow.cpp" line="598"/>
+        <location filename="../lightscreenwindow.cpp" line="918"/>
         <source>Upload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="587"/>
+        <location filename="../lightscreenwindow.cpp" line="586"/>
         <source>View &amp;History</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="327"/>
-        <location filename="../lightscreenwindow.cpp" line="330"/>
+        <location filename="../lightscreenwindow.cpp" line="315"/>
+        <location filename="../lightscreenwindow.cpp" line="318"/>
         <source>Success!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="334"/>
-        <location filename="../lightscreenwindow.cpp" line="337"/>
+        <location filename="../lightscreenwindow.cpp" line="322"/>
+        <location filename="../lightscreenwindow.cpp" line="325"/>
         <source>Failed!</source>
         <translation>Fallito!</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="341"/>
+        <location filename="../lightscreenwindow.cpp" line="329"/>
         <source>Cancelled!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="393"/>
-        <source>Lightscreen is currently %1, this will finish momentarily.&lt;br&gt;Are you sure you want to quit?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="512"/>
+        <location filename="../lightscreenwindow.cpp" line="498"/>
         <source>Some hotkeys could not be registered, they might already be in use</source>
         <translation>Alcune scorciatoie non possono essere registrate, potrebbero essere in uso</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="515"/>
+        <location filename="../lightscreenwindow.cpp" line="501"/>
         <source>&lt;br&gt;The failed hotkeys are the following:</source>
         <translation>&lt;br&gt;Le scorciatoie non accettate sono le seguenti:</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="524"/>
+        <location filename="../lightscreenwindow.cpp" line="510"/>
         <source>&lt;br&gt;The failed hotkey is &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>&lt;br&gt;La scorciatoia non accettata è &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="527"/>
+        <location filename="../lightscreenwindow.cpp" line="513"/>
         <source>&lt;br&gt;&lt;i&gt;What do you want to do?&lt;/i&gt;</source>
         <translation>&lt;br&gt;&lt;i&gt;Cosa vuoi fare?&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="533"/>
+        <location filename="../lightscreenwindow.cpp" line="519"/>
         <source>Change</source>
         <translation>Cambia</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="534"/>
+        <location filename="../lightscreenwindow.cpp" line="520"/>
         <source>Disable</source>
         <translation>Disabilita</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="910"/>
+        <location filename="../lightscreenwindow.cpp" line="755"/>
+        <source>Do you want to cancel all screenshot uploads?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lightscreenwindow.cpp" line="911"/>
         <source>Screenshot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="756"/>
-        <source>Uploading...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="757"/>
+        <location filename="../lightscreenwindow.cpp" line="755"/>
         <source>Upload cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="757"/>
-        <source>Do you want to cancel the upload of %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../lightscreenwindow.cpp" line="757"/>
+        <location filename="../lightscreenwindow.cpp" line="755"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="757"/>
+        <location filename="../lightscreenwindow.cpp" line="755"/>
         <source>Don&apos;t Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="700"/>
+        <location filename="../lightscreenwindow.cpp" line="694"/>
         <source>Uploading %1 screenshot(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="394"/>
-        <location filename="../lightscreenwindow.cpp" line="535"/>
+        <location filename="../lightscreenwindow.cpp" line="374"/>
+        <location filename="../lightscreenwindow.cpp" line="521"/>
         <source>Quit</source>
         <translation>Esci</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="728"/>
+        <location filename="../lightscreenwindow.cpp" line="725"/>
         <source>There&apos;s a new version of Lightscreen available.&lt;br&gt;Would you like to see more information?&lt;br&gt;(&lt;em&gt;You can turn this notification off&lt;/em&gt;)</source>
         <translation>E&apos; disponibile una nuova versione di Lightscreen.&lt;br&gt;Vuoi vedere più informazioni?&lt;br&gt;(&lt;em&gt;Puoi disattivare questa notifica&lt;/em&gt;)</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="732"/>
+        <location filename="../lightscreenwindow.cpp" line="729"/>
         <source>Turn Off</source>
         <translation>Spegni</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="733"/>
+        <location filename="../lightscreenwindow.cpp" line="730"/>
         <source>Remind Me Later</source>
         <translation>Ricordamelo più tardi</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="571"/>
-        <location filename="../lightscreenwindow.cpp" line="872"/>
+        <location filename="../lightscreenwindow.cpp" line="564"/>
+        <location filename="../lightscreenwindow.cpp" line="867"/>
         <source>&amp;Screen</source>
         <translation>&amp;Schermo</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="580"/>
-        <location filename="../lightscreenwindow.cpp" line="881"/>
+        <location filename="../lightscreenwindow.cpp" line="573"/>
+        <location filename="../lightscreenwindow.cpp" line="876"/>
         <source>&amp;Area</source>
         <translation>&amp;Area</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="590"/>
-        <location filename="../lightscreenwindow.cpp" line="904"/>
+        <location filename="../lightscreenwindow.cpp" line="589"/>
+        <location filename="../lightscreenwindow.cpp" line="905"/>
         <source>&amp;Go to Folder</source>
         <translation>&amp;Vai alla cartella</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="869"/>
+        <location filename="../lightscreenwindow.cpp" line="864"/>
         <source>Show&amp;/Hide</source>
         <translation>Mostra&amp;/Nascondi</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="901"/>
+        <location filename="../lightscreenwindow.cpp" line="902"/>
         <source>View &amp;Options</source>
         <translation>Visualizza &amp;Opzioni</translation>
     </message>
     <message>
-        <location filename="../lightscreenwindow.cpp" line="907"/>
+        <location filename="../lightscreenwindow.cpp" line="908"/>
         <source>&amp;Quit</source>
         <translation>&amp;Esci</translation>
     </message>
@@ -455,12 +462,12 @@ This cannot be undone.</source>
 <context>
     <name>OptionsDialog</name>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="514"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="513"/>
         <source>Restore Defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="530"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="529"/>
         <source>Version %1</source>
         <translation type="unfinished">Versione %1</translation>
     </message>
@@ -495,45 +502,45 @@ This cannot be undone.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="443"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="441"/>
         <source>Select where you want to save the screenshots</source>
         <translation>Seleziona dove vuoi salvare gli screenshot</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="456"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="454"/>
         <source>Lightscreen - Restore Default Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="457"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="455"/>
         <source>Restoring the default options will cause you to lose all of your current configuration.</source>
         <translation>Ripristinare le opzioni di default causerà la perdita della corrente configurazione.</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="460"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="458"/>
         <source>Restore</source>
         <translation>Ripristina</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="461"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="459"/>
         <source>Don&apos;t Restore</source>
         <translation>Non ripristinare</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="142"/>
-        <location filename="../dialogs/optionsdialog.cpp" line="496"/>
-        <location filename="../dialogs/optionsdialog.cpp" line="502"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="140"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="494"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="500"/>
         <source>screenshot.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../dialogs/optionsdialog.cpp" line="496"/>
         <location filename="../dialogs/optionsdialog.cpp" line="498"/>
-        <location filename="../dialogs/optionsdialog.cpp" line="500"/>
         <source>.screenshot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="189"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="187"/>
         <source>Install &apos;OptiPNG&apos;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -674,11 +681,6 @@ This cannot be undone.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="272"/>
-        <source>&lt;i&gt;Preview:&lt;/i&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../dialogs/optionsdialog.ui" line="311"/>
         <source>System Startup</source>
         <translation type="unfinished"></translation>
@@ -795,7 +797,7 @@ Created by &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1219"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1222"/>
         <source>Released under the &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.html&quot;&gt;GNU General Public License&lt;/a&gt;.&lt;br&gt;&lt;br&gt;
 Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/about&quot;&gt;Donators and Translators&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
@@ -848,7 +850,7 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="1241"/>
+        <location filename="../dialogs/optionsdialog.ui" line="1247"/>
         <source>&lt;a href=&quot;https://sourceforge.net/projects/lightscreen/&quot;&gt;Visit Sourceforge project site&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://lightscreen.sourceforge.net/&quot;&gt;Visit Lightscreen home page&lt;/a&gt;</source>
         <translation type="unfinished">&lt;a href=&quot;https://sourceforge.net/projects/lightscreen/&quot;&gt;Visita la pagina del progetto su Sourceforge&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://lightscreen.sourceforge.net/&quot;&gt;Visita l&apos;home page di Lightscreen&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;i&gt;Tradotto da Sum90&lt;/i&gt;</translation>
     </message>
@@ -871,8 +873,8 @@ La qualità determina la grandezza del file e naturalmente la leggibilità e la 
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.ui" line="922"/>
-        <location filename="../dialogs/optionsdialog.cpp" line="134"/>
-        <location filename="../dialogs/optionsdialog.cpp" line="137"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="132"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="135"/>
         <source>Screenshots</source>
         <translation type="unfinished"></translation>
     </message>
@@ -899,6 +901,11 @@ La qualità determina la grandezza del file e naturalmente la leggibilità e la 
 &lt;b&gt;Timestamp&lt;/b&gt;: inserts a number, a Unix timestamp, which is the number of seconds passed since 1970-1-1 00:00:00.&lt;br /&gt;
 
 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="272"/>
+        <source>&lt;u&gt;Preview&lt;/u&gt;:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -951,27 +958,27 @@ La qualità determina la grandezza del file e naturalmente la leggibilità e la 
     <name>PreviewDialog</name>
     <message>
         <location filename="../dialogs/previewdialog.cpp" line="47"/>
-        <location filename="../dialogs/previewdialog.cpp" line="309"/>
+        <location filename="../dialogs/previewdialog.cpp" line="307"/>
         <source>Screenshot Preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/previewdialog.cpp" line="160"/>
+        <location filename="../dialogs/previewdialog.cpp" line="158"/>
         <source>Upload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/previewdialog.cpp" line="182"/>
+        <location filename="../dialogs/previewdialog.cpp" line="180"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/previewdialog.cpp" line="306"/>
+        <location filename="../dialogs/previewdialog.cpp" line="304"/>
         <source>Screenshot Preview (%1 of %2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/previewdialog.cpp" line="404"/>
+        <location filename="../dialogs/previewdialog.cpp" line="402"/>
         <source>Preview: Closing in %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -979,8 +986,8 @@ La qualità determina la grandezza del file e naturalmente la leggibilità e la 
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../dialogs/historydialog.cpp" line="104"/>
-        <location filename="../dialogs/historydialog.cpp" line="178"/>
+        <location filename="../dialogs/historydialog.cpp" line="114"/>
+        <location filename="../dialogs/historydialog.cpp" line="188"/>
         <location filename="../tools/screenshotmanager.h" line="49"/>
         <source>- not uploaded -</source>
         <translation type="unfinished"></translation>
@@ -1024,7 +1031,7 @@ La qualità determina la grandezza del file e naturalmente la leggibilità e la 
 <context>
     <name>Screenshot</name>
     <message>
-        <location filename="../tools/screenshot.cpp" line="186"/>
+        <location filename="../tools/screenshot.cpp" line="243"/>
         <source>Save as..</source>
         <translation>Salva come..</translation>
     </message>
@@ -1037,36 +1044,36 @@ La qualità determina la grandezza del file e naturalmente la leggibilità e la 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/screenshotdialog.cpp" line="37"/>
-        <source>You can zoom using the mouse wheel while holding the CTRL key. To return to the default zoom press &quot;Ctrl-0&quot;.</source>
+        <location filename="../dialogs/screenshotdialog.cpp" line="40"/>
+        <source>You can zoom in and out using the mouse wheel while holding the CTRL key. To return to the default zoom press &quot;Ctrl-0&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Uploader</name>
     <message>
-        <location filename="../tools/uploader.cpp" line="58"/>
-        <location filename="../tools/uploader.cpp" line="126"/>
+        <location filename="../tools/uploader.cpp" line="57"/>
+        <location filename="../tools/uploader.cpp" line="127"/>
         <source>Uploading...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/uploader.cpp" line="92"/>
+        <location filename="../tools/uploader.cpp" line="91"/>
         <source>Screenshot file not found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/uploader.cpp" line="95"/>
+        <location filename="../tools/uploader.cpp" line="94"/>
         <source>Could not reach imgur.com</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/uploader.cpp" line="98"/>
+        <location filename="../tools/uploader.cpp" line="97"/>
         <source>You have exceeded your upload quota.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/uploader.cpp" line="101"/>
+        <location filename="../tools/uploader.cpp" line="100"/>
         <source>Upload failed.</source>
         <translation type="unfinished"></translation>
     </message>

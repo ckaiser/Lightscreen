@@ -114,14 +114,12 @@ void OptionsDialog::loadSettings()
   settings()->sync();
   os::translate(settings()->value("options/language").toString()); // Why? Don't ask me, I'm just the programmer.
 
+  setUpdatesEnabled(false);
+
   if (!settings()->contains("file/format")) {
     // If there are no settings, get rid of the cancel button so that the user is forced to save them
     ui.buttonBox->clear();
     ui.buttonBox->addButton(QDialogButtonBox::Ok);
-
-    // Move the first option window to the center of the screen, since Windows usually positions it in a random location since it has no visible parent.
-    if (!(static_cast<QWidget*>(parent())->isVisible()))
-      move(qApp->desktop()->screen(qApp->desktop()->primaryScreen())->rect().center()-QPoint(height()/2, width()/2));
   }
 
   ui.startupCheckBox->toggle();
@@ -156,7 +154,7 @@ void OptionsDialog::loadSettings()
     ui.qualitySlider->setValue(settings()->value("quality", 100).toInt());
     ui.playSoundCheckBox->setChecked(settings()->value("playSound", false).toBool());
     ui.updaterCheckBox->setChecked(!settings()->value("disableUpdater", false).toBool());
-    ui.magnifyCheckBox->setChecked(settings()->value("magnify", true).toBool());
+    ui.magnifyCheckBox->setChecked(settings()->value("magnify", false).toBool());
     ui.cursorCheckBox->setChecked(settings()->value("cursor", false).toBool());
     ui.saveAsCheckBox->setChecked(settings()->value("saveAs", false).toBool());
     ui.previewGroupBox->setChecked(settings()->value("preview", false).toBool());
@@ -171,6 +169,7 @@ void OptionsDialog::loadSettings()
 
     // Advanced
     ui.clipboardCheckBox->setChecked(settings()->value("clipboard", true).toBool());
+    ui.imgurClipboardCheckBox->setChecked(settings()->value("imgurClipboard", false).toBool());
     ui.optiPngCheckBox->setChecked(settings()->value("optipng", true).toBool());
     ui.warnHideCheckBox->setChecked(!settings()->value("disableHideAlert", false).toBool());
     ui.currentMonitorCheckBox->setChecked(settings()->value("currentMonitor", false).toBool());
@@ -231,22 +230,22 @@ void OptionsDialog::loadSettings()
 
   settings()->beginGroup("window");
     ui.windowCheckBox->setChecked(settings()->value("enabled").toBool());
-    ui.windowHotkeyWidget->setHotkey(settings()->value("hotkey", "Alt + Print").toString());
+    ui.windowHotkeyWidget->setHotkey(settings()->value("hotkey", "Alt+Print").toString());
   settings()->endGroup();
 
   settings()->beginGroup("windowPicker");
     ui.windowPickerCheckBox->setChecked(settings()->value("enabled").toBool());
-    ui.windowPickerHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl + Alt + Print").toString());
+    ui.windowPickerHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl+Alt+Print").toString());
   settings()->endGroup();
 
   settings()->beginGroup("open");
     ui.openCheckBox->setChecked(settings()->value("enabled").toBool());
-    ui.openHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl + PgUp").toString());
+    ui.openHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl+PgUp").toString());
   settings()->endGroup();
 
   settings()->beginGroup("directory");
     ui.directoryCheckBox->setChecked(settings()->value("enabled").toBool());
-    ui.directoryHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl + PgDown").toString());
+    ui.directoryHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl+PgDown").toString());
   settings()->endGroup();
 
   settings()->endGroup();
@@ -312,6 +311,7 @@ void OptionsDialog::saveSettings()
     // Advanced
     settings()->setValue("disableHideAlert", !ui.warnHideCheckBox->isChecked());
     settings()->setValue("clipboard", ui.clipboardCheckBox->isChecked());
+    settings()->setValue("imgurClipboard", ui.imgurClipboardCheckBox->isChecked());
     settings()->setValue("optipng", ui.optiPngCheckBox->isChecked());
     settings()->setValue("currentMonitor", ui.currentMonitorCheckBox->isChecked());
     settings()->setValue("replace", ui.replaceCheckBox->isChecked());
@@ -360,9 +360,9 @@ void OptionsDialog::updatePreview()
   Screenshot::NamingOptions options;
 
   options.naming       = (Screenshot::Naming)ui.namingComboBox->currentIndex();
-  options.flip         = settings()->value("options/flip").toBool();
-  options.leadingZeros = settings()->value("options/naming/leadingZeros").toInt();
-  options.dateFormat   = settings()->value("options/naming/dateFormat").toString();
+  options.flip         = settings()->value("options/flip", false).toBool();
+  options.leadingZeros = settings()->value("options/naming/leadingZeros", 0).toInt();
+  options.dateFormat   = settings()->value("options/naming/dateFormat", "yyyy-MM-dd").toString();
 
   ui.namingOptionsButton->setDisabled((options.naming == Screenshot::Empty));
 
@@ -511,6 +511,7 @@ void OptionsDialog::init()
   optionsPalette.setColor(QPalette::Window,  ui.tabWidget->palette().color(QPalette::Base));
   ui.optionsScrollArea->setPalette(optionsPalette);
 
+
   ui.buttonBox->addButton(new QPushButton(" " + tr("Restore Defaults") + " ", this), QDialogButtonBox::ResetRole);
 
   // Set up the autocomplete for the directory.
@@ -530,7 +531,6 @@ void OptionsDialog::init()
   ui.versionLabel->setText(tr("Version %1").arg(qApp->applicationVersion()));
 
   setEnabled(false); // We disable the widgets to prevent any user interaction until the settings have loaded.
-  setUpdatesEnabled(false);
 
   //
   // Connections

@@ -111,8 +111,6 @@ void PreviewDialog::add(Screenshot *screenshot)
 
   bool small = false;
 
-  connect(label, SIGNAL(destroyed()), screenshot, SLOT(discard()));
-
   QSize size = screenshot->pixmap().size();
 
   if (size.width() > mSize || size.height() > mSize) {

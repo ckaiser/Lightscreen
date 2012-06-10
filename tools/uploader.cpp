@@ -27,14 +27,13 @@
 
 Uploader* Uploader::mInstance = 0;
 
-
-Uploader::Uploader(QObject *parent) : QObject(parent), mUploading(0)
+Uploader::Uploader(QObject *parent) : QObject(parent), mUploading(0), mProgressSent(0), mProgressTotal(0)
 {
   mImgur = new QtImgur("6920a141451d125b3e1357ce0e432409", this);
 
-  connect(mImgur, SIGNAL(uploaded(QString, QString)), this, SLOT(uploaded(QString, QString)));
+  connect(mImgur, SIGNAL(uploaded(QString, QString))    , this, SLOT(uploaded(QString, QString)));
   connect(mImgur, SIGNAL(error(QString, QtImgur::Error)), this, SLOT(imgurError(QString, QtImgur::Error)));
-  connect(mImgur, SIGNAL(uploadProgress(qint64,qint64)), this, SIGNAL(progress(qint64,qint64)));
+  connect(mImgur, SIGNAL(uploadProgress(qint64,qint64)) , this, SLOT(reportProgress(qint64, qint64)));
 }
 
 Uploader *Uploader::instance()
@@ -63,9 +62,9 @@ QString Uploader::lastUrl() const
   return url;
 }
 
-void Uploader::cancel(const QString &fileName)
+void Uploader::cancel()
 {
-  mImgur->cancel(fileName);
+  mImgur->cancelAll();
 }
 
 void Uploader::imgurError(const QString &file, const QtImgur::Error e)
@@ -103,12 +102,14 @@ void Uploader::imgurError(const QString &file, const QtImgur::Error e)
   }
 
   mLastError = e;
+
   emit error(errorString);
 }
 
 void Uploader::upload(const QString &fileName)
 {
   if (fileName.isEmpty()) {
+    qDebug() << "Trying to upload an empty filename.";
     return;
   }
 
@@ -119,6 +120,7 @@ void Uploader::upload(const QString &fileName)
     }
   }
 
+  qDebug() << "Uploader::upload(" << fileName << ")";
   mImgur->upload(fileName);
 
   QPair<QString, QString> screenshot;
@@ -142,11 +144,20 @@ void Uploader::uploaded(const QString &file, const QString &url)
 
   mUploading--;
 
-  ScreenshotManager::instance()->saveHistory(file, url);
   emit done(file, url);
 }
 
 int Uploader::uploading()
 {
   return mUploading;
+}
+
+void Uploader::reportProgress(qint64 sent, qint64 total)
+{
+  mProgressSent  = sent;
+  mProgressTotal = total;
+
+  qDebug() << "Reporting progress: " << mProgressSent << " of " << mProgressTotal;
+
+  emit progress(sent, total);
 }
