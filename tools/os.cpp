@@ -68,15 +68,6 @@ void os::addToRecentDocuments(QString fileName)
 #endif
 }
 
-bool os::aeroGlass(QWidget* target)
-{
-  if (QtWin::isCompositionEnabled() && QtWin::extendFrameIntoClientArea(target)) {
-    return true;
-  }
-
-  return false;
-}
-
 QPixmap os::cursor()
 {
 #ifdef Q_WS_WIN

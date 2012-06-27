@@ -27,7 +27,7 @@
 
 Uploader* Uploader::mInstance = 0;
 
-Uploader::Uploader(QObject *parent) : QObject(parent), mUploading(0), mProgressSent(0), mProgressTotal(0)
+Uploader::Uploader(QObject *parent) : QObject(parent), mProgressSent(0), mProgressTotal(0),  mUploading(0)
 {
   mImgur = new QtImgur("6920a141451d125b3e1357ce0e432409", this);
 

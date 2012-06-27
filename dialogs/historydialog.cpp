@@ -25,10 +25,6 @@ HistoryDialog::HistoryDialog(QWidget *parent) :
 {
   ui->setupUi(this);
 
-  if (os::aeroGlass(this)) {
-    layout()->setMargin(2);
-  }
-
   ui->filterEdit->setText(tr("Filter.."));
   ui->filterEdit->installEventFilter(this);
 

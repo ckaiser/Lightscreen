@@ -19,7 +19,7 @@
 #ifndef LIGHTSCREENWINDOW_H
 #define LIGHTSCREENWINDOW_H
 
-#include <QtGui/QDialog>
+#include <QMainWindow>
 #include <QPointer>
 #include <QSystemTrayIcon>
 
@@ -36,7 +36,7 @@
 class QHttp;
 class Updater;
 class QSettings;
-class LightscreenWindow : public QDialog
+class LightscreenWindow : public QMainWindow
 {
     Q_OBJECT
 
@@ -62,7 +62,7 @@ public slots:
   void showHotkeyError(const QStringList &hotkeys);
   void showHistoryDialog();
   void showOptions();
-  void showScreenshotMenu();
+  void showUploadMenu();
   void showScreenshotMessage(const Screenshot::Result &result, const QString &fileName);
   void showUploaderError(const QString &error);
   void showUploaderMessage(QString fileName, QString url);
@@ -81,6 +81,7 @@ private slots:
 
 signals:
   void uploading(bool uploading);
+  void finished();
 
 private:
   void connectHotkeys();

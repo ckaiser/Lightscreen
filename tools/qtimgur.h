@@ -47,6 +47,7 @@ public slots:
 protected slots:
   void progress(qint64, qint64);
   void reply(QNetworkReply* reply);
+  void replyError(QNetworkReply::NetworkError networkError);
 
 signals:
   void error(QString, QtImgur::Error);

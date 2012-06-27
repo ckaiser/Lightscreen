@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+#include <QMainWindow>
 #include <QDate>
 #include <QDesktopServices>
 #include <QFileInfo>
@@ -53,14 +54,13 @@
 #include "tools/os.h"
 #include "tools/screenshot.h"
 #include "tools/screenshotmanager.h"
-#include "tools/qtwin.h"
 
 #include "tools/uploader.h"
 
 #include "updater/updater.h"
 
 LightscreenWindow::LightscreenWindow(QWidget *parent) :
-  QDialog(parent),
+  QMainWindow(parent),
   mDoCache(false),
   mHideTrigger(false),
   mReviveMain(false),
@@ -73,15 +73,10 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
 
   ui.setupUi(this);
 
-  if (QtWin::isCompositionEnabled()) {
-    layout()->setMargin(0);
-    resize(minimumSizeHint());
-  }
-
   setMaximumSize(size());
   setMinimumSize(size());
 
-  setWindowFlags(windowFlags() ^ Qt::WindowContextHelpButtonHint); // Remove the what's this button, no real use in the main window.
+  setWindowFlags(Qt::Window); // Remove the what's this button, no real use in the main window.
 
 #ifdef Q_WS_WIN
   if (QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS7) {
@@ -90,10 +85,15 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
 #endif
 
   // Actions
-  connect(ui.optionsPushButton   , SIGNAL(clicked()), this, SLOT(showOptions()));
-  connect(ui.hidePushButton      , SIGNAL(clicked()), this, SLOT(toggleVisibility()));
-  connect(ui.screenshotPushButton, SIGNAL(clicked()), this, SLOT(showScreenshotMenu()));
-  connect(ui.quitPushButton      , SIGNAL(clicked()), this, SLOT(quit()));
+  connect(ui.screenPushButton, SIGNAL(clicked()), this, SLOT(screenshotAction()));
+  connect(ui.areaPushButton  , SIGNAL(clicked()), this, SLOT(areaHotkey()));
+  connect(ui.windowPushButton, SIGNAL(clicked()), this, SLOT(windowPickerHotkey()));
+
+  connect(ui.optionsPushButton, SIGNAL(clicked()), this, SLOT(showOptions()));
+  connect(ui.folderPushButton , SIGNAL(clicked()), this, SLOT(goToFolder()));
+
+  // TODO: Imgur menu
+  connect(ui.imgurPushButton, SIGNAL(clicked()), this, SLOT(showUploadMenu()));
 
   // Uploader
   connect(Uploader::instance(), SIGNAL(progress(qint64,qint64)), this, SLOT(uploadProgress(qint64, qint64)));
@@ -116,6 +116,8 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
 LightscreenWindow::~LightscreenWindow()
 {
   settings()->setValue("lastScreenshot", mLastScreenshot);
+  settings()->sync();
+
   GlobalShortcutManager::instance()->clear();
   delete mTrayIcon;
 }
@@ -375,7 +377,7 @@ void LightscreenWindow::quit()
   }
 
   if (answer == 0)
-    accept();
+    emit finished();
 }
 
 void LightscreenWindow::restoreNotification()
@@ -556,65 +558,33 @@ void LightscreenWindow::showOptions()
   applySettings();
 }
 
-void LightscreenWindow::showScreenshotMenu()
+
+void LightscreenWindow::showUploadMenu()
 {
-  // This slot is called only on the first click
-  QMenu *buttonMenu = new QMenu;
+  QMenu* imgurMenu = new QMenu(tr("Upload"));
 
-  QAction *screenAction = new QAction(QIcon(":/icons/screen"), tr("&Screen"), buttonMenu);
-  screenAction->setData(QVariant(0));
-
-  QAction *windowAction = new QAction(QIcon(":/icons/window"),tr("Active &Window"), buttonMenu);
-  windowAction->setData(QVariant(1));
-
-  QAction *windowPickerAction = new QAction(QIcon(":/icons/picker"), tr("&Pick Window"), buttonMenu);
-  windowPickerAction->setData(QVariant(3));
-
-  QAction *areaAction = new QAction(QIcon(":/icons/area"), tr("&Area"), buttonMenu);
-  areaAction->setData(QVariant(2));
-
-  QAction *uploadAction = new QAction(QIcon(":/icons/imgur"), tr("&Upload last"), buttonMenu);
+  QAction *uploadAction = new QAction(QIcon(":/icons/imgur"), tr("&Upload last"), imgurMenu);
   uploadAction->setToolTip(tr("Upload the last screenshot you took to imgur.com"));
   connect(uploadAction, SIGNAL(triggered()), this, SLOT(uploadLast()));
 
-  QAction *cancelAction = new QAction(QIcon(":/icons/no"), tr("&Cancel upload"), buttonMenu);
+  QAction *cancelAction = new QAction(QIcon(":/icons/no"), tr("&Cancel upload"), imgurMenu);
   cancelAction->setToolTip(tr("Cancel the currently uploading screenshots"));
   cancelAction->setEnabled(false);
   connect(this, SIGNAL(uploading(bool)), cancelAction, SLOT(setEnabled(bool)));
   connect(cancelAction, SIGNAL(triggered()), this, SLOT(uploadCancel()));
 
-  QAction *historyAction = new QAction(QIcon(":/icons/view-history"), tr("View &History"), buttonMenu);
+  QAction *historyAction = new QAction(QIcon(":/icons/view-history"), tr("View &History"), imgurMenu);
   connect(historyAction, SIGNAL(triggered()), this, SLOT(showHistoryDialog()));
 
-  QAction *goAction = new QAction(QIcon(":/icons/folder"), tr("&Go to Folder"), buttonMenu);
-  connect(goAction, SIGNAL(triggered()), this, SLOT(goToFolder()));
-
-  QActionGroup *screenshotGroup = new QActionGroup(buttonMenu);
-  screenshotGroup->addAction(screenAction);
-  screenshotGroup->addAction(windowAction);
-  screenshotGroup->addAction(windowPickerAction);
-  screenshotGroup->addAction(areaAction);
-
-  QMenu* imgurMenu = new QMenu(tr("Upload"));
   imgurMenu->addAction(uploadAction);
   imgurMenu->addAction(cancelAction);
   imgurMenu->addAction(historyAction);
   imgurMenu->addSeparator();
 
-  connect(screenshotGroup, SIGNAL(triggered(QAction*)), this, SLOT(screenshotActionTriggered(QAction*)));
-
-  buttonMenu->addAction(screenAction);
-  buttonMenu->addAction(areaAction);
-  buttonMenu->addAction(windowAction);
-  buttonMenu->addAction(windowPickerAction);
-  buttonMenu->addSeparator();
-  buttonMenu->addMenu(imgurMenu);
-  buttonMenu->addSeparator();
-  buttonMenu->addAction(goAction);
-
-  ui.screenshotPushButton->setMenu(buttonMenu);
-  ui.screenshotPushButton->showMenu();
+  ui.imgurPushButton->setMenu(imgurMenu);
+  ui.imgurPushButton->showMenu();
 }
+
 
 void LightscreenWindow::showScreenshotMessage(const Screenshot::Result &result, const QString &fileName)
 {
@@ -801,8 +771,6 @@ void LightscreenWindow::applySettings()
   else if (!tray && mTrayIcon) {
     mTrayIcon->deleteLater();
   }
-
-  os::aeroGlass(this);
 
   connectHotkeys();
 
@@ -993,5 +961,6 @@ bool LightscreenWindow::event(QEvent *event)
     resize(minimumSizeHint());
   }
 
-  return QDialog::event(event);
+
+  return QMainWindow::event(event);
 }

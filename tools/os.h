@@ -37,9 +37,6 @@ namespace os
   // Adds the filename to the Windows recent document list (useful for Windows 7 jump lists)
   void addToRecentDocuments(QString fileName);
 
-  // Gives the target widget a full aero glass background
-  bool aeroGlass(QWidget *target);
-
   // Returns the cursor pixmap in Windows
   QPixmap cursor();
 

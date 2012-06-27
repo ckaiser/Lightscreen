@@ -38,7 +38,6 @@ void QtImgur::cancelAll()
   foreach (QNetworkReply *reply, mFiles.keys()) {
     reply->abort();
     mFiles.remove(reply);
-    reply->deleteLater();
   }
 }
 
@@ -51,9 +50,7 @@ void QtImgur::cancel(const QString &fileName)
   }
 
   mFiles.remove(reply);
-
   reply->abort();
-  reply->deleteLater();
 }
 
 void QtImgur::upload(const QString &fileName)
@@ -80,6 +77,7 @@ void QtImgur::upload(const QString &fileName)
 
   QNetworkReply *reply = mNetworkManager->post(request, data);
   connect(reply, SIGNAL(uploadProgress(qint64, qint64)), this, SLOT(progress(qint64, qint64)));
+  connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(replyError(QNetworkReply::NetworkError)));
 
   mFiles.insert(reply, fileName);
 }
@@ -143,4 +141,9 @@ void QtImgur::reply(QNetworkReply *reply)
   }
 
   reply->deleteLater();
+}
+
+void QtImgur::replyError(QNetworkReply::NetworkError networkError) {
+  Q_UNUSED(networkError)
+  emit error(mFiles.value(qobject_cast<QNetworkReply*>(sender())), QtImgur::ErrorNetwork);
 }

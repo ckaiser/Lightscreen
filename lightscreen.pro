@@ -10,7 +10,6 @@ HEADERS += tools/os.h \
     dialogs/previewdialog.h \
     tools/screenshotmanager.h \
     tools/windowpicker.h \
-    tools/qtwin.h \
     tools/uploader.h \
     tools/qtimgur.h \
     dialogs/updaterdialog.h \
@@ -29,7 +28,6 @@ SOURCES += tools/os.cpp \
     dialogs/previewdialog.cpp \
     tools/screenshotmanager.cpp \
     tools/windowpicker.cpp \
-    tools/qtwin.cpp \
     tools/uploader.cpp \
     tools/qtimgur.cpp \
     dialogs/updaterdialog.cpp \
@@ -38,9 +36,9 @@ SOURCES += tools/os.cpp \
     tools/qxtcsvmodel.cpp \
     dialogs/historydialog.cpp
 FORMS += dialogs/optionsdialog.ui \
-    lightscreenwindow.ui \
     dialogs/namingdialog.ui \
-    dialogs/historydialog.ui
+    dialogs/historydialog.ui \
+    lightscreenwindow.ui
 RESOURCES += lightscreen.qrc
 TRANSLATIONS += translations/untranslated.ts \
                 translations/spanish.ts \

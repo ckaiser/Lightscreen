@@ -35,13 +35,6 @@ NamingDialog::NamingDialog(Screenshot::Naming naming,QWidget *parent) :
 
   ui.dateFormatComboBox->installEventFilter(this);
 
-  // Aero
-  if (os::aeroGlass(this)) {
-    ui.container->setStyleSheet("#container { background: palette(light); border: 1px solid palette(dark); border-radius: 4px; }");
-    ui.container->setWindowOpacity(0.5);
-    layout()->setMargin(2);
-  }
-
   // Settings
   QSettings *s = ScreenshotManager::instance()->settings();
   ui.flipNamingCheckBox->setChecked(s->value("options/flip", false).toBool());

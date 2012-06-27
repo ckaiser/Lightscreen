@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
   }
 
   QObject::connect(&application, SIGNAL(messageReceived(const QString&)), &lightscreen, SLOT(messageReceived(const QString&)));
-  QObject::connect(&lightscreen, SIGNAL(finished(int)), &application, SLOT(quit()));
+  QObject::connect(&lightscreen, SIGNAL(finished()), &application, SLOT(quit()));
 
   int result = application.exec();
 

@@ -49,11 +49,6 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
   ui.setupUi(this);
   setModal(true);
 
-  if (os::aeroGlass(this)) {
-    layout()->setMargin(2);
-    resize(minimumSizeHint());
-  }
-
 #if defined(Q_WS_X11)
   // KDE-specific style tweaks.
   if (qApp->style()->objectName() == "oxygen") {
