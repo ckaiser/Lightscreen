@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>271</width>
-    <height>113</height>
+    <width>262</width>
+    <height>115</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,7 +21,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="lightscreen.qrc">
-    <normaloff>:/icons/lightscreen.small</normaloff>:/icons/lightscreen.small</iconset>
+    <normaloff>:/icons/lightscreen</normaloff>:/icons/lightscreen</iconset>
   </property>
   <property name="animated">
    <bool>false</bool>
@@ -32,40 +32,11 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <property name="margin">
-     <number>4</number>
+     <number>3</number>
     </property>
     <property name="spacing">
-     <number>4</number>
+     <number>2</number>
     </property>
-    <item row="0" column="0">
-     <widget class="QPushButton" name="screenPushButton">
-      <property name="minimumSize">
-       <size>
-        <width>24</width>
-        <height>24</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset resource="lightscreen.qrc">
-        <normaloff>:/icons/screen</normaloff>:/icons/screen</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>64</width>
-        <height>64</height>
-       </size>
-      </property>
-      <property name="autoDefault">
-       <bool>false</bool>
-      </property>
-      <property name="flat">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="1">
      <widget class="QPushButton" name="areaPushButton">
       <property name="minimumSize">
@@ -74,18 +45,27 @@
         <height>24</height>
        </size>
       </property>
+      <property name="toolTip">
+       <string>Area capture</string>
+      </property>
+      <property name="whatsThis">
+       <string>Capture a specific area of your desktop, resize and move it around!</string>
+      </property>
       <property name="text">
        <string/>
       </property>
       <property name="icon">
        <iconset resource="lightscreen.qrc">
-        <normaloff>:/icons/area</normaloff>:/icons/area</iconset>
+        <normaloff>:/icons/area.big</normaloff>:/icons/area.big</iconset>
       </property>
       <property name="iconSize">
        <size>
         <width>64</width>
         <height>64</height>
        </size>
+      </property>
+      <property name="shortcut">
+       <string>Ctrl+A</string>
       </property>
       <property name="autoDefault">
        <bool>false</bool>
@@ -103,15 +83,24 @@
         <height>24</height>
        </size>
       </property>
+      <property name="toolTip">
+       <string>Pick window</string>
+      </property>
+      <property name="whatsThis">
+       <string>Drop the picker onto a window to capture it.</string>
+      </property>
       <property name="icon">
        <iconset resource="lightscreen.qrc">
-        <normaloff>:/icons/picker</normaloff>:/icons/picker</iconset>
+        <normaloff>:/icons/picker.big</normaloff>:/icons/picker.big</iconset>
       </property>
       <property name="iconSize">
        <size>
         <width>64</width>
         <height>64</height>
        </size>
+      </property>
+      <property name="shortcut">
+       <string>Ctrl+P</string>
       </property>
       <property name="autoDefault">
        <bool>false</bool>
@@ -139,6 +128,9 @@
        <iconset resource="lightscreen.qrc">
         <normaloff>:/icons/configure</normaloff>:/icons/configure</iconset>
       </property>
+      <property name="shortcut">
+       <string>Ctrl+O</string>
+      </property>
       <property name="autoDefault">
        <bool>false</bool>
       </property>
@@ -155,12 +147,18 @@
         <height>26</height>
        </size>
       </property>
+      <property name="toolTip">
+       <string>Open the current Screenshot folder</string>
+      </property>
       <property name="text">
        <string>&amp;Folder</string>
       </property>
       <property name="icon">
        <iconset resource="lightscreen.qrc">
         <normaloff>:/icons/folder</normaloff>:/icons/folder</iconset>
+      </property>
+      <property name="shortcut">
+       <string>Ctrl+F</string>
       </property>
       <property name="autoDefault">
        <bool>false</bool>
@@ -178,12 +176,53 @@
         <height>26</height>
        </size>
       </property>
+      <property name="toolTip">
+       <string>Imgur upload controls</string>
+      </property>
       <property name="text">
        <string>&amp;Upload</string>
       </property>
       <property name="icon">
        <iconset resource="lightscreen.qrc">
         <normaloff>:/icons/imgur</normaloff>:/icons/imgur</iconset>
+      </property>
+      <property name="shortcut">
+       <string>Ctrl+U</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QPushButton" name="screenPushButton">
+      <property name="minimumSize">
+       <size>
+        <width>24</width>
+        <height>24</height>
+       </size>
+      </property>
+      <property name="toolTip">
+       <string>Fullscreen capture</string>
+      </property>
+      <property name="whatsThis">
+       <string>Take a screenshot of your entire desktop.</string>
+      </property>
+      <property name="icon">
+       <iconset resource="lightscreen.qrc">
+        <normaloff>:/icons/sceen.big</normaloff>:/icons/sceen.big</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>64</width>
+        <height>64</height>
+       </size>
+      </property>
+      <property name="shortcut">
+       <string>Ctrl+S</string>
       </property>
       <property name="autoDefault">
        <bool>false</bool>

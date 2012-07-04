@@ -21,6 +21,7 @@ private slots:
   void clear();
   void contextMenu(QPoint point);
   void copy();
+  void deleteImage();
   void location();
   void open(QModelIndex index);
   void reloadHistory();

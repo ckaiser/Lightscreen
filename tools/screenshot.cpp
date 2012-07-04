@@ -170,21 +170,17 @@ void Screenshot::confirmation()
 
 void Screenshot::discard()
 {
-  qDebug() << "Screenshot: Discarding";
   confirm(false);
 }
 
 void Screenshot::markUpload()
 {
-  qDebug() << "Screenshot: Marking the screenshot as an upload";
   mOptions.upload = true;
 }
 
 void Screenshot::optimize()
 {
   QProcess* process = new QProcess(this);
-
-  qDebug() << "Screenshot: Running optiPNG";
 
   // Delete the QProcess once it's done.
   connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this   , SLOT(optimizationDone()));
@@ -199,14 +195,12 @@ void Screenshot::optimize()
 #endif
 
   if (!QFile::exists(optiPNG)) {
-    qDebug() << "OptiPNG not found!";
     emit optimizationDone();
   }
 
   process->start(optiPNG, QStringList() << mOptions.fileName);
 
   if (process->state() == QProcess::NotRunning) {
-    qDebug() << "OptiPNG failed to start!";
     emit optimizationDone();
     process->deleteLater();
   }
@@ -214,8 +208,6 @@ void Screenshot::optimize()
 
 void Screenshot::optimizationDone()
 {
-  qDebug() << "Screenshot::optimizationDone";
-
   if (mOptions.upload) {
     upload();
   }
@@ -226,8 +218,6 @@ void Screenshot::optimizationDone()
 
 void Screenshot::save()
 {
-  qDebug() << "Screenshot::save";
-
   QString name = "";
   QString fileName = "";
   Screenshot::Result result = Screenshot::Fail;
@@ -237,8 +227,6 @@ void Screenshot::save()
   }
   else if (mOptions.file && mOptions.saveAs) {
     name = QFileDialog::getSaveFileName(0, tr("Save as.."), newFileName(), "*" + extension());
-
-
   }
 
   if (!mOptions.replace && QFile::exists(name+extension())) {
@@ -307,8 +295,6 @@ void Screenshot::save()
   if (!mOptions.result)
     emit finished();
 
-  qDebug() << "Screenshot::save, time to optimize or upload. File: " << mOptions.file;
-
   if (mOptions.format == Screenshot::PNG && mOptions.optimize && mOptions.file) {
     if (!mOptions.upload) {
       ScreenshotManager::instance()->saveHistory(mOptions.fileName);
@@ -374,21 +360,19 @@ void Screenshot::take()
 
 void Screenshot::upload()
 {
-  qDebug() << "Screenshot: upload -> " << mOptions.fileName;
-
-  if (!mOptions.file) {
-    if (unloadPixmap())
-      Uploader::instance()->upload(mUnloadFilename);
+  if (mOptions.file) {
+    Uploader::instance()->upload(mOptions.fileName);
+  }
+  else if (unloadPixmap()) {
+    Uploader::instance()->upload(mUnloadFilename);
   }
   else {
-    Uploader::instance()->upload(mOptions.fileName);
+    emit finished();
   }
 }
 
 void Screenshot::uploadDone(QString url)
 {
-  qDebug() << "Screenshot: uploadDone!";
-
   if (mOptions.imgurClipboard)
     QApplication::clipboard()->setText(url, QClipboard::Clipboard);
 
@@ -507,8 +491,6 @@ void Screenshot::selectedWindow()
 
 bool Screenshot::unloadPixmap()
 {
-  qDebug() << "Screenshot::Unloading pixmap to temporary file";
-
   if (mUnloaded)
     return true;
 

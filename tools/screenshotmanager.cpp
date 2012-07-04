@@ -40,7 +40,7 @@ ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent)
     mPortableMode = false;
   }
 
-  connect(Uploader::instance(), SIGNAL(done(QString, QString)), this, SLOT(uploadDone(QString, QString)));
+  connect(Uploader::instance(), SIGNAL(done(QString, QString, QString)), this, SLOT(uploadDone(QString, QString, QString)));
 }
 
 ScreenshotManager::~ScreenshotManager()
@@ -63,7 +63,7 @@ bool ScreenshotManager::portableMode()
   return mPortableMode;
 }
 
-void ScreenshotManager::saveHistory(QString fileName, QString url)
+void ScreenshotManager::saveHistory(QString fileName, QString url, QString deleteHash)
 {
   if (!mSettings->value("/options/history", true).toBool())
     return;
@@ -81,7 +81,7 @@ void ScreenshotManager::saveHistory(QString fileName, QString url)
   }
 
   if (historyFile.open(QFile::WriteOnly | QFile::Append)) {
-    out << QString("%1|%2|%3").arg(fileName).arg(url).arg(QDateTime::currentMSecsSinceEpoch()) << "\n";
+    out << QString("%1|%2|%3|%4").arg(fileName).arg(url).arg(deleteHash).arg(QDateTime::currentMSecsSinceEpoch()) << "\n";
     historyFile.close();
   }
 }
@@ -119,7 +119,7 @@ void ScreenshotManager::take(Screenshot::Options &options)
   newScreenshot->take();
 }
 
-void ScreenshotManager::uploadDone(QString fileName, QString url)
+void ScreenshotManager::uploadDone(QString fileName, QString url, QString deleteHash)
 {
   foreach (Screenshot* screenshot, mScreenshots) {
     if (screenshot->options().fileName == fileName
@@ -127,10 +127,10 @@ void ScreenshotManager::uploadDone(QString fileName, QString url)
       screenshot->uploadDone(url);
 
       if (screenshot->options().file) {
-        saveHistory(fileName, url);
+        saveHistory(fileName, url, deleteHash);
       }
       else {
-        saveHistory(QObject::tr("- no file -"), url);
+        saveHistory(QObject::tr("- no file -"), url, deleteHash);
       }
     }
   }

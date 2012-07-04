@@ -76,7 +76,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   setMaximumSize(size());
   setMinimumSize(size());
 
-  setWindowFlags(Qt::Window); // Remove the what's this button, no real use in the main window.
+  setWindowFlags(Qt::Window);
 
 #ifdef Q_WS_WIN
   if (QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS7) {
@@ -92,13 +92,12 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   connect(ui.optionsPushButton, SIGNAL(clicked()), this, SLOT(showOptions()));
   connect(ui.folderPushButton , SIGNAL(clicked()), this, SLOT(goToFolder()));
 
-  // TODO: Imgur menu
   connect(ui.imgurPushButton, SIGNAL(clicked()), this, SLOT(showUploadMenu()));
 
   // Uploader
-  connect(Uploader::instance(), SIGNAL(progress(qint64,qint64)), this, SLOT(uploadProgress(qint64, qint64)));
-  connect(Uploader::instance(), SIGNAL(done(QString, QString)) , this, SLOT(showUploaderMessage(QString, QString)));
-  connect(Uploader::instance(), SIGNAL(error(QString))         , this, SLOT(showUploaderError(QString)));
+  connect(Uploader::instance(), SIGNAL(progress(qint64, qint64)),        this, SLOT(uploadProgress(qint64, qint64)));
+  connect(Uploader::instance(), SIGNAL(done(QString, QString, QString)), this, SLOT(showUploaderMessage(QString, QString)));
+  connect(Uploader::instance(), SIGNAL(error(QString)),                  this, SLOT(showUploaderError(QString)));
 
   // Manager
   connect(ScreenshotManager::instance(), SIGNAL(confirm(Screenshot*)),                this, SLOT(preview(Screenshot*)));
@@ -664,11 +663,13 @@ void LightscreenWindow::updateUploadStatus()
   QString statusString;
 
   if (uploadCount > 0) {
-    statusString = tr("Uploading %1 screenshot(s)").arg(uploadCount);
+    statusString = tr("%1 uploading - Lightscreen").arg(uploadCount);
+    ui.imgurPushButton->setIcon(QIcon(":/icons/imgur.upload"));
     emit uploading(true);
   }
   else {
     statusString = tr("Lightscreen");
+    ui.imgurPushButton->setIcon(QIcon(":/icons/imgur"));
     emit uploading(false);
 
 #ifdef Q_WS_WIN
@@ -744,8 +745,19 @@ void LightscreenWindow::uploadProgress(qint64 sent, qint64 total)
 #ifdef Q_WS_WIN
   if (mTaskbarButton)
     mTaskbarButton->SetProgresValue(sent, total);
+
+  if (isVisible()) {
+    int uploadCount = Uploader::instance()->uploading();
+    int progress = (sent*100)/total;
+
+    if (uploadCount > 1) {
+      setWindowTitle(tr("%1% of %2 uploads - Lightscreen").arg(progress).arg(uploadCount));
+    }
+    else {
+      setWindowTitle(tr("%1% - Lightscreen").arg(progress));
+    }
+  }
 #endif
-  //TODO: Update mTrayIcon & windowTitle()
 }
 
 void LightscreenWindow::windowHotkey()

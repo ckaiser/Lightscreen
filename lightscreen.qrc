@@ -22,6 +22,10 @@
         <file alias="imgur">images/imgur.png</file>
         <file alias="imgur.yes">images/imgur.yes.png</file>
         <file alias="view-history">images/view-history.png</file>
+        <file alias="imgur.upload">images/imgur.uploading.png</file>
+        <file alias="area.big">images/area.big.png</file>
+        <file alias="picker.big">images/picker.big.png</file>
+        <file alias="sceen.big">images/screen.big.png</file>
     </qresource>
     <qresource prefix="/backgrounds">
         <file alias="checkerboard">images/checkerboard.png</file>

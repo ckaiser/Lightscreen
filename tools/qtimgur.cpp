@@ -69,6 +69,8 @@ void QtImgur::upload(const QString &fileName)
   QByteArray data;
   data.append(QString("key=").toUtf8());
   data.append(QUrl::toPercentEncoding(mAPIKey));
+  data.append(QString("&caption=").toUtf8());
+  data.append(QUrl::toPercentEncoding(tr("Screenshot taken with Lightscreen - http://lightscreen.sf.net")));
   data.append(QString("&image=").toUtf8());
   data.append(QUrl::toPercentEncoding(image));
 
@@ -123,6 +125,8 @@ void QtImgur::reply(QNetworkReply *reply)
   }
 
   QXmlStreamReader reader(reply->readAll());
+  QString url;
+  QString deleteHash;
 
   while (!reader.atEnd()) {
     reader.readNext();
@@ -133,12 +137,17 @@ void QtImgur::reply(QNetworkReply *reply)
         emit error(fileName, QtImgur::ErrorUpload);
       }
 
+      if (reader.name() == "deletehash") {
+        deleteHash = reader.readElementText();
+      }
+
       if (reader.name() == "imgur_page") {
-        QString url = reader.readElementText();
-        emit uploaded(fileName, url);
+        url = reader.readElementText();
       }
     }
   }
+
+  emit uploaded(fileName, url, deleteHash);
 
   reply->deleteLater();
 }

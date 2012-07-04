@@ -46,7 +46,7 @@ public:
   int activeCount() const;
   QString &historyPath();
   bool portableMode();
-  void saveHistory(QString fileName, QString url = QObject::tr("- not uploaded -"));// TODO: No TR?
+  void saveHistory(QString fileName, QString url = QObject::tr("- not uploaded -"), QString deleteHash = "");
   QSettings *settings() const { return mSettings; }
 
 public slots:
@@ -54,7 +54,7 @@ public slots:
   void cleanup();
   void finished();
   void take(Screenshot::Options &options);
-  void uploadDone(QString fileName, QString url);
+  void uploadDone(QString fileName, QString url, QString deleteHash);
 
 signals:
   void confirm(Screenshot* screenshot);

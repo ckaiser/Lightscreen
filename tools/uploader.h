@@ -40,12 +40,12 @@ public slots:
   void cancel();
   void imgurError(const QString &file, const QtImgur::Error e);
   void upload(const QString &fileName);
-  void uploaded(const QString &fileName, const QString &url);
+  void uploaded(const QString &fileName, const QString &url, const QString &deleteHash);
   int  uploading();
   void reportProgress(qint64 sent, qint64 total);
 
 signals:
-  void done(QString, QString);
+  void done(QString, QString, QString);
   void error(QString);
   void progress(qint64, qint64);
 

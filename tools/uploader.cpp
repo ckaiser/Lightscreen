@@ -31,9 +31,9 @@ Uploader::Uploader(QObject *parent) : QObject(parent), mProgressSent(0), mProgre
 {
   mImgur = new QtImgur("6920a141451d125b3e1357ce0e432409", this);
 
-  connect(mImgur, SIGNAL(uploaded(QString, QString))    , this, SLOT(uploaded(QString, QString)));
-  connect(mImgur, SIGNAL(error(QString, QtImgur::Error)), this, SLOT(imgurError(QString, QtImgur::Error)));
-  connect(mImgur, SIGNAL(uploadProgress(qint64,qint64)) , this, SLOT(reportProgress(qint64, qint64)));
+  connect(mImgur, SIGNAL(uploaded(QString, QString, QString)), this, SLOT(uploaded(QString, QString, QString)));
+  connect(mImgur, SIGNAL(error(QString, QtImgur::Error))     , this, SLOT(imgurError(QString, QtImgur::Error)));
+  connect(mImgur, SIGNAL(uploadProgress(qint64,qint64))      , this, SLOT(reportProgress(qint64, qint64)));
 }
 
 Uploader *Uploader::instance()
@@ -132,7 +132,7 @@ void Uploader::upload(const QString &fileName)
   mUploading++;
 }
 
-void Uploader::uploaded(const QString &file, const QString &url)
+void Uploader::uploaded(const QString &file, const QString &url, const QString &deleteHash)
 {
   // Modifying uploaded list, adding url.
   for (int i = 0; i < mScreenshots.size(); ++i) {
@@ -144,7 +144,7 @@ void Uploader::uploaded(const QString &file, const QString &url)
 
   mUploading--;
 
-  emit done(file, url);
+  emit done(file, url, deleteHash);
 }
 
 int Uploader::uploading()

@@ -52,7 +52,7 @@ protected slots:
 signals:
   void error(QString, QtImgur::Error);
   void uploadProgress(qint64, qint64);
-  void uploaded(QString file, QString url);
+  void uploaded(QString file, QString url, QString deleteHash);
 
 private:
   QString mAPIKey;

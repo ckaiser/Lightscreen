@@ -100,6 +100,7 @@ void HistoryDialog::contextMenu(QPoint point)
   connect(&copyAction, SIGNAL(triggered()), this, SLOT(copy()));
   contextMenu.addAction(&copyAction);
 
+  QAction deleteAction(tr("Delete from imgur.com"), &contextMenu);
   QAction locationAction(tr("Open Location"), &contextMenu);
 
   if (mContextIndex.column() == 0)
@@ -107,8 +108,14 @@ void HistoryDialog::contextMenu(QPoint point)
     connect(&locationAction, SIGNAL(triggered()), this, SLOT(location()));
     contextMenu.addAction(&locationAction);
   }
-  else if (mContextIndex.data().toString() == QObject::tr("- not uploaded -")) {
+  else {
+    connect(&deleteAction, SIGNAL(triggered()), this, SLOT(deleteImage()));
+    contextMenu.addAction(&deleteAction);
+  }
+
+  if (mContextIndex.data().toString() == QObject::tr("- not uploaded -")) {
     copyAction.setEnabled(false);
+    deleteAction.setEnabled(false);
   }
 
   contextMenu.exec(QCursor::pos());
@@ -117,6 +124,11 @@ void HistoryDialog::contextMenu(QPoint point)
 void HistoryDialog::copy()
 {
   qApp->clipboard()->setText(mContextIndex.data().toString());
+}
+
+void HistoryDialog::deleteImage()
+{
+  QDesktopServices::openUrl("http://imgur.com/delete/" + mContextIndex.sibling(mContextIndex.row(), 2).data().toString());
 }
 
 void HistoryDialog::location()
@@ -157,7 +169,8 @@ void HistoryDialog::reloadHistory()
 
   ui->tableView->setModel(mFilterModel);
 
-  ui->tableView->hideColumn(2); // No timestamp.
+  ui->tableView->hideColumn(2); // No delete hash.
+  ui->tableView->hideColumn(3); // No timestamp.
 
   ui->tableView->horizontalHeader()->setClickable(false);
   ui->tableView->horizontalHeader()->setMovable(false);
@@ -213,7 +226,7 @@ bool HistoryDialog::eventFilter(QObject *object, QEvent *event)
         ui->filterEdit->setStyleSheet("");
         ui->filterEdit->setText("");
         mFilterModel->setFilterWildcard("");
-        mFilterModel->sort(2, Qt::DescendingOrder);
+        mFilterModel->sort(3, Qt::DescendingOrder);
       }
     }
     else if (event->type() == QEvent::FocusOut)
@@ -221,18 +234,18 @@ bool HistoryDialog::eventFilter(QObject *object, QEvent *event)
       if (ui->filterEdit->text() == "") {
         ui->filterEdit->setStyleSheet("color: palette(mid);");
         ui->filterEdit->setText(tr("Filter.."));
-        mFilterModel->sort(2, Qt::DescendingOrder);
+        mFilterModel->sort(3, Qt::DescendingOrder);
       }
     }
     else if (event->type() == QEvent::KeyRelease)
     {
       if (ui->filterEdit->text() != tr("Filter..") && !ui->filterEdit->text().isEmpty()) {
         mFilterModel->setFilterWildcard(ui->filterEdit->text());
-        mFilterModel->sort(2, Qt::DescendingOrder);
+        mFilterModel->sort(3, Qt::DescendingOrder);
       }
       else {
         mFilterModel->setFilterWildcard("");
-        mFilterModel->sort(2, Qt::DescendingOrder);
+        mFilterModel->sort(3, Qt::DescendingOrder);
       }
     }
   }
