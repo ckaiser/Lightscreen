@@ -127,14 +127,14 @@ void QtImgur::reply(QNetworkReply *reply)
   QXmlStreamReader reader(reply->readAll());
   QString url;
   QString deleteHash;
+  bool error = false;
 
   while (!reader.atEnd()) {
     reader.readNext();
 
     if (reader.isStartElement()) {
       if (reader.name() == "error") {
-        qDebug() << "Error: " << reply->errorString();
-        emit error(fileName, QtImgur::ErrorUpload);
+        error = true;
       }
 
       if (reader.name() == "deletehash") {
@@ -147,7 +147,12 @@ void QtImgur::reply(QNetworkReply *reply)
     }
   }
 
-  emit uploaded(fileName, url, deleteHash);
+  if (deleteHash.isEmpty() || url.isEmpty() || error) {
+    emit error(fileName, QtImgur::ErrorUpload);
+  }
+  else {
+    emit uploaded(fileName, url, deleteHash);
+  }
 
   reply->deleteLater();
 }
