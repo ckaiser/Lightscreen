@@ -39,6 +39,7 @@
   #include <windows.h>
   #include "tools/qwin7utils/Taskbar.h"
   #include "tools/qwin7utils/TaskbarButton.h"
+  #include "tools/qwin7utils/Utils.h"
   using namespace QW7;
 #endif
 
@@ -72,6 +73,10 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   os::translate(settings()->value("options/language", "English").toString());
 
   ui.setupUi(this);
+
+#ifdef Q_WS_WIN
+  ExtendFrameIntoClientArea(this);
+#endif
 
   setMaximumSize(size());
   setMinimumSize(size());

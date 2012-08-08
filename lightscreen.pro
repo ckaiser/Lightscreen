@@ -15,7 +15,6 @@ HEADERS += tools/os.h \
     dialogs/updaterdialog.h \
     dialogs/screenshotdialog.h \
     dialogs/namingdialog.h \
-    tools/qxtcsvmodel.h \
     dialogs/historydialog.h
 SOURCES += tools/os.cpp \
     updater/updater.cpp \
@@ -33,7 +32,6 @@ SOURCES += tools/os.cpp \
     dialogs/updaterdialog.cpp \
     dialogs/screenshotdialog.cpp \
     dialogs/namingdialog.cpp \
-    tools/qxtcsvmodel.cpp \
     dialogs/historydialog.cpp
 FORMS += dialogs/optionsdialog.ui \
     dialogs/namingdialog.ui \
@@ -50,7 +48,7 @@ TRANSLATIONS += translations/untranslated.ts \
                 translations/dutch.ts
 RC_FILE += lightscreen.rc
 CODECFORSRC = UTF-8
-QT += network core gui xml
+QT += network core gui xml sql
 
 include($$PWD/tools/globalshortcut/globalshortcut.pri)
 include($$PWD/tools/qtsingleapplication/qtsingleapplication.pri)

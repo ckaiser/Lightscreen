@@ -26,18 +26,30 @@
 #include <QDesktopServices>
 #include <QFile>
 #include <QSettings>
+#include <QtSql/QSqlDatabase>
+#include <QtSql/QSqlQuery>
 
 ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent)
 {
+  QString historyPath;
+
   if (QFile::exists(qApp->applicationDirPath() + "/config.ini")) {
     mSettings     = new QSettings(qApp->applicationDirPath() + QDir::separator() + "config.ini", QSettings::IniFormat);
-    mHistoryPath  = qApp->applicationDirPath() + QDir::separator() + "history";
     mPortableMode = true;
+    historyPath   = qApp->applicationDirPath() + QDir::separator() + "history.sqlite";
   }
   else {
     mSettings     = new QSettings();
-    mHistoryPath  = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QDir::separator() + "history";
     mPortableMode = false;
+    historyPath   = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QDir::separator() + "history.sqlite";
+  }
+
+  // Creating the SQLite database.
+  mHistory = QSqlDatabase::addDatabase("QSQLITE");
+  mHistory.setDatabaseName(historyPath);
+
+  if (mHistory.open()) {
+    mHistory.exec("CREATE TABLE IF NOT EXISTS history (fileName text, URL text, deleteURL text, time integer)");
   }
 
   connect(Uploader::instance(), SIGNAL(done(QString, QString, QString)), this, SLOT(uploadDone(QString, QString, QString)));
@@ -53,11 +65,6 @@ int ScreenshotManager::activeCount() const
   return mScreenshots.count();
 }
 
-QString& ScreenshotManager::historyPath()
-{
-  return mHistoryPath;
-}
-
 bool ScreenshotManager::portableMode()
 {
   return mPortableMode;
@@ -68,22 +75,21 @@ void ScreenshotManager::saveHistory(QString fileName, QString url, QString delet
   if (!mSettings->value("/options/history", true).toBool())
     return;
 
-  QFile historyFile(mHistoryPath);
-  QTextStream out(&historyFile);
+  if (!mHistory.isOpen())
+    return;
 
-  if (!historyFile.exists())
-  {
-    QString path = mHistoryPath;
-    path.chop(7);
+  mHistory.exec(QString("INSERT INTO history (fileName, URL, deleteURL, time) VALUES('%1', '%2', '%3', %4)")
+                 .arg(fileName)
+                 .arg(url)
+                 .arg("http://imgur.com/delete/" + deleteHash)
+                 .arg(QDateTime::currentMSecsSinceEpoch())
+                 );
+}
 
-    if (!QDir().mkpath(path))
-      return;
-  }
-
-  if (historyFile.open(QFile::WriteOnly | QFile::Append)) {
-    out << QString("%1|%2|%3|%4").arg(fileName).arg(url).arg(deleteHash).arg(QDateTime::currentMSecsSinceEpoch()) << "\n";
-    historyFile.close();
-  }
+void ScreenshotManager::clearHistory()
+{
+  if (mHistory.isOpen())
+    mHistory.exec("DROP TABLE history");
 }
 
 //
@@ -130,7 +136,7 @@ void ScreenshotManager::uploadDone(QString fileName, QString url, QString delete
         saveHistory(fileName, url, deleteHash);
       }
       else {
-        saveHistory(QObject::tr("- no file -"), url, deleteHash);
+        saveHistory("", url, deleteHash);
       }
     }
   }

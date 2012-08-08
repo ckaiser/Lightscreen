@@ -21,9 +21,9 @@
 
 #include <QObject>
 #include <QList>
+#include <QtSql/QSqlDatabase>
 
 #include "screenshot.h"
-#include "qxtcsvmodel.h"
 
 class QSettings;
 class ScreenshotManager : public QObject
@@ -44,10 +44,11 @@ public:
   static ScreenshotManager *instance();
 
   int activeCount() const;
-  QString &historyPath();
   bool portableMode();
-  void saveHistory(QString fileName, QString url = QObject::tr("- not uploaded -"), QString deleteHash = "");
+  void saveHistory(QString fileName, QString url = "", QString deleteHash = "");
+  void clearHistory();
   QSettings *settings() const { return mSettings; }
+  QSqlDatabase &history() { return mHistory; }
 
 public slots:
   void askConfirmation();
@@ -64,7 +65,7 @@ private:
   static ScreenshotManager* mInstance;
   QList<Screenshot*> mScreenshots;
   QSettings *mSettings;
-  QString mHistoryPath;
+  QSqlDatabase mHistory;
   bool mPortableMode;
 };
 
