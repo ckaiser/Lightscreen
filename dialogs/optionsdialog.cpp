@@ -160,7 +160,9 @@ void OptionsDialog::loadSettings()
     ui.previewAutocloseActionComboBox->setCurrentIndex(settings()->value("previewAutocloseAction", 0).toInt());
     ui.previewDefaultActionComboBox->setCurrentIndex(settings()->value("previewDefaultAction", 0).toInt());
     ui.areaAutocloseCheckBox->setChecked(settings()->value("areaAutoclose", false).toBool());
-    ui.historyCheckBox->setChecked(settings()->value("history", true).toBool());
+
+    // History mode is neat for normal operation but I'll keep it disabled by default on portable mode.
+    ui.historyCheckBox->setChecked(settings()->value("history", (ScreenshotManager::instance()->portableMode()) ? false : true).toBool());
 
     // Advanced
     ui.clipboardCheckBox->setChecked(settings()->value("clipboard", true).toBool());
@@ -406,12 +408,18 @@ bool OptionsDialog::event(QEvent* event)
     updatePreview();
     resize(minimumSizeHint());
   }
-  else if (event->type() == QEvent::Close) {
+  else if (event->type() == QEvent::Close || event->type() == QEvent::Hide) {
+    settings()->setValue("geometry/optionsDialog", saveGeometry());
+
     if (!settings()->contains("file/format")) {
       // I'm afraid I can't let you do that, Dave.
       event->ignore();
       return false;
     }
+  }
+  else if (event->type() == QEvent::Show)
+  {
+    restoreGeometry(settings()->value("geometry/optionsDialog").toByteArray());
   }
 
   return QDialog::event(event);
@@ -505,7 +513,6 @@ void OptionsDialog::init()
   QPalette optionsPalette = ui.optionsScrollArea->palette();
   optionsPalette.setColor(QPalette::Window,  ui.tabWidget->palette().color(QPalette::Base));
   ui.optionsScrollArea->setPalette(optionsPalette);
-
 
   ui.buttonBox->addButton(new QPushButton(" " + tr("Restore Defaults") + " ", this), QDialogButtonBox::ResetRole);
 

@@ -164,12 +164,12 @@ namespace QW7 {
     void ExtendFrameIntoClientArea(QWidget* widget) {
         MARGINS margins = {-1};
 
-        DwmExtendFrameIntoClientArea(widget->winId(), &margins);
+        DwmExtendFrameIntoClientArea((HWND)widget->winId(), &margins);
     }
 
     long EnableBlurBehindWidget(QWidget* widget, bool enable)
     {
-        HWND hwnd = widget->winId();
+        HWND hwnd = (HWND) widget->winId();
         HRESULT hr = S_OK;
 
         widget->setAttribute(Qt::WA_TranslucentBackground, enable);
@@ -190,13 +190,13 @@ namespace QW7 {
         BOOL _enable = enable ? TRUE : FALSE;
 
         DwmSetWindowAttribute(
-            widget->winId(),
+            (HWND)widget->winId(),
             DWMWA_FORCE_ICONIC_REPRESENTATION,
             &_enable,
             sizeof(_enable));
 
         DwmSetWindowAttribute(
-            widget->winId(),
+            (HWND)widget->winId(),
             DWMWA_HAS_ICONIC_BITMAP,
             &_enable,
             sizeof(_enable));
@@ -204,7 +204,7 @@ namespace QW7 {
     }
 
     void InvalidateIconicBitmaps(QWidget* widget) {
-        DwmInvalidateIconicBitmaps(widget->winId());
+        DwmInvalidateIconicBitmaps((HWND)widget->winId());
     }
 
 }

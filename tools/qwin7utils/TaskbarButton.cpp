@@ -53,7 +53,7 @@ namespace QW7 {
 
     long TaskbarButton::SetState(ProgressBarState state) {
         if (Taskbar::GetInstance()->m_private) {
-            return Taskbar::GetInstance()->m_private->GetHandler()->SetProgressState(m_widget->winId(), (TBPFLAG)state);
+            return Taskbar::GetInstance()->m_private->GetHandler()->SetProgressState((HWND)m_widget->winId(), (TBPFLAG)state);
         }
 
         return -1;
@@ -61,7 +61,7 @@ namespace QW7 {
 
     long TaskbarButton::SetProgresValue(unsigned long long done, unsigned long long total) {
         if (Taskbar::GetInstance()->m_private) {
-            return Taskbar::GetInstance()->m_private->GetHandler()->SetProgressValue(m_widget->winId(), done, total);
+            return Taskbar::GetInstance()->m_private->GetHandler()->SetProgressValue((HWND)m_widget->winId(), done, total);
         }
 
         return -1;

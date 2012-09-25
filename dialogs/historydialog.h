@@ -8,6 +8,7 @@ namespace Ui {
     class HistoryDialog;
 }
 
+class QSqlTableModel;
 class QSortFilterProxyModel;
 class HistoryDialog : public QDialog
 {
@@ -23,6 +24,7 @@ private slots:
   void copy();
   void deleteImage();
   void location();
+  void removeHistoryEntry();
   void open(QModelIndex index);
   void reloadHistory();
   void selectionChanged(QItemSelection selected, QItemSelection deselected);
@@ -31,9 +33,11 @@ private slots:
 
 protected:
   bool eventFilter(QObject *object, QEvent *event);
+  bool event(QEvent *event);
 
 private:
   Ui::HistoryDialog *ui;
+  QSqlTableModel *mModel;
   QSortFilterProxyModel *mFilterModel;
   QString     mSelectedScreenshot;
   QModelIndex mContextIndex;

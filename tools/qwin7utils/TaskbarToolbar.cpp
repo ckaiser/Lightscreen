@@ -45,11 +45,11 @@ namespace QW7 {
         RECT wrect;
         wrect.left = rect.left(); wrect.right = rect.right();
         wrect.top = rect.top(); wrect.bottom = rect.bottom();
-        Taskbar::GetInstance()->m_private->GetHandler()->SetThumbnailClip(m_widget->winId(), &wrect);
+        Taskbar::GetInstance()->m_private->GetHandler()->SetThumbnailClip((HWND) m_widget->winId(), &wrect);
     }
 
     void TaskbarToolbar::SetThumbnailTooltip(QString tooltip) {
-        Taskbar::GetInstance()->m_private->GetHandler()->SetThumbnailTooltip(m_widget->winId(), tooltip.toStdWString().c_str());
+        Taskbar::GetInstance()->m_private->GetHandler()->SetThumbnailTooltip((HWND) m_widget->winId(), tooltip.toStdWString().c_str());
     }
 
     void TaskbarToolbar::AddAction(QAction* action) {
@@ -117,13 +117,13 @@ namespace QW7 {
             ++index;
         }
 
-        HRESULT hr = Taskbar::GetInstance()->m_private->GetHandler()->ThumbBarSetImageList(m_widget->winId(), himl);
+        HRESULT hr = Taskbar::GetInstance()->m_private->GetHandler()->ThumbBarSetImageList((HWND)m_widget->winId(), himl);
 
         if (S_OK == hr) {
             if (!m_initialized) {
-                Taskbar::GetInstance()->m_private->GetHandler()->ThumbBarAddButtons(m_widget->winId(), m_actions.size(), thbButtons);
+                Taskbar::GetInstance()->m_private->GetHandler()->ThumbBarAddButtons((HWND)m_widget->winId(), m_actions.size(), thbButtons);
             } else {
-                Taskbar::GetInstance()->m_private->GetHandler()->ThumbBarUpdateButtons(m_widget->winId(), m_actions.size(), thbButtons);
+                Taskbar::GetInstance()->m_private->GetHandler()->ThumbBarUpdateButtons((HWND)m_widget->winId(), m_actions.size(), thbButtons);
             }
         }
 

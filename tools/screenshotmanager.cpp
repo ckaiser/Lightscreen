@@ -28,6 +28,7 @@
 #include <QSettings>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
+#include <QtSql/QSqlRecord>
 
 ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent)
 {
@@ -36,17 +37,23 @@ ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent)
   if (QFile::exists(qApp->applicationDirPath() + "/config.ini")) {
     mSettings     = new QSettings(qApp->applicationDirPath() + QDir::separator() + "config.ini", QSettings::IniFormat);
     mPortableMode = true;
-    historyPath   = qApp->applicationDirPath() + QDir::separator() + "history.sqlite";
+    historyPath   = qApp->applicationDirPath() + QDir::separator();
   }
   else {
     mSettings     = new QSettings();
     mPortableMode = false;
-    historyPath   = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QDir::separator() + "history.sqlite";
+    historyPath   = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QDir::separator();
   }
 
   // Creating the SQLite database.
   mHistory = QSqlDatabase::addDatabase("QSQLITE");
-  mHistory.setDatabaseName(historyPath);
+
+  QDir hp(historyPath);
+
+  if (!hp.exists())
+    hp.mkpath(historyPath);
+
+  mHistory.setDatabaseName(historyPath + "history.sqlite");
 
   if (mHistory.open()) {
     mHistory.exec("CREATE TABLE IF NOT EXISTS history (fileName text, URL text, deleteURL text, time integer)");
@@ -84,6 +91,37 @@ void ScreenshotManager::saveHistory(QString fileName, QString url, QString delet
                  .arg("http://imgur.com/delete/" + deleteHash)
                  .arg(QDateTime::currentMSecsSinceEpoch())
                  );
+}
+
+void ScreenshotManager::updateHistory(QString fileName, QString url, QString deleteHash)
+{
+  if (!mSettings->value("/options/history", true).toBool())
+    return;
+
+  if (!mHistory.isOpen())
+    return;
+
+  QSqlQuery query = mHistory.exec(QString("SELECT fileName FROM history WHERE URL IS NOT NULL AND fileName = '%1'").arg(fileName));
+
+  if (query.record().count() > 0) {
+    // If we can find another entry for this filename with a valid URL, add another record (so as to not override a delete hash)
+    saveHistory(fileName, url, deleteHash);
+  }
+  else {
+    // Makes sure to only update the latest file, in case something weird happened with the files (deleted screenshots, etc). Though that might still happen in some edge cases that I'm too lazy to account for.
+    mHistory.exec(QString("UPDATE history SET URL = '%1', deleteURL = '%2', time = %3 WHERE fileName = '%4' LIMIT 1 ORDER BY time DESC")
+                   .arg(url)
+                   .arg("http://imgur.com/delete/" + deleteHash)
+                   .arg(QDateTime::currentMSecsSinceEpoch())
+                   .arg(fileName)
+                  );
+  }
+}
+
+void ScreenshotManager::removeHistory(QString fileName, qint64 time)
+{
+  if (mHistory.isOpen())
+    mHistory.exec(QString("DELETE FROM history WHERE fileName = '%1' AND time = %3").arg(fileName).arg(time));
 }
 
 void ScreenshotManager::clearHistory()
@@ -138,8 +176,13 @@ void ScreenshotManager::uploadDone(QString fileName, QString url, QString delete
       else {
         saveHistory("", url, deleteHash);
       }
+
+      return;
     }
   }
+
+  // If we get here, it's because the screenshot upload wasn't on the current screenshot list, which means it's a View History/Upload Later upload.
+  updateHistory(fileName, url, deleteHash);
 }
 
 // Singleton

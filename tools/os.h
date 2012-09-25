@@ -21,10 +21,10 @@
 
 #include <QWidget>
 
-struct QPixmap;
-struct QPoint;
-struct QString;
-struct QUrl;
+class QPixmap;
+class QPoint;
+class QString;
+class QUrl;
 class QGraphicsEffect;
 
 #if defined(Q_WS_X11)

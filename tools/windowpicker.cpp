@@ -140,7 +140,7 @@ void WindowPicker::mouseMoveEvent(QMouseEvent *event)
 
   HWND cWindow = GetAncestor(WindowFromPoint(mousePos), GA_ROOT);
 
-  mCurrentWindow = cWindow;
+  mCurrentWindow = (WId) cWindow;
 
   if (mCurrentWindow == winId()) {
     mWindowIcon->setPixmap(QPixmap());
@@ -152,12 +152,12 @@ void WindowPicker::mouseMoveEvent(QMouseEvent *event)
   WCHAR str[60];
   HICON icon;
 
-  ::GetWindowText(mCurrentWindow, str, 60);
+  ::GetWindowText((HWND)mCurrentWindow, str, 60);
   windowName = QString::fromWCharArray(str);
   ///
 
   // Retrieving the application icon
-  icon = (HICON)::GetClassLong(mCurrentWindow, GCL_HICON);
+  icon = (HICON)::GetClassLong((HWND)mCurrentWindow, GCL_HICON);
 
   if (icon != NULL) {
     mWindowIcon->setPixmap(QPixmap::fromWinHICON(icon));
@@ -280,7 +280,7 @@ void WindowPicker::mouseReleaseEvent(QMouseEvent *event)
     Window window = os::windowUnderCursor(false);
 #endif
 
-     if (window == winId()) {
+     if (window == (HWND)winId()) {
        cancel();
        return;
      }
@@ -293,7 +293,7 @@ void WindowPicker::mouseReleaseEvent(QMouseEvent *event)
 #ifdef Q_WS_X11
      emit pixmap(QPixmap::grabWindow(mCurrentWindow));
 #else
-     emit pixmap(os::grabWindow(window));
+     emit pixmap(os::grabWindow((WId)window));
 #endif
 
      return;

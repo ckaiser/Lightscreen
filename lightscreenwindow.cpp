@@ -793,7 +793,7 @@ void LightscreenWindow::applySettings()
 
   mDoCache = false;
 
-  if (settings()->value("lastScreenshot").isValid())
+  if (settings()->value("lastScreenshot").isValid() && mLastScreenshot.isEmpty())
     mLastScreenshot = settings()->value("lastScreenshot").toString();
 
   os::setStartup(settings()->value("options/startup").toBool(), settings()->value("options/startupHide").toBool());

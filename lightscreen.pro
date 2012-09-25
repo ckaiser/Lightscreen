@@ -54,9 +54,16 @@ include($$PWD/tools/globalshortcut/globalshortcut.pri)
 include($$PWD/tools/qtsingleapplication/qtsingleapplication.pri)
 include($$PWD/tools/qwin7utils/qwin7utils.pri)
 
-win32:LIBS += libgdi32 libgcc libuser32 libole32 libshell32 libshlwapi libcomctl32
+windows{
+    contains(QMAKE_CC, gcc){
+        LIBS += libgdi32 libgcc libuser32 libole32 libshell32 libshlwapi libcomctl32
+        QMAKE_CXXFLAGS = -Wextra -Wall -Wpointer-arith
+    }
+    contains(QMAKE_CC, cl){
+        LIBS += gdi32.lib user32.lib ole32.lib shell32.lib shlwapi.lib comctl32.lib
+    }
+}
 
-QMAKE_CXXFLAGS = -Wextra -Wall -Wpointer-arith
 OTHER_FILES += TODO.txt
 
 

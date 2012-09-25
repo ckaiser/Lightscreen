@@ -365,7 +365,7 @@ void AreaDialog::paintEvent(QPaintEvent* e)
     QRect helpRect = qApp->desktop()->screenGeometry(qApp->desktop()->primaryScreen());
     QString helpTxt = tr("Lightscreen area mode:\nUse your mouse to draw a rectangle to capture.\nPress any key or right click to exit.");
 
-    helpRect.setHeight(qRound(helpRect.height() / 10)); // We get a decently sized rect where the text should be drawn (centered)
+    helpRect.setHeight(qRound((float)(helpRect.height() / 10))); // We get a decently sized rect where the text should be drawn (centered)
 
     // We draw the white contrasting background for the text, using the same text and options to get the boundingRect that the text will have.
     painter.setPen(QPen(Qt::white));

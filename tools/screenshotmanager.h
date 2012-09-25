@@ -46,6 +46,8 @@ public:
   int activeCount() const;
   bool portableMode();
   void saveHistory(QString fileName, QString url = "", QString deleteHash = "");
+  void updateHistory(QString fileName, QString url, QString deleteHash);
+  void removeHistory(QString fileName, qint64 time);
   void clearHistory();
   QSettings *settings() const { return mSettings; }
   QSqlDatabase &history() { return mHistory; }

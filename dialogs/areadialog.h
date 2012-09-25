@@ -28,10 +28,10 @@
 #include <QVector>
 #include <QPointer>
 #include <QTimer>
+#include <QRegion>
+#include <QRect>
+#include <QPoint>
 
-struct QRegion;
-struct QPoint;
-struct QRect;
 class QPaintEvent;
 class QResizeEvent;
 class QMouseEvent;

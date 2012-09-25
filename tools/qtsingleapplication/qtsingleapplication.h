@@ -37,12 +37,14 @@
 **
 ****************************************************************************/
 
+#ifndef QTSINGLEAPPLICATION_H
+#define QTSINGLEAPPLICATION_H
 
-#include <QtGui/QApplication>
+#include <QApplication>
 
 class QtLocalPeer;
 
-#ifdef Q_WS_WIN
+#if defined(Q_WS_WIN) || defined(Q_OS_WIN32)
 #  if !defined(QT_QTSINGLEAPPLICATION_EXPORT) && !defined(QT_QTSINGLEAPPLICATION_IMPORT)
 #    define QT_QTSINGLEAPPLICATION_EXPORT
 #  elif defined(QT_QTSINGLEAPPLICATION_IMPORT)
@@ -96,3 +98,5 @@ private:
     QtLocalPeer *peer;
     QWidget *actWin;
 };
+
+#endif // QTSINGLEAPPLICATION_H

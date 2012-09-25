@@ -26,7 +26,6 @@
 
 namespace QW7 {
 
-
     namespace LOCAL_UTILS {
 
         IShellItem* JLItem2ShellItem(const JumpListItem& item) {

@@ -38,7 +38,7 @@ public:
   {
     UINT mod = 0, key;
     if (convertKeySequence(ks, &mod, &key))
-      if (valid = RegisterHotKey(winId(), nextId, mod, key))
+      if (valid = RegisterHotKey((HWND)winId(), nextId, mod, key))
         id_ = nextId++;
   }
 
@@ -48,7 +48,7 @@ public:
   ~Impl()
   {
     if (id_)
-      UnregisterHotKey(winId(), id_);
+      UnregisterHotKey((HWND)winId(), id_);
   }
 
   /**

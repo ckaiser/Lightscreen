@@ -15,6 +15,7 @@
 #include <QMessageBox>
 #include <QSortFilterProxyModel>
 #include <QUrl>
+#include <QSettings>
 
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlTableModel>
@@ -32,14 +33,14 @@ HistoryDialog::HistoryDialog(QWidget *parent) :
 
   if (ScreenshotManager::instance()->history().isOpen())
   {
-    QSqlTableModel *model = new QSqlTableModel(this, ScreenshotManager::instance()->history());
-    model->setTable("history");
-    model->setHeaderData(0, Qt::Horizontal, tr("Screenshot"));
-    model->setHeaderData(1, Qt::Horizontal, tr("URL"));
-    model->select();
+    mModel = new QSqlTableModel(this, ScreenshotManager::instance()->history());
+    mModel->setTable("history");
+    mModel->setHeaderData(0, Qt::Horizontal, tr("Screenshot"));
+    mModel->setHeaderData(1, Qt::Horizontal, tr("URL"));
+    mModel->select();
 
-    mFilterModel = new QSortFilterProxyModel(model);
-    mFilterModel->setSourceModel(model);
+    mFilterModel = new QSortFilterProxyModel(mModel);
+    mFilterModel->setSourceModel(mModel);
     mFilterModel->setDynamicSortFilter(true);
     mFilterModel->setSortCaseSensitivity(Qt::CaseInsensitive);
     mFilterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
@@ -126,6 +127,8 @@ void HistoryDialog::contextMenu(QPoint point)
   QAction deleteAction(tr("Delete from imgur.com"), &contextMenu);
   QAction locationAction(tr("Open Location"), &contextMenu);
 
+  QAction removeAction(tr("Remove history entry"), &contextMenu);
+
   if (mContextIndex.column() == 0)
   {
     connect(&locationAction, SIGNAL(triggered()), this, SLOT(location()));
@@ -136,10 +139,14 @@ void HistoryDialog::contextMenu(QPoint point)
     contextMenu.addAction(&deleteAction);
   }
 
+  connect(&removeAction, SIGNAL(triggered()), this, SLOT(removeHistoryEntry()));
+
   if (mContextIndex.data().toString().isEmpty()) {
     copyAction.setEnabled(false);
     deleteAction.setEnabled(false);
   }
+
+  contextMenu.addAction(&removeAction);
 
   contextMenu.exec(QCursor::pos());
 }
@@ -157,6 +164,12 @@ void HistoryDialog::deleteImage()
 void HistoryDialog::location()
 {
   QDesktopServices::openUrl("file:///" + QFileInfo(mContextIndex.data().toString()).absolutePath());
+}
+
+void HistoryDialog::removeHistoryEntry()
+{
+  ScreenshotManager::instance()->removeHistory(mContextIndex.data().toString(), mContextIndex.sibling(mContextIndex.row(), 3).data().toLongLong());
+  mModel->select();
 }
 
 void HistoryDialog::open(QModelIndex index)
@@ -178,22 +191,24 @@ void HistoryDialog::selectionChanged(QItemSelection selected, QItemSelection des
 {
   Q_UNUSED(deselected);
 
+  if (selected.indexes().count() == 0){
+    return;
+  }
+
   QModelIndex index = selected.indexes().at(0);
 
-  QString screenshot, url;
+  QString screenshot;
 
   if (index.column() == 0) {
     screenshot = index.data().toString();
-    url = ui->tableView->model()->index(index.row(), 1).data().toString();
   }
   else {
     screenshot = ui->tableView->model()->index(index.row(), 0).data().toString();
-    url = index.data().toString();
   }
 
   mSelectedScreenshot = screenshot;
 
-  ui->uploadButton->setEnabled((url.isEmpty() && QFile::exists(screenshot)));
+  ui->uploadButton->setEnabled(QFile::exists(screenshot));
 }
 
 void HistoryDialog::upload()
@@ -208,6 +223,11 @@ void HistoryDialog::uploadProgress(qint64 sent, qint64 total)
 
   ui->uploadProgressBar->setMaximum(total);
   ui->uploadProgressBar->setValue(sent);
+
+
+  if (sent == total) {
+    mModel->select();
+  }
 }
 
 bool HistoryDialog::eventFilter(QObject *object, QEvent *event)
@@ -242,5 +262,21 @@ bool HistoryDialog::eventFilter(QObject *object, QEvent *event)
       }
     }
   }
+
   return QDialog::eventFilter(object, event);
+}
+
+bool HistoryDialog::event(QEvent *event)
+{
+  if (event->type() == QEvent::Show)
+  {
+    restoreGeometry(ScreenshotManager::instance()->settings()->value("geometry/historyDialog").toByteArray());
+  }
+  else  if (event->type() == QEvent::Close)
+  {
+    ScreenshotManager::instance()->settings()->setValue("geometry/historyDialog", saveGeometry());
+  }
+
+
+  return QDialog::event(event);
 }
