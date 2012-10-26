@@ -20,8 +20,8 @@
 #define SCREENSHOTDIALOG_H
 
 #include <QDialog>
+#include <QPoint>
 
-struct QPoint;
 class Screenshot;
 class QScrollArea;
 class QLabel;

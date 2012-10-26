@@ -129,8 +129,7 @@ void HistoryDialog::contextMenu(QPoint point)
 
   QAction removeAction(tr("Remove history entry"), &contextMenu);
 
-  if (mContextIndex.column() == 0)
-  {
+  if (mContextIndex.column() == 0) {
     connect(&locationAction, SIGNAL(triggered()), this, SLOT(location()));
     contextMenu.addAction(&locationAction);
   }
@@ -182,11 +181,6 @@ void HistoryDialog::open(QModelIndex index)
   }
 }
 
-void HistoryDialog::reloadHistory()
-{
-  qobject_cast<QSqlTableModel*>(mFilterModel->sourceModel())->select();
-}
-
 void HistoryDialog::selectionChanged(QItemSelection selected, QItemSelection deselected)
 {
   Q_UNUSED(deselected);
@@ -223,7 +217,6 @@ void HistoryDialog::uploadProgress(qint64 sent, qint64 total)
 
   ui->uploadProgressBar->setMaximum(total);
   ui->uploadProgressBar->setValue(sent);
-
 
   if (sent == total) {
     mModel->select();

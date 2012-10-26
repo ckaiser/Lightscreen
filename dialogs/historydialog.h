@@ -26,7 +26,6 @@ private slots:
   void location();
   void removeHistoryEntry();
   void open(QModelIndex index);
-  void reloadHistory();
   void selectionChanged(QItemSelection selected, QItemSelection deselected);
   void upload();
   void uploadProgress(qint64 sent, qint64 total);

@@ -55,12 +55,10 @@ private:
   // Filename, url
   QList< QPair<QString, QString> > mScreenshots;
   QtImgur *mImgur;
-  QtImgur::Error mLastError;
 
+  QString mLastUrl;
   qint64 mProgressSent;
   qint64 mProgressTotal;
-
-  int mUploading;
 };
 
 #endif // UPLOADER_H

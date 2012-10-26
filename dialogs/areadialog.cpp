@@ -68,22 +68,19 @@ AreaDialog::AreaDialog(Screenshot *screenshot) :
 
   // Creating accept widget:
   mAcceptWidget = new QWidget(this);
-  mAcceptWidget->resize(110, 60);
+  mAcceptWidget->resize(140, 70);
   mAcceptWidget->setWindowOpacity(0.4);
-  mAcceptWidget->setGraphicsEffect(os::shadow(QColor(50, 50, 50, 255), 8));
-  mAcceptWidget->setStyleSheet("QWidget { background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(140, 140, 140, 230), stop:1 rgba(80, 80, 80, 230)); padding: 6px 10px; border: 1px solid rgba(0, 0, 0, 200); border-radius: 8px; } QPushButton { background: transparent; border: none; height: 50px; color: white; padding: 0; } QPushButton:hover { cursor: hand; }");
+  mAcceptWidget->setStyleSheet("QWidget { background: rgba(255, 255, 255, 200); border: 4px solid #232323; padding: 0; } QPushButton { background: transparent; border: none; height: 50px; padding: 5px; } QPushButton:hover { cursor: hand; }");
 
   QPushButton *awAcceptButton = new QPushButton(QIcon(":/icons/yes.big"), "", this);
   connect(awAcceptButton, SIGNAL(clicked()), this, SLOT(grabRect()));
   awAcceptButton->setCursor(Qt::PointingHandCursor);
   awAcceptButton->setIconSize(QSize(48, 48));
-  awAcceptButton->setGraphicsEffect(os::shadow(QColor(50, 50, 50, 255)));
 
   QPushButton *awRejectButton = new QPushButton(QIcon(":/icons/no.big"), "", this);
   connect(awRejectButton, SIGNAL(clicked()), this, SLOT(cancel()));
   awRejectButton->setCursor(Qt::PointingHandCursor);
   awRejectButton->setIconSize(QSize(48, 48));
-  awRejectButton->setGraphicsEffect(os::shadow(QColor(50, 50, 50, 255)));
 
   QHBoxLayout *awLayout = new QHBoxLayout(this);
   awLayout->addWidget(awAcceptButton);
@@ -341,7 +338,7 @@ void AreaDialog::paintEvent(QPaintEvent* e)
   QPalette pal = palette();
   QFont font   = QToolTip::font();
 
-  QColor handleColor(25, 115, 240, 180);
+  QColor handleColor(85, 160, 188, 220);
   QColor overlayColor(0, 0, 0, mOverlayAlpha);
   QColor textColor = pal.color(QPalette::Active, QPalette::Text);
   QColor textBackgroundColor = pal.color(QPalette::Active, QPalette::Base);
@@ -504,7 +501,7 @@ void AreaDialog::paintEvent(QPaintEvent* e)
   QPixmap magnified = mScreenshot->pixmap().copy(newRect).scaled(QSize(newRect.width()*2, newRect.height()*2));
 
   QPainter magPainter(&magnified);
-  magPainter.setPen(QPen(QBrush(QColor(25, 115, 240)), 2)); // Same border pen
+  magPainter.setPen(QPen(QBrush(QColor(35, 35, 35)), 2)); // Same border pen
   magPainter.drawRect(magnified.rect());
 
   if (!mMouseMagnifier) {

@@ -63,6 +63,8 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
       ui.screenshotsGroupBox->setFlat(false);
       ui.previewGroupBox->setFlat(false);
       ui.updaterGroupBox->setFlat(false);
+      ui.historyGroupBox->setFlat(false);
+      ui.clipboardCheckBox->setFlat(false);
 
       ui.optionsTab->layout()->setContentsMargins(0, 0, 6, 0);
       ui.aboutTab->layout()->setMargin(8);
@@ -168,7 +170,7 @@ void OptionsDialog::loadSettings()
     ui.clipboardCheckBox->setChecked(settings()->value("clipboard", true).toBool());
     ui.imgurClipboardCheckBox->setChecked(settings()->value("imgurClipboard", false).toBool());
     ui.optiPngCheckBox->setChecked(settings()->value("optipng", true).toBool());
-    ui.warnHideCheckBox->setChecked(!settings()->value("disableHideAlert", false).toBool());
+    ui.closeToTrayCheckBox->setChecked(settings()->value("closeToTray", true).toBool());
     ui.currentMonitorCheckBox->setChecked(settings()->value("currentMonitor", false).toBool());
     ui.replaceCheckBox->setChecked(settings()->value("replace", false).toBool());
     ui.uploadCheckBox->setChecked(settings()->value("uploadAuto", false).toBool());
@@ -306,7 +308,7 @@ void OptionsDialog::saveSettings()
     settings()->setValue("history", ui.historyCheckBox->isChecked());
 
     // Advanced
-    settings()->setValue("disableHideAlert", !ui.warnHideCheckBox->isChecked());
+    settings()->setValue("closeToTray", ui.closeToTrayCheckBox->isChecked());
     settings()->setValue("clipboard", ui.clipboardCheckBox->isChecked());
     settings()->setValue("imgurClipboard", ui.imgurClipboardCheckBox->isChecked());
     settings()->setValue("optipng", ui.optiPngCheckBox->isChecked());
@@ -356,12 +358,13 @@ void OptionsDialog::updatePreview()
 {
   Screenshot::NamingOptions options;
 
-  options.naming       = (Screenshot::Naming)ui.namingComboBox->currentIndex();
+  options.naming       = (Screenshot::Naming) ui.namingComboBox->currentIndex();
   options.flip         = settings()->value("options/flip", false).toBool();
   options.leadingZeros = settings()->value("options/naming/leadingZeros", 0).toInt();
   options.dateFormat   = settings()->value("options/naming/dateFormat", "yyyy-MM-dd").toString();
 
-  ui.namingOptionsButton->setDisabled((options.naming == Screenshot::Empty));
+  if (ui.fileGroupBox->isChecked()) // Only change the naming button when file options are enabled.
+    ui.namingOptionsButton->setDisabled((options.naming == Screenshot::Empty));
 
   QString preview = Screenshot::getName(options,
                                         ui.prefixLineEdit->text(),
@@ -543,7 +546,7 @@ void OptionsDialog::init()
   connect(ui.buttonBox              , SIGNAL(rejected())               , this    , SLOT(rejected()));
   connect(ui.namingOptionsButton    , SIGNAL(clicked())                , this    , SLOT(namingOptions()));
 
-  connect(ui.prefixLineEdit         , SIGNAL(textChanged(QString))     , this    , SLOT(updatePreview()));
+  connect(ui.prefixLineEdit         , SIGNAL(textEdited(QString))      , this    , SLOT(updatePreview()));
   connect(ui.formatComboBox         , SIGNAL(currentIndexChanged(int)) , this    , SLOT(updatePreview()));
   connect(ui.namingComboBox         , SIGNAL(currentIndexChanged(int)) , this    , SLOT(updatePreview()));
 
@@ -566,6 +569,7 @@ void OptionsDialog::init()
   connect(ui.startupCheckBox     , SIGNAL(toggled(bool)), ui.startupHideCheckBox  , SLOT(setEnabled(bool)));
   connect(ui.qualitySlider       , SIGNAL(valueChanged(int)), ui.qualityValueLabel, SLOT(setNum(int)));
   connect(ui.trayCheckBox        , SIGNAL(toggled(bool)), ui.messageCheckBox      , SLOT(setEnabled(bool)));
+  connect(ui.trayCheckBox        , SIGNAL(toggled(bool)), ui.closeToTrayCheckBox  , SLOT(setEnabled(bool)));
 
   // Auto-upload disables the default action button in the previews.
   connect(ui.uploadCheckBox      , SIGNAL(toggled(bool)), ui.previewDefaultActionLabel   , SLOT(setDisabled(bool)));

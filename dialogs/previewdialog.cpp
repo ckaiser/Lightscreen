@@ -68,13 +68,13 @@ PreviewDialog::PreviewDialog(QWidget *parent) :
 
   mPrevButton->setCursor(Qt::PointingHandCursor);
   mPrevButton->setFlat(true);
-  mPrevButton->setGraphicsEffect(os::shadow());
+  mPrevButton->setGraphicsEffect(os::shadow(Qt::white));
   mPrevButton->setIconSize(QSize(24, 24));
   mPrevButton->setVisible(false);
 
   mNextButton->setCursor(Qt::PointingHandCursor);
   mNextButton->setFlat(true);
-  mNextButton->setGraphicsEffect(os::shadow());
+  mNextButton->setGraphicsEffect(os::shadow(Qt::white));
   mNextButton->setIconSize(QSize(24, 24));
   mNextButton->setVisible(false);
 
@@ -143,7 +143,7 @@ void PreviewDialog::add(Screenshot *screenshot)
 
   confirmPushButton->setIconSize(QSize(24, 24));
   confirmPushButton->setCursor(Qt::PointingHandCursor);
-  confirmPushButton->setGraphicsEffect(os::shadow());
+  confirmPushButton->setGraphicsEffect(os::shadow(Qt::white));
 
   if (ScreenshotManager::instance()->settings()->value("options/previewDefaultAction", 0).toInt() == 0
       || ScreenshotManager::instance()->settings()->value("options/uploadAuto").toBool()) {
@@ -154,7 +154,7 @@ void PreviewDialog::add(Screenshot *screenshot)
       QMenu *confirmMenu = new QMenu(confirmPushButton);
       confirmMenu->setObjectName("confirmMenu");
 
-      QAction *uploadAction = new QAction(QIcon(":/icons/imgur.yes"), tr("Upload"), confirmPushButton);
+      QAction *uploadAction = new QAction(QIcon(":/icons/imgur"), tr("Upload"), confirmPushButton);
       connect(uploadAction, SIGNAL(triggered()), screenshot,   SLOT(markUpload()));
       connect(uploadAction, SIGNAL(triggered()), screenshot,   SLOT(confirm()));
       connect(uploadAction, SIGNAL(triggered()), this,         SLOT(closePreview()));
@@ -171,7 +171,7 @@ void PreviewDialog::add(Screenshot *screenshot)
   }
   else {
     // Reversed button, upload & confirm.
-    confirmPushButton->setIcon(QIcon(":/icons/imgur.yes"));
+    confirmPushButton->setIcon(QIcon(":/icons/imgur"));
 
     QMenu *confirmMenu = new QMenu(confirmPushButton);
     confirmMenu->setObjectName("confirmMenu");
@@ -196,13 +196,13 @@ void PreviewDialog::add(Screenshot *screenshot)
 
   discardPushButton->setIconSize(QSize(24, 24));
   discardPushButton->setCursor(Qt::PointingHandCursor);
-  discardPushButton->setGraphicsEffect(os::shadow());
+  discardPushButton->setGraphicsEffect(os::shadow(Qt::white));
   discardPushButton->setFlat(true);
   discardPushButton->setVisible(false);
 
   enlargePushButton->setIconSize(QSize(22, 22));
   enlargePushButton->setCursor(Qt::PointingHandCursor);
-  enlargePushButton->setGraphicsEffect(os::shadow());
+  enlargePushButton->setGraphicsEffect(os::shadow(Qt::white));
   enlargePushButton->setFlat(true);
   enlargePushButton->setVisible(false);
 

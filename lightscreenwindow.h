@@ -49,7 +49,8 @@ public slots:
   void areaHotkey();
   void checkForUpdates();
   void cleanup(Screenshot::Options &options);
-  bool closingWithoutTray();
+  void closeToTrayWarning();
+  void createUploadMenu();
   void goToFolder();
   void messageClicked();
   void messageReceived(const QString &message);
@@ -62,7 +63,6 @@ public slots:
   void showHotkeyError(const QStringList &hotkeys);
   void showHistoryDialog();
   void showOptions();
-  void showUploadMenu();
   void showScreenshotMessage(const Screenshot::Result &result, const QString &fileName);
   void showUploaderError(const QString &error);
   void showUploaderMessage(QString fileName, QString url);
@@ -73,6 +73,7 @@ public slots:
   void uploadCancel();
   void uploadLast();
   void uploadProgress(qint64 sent, qint64 total);
+  void uploadMenuShown();
   void windowHotkey();
   void windowPickerHotkey();
 

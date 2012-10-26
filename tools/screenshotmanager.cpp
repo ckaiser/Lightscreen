@@ -101,13 +101,13 @@ void ScreenshotManager::updateHistory(QString fileName, QString url, QString del
   if (!mHistory.isOpen())
     return;
 
-  QSqlQuery query = mHistory.exec(QString("SELECT fileName FROM history WHERE URL IS NOT NULL AND fileName = '%1'").arg(fileName));
+  QSqlQuery query = mHistory.exec(QString("SELECT fileName FROM history WHERE URL != '' AND fileName = '%1'").arg(fileName));
 
   if (query.record().count() > 0) {
     // If we can find another entry for this filename with a valid URL, add another record (so as to not override a delete hash)
     saveHistory(fileName, url, deleteHash);
   }
-  else {
+  else if (!url.isEmpty()) {
     // Makes sure to only update the latest file, in case something weird happened with the files (deleted screenshots, etc). Though that might still happen in some edge cases that I'm too lazy to account for.
     mHistory.exec(QString("UPDATE history SET URL = '%1', deleteURL = '%2', time = %3 WHERE fileName = '%4' LIMIT 1 ORDER BY time DESC")
                    .arg(url)
@@ -171,7 +171,7 @@ void ScreenshotManager::uploadDone(QString fileName, QString url, QString delete
       screenshot->uploadDone(url);
 
       if (screenshot->options().file) {
-        saveHistory(fileName, url, deleteHash);
+        updateHistory(fileName, url, deleteHash);
       }
       else {
         saveHistory("", url, deleteHash);

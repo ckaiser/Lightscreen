@@ -373,9 +373,10 @@ void Screenshot::upload()
 
 void Screenshot::uploadDone(QString url)
 {
-  if (mOptions.imgurClipboard)
+  if (mOptions.imgurClipboard && !url.isEmpty())
     QApplication::clipboard()->setText(url, QClipboard::Clipboard);
 
+  qDebug() << "Screenshot: UploadDone: " << url;
   emit finished();
 }
 
@@ -495,7 +496,7 @@ bool Screenshot::unloadPixmap()
     return true;
 
   // Unloading the pixmap to reduce memory usage during previews
-  mUnloadFilename = mOptions.directory.path() + QDir::separator() + QString(".lstemp.%1%2").arg(qrand() * qrand() + QDateTime::currentDateTime().toTime_t()).arg(extension());
+  mUnloadFilename = QDir::tempPath() + QDir::separator() + QString(".lstemp.%1%2").arg(qrand() * qrand() + QDateTime::currentDateTime().toTime_t()).arg(extension());
   mUnloaded       = mPixmap.save(mUnloadFilename, 0, mOptions.quality);
 
   if (mUnloaded) {

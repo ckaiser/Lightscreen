@@ -27,7 +27,7 @@
 
 Uploader* Uploader::mInstance = 0;
 
-Uploader::Uploader(QObject *parent) : QObject(parent), mProgressSent(0), mProgressTotal(0),  mUploading(0)
+Uploader::Uploader(QObject *parent) : QObject(parent), mProgressSent(0), mProgressTotal(0)
 {
   mImgur = new QtImgur("6920a141451d125b3e1357ce0e432409", this);
 
@@ -46,20 +46,7 @@ Uploader *Uploader::instance()
 
 QString Uploader::lastUrl() const
 {
-  QListIterator< QPair<QString, QString> >  i(mScreenshots);
-  i.toBack();
-
-  QString url;
-
-  while (i.hasPrevious()) {
-    url = i.previous().second;
-
-    if (!url.contains(tr("Uploading..."))) {
-      return url;
-    }
-  }
-
-  return url;
+  return mLastUrl;
 }
 
 void Uploader::cancel()
@@ -69,19 +56,12 @@ void Uploader::cancel()
 
 void Uploader::imgurError(const QString &file, const QtImgur::Error e)
 {
-  mUploading--;
-
   // Removing the screenshot.
   for (int i = 0; i < mScreenshots.size(); ++i) {
     if (mScreenshots.at(i).first == file) {
       mScreenshots.removeAt(i);
       break;
     }
-  }
-
-  if (e == mLastError) {
-    // Fail silently? Really? FINE
-    return;
   }
 
   QString errorString;
@@ -97,12 +77,11 @@ void Uploader::imgurError(const QString &file, const QtImgur::Error e)
       errorString = tr("You have exceeded your upload quota.");
     break;
     case QtImgur::ErrorUpload:
-      errorString = tr("Upload failed.");
+      errorString = tr("Upload failed for %1.").arg(QFileInfo(file).fileName());
     break;
   }
 
-  mLastError = e;
-
+  emit done(file, "", "");
   emit error(errorString);
 }
 
@@ -128,28 +107,27 @@ void Uploader::upload(const QString &fileName)
   screenshot.second = tr("Uploading...");
 
   mScreenshots.append(screenshot);
-
-  mUploading++;
 }
 
 void Uploader::uploaded(const QString &file, const QString &url, const QString &deleteHash)
 {
-  // Modifying uploaded list, adding url.
+  // Removing the screenshot.
   for (int i = 0; i < mScreenshots.size(); ++i) {
     if (mScreenshots.at(i).first == file) {
-      mScreenshots[i].second = url;
+      mScreenshots.removeAt(i);
       break;
     }
   }
 
-  mUploading--;
+  mLastUrl = url;
 
   emit done(file, url, deleteHash);
 }
 
 int Uploader::uploading()
 {
-  return mUploading;
+  qDebug() << "Screenshot count: " << mScreenshots.count();
+  return mScreenshots.count();
 }
 
 void Uploader::reportProgress(qint64 sent, qint64 total)

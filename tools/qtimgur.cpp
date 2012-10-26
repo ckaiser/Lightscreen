@@ -37,8 +37,9 @@ void QtImgur::cancelAll()
 {
   foreach (QNetworkReply *reply, mFiles.keys()) {
     reply->abort();
-    mFiles.remove(reply);
   }
+
+  mFiles.clear();
 }
 
 void QtImgur::cancel(const QString &fileName)
@@ -62,24 +63,18 @@ void QtImgur::upload(const QString &fileName)
     return;
   }
 
-  QByteArray image = file.readAll().toBase64();
-
-  file.close();
-
   QByteArray data;
   data.append(QString("key=").toUtf8());
   data.append(QUrl::toPercentEncoding(mAPIKey));
-  data.append(QString("&caption=").toUtf8());
-  data.append(QUrl::toPercentEncoding(tr("Screenshot taken with Lightscreen - http://lightscreen.sf.net")));
   data.append(QString("&image=").toUtf8());
-  data.append(QUrl::toPercentEncoding(image));
+  data.append(QUrl::toPercentEncoding(file.readAll().toBase64()));
+  file.close();
 
   QNetworkRequest request(QUrl("http://api.imgur.com/2/upload"));
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
   QNetworkReply *reply = mNetworkManager->post(request, data);
   connect(reply, SIGNAL(uploadProgress(qint64, qint64)), this, SLOT(progress(qint64, qint64)));
-  connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(replyError(QNetworkReply::NetworkError)));
 
   mFiles.insert(reply, fileName);
 }
@@ -112,15 +107,19 @@ void QtImgur::reply(QNetworkReply *reply)
 
   mFiles.remove(reply);
 
-  if (reply->error() == QNetworkReply::OperationCanceledError) {
-    qDebug() << "Error: " << reply->errorString();
-    emit error(fileName, QtImgur::ErrorCancel);
+  if (reply->error() != QNetworkReply::NoError) {
+    if (reply->error() == QNetworkReply::OperationCanceledError)
+      emit error(fileName, QtImgur::ErrorCancel);
+    else
+      emit error(fileName, QtImgur::ErrorNetwork);
+
+    reply->deleteLater();
     return;
   }
 
   if (reply->rawHeader("X-RateLimit-Remaining") == "0") {
-
     emit error(fileName, QtImgur::ErrorCredits);
+    reply->deleteLater();
     return;
   }
 
@@ -154,10 +153,6 @@ void QtImgur::reply(QNetworkReply *reply)
     emit uploaded(fileName, url, deleteHash);
   }
 
-  reply->deleteLater();
-}
 
-void QtImgur::replyError(QNetworkReply::NetworkError networkError) {
-  Q_UNUSED(networkError)
-  emit error(mFiles.value(qobject_cast<QNetworkReply*>(sender())), QtImgur::ErrorNetwork);
+  reply->deleteLater();
 }

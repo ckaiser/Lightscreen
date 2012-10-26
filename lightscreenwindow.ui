@@ -29,7 +29,7 @@
   <property name="unifiedTitleAndToolBarOnMac">
    <bool>true</bool>
   </property>
-  <widget class="QWidget" name="centralwidget">
+  <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <property name="margin">
      <number>3</number>
@@ -70,9 +70,6 @@
       <property name="autoDefault">
        <bool>false</bool>
       </property>
-      <property name="flat">
-       <bool>false</bool>
-      </property>
      </widget>
     </item>
     <item row="0" column="2">
@@ -105,9 +102,6 @@
       <property name="autoDefault">
        <bool>false</bool>
       </property>
-      <property name="flat">
-       <bool>false</bool>
-      </property>
      </widget>
     </item>
     <item row="1" column="0">
@@ -132,9 +126,6 @@
        <string>Ctrl+O</string>
       </property>
       <property name="autoDefault">
-       <bool>false</bool>
-      </property>
-      <property name="flat">
        <bool>false</bool>
       </property>
      </widget>
@@ -163,9 +154,6 @@
       <property name="autoDefault">
        <bool>false</bool>
       </property>
-      <property name="flat">
-       <bool>false</bool>
-      </property>
      </widget>
     </item>
     <item row="1" column="2">
@@ -192,9 +180,6 @@
       <property name="autoDefault">
        <bool>false</bool>
       </property>
-      <property name="flat">
-       <bool>false</bool>
-      </property>
      </widget>
     </item>
     <item row="0" column="0">
@@ -213,7 +198,7 @@
       </property>
       <property name="icon">
        <iconset resource="lightscreen.qrc">
-        <normaloff>:/icons/sceen.big</normaloff>:/icons/sceen.big</iconset>
+        <normaloff>:/icons/screen.big</normaloff>:/icons/screen.big</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -225,9 +210,6 @@
        <string>Ctrl+S</string>
       </property>
       <property name="autoDefault">
-       <bool>false</bool>
-      </property>
-      <property name="flat">
        <bool>false</bool>
       </property>
      </widget>

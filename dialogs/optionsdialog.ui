@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>393</width>
-    <height>311</height>
+    <height>314</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -570,8 +570,8 @@ Quality is related to file size and of course to readability and overall quality
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>311</width>
-            <height>780</height>
+            <width>358</width>
+            <height>782</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -601,16 +601,36 @@ Quality is related to file size and of course to readability and overall quality
                </widget>
               </item>
               <item>
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <item>
+                 <spacer name="horizontalSpacer_11">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Fixed</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>15</width>
+                    <height>5</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="closeToTrayCheckBox">
+                  <property name="text">
+                   <string>C&amp;lose to tray.</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
                <widget class="QCheckBox" name="hideCheckBox">
                 <property name="text">
                  <string>&amp;Hide Lightscreen while taking a screenshot.</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="warnHideCheckBox">
-                <property name="text">
-                 <string>Warn when hiding without a tra&amp;y icon.</string>
                 </property>
                </widget>
               </item>
@@ -1319,10 +1339,8 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
   <tabstop>openHotkeyWidget</tabstop>
   <tabstop>directoryCheckBox</tabstop>
   <tabstop>directoryHotkeyWidget</tabstop>
-  <tabstop>optionsScrollArea</tabstop>
   <tabstop>trayCheckBox</tabstop>
   <tabstop>hideCheckBox</tabstop>
-  <tabstop>warnHideCheckBox</tabstop>
   <tabstop>messageCheckBox</tabstop>
   <tabstop>playSoundCheckBox</tabstop>
   <tabstop>previewGroupBox</tabstop>
