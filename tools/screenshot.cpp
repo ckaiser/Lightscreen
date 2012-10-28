@@ -129,13 +129,6 @@ Screenshot::Options &Screenshot::options()
 
 QPixmap &Screenshot::pixmap()
 {
-  if (mUnloaded) {
-    // A local reference.. what could go wrong? Nothing! Right guys? Guys?
-    QPixmap p;
-    p.load(mUnloadFilename);
-    return p;
-  }
-
   return mPixmap;
 }
 
@@ -496,7 +489,7 @@ bool Screenshot::unloadPixmap()
     return true;
 
   // Unloading the pixmap to reduce memory usage during previews
-  mUnloadFilename = QDir::tempPath() + QDir::separator() + QString(".lstemp.%1%2").arg(qrand() * qrand() + QDateTime::currentDateTime().toTime_t()).arg(extension());
+  mUnloadFilename = mOptions.directory.path() + QDir::separator() + QString(".lstemp.%1%2").arg(qrand() * qrand() + QDateTime::currentDateTime().toTime_t()).arg(extension());
   mUnloaded       = mPixmap.save(mUnloadFilename, 0, mOptions.quality);
 
   if (mUnloaded) {

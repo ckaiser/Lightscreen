@@ -138,7 +138,7 @@ void PreviewDialog::add(Screenshot *screenshot)
   label->resize(size);
 
   QPushButton *discardPushButton = new QPushButton(QIcon(":/icons/no")   , "", label);
-  QPushButton *enlargePushButton = new QPushButton(QIcon(":/icons/zoom.in"), "", label);
+  QPushButton *enlargePushButton = new QPushButton(QIcon(":/icons/preview"), "", label);
   QToolButton *confirmPushButton = new QToolButton(label);
 
   confirmPushButton->setIconSize(QSize(24, 24));

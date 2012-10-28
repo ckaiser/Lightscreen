@@ -840,7 +840,7 @@ void LightscreenWindow::createTrayIcon()
   QAction *windowAction = new QAction(QIcon(":/icons/window"), tr("Active &Window"), this);
   windowAction->setData(QVariant(1));
 
-  QAction *windowPickerAction = new QAction(QIcon(":/icons/picker"), tr("&Pick Window"), this);
+  QAction *windowPickerAction = new QAction(QIcon(":/icons/pickWindow"), tr("&Pick Window"), this);
   windowPickerAction->setData(QVariant(3));
 
   QAction *areaAction = new QAction(QIcon(":/icons/area"), tr("&Area"), mTrayIcon);

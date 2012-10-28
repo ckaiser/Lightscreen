@@ -129,8 +129,14 @@ void HistoryDialog::contextMenu(QPoint point)
 
   QAction removeAction(tr("Remove history entry"), &contextMenu);
 
+  if (mContextIndex.data().toString().isEmpty()) {
+    copyAction.setEnabled(false);
+    deleteAction.setEnabled(false);
+  }
+
   if (mContextIndex.column() == 0) {
     connect(&locationAction, SIGNAL(triggered()), this, SLOT(location()));
+
     contextMenu.addAction(&locationAction);
   }
   else {
@@ -139,14 +145,7 @@ void HistoryDialog::contextMenu(QPoint point)
   }
 
   connect(&removeAction, SIGNAL(triggered()), this, SLOT(removeHistoryEntry()));
-
-  if (mContextIndex.data().toString().isEmpty()) {
-    copyAction.setEnabled(false);
-    deleteAction.setEnabled(false);
-  }
-
   contextMenu.addAction(&removeAction);
-
   contextMenu.exec(QCursor::pos());
 }
 
@@ -167,7 +166,15 @@ void HistoryDialog::location()
 
 void HistoryDialog::removeHistoryEntry()
 {
-  ScreenshotManager::instance()->removeHistory(mContextIndex.data().toString(), mContextIndex.sibling(mContextIndex.row(), 3).data().toLongLong());
+  if (mContextIndex.column() == 0) {
+    // File got right clicked:
+    ScreenshotManager::instance()->removeHistory(mContextIndex.data().toString(), mContextIndex.sibling(mContextIndex.row(), 3).data().toLongLong());
+  }
+  else {
+    // Screenshot URL got right clicked:
+    ScreenshotManager::instance()->removeHistory(mContextIndex.sibling(mContextIndex.row(), 0).data().toString(), mContextIndex.sibling(mContextIndex.row(), 3).data().toLongLong());
+  }
+
   mModel->select();
 }
 
@@ -265,7 +272,7 @@ bool HistoryDialog::event(QEvent *event)
   {
     restoreGeometry(ScreenshotManager::instance()->settings()->value("geometry/historyDialog").toByteArray());
   }
-  else  if (event->type() == QEvent::Close)
+  else if (event->type() == QEvent::Close)
   {
     ScreenshotManager::instance()->settings()->setValue("geometry/historyDialog", saveGeometry());
   }

@@ -45,8 +45,14 @@ ScreenshotDialog::ScreenshotDialog(Screenshot *screenshot, QWidget *parent) :
 
   mLabel = new QLabel(this);
 
+  QPixmap pixmap = screenshot->pixmap();
+
+  if (pixmap.isNull()) {
+    pixmap.load(screenshot->unloadedFileName());
+  }
+
   QHBoxLayout *layout = new QHBoxLayout(this);
-  mLabel->setPixmap(screenshot->pixmap());
+  mLabel->setPixmap(pixmap);
   mLabel->setScaledContents(true);
 
   mScrollArea->setAlignment(Qt::AlignCenter);

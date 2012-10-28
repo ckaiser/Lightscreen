@@ -88,7 +88,7 @@
       </property>
       <property name="icon">
        <iconset resource="lightscreen.qrc">
-        <normaloff>:/icons/picker.big</normaloff>:/icons/picker.big</iconset>
+        <normaloff>:/icons/pickWindow.big</normaloff>:/icons/pickWindow.big</iconset>
       </property>
       <property name="iconSize">
        <size>

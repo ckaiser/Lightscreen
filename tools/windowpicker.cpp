@@ -280,7 +280,7 @@ void WindowPicker::mouseReleaseEvent(QMouseEvent *event)
     Window window = os::windowUnderCursor(false);
 #endif
 
-     if (window == (HWND)winId()) {
+     if ((WId)window == winId()) {
        cancel();
        return;
      }

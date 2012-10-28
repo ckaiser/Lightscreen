@@ -64,7 +64,7 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
       ui.previewGroupBox->setFlat(false);
       ui.updaterGroupBox->setFlat(false);
       ui.historyGroupBox->setFlat(false);
-      ui.clipboardCheckBox->setFlat(false);
+      ui.clipboardGroupBox->setFlat(false);
 
       ui.optionsTab->layout()->setContentsMargins(0, 0, 6, 0);
       ui.aboutTab->layout()->setMargin(8);
@@ -527,7 +527,7 @@ void OptionsDialog::init()
   // HotkeyWidget icons.
   ui.screenHotkeyWidget->setIcon      (QIcon(":/icons/screen"));
   ui.windowHotkeyWidget->setIcon      (QIcon(":/icons/window"));
-  ui.windowPickerHotkeyWidget->setIcon(QIcon(":/icons/picker"));
+  ui.windowPickerHotkeyWidget->setIcon(QIcon(":/icons/pickWindow"));
   ui.areaHotkeyWidget->setIcon        (QIcon(":/icons/area"));
   ui.openHotkeyWidget->setIcon        (QIcon(":/icons/lightscreen.small"));
   ui.directoryHotkeyWidget->setIcon   (QIcon(":/icons/folder"));
