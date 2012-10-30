@@ -571,7 +571,7 @@ Quality is related to file size and of course to readability and overall quality
             <x>0</x>
             <y>0</y>
             <width>358</width>
-            <height>782</height>
+            <height>780</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -601,31 +601,11 @@ Quality is related to file size and of course to readability and overall quality
                </widget>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout">
-                <item>
-                 <spacer name="horizontalSpacer_11">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeType">
-                   <enum>QSizePolicy::Fixed</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>15</width>
-                    <height>5</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="closeToTrayCheckBox">
-                  <property name="text">
-                   <string>C&amp;lose to tray.</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+               <widget class="QCheckBox" name="closeHideCheckBox">
+                <property name="text">
+                 <string>C&amp;losing hides the main window.</string>
+                </property>
+               </widget>
               </item>
               <item>
                <widget class="QCheckBox" name="hideCheckBox">

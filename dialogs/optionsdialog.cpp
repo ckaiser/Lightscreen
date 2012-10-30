@@ -170,7 +170,7 @@ void OptionsDialog::loadSettings()
     ui.clipboardCheckBox->setChecked(settings()->value("clipboard", true).toBool());
     ui.imgurClipboardCheckBox->setChecked(settings()->value("imgurClipboard", false).toBool());
     ui.optiPngCheckBox->setChecked(settings()->value("optipng", true).toBool());
-    ui.closeToTrayCheckBox->setChecked(settings()->value("closeToTray", true).toBool());
+    ui.closeHideCheckBox->setChecked(settings()->value("closeHide", true).toBool());
     ui.currentMonitorCheckBox->setChecked(settings()->value("currentMonitor", false).toBool());
     ui.replaceCheckBox->setChecked(settings()->value("replace", false).toBool());
     ui.uploadCheckBox->setChecked(settings()->value("uploadAuto", false).toBool());
@@ -308,7 +308,7 @@ void OptionsDialog::saveSettings()
     settings()->setValue("history", ui.historyCheckBox->isChecked());
 
     // Advanced
-    settings()->setValue("closeToTray", ui.closeToTrayCheckBox->isChecked());
+    settings()->setValue("closeHide", ui.closeHideCheckBox->isChecked());
     settings()->setValue("clipboard", ui.clipboardCheckBox->isChecked());
     settings()->setValue("imgurClipboard", ui.imgurClipboardCheckBox->isChecked());
     settings()->setValue("optipng", ui.optiPngCheckBox->isChecked());
@@ -569,7 +569,6 @@ void OptionsDialog::init()
   connect(ui.startupCheckBox     , SIGNAL(toggled(bool)), ui.startupHideCheckBox  , SLOT(setEnabled(bool)));
   connect(ui.qualitySlider       , SIGNAL(valueChanged(int)), ui.qualityValueLabel, SLOT(setNum(int)));
   connect(ui.trayCheckBox        , SIGNAL(toggled(bool)), ui.messageCheckBox      , SLOT(setEnabled(bool)));
-  connect(ui.trayCheckBox        , SIGNAL(toggled(bool)), ui.closeToTrayCheckBox  , SLOT(setEnabled(bool)));
 
   // Auto-upload disables the default action button in the previews.
   connect(ui.uploadCheckBox      , SIGNAL(toggled(bool)), ui.previewDefaultActionLabel   , SLOT(setDisabled(bool)));

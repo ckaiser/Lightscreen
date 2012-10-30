@@ -75,10 +75,6 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
 
   ui.setupUi(this);
 
-#ifdef Q_WS_WIN
-  ExtendFrameIntoClientArea(this);
-#endif
-
   setMaximumSize(size());
   setMinimumSize(size());
 
@@ -219,6 +215,47 @@ void LightscreenWindow::closeToTrayWarning()
   mLastMessage = 3;
   mTrayIcon->showMessage(tr("Closed to tray"), tr("Lightscreen will keep running, you can disable this in the options menu."));
   settings()->setValue("options/closeToTrayWarning", false);
+}
+
+bool LightscreenWindow::closingWithoutTray()
+{
+  if (settings()->value("options/disableHideAlert", false).toBool())
+    return false;
+
+  QMessageBox msgBox;
+  msgBox.setWindowTitle(tr("Lightscreen"));
+  msgBox.setText(tr("You have chosen to hide Lightscreen when there's no system tray icon, so you will not be able to access the program <b>unless you have selected a hotkey to do so</b>.<br>What do you want to do?"));
+  msgBox.setIcon(QMessageBox::Warning);
+
+  msgBox.setStyleSheet("QPushButton { padding: 4px 8px; }");
+
+  QPushButton *enableButton = msgBox.addButton(tr("Hide but enable tray"),
+      QMessageBox::ActionRole);
+  QPushButton *enableAndDenotifyButton = msgBox.addButton(tr("Hide and don't warn"),
+      QMessageBox::ActionRole);
+  QPushButton *hideButton = msgBox.addButton(tr("Just hide"),
+      QMessageBox::ActionRole);
+  QPushButton *abortButton = msgBox.addButton(QMessageBox::Cancel);
+
+  Q_UNUSED(abortButton);
+
+  msgBox.exec();
+
+  if (msgBox.clickedButton() == hideButton) {
+    return true;
+  }
+  else if (msgBox.clickedButton() == enableAndDenotifyButton) {
+    settings()->setValue("options/disableHideAlert", true);
+    applySettings();
+    return true;
+  }
+  else if (msgBox.clickedButton() == enableButton) {
+    settings()->setValue("options/tray", true);
+    applySettings();
+    return true;
+  }
+
+  return false; // Cancel.
 }
 
 void LightscreenWindow::createUploadMenu()
@@ -925,9 +962,13 @@ bool LightscreenWindow::event(QEvent *event)
     settings()->setValue("position", pos());
   }
   else if (event->type() == QEvent::Close) {
-    if (settings()->value("options/tray").toBool() && settings()->value("options/closeToTray").toBool()) {
+    if (settings()->value("options/tray").toBool() && settings()->value("options/closeHide").toBool()) {
       closeToTrayWarning();
       hide();
+    }
+    else if (settings()->value("options/closeHide").toBool()) {
+      if (closingWithoutTray())
+        hide();
     }
     else {
       quit();

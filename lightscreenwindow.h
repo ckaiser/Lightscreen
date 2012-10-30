@@ -50,6 +50,7 @@ public slots:
   void checkForUpdates();
   void cleanup(Screenshot::Options &options);
   void closeToTrayWarning();
+  bool closingWithoutTray();
   void createUploadMenu();
   void goToFolder();
   void messageClicked();
