@@ -93,6 +93,7 @@ void ScreenshotManager::saveHistory(QString fileName, QString url, QString delet
                  );
 }
 
+
 void ScreenshotManager::updateHistory(QString fileName, QString url, QString deleteHash)
 {
   if (!mSettings->value("/options/history", true).toBool())

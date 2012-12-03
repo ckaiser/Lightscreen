@@ -13,7 +13,6 @@ HEADERS += tools/os.h \
     tools/uploader.h \
     tools/qtimgur.h \
     dialogs/updaterdialog.h \
-    dialogs/screenshotdialog.h \
     dialogs/namingdialog.h \
     dialogs/historydialog.h
 SOURCES += tools/os.cpp \
@@ -30,7 +29,6 @@ SOURCES += tools/os.cpp \
     tools/uploader.cpp \
     tools/qtimgur.cpp \
     dialogs/updaterdialog.cpp \
-    dialogs/screenshotdialog.cpp \
     dialogs/namingdialog.cpp \
     dialogs/historydialog.cpp
 FORMS += dialogs/optionsdialog.ui \

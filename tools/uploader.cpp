@@ -88,7 +88,6 @@ void Uploader::imgurError(const QString &file, const QtImgur::Error e)
 void Uploader::upload(const QString &fileName)
 {
   if (fileName.isEmpty()) {
-    qDebug() << "Trying to upload an empty filename.";
     return;
   }
 
@@ -99,7 +98,6 @@ void Uploader::upload(const QString &fileName)
     }
   }
 
-  qDebug() << "Uploader::upload(" << fileName << ")";
   mImgur->upload(fileName);
 
   QPair<QString, QString> screenshot;
@@ -126,7 +124,6 @@ void Uploader::uploaded(const QString &file, const QString &url, const QString &
 
 int Uploader::uploading()
 {
-  qDebug() << "Screenshot count: " << mScreenshots.count();
   return mScreenshots.count();
 }
 
@@ -134,8 +131,6 @@ void Uploader::reportProgress(qint64 sent, qint64 total)
 {
   mProgressSent  = sent;
   mProgressTotal = total;
-
-  qDebug() << "Reporting progress: " << mProgressSent << " of " << mProgressTotal;
 
   emit progress(sent, total);
 }

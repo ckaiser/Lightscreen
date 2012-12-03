@@ -17,7 +17,6 @@
  *
  */
 #include "previewdialog.h"
-#include "screenshotdialog.h"
 #include "../tools/screenshot.h"
 #include "../tools/screenshotmanager.h"
 #include "../tools/os.h"
@@ -36,6 +35,8 @@
 #include <QSettings>
 #include <QStackedLayout>
 #include <QToolButton>
+#include <QDesktopServices>
+#include <QUrl>
 
 #include <QDebug>
 
@@ -269,7 +270,8 @@ void PreviewDialog::enlargePreview()
   Screenshot *screenshot = qobject_cast<Screenshot*>(ScreenshotManager::instance()->children().at(mStack->currentIndex()));
 
   if (screenshot) {
-    new ScreenshotDialog(screenshot, this);
+    QFileInfo info(screenshot->unloadedFileName());
+    QDesktopServices::openUrl(QUrl(info.absoluteFilePath()));
   }
 }
 
@@ -372,6 +374,7 @@ bool PreviewDialog::event(QEvent *event)
     }
   }
   else if (event->type() == QEvent::Close) {
+    emit rejectAll();
     deleteLater();
   }
   else if (event->type() == QEvent::MouseButtonDblClick) {

@@ -57,8 +57,6 @@ Screenshot::Screenshot(QObject *parent, Screenshot::Options options):
 
 Screenshot::~Screenshot()
 {
-  qDebug() << "Deleting Screenshot object!";
-
   if (!mUnloadFilename.isEmpty()) {
     QFile::remove(mUnloadFilename);
   }
@@ -136,8 +134,6 @@ QPixmap &Screenshot::pixmap()
 
 void Screenshot::confirm(bool result)
 {
-  qDebug() << "Screenshot::confirm(" << result << ")";
-
   if (result) {
     save();
   }
@@ -153,7 +149,6 @@ void Screenshot::confirm(bool result)
 
 void Screenshot::confirmation()
 {
-  qDebug() << "Screenshot: Asking for confirmation.";
   emit askConfirmation();
 
   if (mOptions.file) {
@@ -248,8 +243,6 @@ void Screenshot::save()
   }
 
   if (mOptions.clipboard && !(mOptions.upload && mOptions.imgurClipboard)) {
-    qDebug() << "Setting the clipboard pixmap, unloaded:" << mUnloaded;
-
     if (mUnloaded) {
       mUnloaded = false;
       mPixmap = QPixmap(mUnloadFilename);
@@ -369,7 +362,6 @@ void Screenshot::uploadDone(QString url)
   if (mOptions.imgurClipboard && !url.isEmpty())
     QApplication::clipboard()->setText(url, QClipboard::Clipboard);
 
-  qDebug() << "Screenshot: UploadDone: " << url;
   emit finished();
 }
 

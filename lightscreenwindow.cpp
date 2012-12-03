@@ -670,6 +670,7 @@ void LightscreenWindow::toggleVisibility(QSystemTrayIcon::ActivationReason reaso
   }
   else {
     show();
+    os::setForegroundWindow(this);
   }
 }
 

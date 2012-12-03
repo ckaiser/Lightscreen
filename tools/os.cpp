@@ -82,15 +82,17 @@ QPixmap os::cursor()
   cursorInfo.cbSize = sizeof(cursorInfo);
   ::GetCursorInfo(&cursorInfo);
 
-  HICON cursor = (HICON) cursorInfo.hCursor;
+  HICON cursor = cursorInfo.hCursor;
+
+  ICONINFO iconInfo;
+  ::GetIconInfo(cursor, &iconInfo);
 
   ICONINFO info;
   ZeroMemory(&info, sizeof(info));
 
   if (::GetIconInfo(cursor, &info)) {
     if (info.hbmColor) {
-      pixmap = QPixmap::fromWinHBITMAP(info.hbmColor);
-      pixmap.setMask(QBitmap(QPixmap::fromWinHBITMAP(info.hbmMask)));
+      pixmap = QPixmap::fromWinHBITMAP(info.hbmColor, QPixmap::Alpha);
     }
     else {
       QBitmap orig(QPixmap::fromWinHBITMAP(info.hbmMask));
