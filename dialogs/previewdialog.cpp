@@ -374,7 +374,9 @@ bool PreviewDialog::event(QEvent *event)
     }
   }
   else if (event->type() == QEvent::Close) {
-    emit rejectAll();
+    if (mStack->count() != 0)
+      emit rejectAll();
+
     deleteLater();
   }
   else if (event->type() == QEvent::MouseButtonDblClick) {

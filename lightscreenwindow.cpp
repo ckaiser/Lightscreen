@@ -199,7 +199,10 @@ void LightscreenWindow::cleanup(Screenshot::Options &options)
       QSound::play("sound/ls.error.wav");
 #endif
     }
+
   }
+
+  updateUploadStatus();
 
   if (options.result != Screenshot::Success)
     return;
@@ -647,7 +650,7 @@ void LightscreenWindow::showUploaderError(const QString &error)
 
 void LightscreenWindow::showUploaderMessage(QString fileName, QString url)
 {
-  if (mTrayIcon && settings()->value("options/message").toBool()) {
+  if (mTrayIcon && settings()->value("options/message").toBool() && !url.isEmpty()) {
     QString screenshot = QFileInfo(fileName).fileName();
 
     if (screenshot.startsWith(".lstemp."))
@@ -681,12 +684,10 @@ void LightscreenWindow::updateUploadStatus()
 
   if (uploadCount > 0) {
     statusString = tr("%1 uploading - Lightscreen").arg(uploadCount);
-    //ui.imgurPushButton->setIcon(QIcon(":/icons/imgur.upload"));
     emit uploading(true);
   }
   else {
     statusString = tr("Lightscreen");
-    //ui.imgurPushButton->setIcon(QIcon(":/icons/imgur"));
     emit uploading(false);
 
 #ifdef Q_WS_WIN
