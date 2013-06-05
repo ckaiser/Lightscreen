@@ -25,6 +25,29 @@
         <file alias="screen.big">images/screen.big.png</file>
         <file alias="pickWindow.big">images/pickWindow.big.png</file>
         <file alias="preview">images/preview.png</file>
+	</qresource>
+	<qresource prefix="/icons/inv">
+        <file alias="yes">images/inv/yes.png</file>
+        <file alias="no">images/inv/no.png</file>
+        <file alias="yes.big">images/inv/yes.big.png</file>
+        <file alias="no.big">images/inv/no.big.png</file>
+        <file alias="folder">images/inv/folder.png</file>
+        <file alias="configure">images/inv/configure.png</file>
+        <file alias="arrow-left">images/inv/arrow.left.png</file>
+        <file alias="arrow-right">images/inv/arrow.right.png</file>
+        <file alias="picker">images/inv/picker.png</file>
+        <file alias="pickWindow">images/inv/pickWindow.png</file>
+        <file alias="zoom.out">images/inv/minus.png</file>
+        <file alias="zoom.in">images/inv/plus.png</file>
+        <file alias="area">images/inv/area.png</file>
+        <file alias="screen">images/inv/screen.png</file>
+        <file alias="window">images/inv/window.png</file>
+        <file alias="imgur">images/inv/imgur.png</file>
+        <file alias="view-history">images/inv/history.png</file>
+        <file alias="area.big">images/inv/area.big.png</file>
+        <file alias="screen.big">images/inv/screen.big.png</file>
+        <file alias="pickWindow.big">images/inv/pickWindow.big.png</file>
+        <file alias="preview">images/inv/preview.png</file>
     </qresource>
     <qresource prefix="/translations">
         <file alias="Español">translations/spanish.qm</file>

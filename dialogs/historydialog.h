@@ -25,6 +25,7 @@ private slots:
   void deleteImage();
   void location();
   void removeHistoryEntry();
+  void refresh();
   void open(QModelIndex index);
   void selectionChanged(QItemSelection selected, QItemSelection deselected);
   void upload();

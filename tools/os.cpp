@@ -34,6 +34,7 @@
 #include <QTranslator>
 #include <QUrl>
 #include <QWidget>
+#include <QIcon>
 #include <string>
 
 #include <QDebug>
@@ -327,6 +328,22 @@ void os::translate(QString language)
 
   if (translator_qt->load(language, ":/translations_qt")) {
     qApp->installTranslator(translator_qt);
+  }
+}
+
+QIcon os::icon(QString name)
+{
+  static int value = -1;
+
+  if (value < 0) {
+    value = qApp->desktop()->palette().color(QPalette::Button).value();
+  }
+
+  if (value > 125) {
+    return QIcon(":/icons/" + name);
+  }
+  else {
+    return QIcon(":/icons/inv/" + name);
   }
 }
 

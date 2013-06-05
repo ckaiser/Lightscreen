@@ -29,6 +29,7 @@
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlRecord>
+#include <QtSql/QSqlError>
 
 ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent)
 {
@@ -46,17 +47,21 @@ ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent)
   }
 
   // Creating the SQLite database.
-  mHistory = QSqlDatabase::addDatabase("QSQLITE");
+  QSqlDatabase history = QSqlDatabase::addDatabase("QSQLITE");
 
   QDir hp(historyPath);
 
   if (!hp.exists())
     hp.mkpath(historyPath);
 
-  mHistory.setDatabaseName(historyPath + "history.sqlite");
+  history.setHostName("localhost");
+  history.setDatabaseName(historyPath + "history.sqlite");
 
-  if (mHistory.open()) {
-    mHistory.exec("CREATE TABLE IF NOT EXISTS history (fileName text, URL text, deleteURL text, time integer)");
+  if (history.open()) {
+    history.exec("CREATE TABLE IF NOT EXISTS history (fileName text, URL text, deleteURL text, time integer)");
+  }
+  else {
+    qCritical() << "Could not open SQLite DB.";
   }
 
   connect(Uploader::instance(), SIGNAL(done(QString, QString, QString)), this, SLOT(uploadDone(QString, QString, QString)));
@@ -82,53 +87,60 @@ void ScreenshotManager::saveHistory(QString fileName, QString url, QString delet
   if (!mSettings->value("/options/history", true).toBool())
     return;
 
-  if (!mHistory.isOpen())
-    return;
+  QString deleteUrl;
 
-  mHistory.exec(QString("INSERT INTO history (fileName, URL, deleteURL, time) VALUES('%1', '%2', '%3', %4)")
-                 .arg(fileName)
-                 .arg(url)
-                 .arg("http://imgur.com/delete/" + deleteHash)
-                 .arg(QDateTime::currentMSecsSinceEpoch())
-                 );
+  if (!deleteHash.isEmpty())
+    deleteUrl = "http://imgur.com/delete/" + deleteHash;
+
+  QSqlQuery query;
+  query.prepare("INSERT INTO history (fileName, URL, deleteURL, time) VALUES(?, ?, ?, ?)");
+  query.addBindValue(fileName);
+  query.addBindValue(url);
+  query.addBindValue(deleteUrl);
+  query.addBindValue(QDateTime::currentMSecsSinceEpoch());
+  query.exec();
 }
-
 
 void ScreenshotManager::updateHistory(QString fileName, QString url, QString deleteHash)
 {
   if (!mSettings->value("/options/history", true).toBool())
     return;
 
-  if (!mHistory.isOpen())
-    return;
+  QSqlQuery query;
+  query.prepare("SELECT fileName FROM history WHERE URL IS NOT EMPTY AND fileName = ?");
+  query.addBindValue(fileName);
+  query.exec();
 
-  QSqlQuery query = mHistory.exec(QString("SELECT fileName FROM history WHERE URL != '' AND fileName = '%1'").arg(fileName));
-
-  if (query.record().count() > 0) {
-    // If we can find another entry for this filename with a valid URL, add another record (so as to not override a delete hash)
-    saveHistory(fileName, url, deleteHash);
-  }
-  else if (!url.isEmpty()) {
+  if (query.record().count() > 0 && !url.isEmpty()) {
     // Makes sure to only update the latest file, in case something weird happened with the files (deleted screenshots, etc). Though that might still happen in some edge cases that I'm too lazy to account for.
-    mHistory.exec(QString("UPDATE history SET URL = '%1', deleteURL = '%2', time = %3 WHERE fileName = '%4' LIMIT 1 ORDER BY time DESC")
-                   .arg(url)
-                   .arg("http://imgur.com/delete/" + deleteHash)
-                   .arg(QDateTime::currentMSecsSinceEpoch())
-                   .arg(fileName)
-                  );
+    QSqlQuery updateQuery;
+    updateQuery.prepare("UPDATE history SET URL = ?, deleteURL = ?, time = ? WHERE fileName = ?");
+    updateQuery.addBindValue(url);
+    updateQuery.addBindValue("http://imgur.com/delete/" + deleteHash);
+    updateQuery.addBindValue(QDateTime::currentMSecsSinceEpoch());
+    updateQuery.addBindValue(fileName);
+
+    updateQuery.exec();
+  }
+  else {
+    saveHistory(fileName, url, deleteHash);
   }
 }
 
 void ScreenshotManager::removeHistory(QString fileName, qint64 time)
 {
-  if (mHistory.isOpen())
-    mHistory.exec(QString("DELETE FROM history WHERE fileName = '%1' AND time = %3").arg(fileName).arg(time));
+    QSqlQuery removeQuery;
+    removeQuery.prepare("DELETE FROM history WHERE fileName = ? AND time = ?");
+    removeQuery.addBindValue(fileName);
+    removeQuery.addBindValue(time);
+
+    removeQuery.exec();
 }
 
 void ScreenshotManager::clearHistory()
 {
-  if (mHistory.isOpen())
-    mHistory.exec("DROP TABLE history");
+  QSqlQuery clearQuery("DROP TABLE history");
+  clearQuery.exec();
 }
 
 //

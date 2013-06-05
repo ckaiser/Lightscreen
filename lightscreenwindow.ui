@@ -54,10 +54,6 @@
       <property name="text">
        <string/>
       </property>
-      <property name="icon">
-       <iconset resource="lightscreen.qrc">
-        <normaloff>:/icons/area.big</normaloff>:/icons/area.big</iconset>
-      </property>
       <property name="iconSize">
        <size>
         <width>64</width>
@@ -85,10 +81,6 @@
       </property>
       <property name="whatsThis">
        <string>Drop the picker onto a window to capture it.</string>
-      </property>
-      <property name="icon">
-       <iconset resource="lightscreen.qrc">
-        <normaloff>:/icons/pickWindow.big</normaloff>:/icons/pickWindow.big</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -118,10 +110,6 @@
       <property name="text">
        <string>&amp;Options</string>
       </property>
-      <property name="icon">
-       <iconset resource="lightscreen.qrc">
-        <normaloff>:/icons/configure</normaloff>:/icons/configure</iconset>
-      </property>
       <property name="shortcut">
        <string>Ctrl+O</string>
       </property>
@@ -143,10 +131,6 @@
       </property>
       <property name="text">
        <string>&amp;Folder</string>
-      </property>
-      <property name="icon">
-       <iconset resource="lightscreen.qrc">
-        <normaloff>:/icons/folder</normaloff>:/icons/folder</iconset>
       </property>
       <property name="shortcut">
        <string>Ctrl+F</string>
@@ -170,10 +154,6 @@
       <property name="text">
        <string>&amp;Upload</string>
       </property>
-      <property name="icon">
-       <iconset resource="lightscreen.qrc">
-        <normaloff>:/icons/imgur</normaloff>:/icons/imgur</iconset>
-      </property>
       <property name="shortcut">
        <string>Ctrl+U</string>
       </property>
@@ -195,10 +175,6 @@
       </property>
       <property name="whatsThis">
        <string>Take a screenshot of your entire desktop.</string>
-      </property>
-      <property name="icon">
-       <iconset resource="lightscreen.qrc">
-        <normaloff>:/icons/screen.big</normaloff>:/icons/screen.big</iconset>
       </property>
       <property name="iconSize">
        <size>

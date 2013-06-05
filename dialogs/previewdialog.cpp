@@ -61,10 +61,10 @@ PreviewDialog::PreviewDialog(QWidget *parent) :
   mStack = new QStackedLayout;
   connect(mStack, SIGNAL(currentChanged(int)), this, SLOT(indexChanged(int)));
 
-  mPrevButton = new QPushButton(QIcon(":/icons/arrow-left"), "", this);
+  mPrevButton = new QPushButton(os::icon(":/arrow-left"), "", this);
   connect(mPrevButton, SIGNAL(clicked()), this, SLOT(previous()));
 
-  mNextButton = new QPushButton(QIcon(":/icons/arrow-right"), "", this);
+  mNextButton = new QPushButton(os::icon(":/arrow-right"), "", this);
   connect(mNextButton, SIGNAL(clicked()), this, SLOT(next()));
 
   mPrevButton->setCursor(Qt::PointingHandCursor);
@@ -138,8 +138,8 @@ void PreviewDialog::add(Screenshot *screenshot)
 
   label->resize(size);
 
-  QPushButton *discardPushButton = new QPushButton(QIcon(":/icons/no")   , "", label);
-  QPushButton *enlargePushButton = new QPushButton(QIcon(":/icons/preview"), "", label);
+  QPushButton *discardPushButton = new QPushButton(os::icon("no")   , "", label);
+  QPushButton *enlargePushButton = new QPushButton(os::icon("preview"), "", label);
   QToolButton *confirmPushButton = new QToolButton(label);
 
   confirmPushButton->setIconSize(QSize(24, 24));
@@ -149,13 +149,13 @@ void PreviewDialog::add(Screenshot *screenshot)
   if (ScreenshotManager::instance()->settings()->value("options/previewDefaultAction", 0).toInt() == 0
       || ScreenshotManager::instance()->settings()->value("options/uploadAuto").toBool()) {
     // Default button, confirm & upload.
-    confirmPushButton->setIcon(QIcon(":/icons/yes"));
+    confirmPushButton->setIcon(os::icon("yes"));
 
     if (!ScreenshotManager::instance()->settings()->value("options/uploadAuto").toBool()) {
       QMenu *confirmMenu = new QMenu(confirmPushButton);
       confirmMenu->setObjectName("confirmMenu");
 
-      QAction *uploadAction = new QAction(QIcon(":/icons/imgur"), tr("Upload"), confirmPushButton);
+      QAction *uploadAction = new QAction(os::icon("imgur"), tr("Upload"), confirmPushButton);
       connect(uploadAction, SIGNAL(triggered()), screenshot,   SLOT(markUpload()));
       connect(uploadAction, SIGNAL(triggered()), screenshot,   SLOT(confirm()));
       connect(uploadAction, SIGNAL(triggered()), this,         SLOT(closePreview()));
@@ -172,12 +172,12 @@ void PreviewDialog::add(Screenshot *screenshot)
   }
   else {
     // Reversed button, upload & confirm.
-    confirmPushButton->setIcon(QIcon(":/icons/imgur"));
+    confirmPushButton->setIcon(os::icon("imgur"));
 
     QMenu *confirmMenu = new QMenu(confirmPushButton);
     confirmMenu->setObjectName("confirmMenu");
 
-    QAction *confirmAction = new QAction(QIcon(":/icons/yes"), tr("Save"), confirmPushButton);
+    QAction *confirmAction = new QAction(os::icon("yes"), tr("Save"), confirmPushButton);
     connect(this, SIGNAL(acceptAll()), confirmAction, SLOT(trigger()));
     connect(confirmAction, SIGNAL(triggered()), screenshot, SLOT(confirm()));
     connect(confirmAction, SIGNAL(triggered()), this, SLOT(closePreview()));

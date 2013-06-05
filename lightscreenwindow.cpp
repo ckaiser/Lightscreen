@@ -75,6 +75,14 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
 
   ui.setupUi(this);
 
+  ui.screenPushButton->setIcon(os::icon("screen.big"));
+  ui.areaPushButton->setIcon(os::icon("area.big"));
+  ui.windowPushButton->setIcon(os::icon("pickWindow.big"));
+
+  ui.optionsPushButton->setIcon(os::icon("configure"));
+  ui.folderPushButton->setIcon(os::icon("folder"));
+  ui.imgurPushButton->setIcon(os::icon("imgur"));
+
   setMaximumSize(size());
   setMinimumSize(size());
 
@@ -265,18 +273,18 @@ void LightscreenWindow::createUploadMenu()
 {
   QMenu* imgurMenu = new QMenu(tr("Upload"));
 
-  QAction *uploadAction = new QAction(QIcon(":/icons/imgur"), tr("&Upload last"), imgurMenu);
+  QAction *uploadAction = new QAction(os::icon("imgur"), tr("&Upload last"), imgurMenu);
   uploadAction->setToolTip(tr("Upload the last screenshot you took to imgur.com"));
   connect(uploadAction, SIGNAL(triggered()), this, SLOT(uploadLast()));
 
-  QAction *cancelAction = new QAction(QIcon(":/icons/no"), tr("&Cancel upload"), imgurMenu);
+  QAction *cancelAction = new QAction(os::icon("no"), tr("&Cancel upload"), imgurMenu);
   cancelAction->setToolTip(tr("Cancel the currently uploading screenshots"));
   cancelAction->setEnabled(false);
 
   connect(this, SIGNAL(uploading(bool)), cancelAction, SLOT(setEnabled(bool)));
   connect(cancelAction, SIGNAL(triggered()), this, SLOT(uploadCancel()));
 
-  QAction *historyAction = new QAction(QIcon(":/icons/view-history"), tr("View &History"), imgurMenu);
+  QAction *historyAction = new QAction(os::icon("view-history"), tr("View &History"), imgurMenu);
   connect(historyAction, SIGNAL(triggered()), this, SLOT(showHistoryDialog()));
 
   imgurMenu->addAction(uploadAction);
@@ -364,7 +372,7 @@ void LightscreenWindow::notify(const Screenshot::Result &result)
 
 #ifdef Q_WS_WIN
     if (mTaskbarButton)
-      mTaskbarButton->SetOverlayIcon(QIcon(":/icons/yes"), tr("Success!"));
+      mTaskbarButton->SetOverlayIcon(os::icon("yes"), tr("Success!"));
 #endif
 
     setWindowTitle(tr("Success!"));
@@ -374,7 +382,7 @@ void LightscreenWindow::notify(const Screenshot::Result &result)
     setWindowTitle(tr("Failed!"));
 #ifdef Q_WS_WIN
     if (mTaskbarButton)
-      mTaskbarButton->SetOverlayIcon(QIcon(":/icons/no"), tr("Failed!"));
+      mTaskbarButton->SetOverlayIcon(os::icon("no"), tr("Failed!"));
 #endif
     break;
   case Screenshot::Cancel:
@@ -511,7 +519,7 @@ void LightscreenWindow::screenshotAction(int mode)
     options.imgurClipboard = settings()->value("options/imgurClipboard", false).toBool();
     options.preview        = settings()->value("options/preview",        false).toBool();
     options.magnify        = settings()->value("options/magnify",        false).toBool();
-    options.cursor         = settings()->value("options/cursor",         false).toBool();
+    options.cursor         = settings()->value("options/cursor",         true).toBool();
     options.saveAs         = settings()->value("options/saveAs",         false).toBool();
     options.animations     = settings()->value("options/animations",     true).toBool();
     options.replace        = settings()->value("options/replace",        false).toBool();
@@ -794,8 +802,6 @@ void LightscreenWindow::windowPickerHotkey()
   screenshotAction(3);
 }
 
-//
-
 void LightscreenWindow::applySettings()
 {
   bool tray = settings()->value("options/tray").toBool();
@@ -817,9 +823,6 @@ void LightscreenWindow::applySettings()
 
   os::setStartup(settings()->value("options/startup").toBool(), settings()->value("options/startupHide").toBool());
 }
-
-//
-
 
 void LightscreenWindow::connectHotkeys()
 {
@@ -873,16 +876,16 @@ void LightscreenWindow::createTrayIcon()
   QAction *hideAction = new QAction(QIcon(":/icons/lightscreen.small"), tr("Show&/Hide"), mTrayIcon);
   connect(hideAction, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
 
-  QAction *screenAction = new QAction(QIcon(":/icons/screen"), tr("&Screen"), mTrayIcon);
+  QAction *screenAction = new QAction(os::icon("screen"), tr("&Screen"), mTrayIcon);
   screenAction->setData(QVariant(0));
 
-  QAction *windowAction = new QAction(QIcon(":/icons/window"), tr("Active &Window"), this);
+  QAction *windowAction = new QAction(os::icon("window"), tr("Active &Window"), this);
   windowAction->setData(QVariant(1));
 
-  QAction *windowPickerAction = new QAction(QIcon(":/icons/pickWindow"), tr("&Pick Window"), this);
+  QAction *windowPickerAction = new QAction(os::icon("pickWindow"), tr("&Pick Window"), this);
   windowPickerAction->setData(QVariant(3));
 
-  QAction *areaAction = new QAction(QIcon(":/icons/area"), tr("&Area"), mTrayIcon);
+  QAction *areaAction = new QAction(os::icon("area"), tr("&Area"), mTrayIcon);
   areaAction->setData(QVariant(2));
 
   QActionGroup *screenshotGroup = new QActionGroup(mTrayIcon);
@@ -894,24 +897,24 @@ void LightscreenWindow::createTrayIcon()
   connect(screenshotGroup, SIGNAL(triggered(QAction*)), this, SLOT(screenshotActionTriggered(QAction*)));
 
   // Duplicated for the screenshot button :(
-  QAction *uploadAction = new QAction(QIcon(":/icons/imgur"), tr("&Upload last"), mTrayIcon);
+  QAction *uploadAction = new QAction(os::icon("imgur"), tr("&Upload last"), mTrayIcon);
   uploadAction->setToolTip(tr("Upload the last screenshot you took to imgur.com"));
   connect(uploadAction, SIGNAL(triggered()), this, SLOT(uploadLast()));
 
-  QAction *cancelAction = new QAction(QIcon(":/icons/no"), tr("&Cancel upload"), mTrayIcon);
+  QAction *cancelAction = new QAction(os::icon("no"), tr("&Cancel upload"), mTrayIcon);
   cancelAction->setToolTip(tr("Cancel the currently uploading screenshots"));
   cancelAction->setEnabled(false);
   connect(this, SIGNAL(uploading(bool)), cancelAction, SLOT(setEnabled(bool)));
   connect(cancelAction, SIGNAL(triggered()), this, SLOT(uploadCancel()));
 
-  QAction *historyAction = new QAction(QIcon(":/icons/view-history"), tr("View History"), mTrayIcon);
+  QAction *historyAction = new QAction(os::icon("view-history"), tr("View History"), mTrayIcon);
   connect(historyAction, SIGNAL(triggered()), this, SLOT(showHistoryDialog()));
   //
 
-  QAction *optionsAction = new QAction(QIcon(":/icons/configure"), tr("View &Options"), mTrayIcon);
+  QAction *optionsAction = new QAction(os::icon("configure"), tr("View &Options"), mTrayIcon);
   connect(optionsAction, SIGNAL(triggered()), this, SLOT(showOptions()));
 
-  QAction *goAction = new QAction(QIcon(":/icons/folder"), tr("&Go to Folder"), mTrayIcon);
+  QAction *goAction = new QAction(os::icon("folder"), tr("&Go to Folder"), mTrayIcon);
   connect(goAction, SIGNAL(triggered()), this, SLOT(goToFolder()));
 
   QAction *quitAction = new QAction(tr("&Quit"), mTrayIcon);

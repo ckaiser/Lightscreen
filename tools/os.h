@@ -26,6 +26,7 @@ class QPoint;
 class QString;
 class QUrl;
 class QGraphicsEffect;
+class QIcon;
 
 #if defined(Q_WS_X11)
   typedef unsigned long XID;
@@ -60,6 +61,9 @@ namespace os
 
   // Translates the ui to the given language name.
   void translate(QString language);
+
+  // Returns a QIcon for the given icon name (taking into account color schemes and whatnot).
+  QIcon icon(QString name);
 
   // X11-specific functions for the Window Picker
 #if defined(Q_WS_X11)

@@ -21,7 +21,6 @@
 
 #include <QObject>
 #include <QList>
-#include <QtSql/QSqlDatabase>
 
 #include "screenshot.h"
 
@@ -50,7 +49,6 @@ public:
   void removeHistory(QString fileName, qint64 time);
   void clearHistory();
   QSettings *settings() const { return mSettings; }
-  QSqlDatabase &history() { return mHistory; }
 
 public slots:
   void askConfirmation();
@@ -67,7 +65,6 @@ private:
   static ScreenshotManager* mInstance;
   QList<Screenshot*> mScreenshots;
   QSettings *mSettings;
-  QSqlDatabase mHistory;
   bool mPortableMode;
 };
 

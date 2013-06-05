@@ -31,9 +31,9 @@ HistoryDialog::HistoryDialog(QWidget *parent) :
   ui->filterEdit->setText(tr("Filter.."));
   ui->filterEdit->installEventFilter(this);
 
-  if (ScreenshotManager::instance()->history().isOpen())
+  if (QSqlDatabase::database().isOpen())
   {
-    mModel = new QSqlTableModel(this, ScreenshotManager::instance()->history());
+    mModel = new QSqlTableModel(this);
     mModel->setTable("history");
     mModel->setHeaderData(0, Qt::Horizontal, tr("Screenshot"));
     mModel->setHeaderData(1, Qt::Horizontal, tr("URL"));
@@ -45,6 +45,10 @@ HistoryDialog::HistoryDialog(QWidget *parent) :
     mFilterModel->setSortCaseSensitivity(Qt::CaseInsensitive);
     mFilterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     mFilterModel->setFilterKeyColumn(-1);
+
+    while (mModel->canFetchMore()) {
+      mModel->fetchMore();
+    }
 
     ui->tableView->setModel(mFilterModel);
 
@@ -91,6 +95,7 @@ HistoryDialog::HistoryDialog(QWidget *parent) :
   }
 
   connect(Uploader::instance(), SIGNAL(progress(qint64,qint64)), this, SLOT(uploadProgress(qint64, qint64)));
+  connect(Uploader::instance(), SIGNAL(done(QString,QString,QString)), this, SLOT(refresh()));
   connect(ui->uploadButton, SIGNAL(clicked()), this, SLOT(upload()));
   connect(ui->clearButton , SIGNAL(clicked()), this, SLOT(clear()));
 }
@@ -175,6 +180,11 @@ void HistoryDialog::removeHistoryEntry()
     ScreenshotManager::instance()->removeHistory(mContextIndex.sibling(mContextIndex.row(), 0).data().toString(), mContextIndex.sibling(mContextIndex.row(), 3).data().toLongLong());
   }
 
+  refresh();
+}
+
+void HistoryDialog::refresh()
+{
   mModel->select();
 }
 
@@ -224,10 +234,6 @@ void HistoryDialog::uploadProgress(qint64 sent, qint64 total)
 
   ui->uploadProgressBar->setMaximum(total);
   ui->uploadProgressBar->setValue(sent);
-
-  if (sent == total) {
-    mModel->select();
-  }
 }
 
 bool HistoryDialog::eventFilter(QObject *object, QEvent *event)

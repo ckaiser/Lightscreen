@@ -152,7 +152,7 @@ void OptionsDialog::loadSettings()
     ui.playSoundCheckBox->setChecked(settings()->value("playSound", false).toBool());
     ui.updaterCheckBox->setChecked(!settings()->value("disableUpdater", false).toBool());
     ui.magnifyCheckBox->setChecked(settings()->value("magnify", false).toBool());
-    ui.cursorCheckBox->setChecked(settings()->value("cursor", false).toBool());
+    ui.cursorCheckBox->setChecked(settings()->value("cursor", true).toBool());
     ui.saveAsCheckBox->setChecked(settings()->value("saveAs", false).toBool());
     ui.previewGroupBox->setChecked(settings()->value("preview", false).toBool());
     ui.previewSizeSpinBox->setValue(settings()->value("previewSize", 300).toInt());
@@ -525,12 +525,12 @@ void OptionsDialog::init()
   ui.targetLineEdit->setCompleter(completer);
 
   // HotkeyWidget icons.
-  ui.screenHotkeyWidget->setIcon      (QIcon(":/icons/screen"));
-  ui.windowHotkeyWidget->setIcon      (QIcon(":/icons/window"));
-  ui.windowPickerHotkeyWidget->setIcon(QIcon(":/icons/pickWindow"));
-  ui.areaHotkeyWidget->setIcon        (QIcon(":/icons/area"));
+  ui.screenHotkeyWidget->setIcon      (os::icon("screen"));
+  ui.windowHotkeyWidget->setIcon      (os::icon("window"));
+  ui.windowPickerHotkeyWidget->setIcon(os::icon("pickWindow"));
+  ui.areaHotkeyWidget->setIcon        (os::icon("area"));
   ui.openHotkeyWidget->setIcon        (QIcon(":/icons/lightscreen.small"));
-  ui.directoryHotkeyWidget->setIcon   (QIcon(":/icons/folder"));
+  ui.directoryHotkeyWidget->setIcon   (os::icon("folder"));
 
   // Version
   ui.versionLabel->setText(tr("Version %1").arg(qApp->applicationVersion()));
