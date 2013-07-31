@@ -62,6 +62,8 @@ windows{
     }
 }
 
+unix:LIBS += -lX11
+
 OTHER_FILES += TODO.txt
 
 

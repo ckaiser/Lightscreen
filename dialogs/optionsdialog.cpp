@@ -517,6 +517,9 @@ void OptionsDialog::init()
   optionsPalette.setColor(QPalette::Window,  ui.tabWidget->palette().color(QPalette::Base));
   ui.optionsScrollArea->setPalette(optionsPalette);
 
+  ui.browsePushButton->setIcon(os::icon("folder"));
+  ui.namingOptionsButton->setIcon(os::icon("configure"));
+
   ui.buttonBox->addButton(new QPushButton(" " + tr("Restore Defaults") + " ", this), QDialogButtonBox::ResetRole);
 
   // Set up the autocomplete for the directory.

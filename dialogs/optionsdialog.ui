@@ -85,10 +85,6 @@
             <property name="text">
              <string/>
             </property>
-            <property name="icon">
-             <iconset resource="../lightscreen.qrc">
-              <normaloff>:/icons/folder</normaloff>:/icons/folder</iconset>
-            </property>
             <property name="autoDefault">
              <bool>false</bool>
             </property>
@@ -158,10 +154,6 @@
           </item>
           <item row="1" column="2">
            <widget class="QPushButton" name="namingOptionsButton">
-            <property name="icon">
-             <iconset resource="../lightscreen.qrc">
-              <normaloff>:/icons/configure</normaloff>:/icons/configure</iconset>
-            </property>
             <property name="autoDefault">
              <bool>false</bool>
             </property>
@@ -570,7 +562,7 @@ Quality is related to file size and of course to readability and overall quality
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>358</width>
+            <width>311</width>
             <height>780</height>
            </rect>
           </property>
@@ -1345,9 +1337,7 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
   <tabstop>checkUpdatesPushButton</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
- <resources>
-  <include location="../lightscreen.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>
