@@ -61,10 +61,10 @@ PreviewDialog::PreviewDialog(QWidget *parent) :
   mStack = new QStackedLayout;
   connect(mStack, SIGNAL(currentChanged(int)), this, SLOT(indexChanged(int)));
 
-  mPrevButton = new QPushButton(os::icon(":/arrow-left"), "", this);
+  mPrevButton = new QPushButton(os::icon("arrow-left"), "", this);
   connect(mPrevButton, SIGNAL(clicked()), this, SLOT(previous()));
 
-  mNextButton = new QPushButton(os::icon(":/arrow-right"), "", this);
+  mNextButton = new QPushButton(os::icon("arrow-right"), "", this);
   connect(mNextButton, SIGNAL(clicked()), this, SLOT(next()));
 
   mPrevButton->setCursor(Qt::PointingHandCursor);

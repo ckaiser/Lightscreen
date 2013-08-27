@@ -72,12 +72,12 @@ AreaDialog::AreaDialog(Screenshot *screenshot) :
   mAcceptWidget->setWindowOpacity(0.4);
   mAcceptWidget->setStyleSheet("QWidget { background: rgba(255, 255, 255, 200); border: 4px solid #232323; padding: 0; } QPushButton { background: transparent; border: none; height: 50px; padding: 5px; } QPushButton:hover { cursor: hand; }");
 
-  QPushButton *awAcceptButton = new QPushButton(os::icon("yes.big"), "", this);
+  QPushButton *awAcceptButton = new QPushButton(QIcon(":/icon/yes.big"), "", this);
   connect(awAcceptButton, SIGNAL(clicked()), this, SLOT(grabRect()));
   awAcceptButton->setCursor(Qt::PointingHandCursor);
   awAcceptButton->setIconSize(QSize(48, 48));
 
-  QPushButton *awRejectButton = new QPushButton(os::icon("no.big"), "", this);
+  QPushButton *awRejectButton = new QPushButton(QIcon(":/icon/no.big"), "", this);
   connect(awRejectButton, SIGNAL(clicked()), this, SLOT(cancel()));
   awRejectButton->setCursor(Qt::PointingHandCursor);
   awRejectButton->setIconSize(QSize(48, 48));
