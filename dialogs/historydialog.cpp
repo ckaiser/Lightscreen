@@ -54,13 +54,13 @@ HistoryDialog::HistoryDialog(QWidget *parent) :
 
     ui->tableView->hideColumn(2); // No delete hash.
     ui->tableView->hideColumn(3); // No timestamp.
-
+/*
     ui->tableView->horizontalHeader()->setClickable(false);
     ui->tableView->horizontalHeader()->setMovable(false);
 
     ui->tableView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
     ui->tableView->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
-
+*/
     ui->tableView->verticalHeader()->hide();
 
     ui->tableView->setTextElideMode(Qt::ElideLeft);

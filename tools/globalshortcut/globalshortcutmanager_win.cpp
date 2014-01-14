@@ -1,4 +1,5 @@
 /*
+ *
  * globalshortcutmanager_win.cpp - Windows implementation of global shortcuts
  * Copyright (C) 2003-2006  Justin Karneges, Maciej Niedzielski
  *
@@ -18,14 +19,16 @@
  *
  */
 
+
 #include "globalshortcutmanager.h"
 #include "globalshortcuttrigger.h"
 
 #include <QWidget>
+#include <QAbstractNativeEventFilter>
 
 #include <windows.h>
 
-class GlobalShortcutManager::KeyTrigger::Impl : public QWidget
+class GlobalShortcutManager::KeyTrigger::Impl : public QWidget, public QAbstractNativeEventFilter
 {
 public:
   /**
@@ -54,13 +57,19 @@ public:
   /**
    * Triggers activated() signal when the hotkey is activated.
    */
-  bool winEvent(MSG* m, long* result)
+  bool nativeEventFilter(const QByteArray &eventType, void* message, long* result)
   {
+    if (eventType != "windows_dispatcher_MSG")
+      return false;
+
+    Q_UNUSED(result)
+
+    MSG* m = (MSG*) message;
+
     if (m->message == WM_HOTKEY && m->wParam == id_) {
       emit trigger_->activated();
       return true;
     }
-    return QWidget::winEvent(m, result);
   }
 
   bool isValid() { return valid; }
@@ -81,7 +90,7 @@ private:
 
   static bool convertKeySequence(const QKeySequence& ks, UINT* mod_, UINT* key_)
   {
-    int code = ks;
+    int code = (int) ks;
 
     UINT mod = 0;
     if (code & Qt::META)

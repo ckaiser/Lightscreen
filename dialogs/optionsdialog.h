@@ -19,7 +19,7 @@
 #ifndef OPTIONSDIALOG_H
 #define OPTIONSDIALOG_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 #include "../updater/updater.h"
 #include "ui_optionsdialog.h"
 
@@ -46,7 +46,7 @@ public slots:
 protected:
   bool event(QEvent *event);
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   bool winEvent(MSG *message, long *result);
 #endif
 

@@ -28,6 +28,7 @@
 
 #include <QDebug>
 
+#include "winextras/qwinfunctions.h"
 #include "windowpicker.h"
 #include "os.h"
 
@@ -160,7 +161,7 @@ void WindowPicker::mouseMoveEvent(QMouseEvent *event)
   icon = (HICON)::GetClassLong((HWND)mCurrentWindow, GCL_HICON);
 
   if (icon != NULL) {
-    mWindowIcon->setPixmap(QPixmap::fromWinHICON(icon));
+    mWindowIcon->setPixmap(QWinExtras::fromHICON(icon));
   }
   else {
     mWindowIcon->setPixmap(QPixmap());

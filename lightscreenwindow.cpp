@@ -21,22 +21,21 @@
 #include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QFileInfo>
-#include <QHttp>
 #include <QKeyEvent>
 #include <QMenu>
 #include <QMessageBox>
 #include <QPointer>
 #include <QProcess>
 #include <QSettings>
-#include <QSound>
 #include <QSystemTrayIcon>
 #include <QTimer>
 #include <QToolTip>
 #include <QUrl>
+#include <QSound>
 
 #include <QDebug>
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   #include <windows.h>
   #include "tools/qwin7utils/Taskbar.h"
   #include "tools/qwin7utils/TaskbarButton.h"
@@ -88,7 +87,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
 
   setWindowFlags(Qt::Window);
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   if (QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS7) {
     mTaskbarButton = new TaskbarButton(this);
   }
@@ -159,8 +158,10 @@ void LightscreenWindow::checkForUpdates()
       > QDate::currentDate().dayOfYear())
     return; // If 7 days have not passed since the last update check.
 
-  connect(Updater::instance(), SIGNAL(done(bool)), this, SLOT(updaterDone(bool)));
-  Updater::instance()->check();
+  mUpdater = new Updater(this);
+
+  connect(mUpdater, SIGNAL(done(bool)), this, SLOT(updaterDone(bool)));
+  mUpdater->check();
 }
 
 void LightscreenWindow::cleanup(Screenshot::Options &options)
@@ -201,7 +202,7 @@ void LightscreenWindow::cleanup(Screenshot::Options &options)
       QSound::play("sounds/ls.screenshot.wav");
     }
     else {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
       QSound::play("afakepathtomakewindowsplaythedefaultsoundtheresprobablyabetterwaybuticantbebothered");
 #else
       QSound::play("sound/ls.error.wav");
@@ -300,7 +301,7 @@ void LightscreenWindow::createUploadMenu()
 
 void LightscreenWindow::goToFolder()
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   if (!mLastScreenshot.isEmpty() && QFile::exists(mLastScreenshot)) {
     QProcess::startDetached("explorer /select, \"" + mLastScreenshot +"\"");
   }
@@ -315,7 +316,7 @@ void LightscreenWindow::goToFolder()
       folder.append(QDir::separator());
 
     QDesktopServices::openUrl("file:///"+folder);
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   }
 #endif
 }
@@ -370,7 +371,7 @@ void LightscreenWindow::notify(const Screenshot::Result &result)
   case Screenshot::Success:
     mTrayIcon->setIcon(QIcon(":/icons/lightscreen.yes"));
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     if (mTaskbarButton)
       mTaskbarButton->SetOverlayIcon(os::icon("yes"), tr("Success!"));
 #endif
@@ -380,7 +381,7 @@ void LightscreenWindow::notify(const Screenshot::Result &result)
   case Screenshot::Fail:
     mTrayIcon->setIcon(QIcon(":/icons/lightscreen.no"));
     setWindowTitle(tr("Failed!"));
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     if (mTaskbarButton)
       mTaskbarButton->SetOverlayIcon(os::icon("no"), tr("Failed!"));
 #endif
@@ -444,7 +445,7 @@ void LightscreenWindow::restoreNotification()
   if (mTrayIcon)
     mTrayIcon->setIcon(QIcon(":/icons/lightscreen.small"));
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   if (mTaskbarButton)
     mTaskbarButton->SetOverlayIcon(QIcon(), "");
 #endif
@@ -698,7 +699,7 @@ void LightscreenWindow::updateUploadStatus()
     statusString = tr("Lightscreen");
     emit uploading(false);
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     if (mTaskbarButton) {
       mTaskbarButton->SetProgresValue(0, 0);
       mTaskbarButton->SetState(STATE_NOPROGRESS);
@@ -739,6 +740,8 @@ void LightscreenWindow::updaterDone(bool result)
   else if (msgBox.clickedButton() == turnOffButton) {
     settings()->setValue("options/disableUpdater", true);
   }
+
+  mUpdater->deleteLater();
 }
 
 void LightscreenWindow::upload(const QString &fileName)
@@ -768,7 +771,7 @@ void LightscreenWindow::uploadLast()
 
 void LightscreenWindow::uploadProgress(qint64 sent, qint64 total)
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   if (mTaskbarButton)
     mTaskbarButton->SetProgresValue(sent, total);
 
@@ -947,7 +950,7 @@ void LightscreenWindow::createTrayIcon()
   mTrayIcon->setContextMenu(trayIconMenu);
 }
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 bool LightscreenWindow::winEvent(MSG *message, long *result)
 {
   Taskbar::GetInstance()->winEvent(message, result);

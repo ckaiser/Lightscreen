@@ -43,7 +43,7 @@
 
 #include "qtwin.h"
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   #include <qt_windows.h>
   #include <shlobj.h>
 #elif defined(Q_WS_X11)
@@ -58,7 +58,7 @@
 
 void os::addToRecentDocuments(QString fileName)
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   QT_WA ( {
       SHAddToRecentDocs (0x00000003, QDir::toNativeSeparators(fileName).utf16());
     } , {
@@ -71,9 +71,9 @@ void os::addToRecentDocuments(QString fileName)
 
 QPixmap os::cursor()
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   /*
-  * Taken from: git://github.com/arrai/mumble-record.git › src › mumble › Overlay.cpp
+  * Taken from: git://github.com/arrai/mumble-record.git ï¿½ src ï¿½ mumble ï¿½ Overlay.cpp
   * BSD License.
   */
 
@@ -152,7 +152,7 @@ void os::effect(QObject* target, const char *slot, int frames, int duration, con
 
 QString os::getDocumentsPath()
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   TCHAR szPath[MAX_PATH];
 
   if (SUCCEEDED(SHGetFolderPath(NULL,
@@ -174,7 +174,7 @@ QString os::getDocumentsPath()
 
 QPixmap os::grabWindow(WId winId)
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   RECT rcWindow;
   GetWindowRect(winId, &rcWindow);
 
@@ -245,7 +245,7 @@ QPixmap os::grabWindow(WId winId)
 
 void os::setForegroundWindow(QWidget *window)
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   ShowWindow(window->winId(), SW_RESTORE);
   SetForegroundWindow(window->winId());
 #else
@@ -260,7 +260,7 @@ void os::setStartup(bool startup, bool hide)
   if (hide)
     lightscreen.append(" -h");
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   // Windows startup settings
   QSettings init("Microsoft", "Windows");
   init.beginGroup("CurrentVersion");
@@ -319,7 +319,7 @@ void os::translate(QString language)
   translator    = new QTranslator(qApp);
   translator_qt = new QTranslator(qApp);
 
-  if (language == "Español")
+  if (language == "Espaï¿½ol")
     QLocale::setDefault(QLocale::Spanish);
 
   if (translator->load(language, ":/translations")) {

@@ -22,7 +22,7 @@
 
 #include <QDebug>
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   #include "tools/qwin7utils/AppUserModel.h"
   #include "tools/qwin7utils/JumpList.h"
   #include "tools/qwin7utils/Taskbar.h"
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 
   LightscreenWindow lightscreen;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   // Windows 7 jumplists.
   if (QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS7) {
     AppUserModel::SetCurrentProcessExplicitAppUserModelID("Lightscreen");
@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
 
   int result = application.exec();
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   Taskbar::ReleaseInstance();
 #endif
 

@@ -46,11 +46,10 @@ TRANSLATIONS += translations/untranslated.ts \
                 translations/dutch.ts
 RC_FILE += lightscreen.rc
 CODECFORSRC = UTF-8
-QT += network core gui xml sql
+QT += network core gui xml sql multimedia
 
 include($$PWD/tools/globalshortcut/globalshortcut.pri)
 include($$PWD/tools/qtsingleapplication/qtsingleapplication.pri)
-include($$PWD/tools/qwin7utils/qwin7utils.pri)
 
 windows{
     contains(QMAKE_CC, gcc){

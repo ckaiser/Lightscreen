@@ -18,46 +18,33 @@
  */
 #include <QApplication>
 #include <QDate>
-#include <QHttp>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 #include <QDebug>
 
 #include "updater.h"
 #include "../dialogs/updaterdialog.cpp"
 
-Updater* Updater::mInstance = 0;
-
 Updater::Updater(QObject *parent) :
   QObject(parent)
 {
-  connect(&mHttp, SIGNAL(done(bool)), this, SLOT(httpDone(bool)));
+  connect(&mNetwork, SIGNAL(finished(QNetworkReply*)), this, SLOT(finished(QNetworkReply*)));
 }
-
-Updater *Updater::instance()
-{
-  if (!mInstance)
-    mInstance = new Updater();
-
-  return mInstance;
-}
-
-//
 
 void Updater::check()
 {
-  if (mHttp.hasPendingRequests())
-    return;
-
   QString platform = "unknown";
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   platform = QString("Windows_%1").arg(QSysInfo::windowsVersion());
 #else
   platform = "Linux";
 #endif
 
-  mHttp.setHost("lightscreen.sourceforge.net");
-  mHttp.get("/version?from=" + qApp->applicationVersion() + "&platform=" + platform);
+  QNetworkRequest request(QUrl("http://lightscreen.sourceforge.net/version?from=" + qApp->applicationVersion() + "&platform=" + platform));
+  mNetwork.get(request);
 }
 
 void Updater::checkWithFeedback()
@@ -69,13 +56,9 @@ void Updater::checkWithFeedback()
   updaterDialog.exec();
 }
 
-//
-
-void Updater::httpDone(bool error)
+void Updater::finished(QNetworkReply *reply)
 {
-  Q_UNUSED(error)
-
-  QByteArray data = mHttp.readAll();
+  QByteArray data = reply->readAll();
   double version  = QString(data).toDouble();
 
   emit done((version > qApp->applicationVersion().toDouble()));

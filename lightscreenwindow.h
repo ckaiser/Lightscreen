@@ -29,7 +29,7 @@
 
 #include "ui_lightscreenwindow.h"
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   #include "tools/qwin7utils/TaskbarButton.h"
 #endif
 
@@ -89,7 +89,7 @@ private:
   void connectHotkeys();
   void createTrayIcon();
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   bool winEvent(MSG *message, long *result);
 #endif
   // Convenience function
@@ -108,9 +108,10 @@ private:
   QString mLastScreenshot;
   QPointer<QSystemTrayIcon> mTrayIcon;
   QPointer<PreviewDialog> mPreviewDialog;
+  QPointer<Updater> mUpdater;
   Ui::LightscreenWindowClass ui;
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   QW7::TaskbarButton *mTaskbarButton;
 #endif
 };

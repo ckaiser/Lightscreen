@@ -20,7 +20,7 @@
 #define NAMINGDIALOG_H
 
 #include "ui_namingdialog.h"
-#include "tools/screenshot.h"
+#include "../tools/screenshot.h"
 
 #include <QUrl>
 

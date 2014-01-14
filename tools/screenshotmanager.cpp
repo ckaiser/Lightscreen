@@ -23,7 +23,7 @@
 #include <QApplication>
 #include <QDateTime>
 #include <QDebug>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QFile>
 #include <QSettings>
 #include <QtSql/QSqlDatabase>
@@ -43,7 +43,7 @@ ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent)
   else {
     mSettings     = new QSettings();
     mPortableMode = false;
-    historyPath   = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QDir::separator();
+    historyPath   = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator();
   }
 
   // Creating the SQLite database.

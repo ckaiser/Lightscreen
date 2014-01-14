@@ -35,7 +35,7 @@
 
 #include "os.h"
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   #include <windows.h>
 #endif
 
@@ -95,7 +95,7 @@ QString Screenshot::getName(NamingOptions options, QString prefix, QDir director
       QString format;
       QTextStream (&format) << "%0" << (options.leadingZeros+1) << "d";
 
-      naming = naming.arg(QString().sprintf(format.toAscii(), naming_largest + 1));
+      naming = naming.arg(QString().sprintf(format.toLatin1(), naming_largest + 1));
     }
     else {
       naming = naming.arg(naming_largest + 1);
@@ -369,7 +369,7 @@ void Screenshot::uploadDone(QString url)
 
 void Screenshot::activeWindow()
 {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
   HWND fWindow = GetForegroundWindow();
 
   if (fWindow == NULL)
@@ -380,7 +380,7 @@ void Screenshot::activeWindow()
    return;
   }
 
-  mPixmap = os::grabWindow(GetForegroundWindow());
+  mPixmap = os::grabWindow((WId)GetForegroundWindow());
 #endif
 
 #if defined(Q_WS_X11)

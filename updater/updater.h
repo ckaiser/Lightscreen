@@ -20,15 +20,13 @@
 #define UPDATER_H_
 
 #include <QObject>
-#include <QHttp>
+#include <QNetworkAccessManager>
 
 class Updater : public QObject
 {
   Q_OBJECT
 public:
   Updater(QObject *parent = 0);
-
-  static Updater *instance();
 
 signals:
   void done(bool result);
@@ -38,11 +36,10 @@ public slots:
   void checkWithFeedback();
 
 private slots:
-  void httpDone(bool error);
+  void finished(QNetworkReply* reply);
 
 private:
-  QHttp mHttp;
-  static Updater* mInstance;
+  QNetworkAccessManager mNetwork;
 
 };
 
