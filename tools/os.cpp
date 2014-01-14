@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012  Christian Kaiser
+ * Copyright (C) 2014  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,10 @@
 #include <QDialog>
 #include <QDir>
 #include <QGraphicsDropShadowEffect>
+#include <QIcon>
 #include <QLibrary>
+#include <QLocale>
+#include <QMessageBox>
 #include <QPixmap>
 #include <QPointer>
 #include <QProcess>
@@ -34,12 +37,7 @@
 #include <QTranslator>
 #include <QUrl>
 #include <QWidget>
-#include <QIcon>
 #include <string>
-
-#include <QDebug>
-
-#include <QMessageBox>
 
 #include "qtwin.h"
 

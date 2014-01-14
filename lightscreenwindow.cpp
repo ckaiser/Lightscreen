@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012  Christian Kaiser
+ * Copyright (C) 2014  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,13 +16,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-#include <QMainWindow>
 #include <QDate>
 #include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QFileInfo>
 #include <QHttp>
 #include <QKeyEvent>
+#include <QMainWindow>
 #include <QMenu>
 #include <QMessageBox>
 #include <QPointer>
@@ -33,8 +33,6 @@
 #include <QTimer>
 #include <QToolTip>
 #include <QUrl>
-
-#include <QDebug>
 
 #ifdef Q_WS_WIN
   #include <windows.h>

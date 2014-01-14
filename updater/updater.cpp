@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012  Christian Kaiser
+ * Copyright (C) 2014  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,7 +20,6 @@
 #include <QDate>
 #include <QHttp>
 
-#include <QDebug>
 
 #include "updater.h"
 #include "../dialogs/updaterdialog.cpp"

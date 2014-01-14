@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012  Christian Kaiser
+ * Copyright (C) 2014  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,8 +19,6 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QLocale>
-
-#include <QDebug>
 
 #ifdef Q_WS_WIN
   #include "tools/qwin7utils/AppUserModel.h"

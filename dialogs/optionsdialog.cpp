@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012  Christian Kaiser
+ * Copyright (C) 2014  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,8 +28,6 @@
 #include <QSettings>
 #include <QTimer>
 #include <QUrl>
-
-#include <QDebug>
 
 #ifdef Q_WS_WIN
   #include <windows.h>
@@ -474,7 +472,7 @@ void OptionsDialog::dialogButtonClicked(QAbstractButton *button)
     if (msgBox.clickedButton() == dontRestoreButton)
       return;
 
-    QString language = settings()->value("options/language").toString(); // Only mantain language.
+    QString language = settings()->value("options/language").toString(); // Only maintain language.
 
     settings()->clear();
     settings()->setValue("options/language", language);

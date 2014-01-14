@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012  Christian Kaiser
+ * Copyright (C) 2014  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +22,6 @@
 
 #include <QList>
 #include <QPair>
-
-#include <QDebug>
 
 Uploader* Uploader::mInstance = 0;
 
