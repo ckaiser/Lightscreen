@@ -1,4 +1,4 @@
-/*
+ï»¿/*
  * Copyright (C) 2014  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
@@ -71,7 +71,7 @@ QPixmap os::cursor()
 {
 #ifdef Q_WS_WIN
   /*
-  * Taken from: git://github.com/arrai/mumble-record.git › src › mumble › Overlay.cpp
+  * Taken from: git://github.com/arrai/mumble-record.git > src > mumble > Overlay.cpp
   * BSD License.
   */
 
@@ -317,7 +317,7 @@ void os::translate(QString language)
   translator    = new QTranslator(qApp);
   translator_qt = new QTranslator(qApp);
 
-  if (language == "Español")
+  if (language == "EspaÃ±ol")
     QLocale::setDefault(QLocale::Spanish);
 
   if (translator->load(language, ":/translations")) {
@@ -346,7 +346,7 @@ QIcon os::icon(QString name)
 }
 
 #ifdef Q_WS_X11
-// Taken from KSnapshot. Oh KDE, what would I do whithout you :D
+// Taken from KSnapshot. Oh KDE, what would I do without you :D
 Window os::findRealWindow(Window w, int depth)
 {
     if( depth > 5 ) {

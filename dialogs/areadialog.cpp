@@ -445,10 +445,10 @@ void AreaDialog::paintEvent(QPaintEvent* e)
   QRect pixmapRect = mScreenshot->pixmap().rect();
 
   if (mMouseMagnifier) {
-    drawPosition = QCursor::pos() - QPoint(100, 100);
+    drawPosition = mMousePos - QPoint(100, 100);
 
-    magStart = QCursor::pos() - QPoint(50, 50);
-    magEnd = QCursor::pos() + QPoint(50, 50);
+    magStart = mMousePos - QPoint(50, 50);
+    magEnd = mMousePos + QPoint(50, 50);
 
     newRect = QRect(magStart, magEnd);
   }
@@ -471,7 +471,7 @@ void AreaDialog::paintEvent(QPaintEvent* e)
     else if (mMouseOverHandle == &mBHandle)
       magStart =  QPoint(mSelection.center().x(), mSelection.bottom());
     else if (mMouseOverHandle == 0)
-      magStart = QCursor::pos();
+      magStart = mMousePos;
 
     magEnd = magStart;
     drawPosition = mSelection.bottomRight();

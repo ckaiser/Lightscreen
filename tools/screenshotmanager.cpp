@@ -30,6 +30,8 @@
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlRecord>
 
+#include <QDebug>
+
 ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent)
 {
   QString historyPath;

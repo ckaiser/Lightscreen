@@ -451,6 +451,7 @@ void OptionsDialog::browse()
     return;
 
   ui.targetLineEdit->setText(fileName);
+  updatePreview();
 }
 
 void OptionsDialog::dialogButtonClicked(QAbstractButton *button)
