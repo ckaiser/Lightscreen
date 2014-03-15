@@ -39,6 +39,7 @@ public:
   };
 
   QtImgur(const QString &APIKey, QObject *parent);
+  bool directUrl;
 
 public slots:
   void cancelAll();

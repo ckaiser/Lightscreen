@@ -24,7 +24,7 @@
 #include <QNetworkRequest>
 #include <QXmlStreamReader>
 
-QtImgur::QtImgur(const QString &APIKey, QObject *parent) : QObject(parent), mAPIKey(APIKey)
+QtImgur::QtImgur(const QString &APIKey, QObject *parent) : QObject(parent), mAPIKey(APIKey), directUrl(false)
 {
   mNetworkManager = new QNetworkAccessManager(this);
 
@@ -122,8 +122,16 @@ void QtImgur::reply(QNetworkReply *reply)
   }
 
   QXmlStreamReader reader(reply->readAll());
+
+  QString url_option = "imgur_page";
+
+  if (directUrl)
+      url_option = "original";
+
   QString url;
   QString deleteHash;
+
+
   bool hasError = false;
 
   while (!reader.atEnd()) {
@@ -138,7 +146,7 @@ void QtImgur::reply(QNetworkReply *reply)
         deleteHash = reader.readElementText();
       }
 
-      if (reader.name() == "imgur_page") {
+      if (reader.name() == url_option) {
         url = reader.readElementText();
       }
     }

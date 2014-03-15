@@ -22,6 +22,7 @@
 
 #include <QList>
 #include <QPair>
+#include <QSettings>
 
 Uploader* Uploader::mInstance = 0;
 
@@ -88,6 +89,8 @@ void Uploader::upload(const QString &fileName)
   if (fileName.isEmpty()) {
     return;
   }
+
+  mImgur->directUrl = ScreenshotManager::instance()->settings()->value("options/uploadDirectLink", false).toBool();
 
   // Cancel on duplicate
   for (int i = 0; i < mScreenshots.size(); ++i) {
