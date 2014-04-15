@@ -26,7 +26,7 @@ class UpdaterDialog : public QProgressDialog
   Q_OBJECT
 
 public:
-  UpdaterDialog();
+  UpdaterDialog(QWidget* parent = 0);
 
 public slots:
   void updateDone(bool result);

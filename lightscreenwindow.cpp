@@ -69,8 +69,6 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   mLastMode(-1),
   mLastScreenshot()
 {
-  os::translate(settings()->value("options/language", "English").toString());
-
   ui.setupUi(this);
 
   ui.screenPushButton->setIcon(os::icon("screen.big"));
@@ -732,7 +730,7 @@ void LightscreenWindow::updaterDone(bool result)
   msgBox.exec();
 
   if (msgBox.clickedButton() == yesButton) {
-    QDesktopServices::openUrl(QUrl("http://lightscreen.sourceforge.net/whatsnew/?from=" + qApp->applicationVersion()));
+    QDesktopServices::openUrl(QUrl("http://lightscreen.com.ar/whatsnew?from=" + qApp->applicationVersion()));
   }
   else if (msgBox.clickedButton() == turnOffButton) {
     settings()->setValue("options/disableUpdater", true);

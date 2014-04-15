@@ -26,8 +26,8 @@
 #include "updaterdialog.h"
 #include "../tools/os.h"
 
-UpdaterDialog::UpdaterDialog() :
-QProgressDialog("", tr("Cancel"), 0, 0)
+UpdaterDialog::UpdaterDialog(QWidget *parent) :
+QProgressDialog("", tr("Cancel"), 0, 0, parent)
 {
   setWindowTitle(tr("Updater - Lightscreen"));
   setWindowFlags(windowFlags() ^ Qt::WindowContextHelpButtonHint);
@@ -47,7 +47,7 @@ QProgressDialog("", tr("Cancel"), 0, 0)
 void UpdaterDialog::updateDone(bool result)
 {
   if (result) {
-    setLabelText(tr("There's a new version available,<br> please see <a href=\"http://lightscreen.sourceforge.net/whatsnew/%1\">the Lighscreen website</a>.").arg(qApp->applicationVersion()));
+    setLabelText(tr("There's a new version available,<br> please see <a href=\"http://lightscreen.com.ar/whatsnew/%1\">the Lighscreen website</a>.").arg(qApp->applicationVersion()));
   }
   else {
     setLabelText(tr("No new versions available."));

@@ -55,7 +55,7 @@ void Updater::check()
   platform = "Linux";
 #endif
 
-  mHttp.setHost("lightscreen.sourceforge.net");
+  mHttp.setHost("lightscreen.com.ar");
   mHttp.get("/version?from=" + qApp->applicationVersion() + "&platform=" + platform);
 }
 

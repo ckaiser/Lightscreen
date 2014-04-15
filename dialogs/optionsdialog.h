@@ -35,10 +35,8 @@ public:
 public slots:
   void accepted();
   void checkUpdatesNow();
-  void languageChange(QString language);
   void loadSettings();
   void openUrl(QString url);
-  void rejected();
   void saveSettings();
   void updatePreview();
   void viewHistory();

@@ -49,10 +49,4 @@
         <file alias="pickWindow.big">images/inv/pickWindow.big.png</file>
         <file alias="preview">images/inv/preview.png</file>
     </qresource>
-    <qresource prefix="/translations">
-        <file alias="Español">translations/spanish.qm</file>
-    </qresource>
-    <qresource prefix="/translations_qt">
-        <file alias="Español">translations/qt/qt_es.qm</file>
-    </qresource>
 </RCC>

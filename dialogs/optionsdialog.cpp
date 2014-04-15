@@ -99,16 +99,9 @@ void OptionsDialog::checkUpdatesNow()
   Updater::instance()->checkWithFeedback();
 }
 
-void OptionsDialog::languageChange(QString language)
-{
-  os::translate(language);
-}
-
 void OptionsDialog::loadSettings()
 {
   settings()->sync();
-  os::translate(settings()->value("options/language").toString()); // Why? Don't ask me, I'm just the programmer.
-
   setUpdatesEnabled(false);
 
   if (!settings()->contains("file/format")) {
@@ -194,16 +187,6 @@ void OptionsDialog::loadSettings()
   ui.cursorCheckBox->setVisible(false);
   ui.cursorCheckBox->setChecked(false);
 #endif
-
-  //TODO: Must replace with not-stupid system
-  QString lang = settings()->value("language").toString();
-  int index = ui.languageComboBox->findText(lang);
-
-  if (index == -1)
-    index = ui.languageComboBox->findText("English");
-
-  ui.languageComboBox->setCurrentIndex(index);
-
   settings()->endGroup();
 
   settings()->beginGroup("actions");
@@ -264,11 +247,6 @@ void OptionsDialog::openUrl(QString url)
   }
 }
 
-void OptionsDialog::rejected()
-{
-  languageChange(settings()->value("options/language").toString()); // Revert language to default.
-}
-
 void OptionsDialog::saveSettings()
 {
   settings()->beginGroup("file");
@@ -289,8 +267,6 @@ void OptionsDialog::saveSettings()
     settings()->setValue("message", ui.messageCheckBox->isChecked());
     settings()->setValue("quality", ui.qualitySlider->value());
     settings()->setValue("playSound", ui.playSoundCheckBox->isChecked());
-    // We save the explicit string because addition/removal of language files can cause it to change
-    settings()->setValue("language", ui.languageComboBox->currentText());
     // This settings is inverted because the first iteration of the Updater did not have a settings but instead relied on the messagebox choice of the user.
     settings()->setValue("disableUpdater", !ui.updaterCheckBox->isChecked());
     settings()->setValue("magnify", ui.magnifyCheckBox->isChecked());
@@ -391,28 +367,7 @@ void OptionsDialog::viewHistory()
 
 bool OptionsDialog::event(QEvent* event)
 {
-  if (event->type() == QEvent::LanguageChange) {
-
-    // ComboBoxes revert to the first index when translated:
-    int naming = ui.namingComboBox->currentIndex();
-    int format = ui.formatComboBox->currentIndex();
-    int previewPosition  = ui.previewPositionComboBox->currentIndex();
-    int previewAutoclose = ui.previewAutocloseActionComboBox->currentIndex();
-    int previewDefault   = ui.previewDefaultActionComboBox->currentIndex();
-
-    ui.retranslateUi(this);
-
-    // Restoring comboboxes
-    ui.namingComboBox->setCurrentIndex(naming);
-    ui.formatComboBox->setCurrentIndex(format);
-    ui.previewPositionComboBox->setCurrentIndex(previewPosition);
-    ui.previewAutocloseActionComboBox->setCurrentIndex(previewAutoclose);
-    ui.previewDefaultActionComboBox->setCurrentIndex(previewDefault);
-
-    updatePreview();
-    resize(minimumSizeHint());
-  }
-  else if (event->type() == QEvent::Close || event->type() == QEvent::Hide) {
+  if (event->type() == QEvent::Close || event->type() == QEvent::Hide) {
     settings()->setValue("geometry/optionsDialog", saveGeometry());
 
     if (!settings()->contains("file/format")) {
@@ -476,11 +431,7 @@ void OptionsDialog::dialogButtonClicked(QAbstractButton *button)
     if (msgBox.clickedButton() == dontRestoreButton)
       return;
 
-    QString language = settings()->value("options/language").toString(); // Only maintain language.
-
     settings()->clear();
-    settings()->setValue("options/language", language);
-
     loadSettings();
   }
 }
@@ -548,7 +499,6 @@ void OptionsDialog::init()
 
   connect(ui.buttonBox              , SIGNAL(clicked(QAbstractButton*)), this    , SLOT(dialogButtonClicked(QAbstractButton*)));
   connect(ui.buttonBox              , SIGNAL(accepted())               , this    , SLOT(accepted()));
-  connect(ui.buttonBox              , SIGNAL(rejected())               , this    , SLOT(rejected()));
   connect(ui.namingOptionsButton    , SIGNAL(clicked())                , this    , SLOT(namingOptions()));
 
   connect(ui.prefixLineEdit         , SIGNAL(textEdited(QString))      , this    , SLOT(updatePreview()));
@@ -580,25 +530,9 @@ void OptionsDialog::init()
   connect(ui.uploadCheckBox      , SIGNAL(toggled(bool)), ui.previewDefaultActionComboBox, SLOT(setDisabled(bool)));
   connect(ui.directoryCheckBox   , SIGNAL(toggled(bool)), ui.directoryHotkeyWidget, SLOT(setEnabled(bool)));
 
-  connect(ui.moreInformationLabel, SIGNAL(linkActivated(QString))      , this, SLOT(openUrl(QString)));
-
-  connect(ui.languageComboBox    , SIGNAL(currentIndexChanged(QString)), this, SLOT(languageChange(QString)));
-
   connect(ui.mainLabel ,        SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
   connect(ui.licenseAboutLabel, SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
   connect(ui.linksLabel,        SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
-
-  //
-  // Languages
-  //
-
-  QDir languages(":/translations");
-
-  ui.languageComboBox->addItem("English");
-
-  foreach (QString language, languages.entryList()) {
-    ui.languageComboBox->addItem(language);
-  }
 }
 
 void OptionsDialog::namingOptions()

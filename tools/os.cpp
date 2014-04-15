@@ -34,7 +34,6 @@
 #include <QTextEdit>
 #include <QTimeLine>
 #include <QTimer>
-#include <QTranslator>
 #include <QUrl>
 #include <QWidget>
 #include <string>
@@ -298,6 +297,7 @@ QGraphicsEffect* os::shadow(QColor color, int blurRadius, int offset) {
 
 void os::translate(QString language)
 {
+  /*
   static QTranslator *translator = 0;
   static QTranslator *translator_qt = 0;
 
@@ -327,6 +327,7 @@ void os::translate(QString language)
   if (translator_qt->load(language, ":/translations_qt")) {
     qApp->installTranslator(translator_qt);
   }
+  */
 }
 
 QIcon os::icon(QString name)
