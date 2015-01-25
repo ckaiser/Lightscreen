@@ -29,13 +29,10 @@
 
 #include "ui_lightscreenwindow.h"
 
-#ifdef Q_OS_WIN
-  #include "tools/qwin7utils/TaskbarButton.h"
-#endif
-
 class QHttp;
 class Updater;
 class QSettings;
+class QWinTaskbarButton;
 class LightscreenWindow : public QMainWindow
 {
     Q_OBJECT
@@ -112,7 +109,7 @@ private:
   Ui::LightscreenWindowClass ui;
 
 #ifdef Q_OS_WIN
-  QW7::TaskbarButton *mTaskbarButton;
+  QWinTaskbarButton *mTaskbarButton;
 #endif
 };
 

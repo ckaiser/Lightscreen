@@ -41,9 +41,8 @@
 
 #include <QMessageBox>
 
-#include "qtwin.h"
-
 #ifdef Q_OS_WIN
+  #include <QtWin>
   #include <qt_windows.h>
   #include <shlobj.h>
 #elif defined(Q_WS_X11)
@@ -59,11 +58,7 @@
 void os::addToRecentDocuments(QString fileName)
 {
 #ifdef Q_OS_WIN
-  QT_WA ( {
-      SHAddToRecentDocs (0x00000003, QDir::toNativeSeparators(fileName).utf16());
-    } , {
-      SHAddToRecentDocs (0x00000002, QDir::toNativeSeparators(fileName).toLocal8Bit().data());
-  } ); // QT_WA
+  SHAddToRecentDocs (0x00000003, QDir::toNativeSeparators(fileName).utf16());
 #else
   Q_UNUSED(fileName)
 #endif
@@ -73,7 +68,7 @@ QPixmap os::cursor()
 {
 #ifdef Q_OS_WIN
   /*
-  * Taken from: git://github.com/arrai/mumble-record.git � src � mumble � Overlay.cpp
+  * Taken from: git://github.com/arrai/mumble-record.git > src > mumble > Overlay.cpp
   * BSD License.
   */
 
@@ -93,10 +88,10 @@ QPixmap os::cursor()
 
   if (::GetIconInfo(cursor, &info)) {
     if (info.hbmColor) {
-      pixmap = QPixmap::fromWinHBITMAP(info.hbmColor, QPixmap::Alpha);
+      pixmap = QtWin::fromHBITMAP(info.hbmColor, QtWin::HBitmapAlpha);
     }
     else {
-      QBitmap orig(QPixmap::fromWinHBITMAP(info.hbmMask));
+      QBitmap orig(QtWin::fromHBITMAP(info.hbmMask));
       QImage img = orig.toImage();
 
       int h = img.height() / 2;
@@ -176,9 +171,12 @@ QPixmap os::grabWindow(WId winId)
 {
 #ifdef Q_OS_WIN
   RECT rcWindow;
-  GetWindowRect(winId, &rcWindow);
 
-  if (IsZoomed(winId)) {
+  HWND hwndId = (HWND)winId;
+
+  GetWindowRect(hwndId, &rcWindow);
+
+  if (IsZoomed(hwndId)) {
     int margin = GetSystemMetrics(SM_CXSIZEFRAME);
 
     rcWindow.right -= margin;
@@ -210,7 +208,7 @@ QPixmap os::grabWindow(WId winId)
     // Grabbing the window from the Screen DC.
     HDC hdcScreen = GetDC(NULL);
 
-    BringWindowToTop(winId);
+    BringWindowToTop(hwndId);
 
     hdcMem = CreateCompatibleDC(hdcScreen);
     hbmCapture = CreateCompatibleBitmap(hdcScreen, width, height);
@@ -220,7 +218,7 @@ QPixmap os::grabWindow(WId winId)
   }
   else {
     // Grabbing the window by its own DC
-    HDC hdcWindow = GetWindowDC(winId);
+    HDC hdcWindow = GetWindowDC(hwndId);
 
     hdcMem = CreateCompatibleDC(hdcWindow);
     hbmCapture = CreateCompatibleBitmap(hdcWindow, width, height);
@@ -229,10 +227,10 @@ QPixmap os::grabWindow(WId winId)
     BitBlt(hdcMem, 0, 0, width, height, hdcWindow, 0, 0, SRCCOPY);
   }
 
-  ReleaseDC(winId, hdcMem);
+  ReleaseDC(hwndId, hdcMem);
   DeleteDC(hdcMem);
 
-  pixmap = QPixmap::fromWinHBITMAP(hbmCapture);
+  pixmap = QtWin::fromHBITMAP(hbmCapture);
 
   DeleteObject(hbmCapture);
 
@@ -246,8 +244,8 @@ QPixmap os::grabWindow(WId winId)
 void os::setForegroundWindow(QWidget *window)
 {
 #ifdef Q_OS_WIN
-  ShowWindow(window->winId(), SW_RESTORE);
-  SetForegroundWindow(window->winId());
+  ShowWindow((HWND)window->winId(), SW_RESTORE);
+  SetForegroundWindow((HWND)window->winId());
 #else
   Q_UNUSED(window)
 #endif
@@ -319,7 +317,7 @@ void os::translate(QString language)
   translator    = new QTranslator(qApp);
   translator_qt = new QTranslator(qApp);
 
-  if (language == "Espa�ol")
+  if (language == "Español")
     QLocale::setDefault(QLocale::Spanish);
 
   if (translator->load(language, ":/translations")) {

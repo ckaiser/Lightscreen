@@ -47,7 +47,7 @@ protected:
   bool event(QEvent *event);
 
 #ifdef Q_OS_WIN
-  bool winEvent(MSG *message, long *result);
+  bool nativeEvent(const QByteArray &eventType, void *message, long *result);
 #endif
 
 private slots:

@@ -431,14 +431,18 @@ bool OptionsDialog::event(QEvent* event)
 
 #ifdef Q_OS_WIN
 // Qt does not send the print screen key as a regular QKeyPress event, so we must use the Windows API
-bool OptionsDialog::winEvent(MSG *message, long *result)
+bool OptionsDialog::nativeEvent(const QByteArray &eventType, void *message, long *result)
 {
-  if ((message->message == WM_KEYUP || message->message == WM_SYSKEYUP)
-      && message->wParam == VK_SNAPSHOT) {
-        qApp->postEvent(qApp->focusWidget(), new QKeyEvent(QEvent::KeyPress, Qt::Key_Print,  qApp->keyboardModifiers()));
+  if (eventType == "windows_generic_MSG") {
+    MSG* m = static_cast<MSG*>(message);
+
+    if ((m->message == WM_KEYUP || m->message == WM_SYSKEYUP)
+        && m->wParam == VK_SNAPSHOT) {
+          qApp->postEvent(qApp->focusWidget(), new QKeyEvent(QEvent::KeyPress, Qt::Key_Print,  qApp->queryKeyboardModifiers()));
+    }
   }
 
-  return QDialog::winEvent(message, result);
+  return QDialog::nativeEvent(eventType, message, result);
 }
 #endif
 

@@ -1,6 +1,5 @@
 HEADERS += $$PWD/globalshortcutmanager.h $$PWD/globalshortcuttrigger.h
 SOURCES += $$PWD/globalshortcutmanager.cpp
-INCLUDEPATH += $$PWD
 DEPENDPATH  += $$PWD
 
 unix:!mac {
@@ -10,5 +9,10 @@ win32: {
 	SOURCES += $$PWD/globalshortcutmanager_win.cpp
 }
 mac: {
-	SOURCES += $$PWD/globalshortcutmanager_mac.cpp
+	*g++*:QMAKE_OBJECTIVE_CFLAGS += -std=gnu99
+	OBJECTIVE_SOURCES += \
+		$$PWD/globalshortcutmanager_mac.mm \
+		$$PWD/NDKeyboardLayout.m
+	HEADERS += \
+		$$PWD/NDKeyboardLayout.h
 }

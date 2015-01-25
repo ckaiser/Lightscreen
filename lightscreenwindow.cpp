@@ -37,10 +37,7 @@
 
 #ifdef Q_OS_WIN
   #include <windows.h>
-  #include "tools/qwin7utils/Taskbar.h"
-  #include "tools/qwin7utils/TaskbarButton.h"
-  #include "tools/qwin7utils/Utils.h"
-  using namespace QW7;
+  #include <QtWinExtras>
 #endif
 
 /*
@@ -89,7 +86,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
 
 #ifdef Q_OS_WIN
   if (QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS7) {
-    mTaskbarButton = new TaskbarButton(this);
+    mTaskbarButton = new QWinTaskbarButton(this);
   }
 
   if (QSysInfo::windowsVersion() < QSysInfo::WV_WINDOWS7) {
@@ -373,7 +370,7 @@ void LightscreenWindow::notify(const Screenshot::Result &result)
 
 #ifdef Q_OS_WIN
     if (mTaskbarButton)
-      mTaskbarButton->SetOverlayIcon(os::icon("yes"), tr("Success!"));
+      mTaskbarButton->setOverlayIcon(os::icon("yes"));
 #endif
 
     setWindowTitle(tr("Success!"));
@@ -382,8 +379,9 @@ void LightscreenWindow::notify(const Screenshot::Result &result)
     mTrayIcon->setIcon(QIcon(":/icons/lightscreen.no"));
     setWindowTitle(tr("Failed!"));
 #ifdef Q_OS_WIN
-    if (mTaskbarButton)
-      mTaskbarButton->SetOverlayIcon(os::icon("no"), tr("Failed!"));
+    if (mTaskbarButton) {
+      mTaskbarButton->setOverlayIcon(os::icon("no"));
+    }
 #endif
     break;
   case Screenshot::Cancel:
@@ -447,7 +445,7 @@ void LightscreenWindow::restoreNotification()
 
 #ifdef Q_OS_WIN
   if (mTaskbarButton)
-    mTaskbarButton->SetOverlayIcon(QIcon(), "");
+    mTaskbarButton->clearOverlayIcon();
 #endif
 
   updateUploadStatus();
@@ -701,8 +699,7 @@ void LightscreenWindow::updateUploadStatus()
 
 #ifdef Q_OS_WIN
     if (mTaskbarButton) {
-      mTaskbarButton->SetProgresValue(0, 0);
-      mTaskbarButton->SetState(STATE_NOPROGRESS);
+      mTaskbarButton->progress()->setVisible(false);
     }
 #endif
   }
@@ -772,8 +769,10 @@ void LightscreenWindow::uploadLast()
 void LightscreenWindow::uploadProgress(qint64 sent, qint64 total)
 {
 #ifdef Q_OS_WIN
-  if (mTaskbarButton)
-    mTaskbarButton->SetProgresValue(sent, total);
+  if (mTaskbarButton) {
+    mTaskbarButton->progress()->setRange(0, total);
+    mTaskbarButton->progress()->setValue(sent);
+  }
 
   if (isVisible() && total > 0) {
     int uploadCount = Uploader::instance()->uploading();
@@ -949,14 +948,6 @@ void LightscreenWindow::createTrayIcon()
 
   mTrayIcon->setContextMenu(trayIconMenu);
 }
-
-#ifdef Q_OS_WIN
-bool LightscreenWindow::winEvent(MSG *message, long *result)
-{
-  Taskbar::GetInstance()->winEvent(message, result);
-  return false;
-}
-#endif
 
 QSettings *LightscreenWindow::settings() const
 {

@@ -35,7 +35,7 @@ ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent)
 {
   QString historyPath;
 
-  if (QFile::exists(qApp->applicationDirPath() + "/config.ini")) {
+  if (QFile::exists(qApp->applicationDirPath() + QDir::separator() + "config.ini")) {
     mSettings     = new QSettings(qApp->applicationDirPath() + QDir::separator() + "config.ini", QSettings::IniFormat);
     mPortableMode = true;
     historyPath   = qApp->applicationDirPath() + QDir::separator();

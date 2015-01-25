@@ -23,10 +23,7 @@
 #include <QDebug>
 
 #ifdef Q_OS_WIN
-  #include "tools/qwin7utils/AppUserModel.h"
-  #include "tools/qwin7utils/JumpList.h"
-  #include "tools/qwin7utils/Taskbar.h"
-  using namespace QW7;
+    #include <QtWinExtras>
 #endif
 
 #include "tools/os.h"
@@ -59,25 +56,28 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_WIN
   // Windows 7 jumplists.
   if (QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS7) {
-    AppUserModel::SetCurrentProcessExplicitAppUserModelID("Lightscreen");
+    QWinJumpList* jumplist = new QWinJumpList(&lightscreen);
 
-    JumpList jumpList("Lightscreen");
+    QWinJumpListCategory* screenshotCategory = new QWinJumpListCategory("Screenshot");
+    screenshotCategory->setVisible(true);
+    screenshotCategory->addLink(os::icon("screen")    , QObject::tr("Screen")       , application.applicationFilePath(), QStringList("--screen"));
+    screenshotCategory->addLink(os::icon("area")      , QObject::tr("Area")         , application.applicationFilePath(), QStringList("--area"));
+    screenshotCategory->addLink(os::icon("window")    , QObject::tr("Active Window"), application.applicationFilePath(), QStringList("--activewindow"));
+    screenshotCategory->addLink(os::icon("pickWindow"), QObject::tr("Pick Window")  , application.applicationFilePath(), QStringList("--activewindow"));
 
-    QList<JumpListItem> tasks;
-    tasks.append(JumpListItem(application.applicationFilePath(), "--screen"      , QObject::tr("Screen")       , "", "", 0, application.applicationDirPath()));
-    tasks.append(JumpListItem(application.applicationFilePath(), "--area"        , QObject::tr("Area")         , "", "", 0, application.applicationDirPath()));
-    tasks.append(JumpListItem(application.applicationFilePath(), "--activewindow", QObject::tr("Active Window"), "", "", 0, application.applicationDirPath()));
-    tasks.append(JumpListItem(application.applicationFilePath(), "--pickwindow"  , QObject::tr("Pick Window")  , "", "", 0, application.applicationDirPath()));
-    tasks.append(JumpListItem());
-    tasks.append(JumpListItem(application.applicationFilePath(), "--uploadlast"  , QObject::tr("Upload Last")  , "", "", 0, application.applicationDirPath()));
-    tasks.append(JumpListItem(application.applicationFilePath(), "--viewhistory" , QObject::tr("View History") , "", "", 0, application.applicationDirPath()));
-    tasks.append(JumpListItem());
-    tasks.append(JumpListItem(application.applicationFilePath(), "--folder"      , QObject::tr("Go to Folder") , "", "", 0, application.applicationDirPath()));
+    QWinJumpListCategory* uploadCategory = new QWinJumpListCategory("Upload");
+    uploadCategory->setVisible(true);
+    uploadCategory->addLink(os::icon("imgur")       , QObject::tr("Upload Last") , application.applicationFilePath(), QStringList("--uploadlast"));
+    uploadCategory->addLink(os::icon("view-history"), QObject::tr("View History"), application.applicationFilePath(), QStringList("--viewhistory"));
 
-    jumpList.Begin();
-    jumpList.AddUserTasks(tasks);
-    jumpList.Commit();
-  }
+    QWinJumpListCategory* folderCategory = new QWinJumpListCategory;
+    folderCategory->setVisible(true);
+    folderCategory->addLink(os::icon("folder"), QObject::tr("Go to Folder") , application.applicationFilePath(), QStringList("--folder"));
+
+    jumplist->addCategory(screenshotCategory);
+    jumplist->addCategory(uploadCategory);
+    jumplist->addCategory(folderCategory);
+}
 #endif
 
   if (application.arguments().size() > 1) {
@@ -93,10 +93,5 @@ int main(int argc, char *argv[])
   QObject::connect(&lightscreen, SIGNAL(finished()), &application, SLOT(quit()));
 
   int result = application.exec();
-
-#ifdef Q_OS_WIN
-  Taskbar::ReleaseInstance();
-#endif
-
   return result;
 }

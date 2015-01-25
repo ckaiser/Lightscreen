@@ -14,26 +14,27 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  */
 
 #include "globalshortcutmanager.h"
 
 #include <QCoreApplication>
+
 #include "globalshortcuttrigger.h"
 
 /**
  * \brief Constructs new GlobalShortcutManager.
  */
 GlobalShortcutManager::GlobalShortcutManager()
-  : QObject(QCoreApplication::instance())
+	: QObject(QCoreApplication::instance())
 {
 }
 
 GlobalShortcutManager::~GlobalShortcutManager()
 {
-  clear();
+	clear();
 }
 
 GlobalShortcutManager* GlobalShortcutManager::instance_ = 0;
@@ -43,9 +44,9 @@ GlobalShortcutManager* GlobalShortcutManager::instance_ = 0;
  */
 GlobalShortcutManager* GlobalShortcutManager::instance()
 {
-  if (!instance_)
-    instance_ = new GlobalShortcutManager();
-  return instance_;
+	if (!instance_)
+		instance_ = new GlobalShortcutManager();
+	return instance_;
 }
 
 /**
@@ -56,17 +57,19 @@ GlobalShortcutManager* GlobalShortcutManager::instance()
  */
 bool GlobalShortcutManager::connect(const QKeySequence& key, QObject* receiver, const char* slot)
 {
-  KeyTrigger* t = instance()->triggers_[key];
-  if (!t) {
+	KeyTrigger* t = instance()->triggers_[key];
+	if (!t) {
     t = new KeyTrigger(key);
 
-    if (!t->isValid())
+    if (!t->isValid()) {
+      t->deleteLater();
       return false;
+    }
 
-    instance()->triggers_.insert(key, t);
-  }
+		instance()->triggers_.insert(key, t);
+	}
 
-  QObject::connect(t, SIGNAL(activated()), receiver, slot);
+  QObject::connect(t, SIGNAL(triggered()), receiver, slot);
   return true;
 }
 
@@ -78,21 +81,21 @@ bool GlobalShortcutManager::connect(const QKeySequence& key, QObject* receiver, 
  */
 void GlobalShortcutManager::disconnect(const QKeySequence& key, QObject* receiver, const char* slot)
 {
-  KeyTrigger* t = instance()->triggers_[key];
-  if (!t) {
-    return;
-  }
+	KeyTrigger* t = instance()->triggers_[key];
+	if (!t) {
+		return;
+	}
 
-  QObject::disconnect(t, SIGNAL(activated()), receiver, slot);
+	QObject::disconnect(t, SIGNAL(triggered()), receiver, slot);
 
-  if (!t->isUsed()) {
-    delete instance()->triggers_.take(key);
-  }
+	if (!t->isUsed()) {
+		delete instance()->triggers_.take(key);
+	}
 }
 
 void GlobalShortcutManager::clear()
 {
-  foreach (KeyTrigger* t, instance()->triggers_)
-    delete t;
-  instance()->triggers_.clear();
+	foreach (KeyTrigger* t, instance()->triggers_)
+		delete t;
+	instance()->triggers_.clear();
 }
