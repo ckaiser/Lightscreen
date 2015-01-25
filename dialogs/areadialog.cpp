@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012  Christian Kaiser
+ * Copyright (C) 2014  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,8 +36,6 @@
 #include <QTimer>
 #include <QToolTip>
 
-#include <QDebug>
-
 AreaDialog::AreaDialog(Screenshot *screenshot) :
   QDialog(0), mScreenshot(screenshot), mMouseDown(false), mMouseMagnifier(false),
   mNewSelection(false),  mHandleSize(10), mMouseOverHandle(0), mIdleTimer(),
@@ -72,12 +70,12 @@ AreaDialog::AreaDialog(Screenshot *screenshot) :
   mAcceptWidget->setWindowOpacity(0.4);
   mAcceptWidget->setStyleSheet("QWidget { background: rgba(255, 255, 255, 200); border: 4px solid #232323; padding: 0; } QPushButton { background: transparent; border: none; height: 50px; padding: 5px; } QPushButton:hover { cursor: hand; }");
 
-  QPushButton *awAcceptButton = new QPushButton(QIcon(":/icon/yes.big"), "", this);
+  QPushButton *awAcceptButton = new QPushButton(QIcon(":/icons/yes.big"), "", this);
   connect(awAcceptButton, SIGNAL(clicked()), this, SLOT(grabRect()));
   awAcceptButton->setCursor(Qt::PointingHandCursor);
   awAcceptButton->setIconSize(QSize(48, 48));
 
-  QPushButton *awRejectButton = new QPushButton(QIcon(":/icon/no.big"), "", this);
+  QPushButton *awRejectButton = new QPushButton(QIcon(":/icons/no.big"), "", this);
   connect(awRejectButton, SIGNAL(clicked()), this, SLOT(cancel()));
   awRejectButton->setCursor(Qt::PointingHandCursor);
   awRejectButton->setIconSize(QSize(48, 48));
@@ -447,10 +445,10 @@ void AreaDialog::paintEvent(QPaintEvent* e)
   QRect pixmapRect = mScreenshot->pixmap().rect();
 
   if (mMouseMagnifier) {
-    drawPosition = QCursor::pos() - QPoint(100, 100);
+    drawPosition = mMousePos - QPoint(100, 100);
 
-    magStart = QCursor::pos() - QPoint(50, 50);
-    magEnd = QCursor::pos() + QPoint(50, 50);
+    magStart = mMousePos - QPoint(50, 50);
+    magEnd = mMousePos + QPoint(50, 50);
 
     newRect = QRect(magStart, magEnd);
   }
@@ -473,7 +471,7 @@ void AreaDialog::paintEvent(QPaintEvent* e)
     else if (mMouseOverHandle == &mBHandle)
       magStart =  QPoint(mSelection.center().x(), mSelection.bottom());
     else if (mMouseOverHandle == 0)
-      magStart = QCursor::pos();
+      magStart = mMousePos;
 
     magEnd = magStart;
     drawPosition = mSelection.bottomRight();

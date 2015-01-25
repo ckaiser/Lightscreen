@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012  Christian Kaiser
+ * Copyright (C) 2014  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,10 +20,18 @@
 #include <QDesktopWidget>
 #include <QLocale>
 
+<<<<<<< HEAD
 #include <QDebug>
 
 #ifdef Q_OS_WIN
     #include <QtWinExtras>
+=======
+#ifdef Q_WS_WIN
+  #include "tools/qwin7utils/AppUserModel.h"
+  #include "tools/qwin7utils/JumpList.h"
+  #include "tools/qwin7utils/Taskbar.h"
+  using namespace QW7;
+>>>>>>> master
 #endif
 
 #include "tools/os.h"
@@ -56,6 +64,7 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_WIN
   // Windows 7 jumplists.
   if (QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS7) {
+<<<<<<< HEAD
     QWinJumpList* jumplist = new QWinJumpList(&lightscreen);
 
     QWinJumpListCategory* screenshotCategory = new QWinJumpListCategory("Screenshot");
@@ -78,6 +87,27 @@ int main(int argc, char *argv[])
     jumplist->addCategory(uploadCategory);
     jumplist->addCategory(folderCategory);
 }
+=======
+    AppUserModel::SetCurrentProcessExplicitAppUserModelID("Lightscreen");
+
+    JumpList jumpList("Lightscreen");
+
+    QList<JumpListItem> tasks;
+    tasks.append(JumpListItem(application.applicationFilePath(), "--screen"      , application.translate("JumpList", "Screen"), "", "", 0, application.applicationDirPath()));
+    tasks.append(JumpListItem(application.applicationFilePath(), "--area"        , application.translate("JumpList", "Area")         , "", "", 0, application.applicationDirPath()));
+    tasks.append(JumpListItem(application.applicationFilePath(), "--activewindow", application.translate("JumpList", "Active Window"), "", "", 0, application.applicationDirPath()));
+    tasks.append(JumpListItem(application.applicationFilePath(), "--pickwindow"  , application.translate("JumpList", "Pick Window")  , "", "", 0, application.applicationDirPath()));
+    tasks.append(JumpListItem());
+    tasks.append(JumpListItem(application.applicationFilePath(), "--uploadlast"  , application.translate("JumpList", "Upload Last")  , "", "", 0, application.applicationDirPath()));
+    tasks.append(JumpListItem(application.applicationFilePath(), "--viewhistory" , application.translate("JumpList", "View History") , "", "", 0, application.applicationDirPath()));
+    tasks.append(JumpListItem());
+    tasks.append(JumpListItem(application.applicationFilePath(), "--folder"      , application.translate("JumpList", "Go to Folder") , "", "", 0, application.applicationDirPath()));
+
+    jumpList.Begin();
+    jumpList.AddUserTasks(tasks);
+    jumpList.Commit();
+  }
+>>>>>>> master
 #endif
 
   if (application.arguments().size() > 1) {

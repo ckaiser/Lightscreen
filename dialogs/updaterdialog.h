@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012  Christian Kaiser
+ * Copyright (C) 2014  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ class UpdaterDialog : public QProgressDialog
   Q_OBJECT
 
 public:
-  UpdaterDialog();
+  UpdaterDialog(QWidget* parent = 0);
 
 public slots:
   void updateDone(bool result);

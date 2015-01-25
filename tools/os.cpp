@@ -1,5 +1,5 @@
-/*
- * Copyright (C) 2012  Christian Kaiser
+﻿/*
+ * Copyright (C) 2014  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,10 @@
 #include <QDialog>
 #include <QDir>
 #include <QGraphicsDropShadowEffect>
+#include <QIcon>
 #include <QLibrary>
+#include <QLocale>
+#include <QMessageBox>
 #include <QPixmap>
 #include <QPointer>
 #include <QProcess>
@@ -31,14 +34,9 @@
 #include <QTextEdit>
 #include <QTimeLine>
 #include <QTimer>
-#include <QTranslator>
 #include <QUrl>
 #include <QWidget>
-#include <QIcon>
 #include <string>
-
-#include <QDebug>
-
 #include <QMessageBox>
 
 #ifdef Q_OS_WIN
@@ -298,6 +296,7 @@ QGraphicsEffect* os::shadow(QColor color, int blurRadius, int offset) {
 
 void os::translate(QString language)
 {
+  /*
   static QTranslator *translator = 0;
   static QTranslator *translator_qt = 0;
 
@@ -327,6 +326,7 @@ void os::translate(QString language)
   if (translator_qt->load(language, ":/translations_qt")) {
     qApp->installTranslator(translator_qt);
   }
+  */
 }
 
 QIcon os::icon(QString name)
@@ -346,7 +346,7 @@ QIcon os::icon(QString name)
 }
 
 #ifdef Q_WS_X11
-// Taken from KSnapshot. Oh KDE, what would I do whithout you :D
+// Taken from KSnapshot. Oh KDE, what would I do without you :D
 Window os::findRealWindow(Window w, int depth)
 {
     if( depth > 5 ) {

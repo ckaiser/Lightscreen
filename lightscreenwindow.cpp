@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012  Christian Kaiser
+ * Copyright (C) 2014  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,12 +16,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-#include <QMainWindow>
 #include <QDate>
 #include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QFileInfo>
 #include <QKeyEvent>
+#include <QMainWindow>
 #include <QMenu>
 #include <QMessageBox>
 #include <QPointer>
@@ -32,8 +32,6 @@
 #include <QToolTip>
 #include <QUrl>
 #include <QSound>
-
-#include <QDebug>
 
 #ifdef Q_OS_WIN
   #include <windows.h>
@@ -67,8 +65,6 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   mLastMode(-1),
   mLastScreenshot()
 {
-  os::translate(settings()->value("options/language", "English").toString());
-
   ui.setupUi(this);
 
   ui.screenPushButton->setIcon(os::icon("screen.big"));
@@ -732,7 +728,7 @@ void LightscreenWindow::updaterDone(bool result)
   msgBox.exec();
 
   if (msgBox.clickedButton() == yesButton) {
-    QDesktopServices::openUrl(QUrl("http://lightscreen.sourceforge.net/whatsnew/?from=" + qApp->applicationVersion()));
+    QDesktopServices::openUrl(QUrl("http://lightscreen.com.ar/whatsnew?from=" + qApp->applicationVersion()));
   }
   else if (msgBox.clickedButton() == turnOffButton) {
     settings()->setValue("options/disableUpdater", true);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012  Christian Kaiser
+ * Copyright (C) 2014  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +22,7 @@
 
 #include <QList>
 #include <QPair>
-
-#include <QDebug>
+#include <QSettings>
 
 Uploader* Uploader::mInstance = 0;
 
@@ -90,6 +89,8 @@ void Uploader::upload(const QString &fileName)
   if (fileName.isEmpty()) {
     return;
   }
+
+  mImgur->directUrl = ScreenshotManager::instance()->settings()->value("options/uploadDirectLink", false).toBool();
 
   // Cancel on duplicate
   for (int i = 0; i < mScreenshots.size(); ++i) {

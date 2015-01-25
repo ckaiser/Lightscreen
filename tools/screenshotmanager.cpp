@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012  Christian Kaiser
+ * Copyright (C) 2014  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,14 +22,15 @@
 
 #include <QApplication>
 #include <QDateTime>
-#include <QDebug>
 #include <QStandardPaths>
 #include <QFile>
 #include <QSettings>
 #include <QtSql/QSqlDatabase>
+#include <QtSql/QSqlError>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlRecord>
-#include <QtSql/QSqlError>
+
+#include <QDebug>
 
 ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent)
 {

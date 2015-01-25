@@ -608,7 +608,11 @@ Quality is related to file size and of course to readability and overall quality
             <x>0</x>
             <y>0</y>
             <width>358</width>
+<<<<<<< HEAD
             <height>780</height>
+=======
+            <height>775</height>
+>>>>>>> master
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -730,50 +734,6 @@ Quality is related to file size and of course to readability and overall quality
                    <cstring>messageCheckBox</cstring>
                   </property>
                  </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="languageLayout">
-                <item>
-                 <widget class="QLabel" name="languageLabel">
-                  <property name="text">
-                   <string>&amp;Language:</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>languageComboBox</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QComboBox" name="languageComboBox">
-                  <property name="focusPolicy">
-                   <enum>Qt::NoFocus</enum>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="moreInformationLabel">
-                  <property name="whatsThis">
-                   <string>Click here to go to the Lightscreen homepage to learn more about translations.</string>
-                  </property>
-                  <property name="text">
-                   <string>&lt;a href=&quot;http://lightscreen.sourceforge.net/translation&quot;&gt;More information..&lt;/a&gt;</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="languageSpacer">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                 </spacer>
                 </item>
                </layout>
               </item>
@@ -1098,6 +1058,13 @@ Quality is related to file size and of course to readability and overall quality
                </widget>
               </item>
               <item>
+               <widget class="QCheckBox" name="uploadDirectLinkCheckBox">
+                <property name="text">
+                 <string>Get the direct image link when uploading.</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <layout class="QHBoxLayout" name="horizontalLayout_5">
                 <item>
                  <widget class="QLabel" name="delayLabel">
@@ -1287,8 +1254,7 @@ Created by &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/
        <item>
         <widget class="QLabel" name="licenseAboutLabel">
          <property name="text">
-          <string>Released under the &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.html&quot;&gt;GNU General Public License&lt;/a&gt;.&lt;br&gt;&lt;br&gt;
-Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/about&quot;&gt;Donators and Translators&lt;/a&gt;.</string>
+          <string>Released under the &lt;a href=&quot;http://www.gnu.org/licenses/gpl-2.0.html&quot;&gt;GNU General Public License&lt;/a&gt;.</string>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
@@ -1312,7 +1278,7 @@ Special thanks goes to the &lt;a href=&quot;http://lightscreen.sourceforge.net/a
        <item>
         <widget class="QLabel" name="linksLabel">
          <property name="text">
-          <string>&lt;a href=&quot;https://sourceforge.net/projects/lightscreen/&quot;&gt;Visit Sourceforge project site&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://lightscreen.sourceforge.net/&quot;&gt;Visit Lightscreen home page&lt;/a&gt;</string>
+          <string>&lt;a href=&quot;https://github.com/ckaiser/Lightscreen/&quot;&gt;GitHub page&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://lightscreen.com.ar/&quot;&gt;Lightscreen home page&lt;/a&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>

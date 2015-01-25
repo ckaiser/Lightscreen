@@ -1,49 +1,42 @@
 TEMPLATE = app
 TARGET = lightscreen
-HEADERS += tools/os.h \
-    updater/updater.h \
-    dialogs/areadialog.h \
-    dialogs/optionsdialog.h \
-    widgets/hotkeywidget.h \
-    lightscreenwindow.h \
-    tools/screenshot.h \
-    dialogs/previewdialog.h \
-    tools/screenshotmanager.h \
-    tools/windowpicker.h \
-    tools/uploader.h \
-    tools/qtimgur.h \
-    dialogs/updaterdialog.h \
+HEADERS += dialogs/areadialog.h \
+    dialogs/historydialog.h \
     dialogs/namingdialog.h \
-    dialogs/historydialog.h
-SOURCES += tools/os.cpp \
-    updater/updater.cpp \
-    dialogs/areadialog.cpp \
-    dialogs/optionsdialog.cpp \
-    widgets/hotkeywidget.cpp \
-    main.cpp \
-    lightscreenwindow.cpp \
-    tools/screenshot.cpp \
-    dialogs/previewdialog.cpp \
-    tools/screenshotmanager.cpp \
-    tools/windowpicker.cpp \
-    tools/uploader.cpp \
-    tools/qtimgur.cpp \
-    dialogs/updaterdialog.cpp \
+    dialogs/optionsdialog.h \
+    dialogs/previewdialog.h \
+    dialogs/updaterdialog.h \
+    lightscreenwindow.h \
+    tools/os.h \
+    tools/qtimgur.h \
+    tools/screenshot.h \
+    tools/screenshotmanager.h \
+    tools/uploader.h \
+    tools/windowpicker.h \
+    updater/updater.h \
+    widgets/hotkeywidget.h
+SOURCES += dialogs/areadialog.cpp \
+    dialogs/historydialog.cpp \
     dialogs/namingdialog.cpp \
-    dialogs/historydialog.cpp
-FORMS += dialogs/optionsdialog.ui \
+    dialogs/optionsdialog.cpp \
+    dialogs/previewdialog.cpp \
+    dialogs/updaterdialog.cpp \
+    lightscreenwindow.cpp \
+    main.cpp \
+    tools/os.cpp \
+    tools/qtimgur.cpp \
+    tools/screenshot.cpp \
+    tools/screenshotmanager.cpp \
+    tools/uploader.cpp \
+    tools/windowpicker.cpp \
+    updater/updater.cpp \
+    widgets/hotkeywidget.cpp
+FORMS += dialogs/historydialog.ui \
     dialogs/namingdialog.ui \
-    dialogs/historydialog.ui \
+    dialogs/optionsdialog.ui \
     lightscreenwindow.ui
 RESOURCES += lightscreen.qrc
-TRANSLATIONS += translations/untranslated.ts \
-                translations/spanish.ts \
-                translations/russian.ts \
-                translations/portuguese.ts \
-                translations/polish.ts \
-                translations/japanese.ts \
-                translations/italian.ts \
-                translations/dutch.ts
+
 RC_FILE += lightscreen.rc
 CODECFORSRC = UTF-8
 QT += network core gui xml sql multimedia winextras

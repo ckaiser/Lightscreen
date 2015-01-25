@@ -13,14 +13,11 @@
 #include <QFileSystemWatcher>
 #include <QMenu>
 #include <QMessageBox>
-#include <QSortFilterProxyModel>
-#include <QUrl>
 #include <QSettings>
-
+#include <QSortFilterProxyModel>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlTableModel>
-
-#include <QDebug>
+#include <QUrl>
 
 HistoryDialog::HistoryDialog(QWidget *parent) :
     QDialog(parent),

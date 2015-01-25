@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012  Christian Kaiser
+ * Copyright (C) 2014  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,9 +24,7 @@
 #include <QNetworkRequest>
 #include <QXmlStreamReader>
 
-#include <QDebug>
-
-QtImgur::QtImgur(const QString &APIKey, QObject *parent) : QObject(parent), mAPIKey(APIKey)
+QtImgur::QtImgur(const QString &APIKey, QObject *parent) : QObject(parent), mAPIKey(APIKey), directUrl(false)
 {
   mNetworkManager = new QNetworkAccessManager(this);
 
@@ -124,8 +122,16 @@ void QtImgur::reply(QNetworkReply *reply)
   }
 
   QXmlStreamReader reader(reply->readAll());
+
+  QString url_option = "imgur_page";
+
+  if (directUrl)
+      url_option = "original";
+
   QString url;
   QString deleteHash;
+
+
   bool hasError = false;
 
   while (!reader.atEnd()) {
@@ -140,7 +146,7 @@ void QtImgur::reply(QNetworkReply *reply)
         deleteHash = reader.readElementText();
       }
 
-      if (reader.name() == "imgur_page") {
+      if (reader.name() == url_option) {
         url = reader.readElementText();
       }
     }
