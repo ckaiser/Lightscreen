@@ -608,11 +608,7 @@ Quality is related to file size and of course to readability and overall quality
             <x>0</x>
             <y>0</y>
             <width>358</width>
-<<<<<<< HEAD
             <height>780</height>
-=======
-            <height>775</height>
->>>>>>> master
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
