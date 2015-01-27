@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
   QtSingleApplication application(argc, argv);
   application.setOrganizationName("K");
   application.setApplicationName ("Lightscreen");
-  application.setApplicationVersion("2.0");
+  application.setApplicationVersion("2.1");
   application.setQuitOnLastWindowClosed(false);
 
   if (application.isRunning()) {

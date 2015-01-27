@@ -67,6 +67,12 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
 {
   ui.setupUi(this);
 
+  if (QtWin::isCompositionEnabled()) {
+    setAttribute(Qt::WA_NoSystemBackground);
+    QtWin::enableBlurBehindWindow(this);
+    QtWin::extendFrameIntoClientArea(this, QMargins(-1, -1, -1, -1));
+  }
+
   ui.screenPushButton->setIcon(os::icon("screen.big"));
   ui.areaPushButton->setIcon(os::icon("area.big"));
   ui.windowPushButton->setIcon(os::icon("pickWindow.big"));

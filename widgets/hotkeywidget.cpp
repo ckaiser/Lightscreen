@@ -77,6 +77,10 @@ bool HotkeyWidget::event(QEvent *event)
   if (event->type() == QEvent::LanguageChange) {
     setHotkeyText();
   }
+  else if (event->type() == QEvent::KeyPress) {
+    keyPressEvent(static_cast<QKeyEvent *>(event));
+    return true;
+  }
   else if (event->type() == QEvent::FocusIn) {
     QFocusEvent* focusEvent = static_cast<QFocusEvent*>(event);
 
@@ -97,6 +101,10 @@ bool HotkeyWidget::event(QEvent *event)
 
     releaseKeyboard();
     setHotkeyText(); // Reset the text
+  }
+  else if ((event->type() == QEvent::KeyPress || event->type() == QEvent::ShortcutOverride || event->type() == QEvent::Shortcut) && hasFocus()) {
+      event->accept();
+      return true;
   }
 
   return QPushButton::event(event);

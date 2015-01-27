@@ -392,9 +392,8 @@ bool OptionsDialog::nativeEvent(const QByteArray &eventType, void *message, long
   if (eventType == "windows_generic_MSG") {
     MSG* m = static_cast<MSG*>(message);
 
-    if ((m->message == WM_KEYUP || m->message == WM_SYSKEYUP)
-        && m->wParam == VK_SNAPSHOT) {
-          qApp->postEvent(qApp->focusWidget(), new QKeyEvent(QEvent::KeyPress, Qt::Key_Print,  qApp->queryKeyboardModifiers()));
+    if ((m->message == WM_KEYUP || m->message == WM_SYSKEYUP) && m->wParam == VK_SNAPSHOT) {
+        qApp->postEvent(qApp->focusWidget(), new QKeyEvent(QEvent::KeyPress, Qt::Key_Print,  qApp->queryKeyboardModifiers()));
     }
   }
 
