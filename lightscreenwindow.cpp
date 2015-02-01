@@ -51,7 +51,7 @@
 #include "tools/screenshot.h"
 #include "tools/screenshotmanager.h"
 
-#include "tools/uploader.h"
+#include "tools/uploader/uploader.h"
 
 #include "updater/updater.h"
 

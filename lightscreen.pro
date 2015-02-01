@@ -8,13 +8,19 @@ HEADERS += dialogs/areadialog.h \
     dialogs/updaterdialog.h \
     lightscreenwindow.h \
     tools/os.h \
-    tools/qtimgur.h \
     tools/screenshot.h \
     tools/screenshotmanager.h \
     tools/uploader.h \
     tools/windowpicker.h \
     updater/updater.h \
-    widgets/hotkeywidget.h
+    widgets/hotkeywidget.h \
+    tools/qtsingleapplication/qtlockedfile.h \
+    tools/qtsingleapplication/qtsinglecoreapplication.h \
+    tools/uploader/imageuploader.h \
+    tools/uploader/imguruploader.h \
+    tools/uploader/uploader.h \
+    tools/qtimgur.h \
+    tools/qtwin.h
 SOURCES += dialogs/areadialog.cpp \
     dialogs/historydialog.cpp \
     dialogs/namingdialog.cpp \
@@ -24,13 +30,20 @@ SOURCES += dialogs/areadialog.cpp \
     lightscreenwindow.cpp \
     main.cpp \
     tools/os.cpp \
-    tools/qtimgur.cpp \
     tools/screenshot.cpp \
     tools/screenshotmanager.cpp \
-    tools/uploader.cpp \
     tools/windowpicker.cpp \
     updater/updater.cpp \
-    widgets/hotkeywidget.cpp
+    widgets/hotkeywidget.cpp \
+    tools/qtsingleapplication/qtlockedfile.cpp \
+    tools/qtsingleapplication/qtlockedfile_unix.cpp \
+    tools/qtsingleapplication/qtlockedfile_win.cpp \
+    tools/qtsingleapplication/qtsinglecoreapplication.cpp \
+    tools/uploader/imageuploader.cpp \
+    tools/uploader/imguruploader.cpp \
+    tools/uploader/uploader.cpp \
+    tools/qtimgur.cpp \
+    tools/qtwin.cpp
 FORMS += dialogs/historydialog.ui \
     dialogs/namingdialog.ui \
     dialogs/optionsdialog.ui \

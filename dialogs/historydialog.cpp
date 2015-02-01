@@ -2,7 +2,7 @@
 #include "ui_historydialog.h"
 
 #include "../tools/os.h"
-#include "../tools/uploader.h"
+#include "../tools/uploader/uploader.h"
 #include "../tools/screenshotmanager.h"
 
 #include <QClipboard>
@@ -47,6 +47,7 @@ HistoryDialog::HistoryDialog(QWidget *parent) :
       mModel->fetchMore();
     }
 
+    ui->tableView->setWordWrap(false);
     ui->tableView->setModel(mFilterModel);
 
     ui->tableView->hideColumn(2); // No delete hash.
@@ -55,8 +56,8 @@ HistoryDialog::HistoryDialog(QWidget *parent) :
     ui->tableView->horizontalHeader()->setSectionsClickable(false);
     ui->tableView->horizontalHeader()->setSectionsMovable(false);
 
-    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 
     ui->tableView->verticalHeader()->hide();
 

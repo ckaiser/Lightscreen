@@ -18,7 +18,7 @@
  */
 #include "screenshotmanager.h"
 #include "screenshot.h"
-#include "uploader.h"
+#include "uploader/uploader.h"
 
 #include <QApplication>
 #include <QDateTime>

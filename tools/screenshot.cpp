@@ -25,10 +25,11 @@
 #include <QPixmap>
 #include <QProcess>
 #include <QTextStream>
+#include <QScreen>
 
 #include "windowpicker.h"
 #include "../dialogs/areadialog.h"
-#include "uploader.h"
+#include "uploader/uploader.h"
 #include "screenshot.h"
 #include "screenshotmanager.h"
 
@@ -410,16 +411,22 @@ QString Screenshot::extension() const
 
 void Screenshot::grabDesktop()
 {
-  QRect geometry;
-
   if (mOptions.currentMonitor) {
-    geometry = qApp->desktop()->screenGeometry(QCursor::pos());
+    /*
+     * TODO
+    QRect geometry;
+
+    foreach (QScreen *screen, QGuiApplication::screens()) {
+      geometry.setWidth(geometry.width() + screen->geometry().width());
+      geometry.setHeight(geometry.height() + screen->geometry().height());
+    }
+
+    mPixmap = QApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId());
+  */
   }
   else {
-    geometry = qApp->desktop()->geometry();
+    mPixmap = QApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId());
   }
-
-  mPixmap = QPixmap::grabWindow(qApp->desktop()->winId(), geometry.x(), geometry.y(), geometry.width(), geometry.height());
 
   if (mOptions.cursor && !mPixmap.isNull()) {
     QPainter painter(&mPixmap);
