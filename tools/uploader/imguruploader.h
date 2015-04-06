@@ -11,7 +11,7 @@ class ImgurUploader : public ImageUploader
 Q_OBJECT
 
 public:
-  ImgurUploader(QVariantHash &options);
+  ImgurUploader(QVariantHash &options, QString fileName = "");
 
 public slots:
   void upload(const QString &fileName);
@@ -24,9 +24,6 @@ private slots:
 
 signals:
   void cancelRequest();
-
-private:
-  void uploadAnonymous(const QString &fileName);
 
 };
 

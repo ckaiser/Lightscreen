@@ -63,9 +63,8 @@ void Uploader::upload(const QString &fileName)
   QVariantHash options;
   options["networkManager"].setValue(mNetworkAccessManager);
   options["directUrl"] = ScreenshotManager::instance()->settings()->value("options/uploadDirectLink", false).toBool();
-  options["anonymous"] = true; //TODO: Settings
 
-  ImgurUploader *uploader = new ImgurUploader(options);
+  ImgurUploader *uploader = new ImgurUploader(options, fileName);
 
   connect(uploader, &ImgurUploader::uploaded      , this, &Uploader::uploaded);
   connect(uploader, &ImgurUploader::error         , this, &Uploader::uploaderError);
@@ -73,7 +72,6 @@ void Uploader::upload(const QString &fileName)
 
   connect(this    , SIGNAL(cancelAll()), uploader, SLOT(cancel()));
 
-  uploader->upload(fileName);
   mUploaders.append(uploader);
 }
 
