@@ -2,31 +2,44 @@
 #include <QNetworkAccessManager>
 #include <QtNetwork>
 
-ImgurUploader::ImgurUploader(QVariantHash &options, QString fileName) : ImageUploader(options)
-{
-  upload(fileName);
-}
+ImgurUploader::ImgurUploader(QVariantHash &options) : ImageUploader(options) {}
 
 void ImgurUploader::upload(const QString &fileName)
 {
-  QFile file(fileName);
 
-  if (!file.open(QIODevice::ReadOnly)) {
+  if (mOptions.value("anonymous", true).toBool()) {
+    uploadAnonymous(fileName);
+  }
+  else {
+    //uploadOAuth(fileName);
+  }
+}
+
+void ImgurUploader::uploadAnonymous(const QString &fileName)
+{
+  QFile *file = new QFile(fileName);
+
+  if (!file->open(QIODevice::ReadOnly)) {
     emit error(ImageUploader::FileError, fileName);
+    file->deleteLater();
     return;
   }
 
-  QByteArray data;
-  data.append(QString("key=").toUtf8());
-  data.append(QUrl::toPercentEncoding(mOptions.value("APIKey", "6920a141451d125b3e1357ce0e432409").toString()));
-  data.append(QString("&image=").toUtf8());
-  data.append(QUrl::toPercentEncoding(file.readAll().toBase64()));
-  file.close();
+  QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
-  QNetworkRequest request(QUrl("http://api.imgur.com/2/upload"));
-  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+  QHttpPart imagePart;
+  imagePart.setHeader(QNetworkRequest::ContentTypeHeader, "image/png");
+  imagePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"image\""));
 
-  QNetworkReply *reply = mOptions.value("networkManager").value<QNetworkAccessManager*>()->post(request, data);
+  imagePart.setBodyDevice(file);
+  file->setParent(multiPart);
+  multiPart->append(imagePart);
+
+  QNetworkRequest request(QUrl("https://api.imgur.com/3/upload"));
+  request.setRawHeader("Authorization", "Client-ID 3ebe94c791445c1");
+
+  QNetworkReply *reply = mOptions.value("networkManager").value<QNetworkAccessManager*>()->post(request, multiPart);
+
   reply->setProperty("fileName", fileName);
   this->setProperty("fileName", fileName);
 
@@ -60,15 +73,18 @@ void ImgurUploader::networkError(QNetworkReply::NetworkError code)
 
 void ImgurUploader::finished()
 {
+  qDebug() << "ImgurUploader::finished()";
+
   QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
   QString fileName = reply->property("fileName").toString();
-  reply->deleteLater();
 
   if (reply->error() != QNetworkReply::NoError) {
     if (reply->error() == QNetworkReply::OperationCanceledError) {
       emit error(ImageUploader::CancelError, fileName);
     }
     else {
+      qDebug() << reply->errorString();
+
       emit error(ImageUploader::NetworkError, fileName);
     }
 
@@ -80,42 +96,18 @@ void ImgurUploader::finished()
     return;
   }
 
-  QXmlStreamReader reader(reply->readAll());
+  QJsonObject imgurResponse = QJsonDocument::fromJson(reply->readAll()).object();
 
-  QString url_option = "imgur_page";
+  if (imgurResponse.value("success").toBool() == true) {
+    QJsonObject imageData = imgurResponse.value("data").toObject();
 
-  if (mOptions.value("directUrl", false).toBool())
-      url_option = "original";
-
-  QString url;
-  QString deleteHash;
-
-  bool hasError = false;
-
-  while (!reader.atEnd()) {
-    reader.readNext();
-
-    if (reader.isStartElement()) {
-      if (reader.name() == "error") {
-        hasError = true;
-      }
-
-      if (reader.name() == "deletehash") {
-        deleteHash = reader.readElementText();
-      }
-
-      if (reader.name() == url_option) {
-        url = reader.readElementText();
-      }
-    }
-  }
-
-  if (deleteHash.isEmpty() || url.isEmpty() || hasError) {
-    emit error(ImageUploader::HostError, fileName);
+    emit uploaded(fileName, imageData["link"].toString(), imageData["deletehash"].toString());
   }
   else {
-    emit uploaded(fileName, url, deleteHash);
+    emit error(ImageUploader::HostError, fileName);
   }
+
+  reply->deleteLater();
 }
 
 void ImgurUploader::uploadProgress(qint64 bytesReceived, qint64 bytesTotal)

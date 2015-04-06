@@ -19,7 +19,6 @@ HEADERS += dialogs/areadialog.h \
     tools/uploader/imageuploader.h \
     tools/uploader/imguruploader.h \
     tools/uploader/uploader.h \
-    tools/qtimgur.h \
     tools/qtwin.h
 SOURCES += dialogs/areadialog.cpp \
     dialogs/historydialog.cpp \
@@ -42,7 +41,6 @@ SOURCES += dialogs/areadialog.cpp \
     tools/uploader/imageuploader.cpp \
     tools/uploader/imguruploader.cpp \
     tools/uploader/uploader.cpp \
-    tools/qtimgur.cpp \
     tools/qtwin.cpp
 FORMS += dialogs/historydialog.ui \
     dialogs/namingdialog.ui \
@@ -52,7 +50,7 @@ RESOURCES += lightscreen.qrc
 
 RC_FILE += lightscreen.rc
 CODECFORSRC = UTF-8
-QT += network core gui xml sql multimedia winextras
+QT += network core gui sql multimedia winextras
 
 include($$PWD/tools/globalshortcut/globalshortcut.pri)
 include($$PWD/tools/qtsingleapplication/qtsingleapplication.pri)
