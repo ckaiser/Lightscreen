@@ -84,7 +84,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   setMaximumSize(size());
   setMinimumSize(size());
 
-  setWindowFlags(Qt::Window);
+  setWindowFlags(windowFlags() ^ Qt::WindowMaximizeButtonHint);
 
 #ifdef Q_OS_WIN
   if (QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS7) {
@@ -107,7 +107,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   connect(ui.imgurPushButton, SIGNAL(clicked()), this, SLOT(createUploadMenu()));
 
   // Uploader
-  connect(Uploader::instance(), SIGNAL(progress(qint64, qint64)),        this, SLOT(uploadProgress(qint64, qint64)));
+  connect(Uploader::instance(), SIGNAL(progress(int)),        this, SLOT(uploadProgress(int)));
   connect(Uploader::instance(), SIGNAL(done(QString, QString, QString)), this, SLOT(showUploaderMessage(QString, QString)));
   connect(Uploader::instance(), SIGNAL(error(QString)),                  this, SLOT(showUploaderError(QString)));
 
@@ -768,17 +768,16 @@ void LightscreenWindow::uploadLast()
   updateUploadStatus();
 }
 
-void LightscreenWindow::uploadProgress(qint64 sent, qint64 total)
+void LightscreenWindow::uploadProgress(int progress)
 {
 #ifdef Q_OS_WIN
   if (mTaskbarButton) {
-    mTaskbarButton->progress()->setRange(0, total);
-    mTaskbarButton->progress()->setValue(sent);
+    mTaskbarButton->progress()->setRange(0, 100);
+    mTaskbarButton->progress()->setValue(progress);
   }
 
-  if (isVisible() && total > 0) {
+  if (isVisible() && progress > 0) {
     int uploadCount = Uploader::instance()->uploading();
-    int progress = (sent*100)/total;
 
     if (uploadCount > 1) {
       setWindowTitle(tr("%1% of %2 uploads - Lightscreen").arg(progress).arg(uploadCount));

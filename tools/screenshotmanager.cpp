@@ -34,36 +34,18 @@
 
 ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent)
 {
-  QString historyPath;
-
   if (QFile::exists(qApp->applicationDirPath() + QDir::separator() + "config.ini")) {
     mSettings     = new QSettings(qApp->applicationDirPath() + QDir::separator() + "config.ini", QSettings::IniFormat);
     mPortableMode = true;
-    historyPath   = qApp->applicationDirPath() + QDir::separator();
+    mHistoryPath  = qApp->applicationDirPath() + QDir::separator();
   }
   else {
     mSettings     = new QSettings();
     mPortableMode = false;
-    historyPath   = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator();
+    mHistoryPath  = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator();
   }
 
-  // Creating the SQLite database.
-  QSqlDatabase history = QSqlDatabase::addDatabase("QSQLITE");
-
-  QDir hp(historyPath);
-
-  if (!hp.exists())
-    hp.mkpath(historyPath);
-
-  history.setHostName("localhost");
-  history.setDatabaseName(historyPath + "history.sqlite");
-
-  if (history.open()) {
-    history.exec("CREATE TABLE IF NOT EXISTS history (fileName text, URL text, deleteURL text, time integer)");
-  }
-  else {
-    qCritical() << "Could not open SQLite DB.";
-  }
+  initHistory();
 
   connect(Uploader::instance(), SIGNAL(done(QString, QString, QString)), this, SLOT(uploadDone(QString, QString, QString)));
 }
@@ -71,6 +53,27 @@ ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent)
 ScreenshotManager::~ScreenshotManager()
 {
   delete mSettings;
+}
+
+void ScreenshotManager::initHistory()
+{
+  // Creating the SQLite database.
+  QSqlDatabase history = QSqlDatabase::addDatabase("QSQLITE");
+
+  QDir hp(mHistoryPath);
+
+  if (!hp.exists())
+    hp.mkpath(mHistoryPath);
+
+  history.setHostName("localhost");
+  history.setDatabaseName(mHistoryPath + "history.sqlite");
+
+  if (history.open()) {
+    history.exec("CREATE TABLE IF NOT EXISTS history (fileName text, URL text, deleteURL text, time integer)");
+  }
+  else {
+    qCritical() << "Could not open SQLite DB.";
+  }
 }
 
 int ScreenshotManager::activeCount() const
@@ -142,6 +145,8 @@ void ScreenshotManager::clearHistory()
 {
   QSqlQuery clearQuery("DROP TABLE history");
   clearQuery.exec();
+
+  initHistory();
 }
 
 //

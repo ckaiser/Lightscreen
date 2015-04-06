@@ -83,16 +83,9 @@ HistoryDialog::HistoryDialog(QWidget *parent) :
     ui->clearButton->setEnabled(false);
   }
 
-  ui->uploadProgressBar->setValue  (Uploader::instance()->progressSent());
+  ui->uploadProgressBar->setValue(Uploader::instance()->progress());
 
-  if (Uploader::instance()->progressTotal() == 0) {
-    ui->uploadProgressBar->setMaximum(1);
-  }
-  else {
-    ui->uploadProgressBar->setMaximum(Uploader::instance()->progressTotal());
-  }
-
-  connect(Uploader::instance(), SIGNAL(progress(qint64,qint64)), this, SLOT(uploadProgress(qint64, qint64)));
+  connect(Uploader::instance(), SIGNAL(progress(int)), this, SLOT(uploadProgress(int)));
   connect(Uploader::instance(), SIGNAL(done(QString,QString,QString)), this, SLOT(refresh()));
   connect(ui->uploadButton, SIGNAL(clicked()), this, SLOT(upload()));
   connect(ui->clearButton , SIGNAL(clicked()), this, SLOT(clear()));
@@ -226,12 +219,10 @@ void HistoryDialog::upload()
   ui->uploadButton->setEnabled(false);
 }
 
-void HistoryDialog::uploadProgress(qint64 sent, qint64 total)
+void HistoryDialog::uploadProgress(int progress)
 {
   ui->uploadProgressBar->setEnabled(true);
-
-  ui->uploadProgressBar->setMaximum(total);
-  ui->uploadProgressBar->setValue(sent);
+  ui->uploadProgressBar->setValue(progress);
 }
 
 bool HistoryDialog::eventFilter(QObject *object, QEvent *event)

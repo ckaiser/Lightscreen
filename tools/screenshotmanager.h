@@ -42,6 +42,7 @@ public:
   ~ScreenshotManager();
   static ScreenshotManager *instance();
 
+  void initHistory();
   int activeCount() const;
   bool portableMode();
   void saveHistory(QString fileName, QString url = "", QString deleteHash = "");
@@ -65,6 +66,7 @@ private:
   static ScreenshotManager* mInstance;
   QList<Screenshot*> mScreenshots;
   QSettings *mSettings;
+  QString mHistoryPath;
   bool mPortableMode;
 };
 

@@ -2,9 +2,9 @@
 #include <QNetworkAccessManager>
 #include <QtNetwork>
 
-ImgurUploader::ImgurUploader(QVariantHash &options) : ImageUploader(options)
+ImgurUploader::ImgurUploader(QVariantHash &options, QString fileName) : ImageUploader(options)
 {
-
+  upload(fileName);
 }
 
 void ImgurUploader::upload(const QString &fileName)
@@ -28,8 +28,34 @@ void ImgurUploader::upload(const QString &fileName)
 
   QNetworkReply *reply = mOptions.value("networkManager").value<QNetworkAccessManager*>()->post(request, data);
   reply->setProperty("fileName", fileName);
-//  connect(reply, SIGNAL(uploadProgress(qint64, qint64)), this, SLOT(progress(qint64, qint64)));
+  this->setProperty("fileName", fileName);
+
+  connect(reply, SIGNAL(uploadProgress(qint64, qint64)), this, SLOT(uploadProgress(qint64, qint64)));
+  connect(this , SIGNAL(cancelRequest()), reply, SLOT(abort()));
+  connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(networkError(QNetworkReply::NetworkError)));
   connect(reply, SIGNAL(finished()), this, SLOT(finished()));
+}
+
+void ImgurUploader::cancel()
+{
+  emit cancelRequest();
+  deleteLater();
+}
+
+void ImgurUploader::networkError(QNetworkReply::NetworkError code)
+{
+  QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+  QString fileName = reply->property("fileName").toString();
+  reply->deleteLater();
+
+  switch (code)
+  {
+  case QNetworkReply::OperationCanceledError:
+      emit error(ImageUploader::CancelError, fileName);
+      break;
+  default:
+    emit error(ImageUploader::NetworkError, fileName);
+  }
 }
 
 void ImgurUploader::finished()
@@ -39,8 +65,6 @@ void ImgurUploader::finished()
   reply->deleteLater();
 
   if (reply->error() != QNetworkReply::NoError) {
-    qDebug() << reply->errorString();
-
     if (reply->error() == QNetworkReply::OperationCanceledError) {
       emit error(ImageUploader::CancelError, fileName);
     }
@@ -52,7 +76,6 @@ void ImgurUploader::finished()
   }
 
   if (reply->rawHeader("X-RateLimit-Remaining") == "0") {
-    qDebug() << "Rate limit :(";
     emit error(ImageUploader::HostError, fileName);
     return;
   }
@@ -88,12 +111,18 @@ void ImgurUploader::finished()
   }
 
   if (deleteHash.isEmpty() || url.isEmpty() || hasError) {
-    qDebug() << "ImgurUploader: SOME SORT OF ERROR IN THE IMGUR RESPONSE";
     emit error(ImageUploader::HostError, fileName);
   }
   else {
-    qDebug() << "Uploaded! " << url;
     emit uploaded(fileName, url, deleteHash);
   }
+}
+
+void ImgurUploader::uploadProgress(qint64 bytesReceived, qint64 bytesTotal)
+{
+  float b = (float) bytesReceived/bytesTotal;
+  int p = qRound(b*100);
+  setProgress(p);
+  emit progressChange(p);
 }
 

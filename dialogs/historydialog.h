@@ -29,7 +29,7 @@ private slots:
   void open(QModelIndex index);
   void selectionChanged(QItemSelection selected, QItemSelection deselected);
   void upload();
-  void uploadProgress(qint64 sent, qint64 total);
+  void uploadProgress(int progress);
 
 protected:
   bool eventFilter(QObject *object, QEvent *event);

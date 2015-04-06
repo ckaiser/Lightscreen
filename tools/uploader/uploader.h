@@ -20,9 +20,8 @@
 #define UPLOADER_H
 
 #include <QObject>
-#include <QList>
-#include <QPair>
 #include <QtNetwork>
+#include "imageuploader.h"
 
 class Uploader : public QObject
 {
@@ -32,32 +31,30 @@ public:
   Uploader(QObject *parent = 0);
   static Uploader* instance();
   QString lastUrl() const;
-  QList< QPair<QString, QString> > &screenshots() { return mScreenshots; }
-  qint64 progressSent() const  { return mProgressSent; }
-  qint64 progressTotal() const { return mProgressTotal; }
+  int progress() const;
 
 public slots:
   void cancel();
   //void error(const QString &file, const QtImgur::Error e);
   void upload(const QString &fileName);
   void uploaded(const QString &fileName, const QString &url, const QString &deleteHash);
+  void uploaderError(ImageUploader::Error error, QString fileName);
   int  uploading();
-  void reportProgress(qint64 sent, qint64 total);
+  void progressChange(int p);
 
 signals:
   void done(QString, QString, QString);
   void error(QString);
-  void progress(qint64, qint64);
+  void progress(int);
+  void cancelAll();
 
 private:
   static Uploader* mInstance;
-
-  QList< QPair<QString, QString> > mScreenshots;
   QNetworkAccessManager *mNetworkAccessManager;
 
+  int mProgress;
   QString mLastUrl;
-  qint64 mProgressSent;
-  qint64 mProgressTotal;
+  QList<ImageUploader*> mUploaders;
 };
 
 #endif // UPLOADER_H

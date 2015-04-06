@@ -25,7 +25,7 @@
 
 Uploader* Uploader::mInstance = 0;
 
-Uploader::Uploader(QObject *parent) : QObject(parent), mProgressSent(0), mProgressTotal(0)
+Uploader::Uploader(QObject *parent) : QObject(parent)
 {
   mNetworkAccessManager = new QNetworkAccessManager(this);
 }
@@ -38,6 +38,11 @@ Uploader *Uploader::instance()
   return mInstance;
 }
 
+int Uploader::progress() const
+{
+  return mProgress;
+}
+
 QString Uploader::lastUrl() const
 {
   return mLastUrl;
@@ -45,42 +50,9 @@ QString Uploader::lastUrl() const
 
 void Uploader::cancel()
 {
-  qDebug() << "TODO: Implement";
-  //mNetworkAccessManager->->cancelAll();
+  mUploaders.clear();
+  emit cancelAll();
 }
-/*
-void Uploader::imgurError(const QString &file, const QtImgur::Error e)
-{
-
-  // Removing the screenshot.
-  for (int i = 0; i < mScreenshots.size(); ++i) {
-    if (mScreenshots.at(i).first == file) {
-      mScreenshots.removeAt(i);
-      break;
-    }
-  }
-
-  QString errorString;
-
-  switch (e) {
-    case QtImgur::ErrorFile:
-      errorString = tr("Screenshot file not found.");
-    break;
-    case QtImgur::ErrorNetwork:
-      errorString = tr("Could not reach imgur.com");
-    break;
-    case QtImgur::ErrorCredits:
-      errorString = tr("You have exceeded your upload quota.");
-    break;
-    case QtImgur::ErrorUpload:
-      errorString = tr("Upload failed for %1.").arg(QFileInfo(file).fileName());
-    break;
-  }
-
-  emit done(file, "", "");
-  emit error(errorString);
-}
-*/
 
 void Uploader::upload(const QString &fileName)
 {
@@ -92,50 +64,54 @@ void Uploader::upload(const QString &fileName)
   options["networkManager"].setValue(mNetworkAccessManager);
   options["directUrl"] = ScreenshotManager::instance()->settings()->value("options/uploadDirectLink", false).toBool();
 
-  ImgurUploader *uploader = new ImgurUploader(options);
-  uploader->upload(fileName);
+  ImgurUploader *uploader = new ImgurUploader(options, fileName);
 
-  connect(uploader, SIGNAL(uploaded(QString,QString,QString)), this, SLOT(uploaded(QString,QString,QString)));
+  connect(uploader, &ImgurUploader::uploaded      , this, &Uploader::uploaded);
+  connect(uploader, &ImgurUploader::error         , this, &Uploader::uploaderError);
+  connect(uploader, &ImgurUploader::progressChange, this, &Uploader::progressChange);
 
-  // Cancel on duplicate
-  for (int i = 0; i < mScreenshots.size(); ++i) {
-    if (mScreenshots.at(i).first == fileName) {
-      return;
-    }
-  }
+  connect(this    , SIGNAL(cancelAll()), uploader, SLOT(cancel()));
 
-  QPair<QString, QString> screenshot;
-  screenshot.first  = fileName;
-  screenshot.second = tr("Uploading...");
-
-  mScreenshots.append(screenshot);
+  mUploaders.append(uploader);
 }
 
 void Uploader::uploaded(const QString &file, const QString &url, const QString &deleteHash)
 {
-  // Removing the screenshot.
-  for (int i = 0; i < mScreenshots.size(); ++i) {
-    if (mScreenshots.at(i).first == file) {
-      mScreenshots.removeAt(i);
-      break;
-    }
-  }
-
   mLastUrl = url;
 
+  mUploaders.removeAll(qobject_cast<ImageUploader*>(sender()));
   sender()->deleteLater();
   emit done(file, url, deleteHash);
 }
 
+void Uploader::uploaderError(ImageUploader::Error error, QString fileName)
+{
+  Q_UNUSED(error)
+
+  mUploaders.removeAll(qobject_cast<ImageUploader*>(sender()));
+  sender()->deleteLater();
+  emit done(fileName, "", "");
+}
+
 int Uploader::uploading()
 {
-  return mScreenshots.count();
+  return mUploaders.count();
 }
 
-void Uploader::reportProgress(qint64 sent, qint64 total)
+void Uploader::progressChange(int p)
 {
-  mProgressSent  = sent;
-  mProgressTotal = total;
+  if (mUploaders.size() <= 0) {
+    emit progress(p);
+    return;
+  }
 
-  emit progress(sent, total);
+  int totalProgress = 0;
+
+  for (int i = 0; i < mUploaders.size(); ++i) {
+    totalProgress += mUploaders[i]->progress();
+  }
+
+  mProgress = totalProgress / mUploaders.size();
+  emit progress(mProgress);
 }
+

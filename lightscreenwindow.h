@@ -70,7 +70,7 @@ public slots:
   void upload(const QString &fileName);
   void uploadCancel();
   void uploadLast();
-  void uploadProgress(qint64 sent, qint64 total);
+  void uploadProgress(int progress);
   void uploadMenuShown();
   void windowHotkey();
   void windowPickerHotkey();
