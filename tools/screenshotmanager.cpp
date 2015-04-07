@@ -30,8 +30,6 @@
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlRecord>
 
-#include <QDebug>
-
 ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent)
 {
   if (QFile::exists(qApp->applicationDirPath() + QDir::separator() + "config.ini")) {

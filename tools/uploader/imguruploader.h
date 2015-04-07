@@ -15,18 +15,16 @@ public:
 
 public slots:
   void upload(const QString &fileName);
+  void retry();
   void cancel();
 
 private slots:
   void finished();
   void uploadProgress(qint64 bytesReceived, qint64 bytesTotal);
-  void networkError(QNetworkReply::NetworkError code);
 
 signals:
   void cancelRequest();
-
-private:
-  void uploadAnonymous(const QString &fileName);
+  void needAuthRefresh();
 
 };
 

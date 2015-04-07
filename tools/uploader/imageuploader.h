@@ -22,16 +22,18 @@ public:
 
 public:
   ImageUploader(QVariantHash &options);
+  QVariantHash &options() { return mOptions; }
 
 public slots:
   virtual void upload(const QString &fileName) = 0;
   virtual void cancel() = 0;
+  virtual void retry() = 0;
   int progress() const { return mProgress; }
   void setProgress(int progress) { mProgress = progress; }
 
 signals:
   void uploaded(QString, QString, QString);
-  void error(Error, QString);
+  void error(Error, QString, QString);
   void progressChange(int);
 
 protected:

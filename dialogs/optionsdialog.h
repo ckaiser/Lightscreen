@@ -35,11 +35,15 @@ public:
 public slots:
   void accepted();
   void checkUpdatesNow();
+  void imgurAuthorize();
+  void imgurToken();
   void loadSettings();
   void openUrl(QString url);
   void saveSettings();
   void updatePreview();
   void viewHistory();
+  void imgurRequestAlbumList();
+  void imgurAlbumList();
 
 protected:
   bool event(QEvent *event);

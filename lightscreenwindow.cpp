@@ -649,12 +649,13 @@ void LightscreenWindow::showScreenshotMessage(const Screenshot::Result &result, 
 void LightscreenWindow::showUploaderError(const QString &error)
 {
   mLastMessage = -1;
+  updateUploadStatus();
 
   if (mTrayIcon && !error.isEmpty() && settings()->value("options/message").toBool()) {
     mTrayIcon->showMessage(tr("Upload error"), error);
   }
 
-  updateUploadStatus();
+  notify(Screenshot::Fail);
 }
 
 void LightscreenWindow::showUploaderMessage(QString fileName, QString url)

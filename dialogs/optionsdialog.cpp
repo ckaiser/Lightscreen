@@ -28,6 +28,7 @@
 #include <QSettings>
 #include <QTimer>
 #include <QUrl>
+#include <QInputDialog>
 
 #ifdef Q_OS_WIN
   #include <windows.h>
@@ -39,6 +40,7 @@
 #include "../tools/os.h"
 #include "../tools/screenshot.h"
 #include "../tools/screenshotmanager.h"
+#include "../tools/uploader/uploader.h"
 #include "../updater/updater.h"
 
 OptionsDialog::OptionsDialog(QWidget *parent) :
@@ -98,6 +100,132 @@ void OptionsDialog::checkUpdatesNow()
 {
   Updater updater;
   updater.checkWithFeedback();
+}
+
+void OptionsDialog::imgurAuthorize()
+{ // TODO: Tuck this into Uploader
+  if (ui.imgurAuthButton->text() == tr("Deauthorize"))
+  {
+    ui.imgurAuthUserLabel->setText(tr("<i>none</i>"));
+    ui.imgurAuthButton->setText(tr("Authorize"));
+
+    ui.imgurAlbumComboBox->setEnabled(false);
+    ui.imgurAlbumComboBox->clear();
+    ui.imgurAlbumComboBox->addItem(tr("- None -"));
+
+    settings()->setValue("upload/imgur/access_token", "");
+    settings()->setValue("upload/imgur/refresh_token", "");
+    settings()->setValue("upload/imgur/account_username", "");
+    settings()->setValue("upload/imgur/expires_in", 0);
+    return;
+  }
+
+  openUrl("https://api.imgur.com/oauth2/authorize?client_id=3ebe94c791445c1&response_type=pin"); //TODO: get the client-id from somewhere?
+
+  bool ok;
+  QString pin = QInputDialog::getText(this, tr("Imgur Authorization"),
+                                           tr("PIN:"), QLineEdit::Normal,
+                                           "", &ok);
+  if (ok) {
+    QByteArray parameters;
+    parameters.append(QString("client_id=").toUtf8());
+    parameters.append(QUrl::toPercentEncoding("3ebe94c791445c1"));
+    parameters.append(QString("&client_secret=").toUtf8());
+    parameters.append(QUrl::toPercentEncoding("0546b05d6a80b2092dcea86c57b792c9c9faebf0")); // TODO: TA.png
+    parameters.append(QString("&grant_type=pin").toUtf8());
+    parameters.append(QString("&pin=").toUtf8());
+    parameters.append(QUrl::toPercentEncoding(pin));
+
+    QNetworkRequest request(QUrl("https://api.imgur.com/oauth2/token"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+    QNetworkReply* reply = Uploader::instance()->nam()->post(request, parameters);
+    connect(reply, SIGNAL(finished()), this, SLOT(imgurToken()));
+
+    ui.imgurAuthButton->setText(tr("Authorizing.."));
+    ui.imgurAuthButton->setEnabled(false);
+  }
+}
+
+void OptionsDialog::imgurToken()
+{
+  QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+  ui.imgurAuthButton->setEnabled(true);
+
+  if (reply->error() != QNetworkReply::NoError) {
+    QMessageBox::critical(this, tr("Imgur Authorization Error"), tr("There's been an error authorizing your account with Imgur, please try again."));
+    ui.imgurAuthButton->setText(tr("Authorize"));
+    return;
+  }
+
+  QJsonObject imgurResponse = QJsonDocument::fromJson(reply->readAll()).object();
+
+  settings()->setValue("upload/imgur/access_token"    , imgurResponse.value("access_token").toString());
+  settings()->setValue("upload/imgur/refresh_token"   , imgurResponse.value("refresh_token").toString());
+  settings()->setValue("upload/imgur/account_username", imgurResponse.value("account_username").toString());
+  settings()->setValue("upload/imgur/expires_in"      , imgurResponse.value("expires_in").toInt());
+
+  ui.imgurAuthUserLabel->setText("<b>" + imgurResponse.value("account_username").toString() + "</b>");
+  ui.imgurAuthButton->setText(tr("Deauthorize"));
+
+  imgurRequestAlbumList();
+}
+
+void OptionsDialog::imgurRequestAlbumList() {
+
+  QString username = settings()->value("upload/imgur/account_username").toString();
+
+  if (username.isEmpty()) {
+    return;
+  }
+
+  ui.imgurAlbumComboBox->clear();
+  ui.imgurAlbumComboBox->setEnabled(false);
+  ui.imgurAlbumComboBox->addItem(tr("Loading album data..."));
+
+  QNetworkRequest request(QUrl("https://api.imgur.com/3/account/" + username + "/albums/"));
+  request.setRawHeader("Authorization", QByteArray("Bearer ") + settings()->value("upload/imgur/access_token").toByteArray());
+
+  QNetworkReply* reply = Uploader::instance()->nam()->get(request);
+  connect(reply, SIGNAL(finished()), this, SLOT(imgurAlbumList()));
+}
+
+void OptionsDialog::imgurAlbumList() {
+  QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+
+  if (reply->error() != QNetworkReply::NoError) {
+    if (reply->error() == QNetworkReply::ContentOperationNotPermittedError ||
+        reply->error() == QNetworkReply::AuthenticationRequiredError) {
+      Uploader::instance()->imgurAuthRefresh();
+      connect(Uploader::instance(), &Uploader::imgurAuthRefreshed, this, &OptionsDialog::imgurRequestAlbumList);
+    }
+
+    ui.imgurAlbumComboBox->addItem(tr("Loading failed :("));
+    return;
+  }
+
+  QJsonObject imgurResponse = QJsonDocument::fromJson(reply->readAll()).object();
+
+  if (imgurResponse["success"].toBool() != true || imgurResponse["status"].toInt() != 200)
+    return;
+
+  QJsonArray albumList = imgurResponse["data"].toArray();
+
+  ui.imgurAlbumComboBox->clear();
+  ui.imgurAlbumComboBox->setEnabled(true);
+  ui.imgurAlbumComboBox->addItem(tr("- None -"), "");
+
+  int settingsIndex = 0;
+
+  foreach (const QJsonValue &albumValue, albumList) {
+      QJsonObject album = albumValue.toObject();
+      ui.imgurAlbumComboBox->addItem(album["title"].toString(), album["id"].toString());
+
+      if (album["id"].toString() == settings()->value("upload/imgur/album").toString())
+        settingsIndex = ui.imgurAlbumComboBox->count() - 1;
+  }
+
+  ui.imgurAlbumComboBox->setCurrentIndex(settingsIndex);
 }
 
 void OptionsDialog::loadSettings()
@@ -169,70 +297,87 @@ void OptionsDialog::loadSettings()
     ui.uploadDirectLinkCheckBox->setChecked(settings()->value("uploadDirectLink", false).toBool());
 
 #ifdef Q_OS_WIN
-  if (!QFile::exists(qApp->applicationDirPath() + QDir::separator() + "optipng.exe")) {
-    ui.optiPngCheckBox->setEnabled(false);
-    ui.optiPngLabel->setText("optipng.exe not found");
-  }
+    if (!QFile::exists(qApp->applicationDirPath() + QDir::separator() + "optipng.exe")) {
+      ui.optiPngCheckBox->setEnabled(false);
+      ui.optiPngLabel->setText("optipng.exe not found");
+    }
 #elif defined(Q_WS_X11)
-  if (!QProcess::startDetached("optipng")) {
-    ui.optiPngCheckBox->setChecked(false);
-    ui.optiPngCheckBox->setEnabled(false);
-    ui.optiPngLabel->setText(tr("Install 'OptiPNG'"));
-  }
+    if (!QProcess::startDetached("optipng")) {
+      ui.optiPngCheckBox->setChecked(false);
+      ui.optiPngCheckBox->setEnabled(false);
+      ui.optiPngLabel->setText(tr("Install 'OptiPNG'"));
+    }
 
-  //TODO: Sound cue support on Linux
-  ui.playSoundCheckBox->setVisible(false);
-  ui.playSoundCheckBox->setChecked(false);
+    //TODO: Sound cue support on Linux
+    ui.playSoundCheckBox->setVisible(false);
+    ui.playSoundCheckBox->setChecked(false);
 
-  //TODO: Cursor support on X11
-  ui.cursorCheckBox->setVisible(false);
-  ui.cursorCheckBox->setChecked(false);
+    //TODO: Cursor support on X11
+    ui.cursorCheckBox->setVisible(false);
+    ui.cursorCheckBox->setChecked(false);
 #endif
   settings()->endGroup();
 
   settings()->beginGroup("actions");
+    // This toggle is for the first run
+    ui.screenCheckBox->toggle();
+    ui.areaCheckBox->toggle();
+    ui.windowCheckBox->toggle();
+    ui.windowPickerCheckBox->toggle();
+    ui.openCheckBox->toggle();
+    ui.directoryCheckBox->toggle();
 
-  // This toggle is for the first run
-  ui.screenCheckBox->toggle();
-  ui.areaCheckBox->toggle();
-  ui.windowCheckBox->toggle();
-  ui.windowPickerCheckBox->toggle();
-  ui.openCheckBox->toggle();
-  ui.directoryCheckBox->toggle();
+    settings()->beginGroup("screen");
+      ui.screenCheckBox->setChecked(settings()->value("enabled", true).toBool());
+      ui.screenHotkeyWidget->setHotkey(settings()->value("hotkey", "Print").toString());
+    settings()->endGroup();
 
-  settings()->beginGroup("screen");
-    ui.screenCheckBox->setChecked(settings()->value("enabled", true).toBool());
-    ui.screenHotkeyWidget->setHotkey(settings()->value("hotkey", "Print").toString());
+    settings()->beginGroup("area");
+      ui.areaCheckBox->setChecked(settings()->value("enabled").toBool());
+      ui.areaHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl+Print").toString());
+    settings()->endGroup();
+
+    settings()->beginGroup("window");
+      ui.windowCheckBox->setChecked(settings()->value("enabled").toBool());
+      ui.windowHotkeyWidget->setHotkey(settings()->value("hotkey", "Alt+Print").toString());
+    settings()->endGroup();
+
+    settings()->beginGroup("windowPicker");
+      ui.windowPickerCheckBox->setChecked(settings()->value("enabled").toBool());
+      ui.windowPickerHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl+Alt+Print").toString());
+    settings()->endGroup();
+
+    settings()->beginGroup("open");
+      ui.openCheckBox->setChecked(settings()->value("enabled").toBool());
+      ui.openHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl+PgUp").toString());
+    settings()->endGroup();
+
+    settings()->beginGroup("directory");
+      ui.directoryCheckBox->setChecked(settings()->value("enabled").toBool());
+      ui.directoryHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl+PgDown").toString());
+    settings()->endGroup();
   settings()->endGroup();
 
-  settings()->beginGroup("area");
-    ui.areaCheckBox->setChecked(settings()->value("enabled").toBool());
-    ui.areaHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl+Print").toString());
-  settings()->endGroup();
+  settings()->beginGroup("upload");
+    ui.serviceComboBox->setCurrentIndex(settings()->value("service").toInt());
 
-  settings()->beginGroup("window");
-    ui.windowCheckBox->setChecked(settings()->value("enabled").toBool());
-    ui.windowHotkeyWidget->setHotkey(settings()->value("hotkey", "Alt+Print").toString());
-  settings()->endGroup();
+    settings()->beginGroup("imgur");
+      ui.imgurAuthGroupBox->setChecked(!settings()->value("anonymous", false).toBool());
+      ui.imgurAuthUserLabel->setText(settings()->value("account_username", tr("<i>none</i>")).toString());
 
-  settings()->beginGroup("windowPicker");
-    ui.windowPickerCheckBox->setChecked(settings()->value("enabled").toBool());
-    ui.windowPickerHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl+Alt+Print").toString());
-  settings()->endGroup();
-
-  settings()->beginGroup("open");
-    ui.openCheckBox->setChecked(settings()->value("enabled").toBool());
-    ui.openHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl+PgUp").toString());
-  settings()->endGroup();
-
-  settings()->beginGroup("directory");
-    ui.directoryCheckBox->setChecked(settings()->value("enabled").toBool());
-    ui.directoryHotkeyWidget->setHotkey(settings()->value("hotkey", "Ctrl+PgDown").toString());
-  settings()->endGroup();
-
+      if (settings()->value("account_username").toString().isEmpty()) {
+        ui.imgurAuthUserLabel->setText(tr("<i>none</i>"));
+        ui.imgurAlbumComboBox->setEnabled(false);
+      }
+      else {
+        ui.imgurAuthButton->setText(tr("Deauthorize"));
+        ui.imgurAuthUserLabel->setText("<b>" + ui.imgurAuthUserLabel->text() + "</b>");
+      }
+    settings()->endGroup();
   settings()->endGroup();
 
   QTimer::singleShot(0, this, SLOT(updatePreview()));
+  QTimer::singleShot(1, this, SLOT(imgurRequestAlbumList()));
 
   setEnabled(true);
   setUpdatesEnabled(true);
@@ -259,7 +404,6 @@ void OptionsDialog::saveSettings()
   settings()->endGroup();
 
   settings()->beginGroup("options");
-
     settings()->setValue("startup", ui.startupCheckBox->isChecked());
     settings()->setValue("startupHide", ui.startupHideCheckBox->isChecked());
     settings()->setValue("hide", ui.hideCheckBox->isChecked());
@@ -327,6 +471,16 @@ void OptionsDialog::saveSettings()
     settings()->beginGroup("directory");
       settings()->setValue("enabled", ui.directoryCheckBox->isChecked());
       settings()->setValue("hotkey", ui.directoryHotkeyWidget->hotkey());
+    settings()->endGroup();
+
+  settings()->endGroup();
+
+  settings()->beginGroup("upload");
+    settings()->setValue("service", ui.serviceComboBox->currentIndex());
+
+    settings()->beginGroup("imgur");
+      settings()->setValue("anonymous", !ui.imgurAuthGroupBox->isChecked());
+      settings()->setValue("album", ui.imgurAlbumComboBox->property("currentData").toString()); // TODO
     settings()->endGroup();
 
   settings()->endGroup();
@@ -512,6 +666,7 @@ void OptionsDialog::init()
   connect(ui.browsePushButton       , SIGNAL(clicked())                , this    , SLOT(browse()));
   connect(ui.checkUpdatesPushButton , SIGNAL(clicked())                , this    , SLOT(checkUpdatesNow()));
   connect(ui.historyPushButton      , SIGNAL(clicked())                , this    , SLOT(viewHistory()));
+  connect(ui.imgurAuthButton        , SIGNAL(clicked())                , this    , SLOT(imgurAuthorize()));
 
   connect(ui.screenCheckBox      , SIGNAL(toggled(bool)), ui.screenHotkeyWidget   , SLOT(setEnabled(bool)));
   connect(ui.areaCheckBox        , SIGNAL(toggled(bool)), ui.areaHotkeyWidget     , SLOT(setEnabled(bool)));
