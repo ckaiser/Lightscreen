@@ -46,10 +46,11 @@
 #include "dialogs/previewdialog.h"
 #include "dialogs/historydialog.h"
 
-#include "tools/globalshortcut/globalshortcutmanager.h"
+
 #include "tools/os.h"
 #include "tools/screenshot.h"
 #include "tools/screenshotmanager.h"
+#include "tools/qxtglobalshortcut/qxtglobalshortcut.h"
 
 #include "tools/uploader/uploader.h"
 
@@ -106,6 +107,14 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
 
   connect(ui.imgurPushButton, SIGNAL(clicked()), this, SLOT(createUploadMenu()));
 
+  // Shortcuts
+  connect(&mScreenShortcut      , &QxtGlobalShortcut::activated, this, &LightscreenWindow::screenHotkey);
+  connect(&mAreaShortcut        , &QxtGlobalShortcut::activated, this, &LightscreenWindow::areaHotkey);
+  connect(&mWindowShortcut      , &QxtGlobalShortcut::activated, this, &LightscreenWindow::windowHotkey);
+  connect(&mWindowPickerShortcut, &QxtGlobalShortcut::activated, this, &LightscreenWindow::windowPickerHotkey);
+  connect(&mOpenShortcut        , &QxtGlobalShortcut::activated, this, &LightscreenWindow::show);
+  connect(&mDirectoryShortcut   , &QxtGlobalShortcut::activated, this, &LightscreenWindow::goToFolder);
+
   // Uploader
   connect(Uploader::instance(), SIGNAL(progress(int)),        this, SLOT(uploadProgress(int)));
   connect(Uploader::instance(), SIGNAL(done(QString, QString, QString)), this, SLOT(showUploaderMessage(QString, QString)));
@@ -129,7 +138,7 @@ LightscreenWindow::~LightscreenWindow()
   settings()->setValue("lastScreenshot", mLastScreenshot);
   settings()->sync();
 
-  GlobalShortcutManager::instance()->clear();
+  //GlobalShortcutManager::instance()->clear();
   delete mTrayIcon;
 }
 
@@ -143,9 +152,10 @@ void LightscreenWindow::action(int mode)
   }
 }
 
+
 void LightscreenWindow::areaHotkey()
 {
-    screenshotAction(2);
+  screenshotAction(2);
 }
 
 void LightscreenWindow::checkForUpdates()
@@ -548,6 +558,11 @@ void LightscreenWindow::screenshotActionTriggered(QAction* action)
   screenshotAction(action->data().toInt());
 }
 
+void LightscreenWindow::screenHotkey()
+{
+  screenshotAction(0);
+}
+
 void LightscreenWindow::showHotkeyError(const QStringList &hotkeys)
 {
    static bool dontShow = false;
@@ -608,7 +623,7 @@ void LightscreenWindow::showHistoryDialog()
 
 void LightscreenWindow::showOptions()
 {
-  GlobalShortcutManager::clear();
+  //GlobalShortcutManager::clear();
 
   QPointer<OptionsDialog> optionsDialog = new OptionsDialog(this);
 
@@ -830,6 +845,14 @@ void LightscreenWindow::applySettings()
 
 void LightscreenWindow::connectHotkeys()
 {
+  bool screen = mScreenShortcut.setShortcut(settings()->value("actions/screen/hotkey").value<QKeySequence>());
+  mScreenShortcut.setEnabled(settings()->value("actions/screen/enabled").toBool());
+
+  bool area = mAreaShortcut.setShortcut(settings()->value("actions/area/hotkey").value<QKeySequence>());
+  mAreaShortcut.setEnabled(settings()->value("actions/area/enabled").toBool());
+
+/*
+
   // Set to true because if the hotkey is disabled it will show an error.
   bool screen = true, area = true, window = true, windowPicker = true, open = true, directory = true;
 
@@ -856,14 +879,15 @@ void LightscreenWindow::connectHotkeys()
   if (settings()->value("actions/directory/enabled").toBool())
     directory = GlobalShortcutManager::instance()->connect(settings()->value(
         "actions/directory/hotkey").value<QKeySequence> (), this, SLOT(goToFolder()));
+*/
 
   QStringList failed;
   if (!screen)       failed << "screen";
   if (!area)         failed << "area";
-  if (!window)       failed << "window";
+  /*if (!window)       failed << "window";
   if (!windowPicker) failed << "window picker";
   if (!open)         failed << "open";
-  if (!directory)    failed << "directory";
+  if (!directory)    failed << "directory";*/
 
   if (!failed.isEmpty())
     showHotkeyError(failed);

@@ -25,6 +25,8 @@
 
 #include "updater/updater.h"
 #include "tools/screenshot.h"
+#include "tools/qxtglobalshortcut/qxtglobalshortcut.h"
+
 #include "dialogs/previewdialog.h"
 
 #include "ui_lightscreenwindow.h"
@@ -58,6 +60,7 @@ public slots:
   void restoreNotification();
   void screenshotAction(int mode = 0);
   void screenshotActionTriggered(QAction* action);
+  void screenHotkey();
   void showHotkeyError(const QStringList &hotkeys);
   void showHistoryDialog();
   void showOptions();
@@ -107,6 +110,13 @@ private:
   QPointer<PreviewDialog> mPreviewDialog;
   QPointer<Updater> mUpdater;
   Ui::LightscreenWindowClass ui;
+
+  QxtGlobalShortcut mScreenShortcut;
+  QxtGlobalShortcut mAreaShortcut;
+  QxtGlobalShortcut mWindowShortcut;
+  QxtGlobalShortcut mWindowPickerShortcut;
+  QxtGlobalShortcut mOpenShortcut;
+  QxtGlobalShortcut mDirectoryShortcut;
 
 #ifdef Q_OS_WIN
   QWinTaskbarButton *mTaskbarButton;

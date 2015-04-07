@@ -52,7 +52,7 @@ RC_FILE += lightscreen.rc
 CODECFORSRC = UTF-8
 QT += network core gui sql multimedia winextras
 
-include($$PWD/tools/globalshortcut/globalshortcut.pri)
+include($$PWD/tools/qxtglobalshortcut/qxtglobalshortcut.pri)
 include($$PWD/tools/qtsingleapplication/qtsingleapplication.pri)
 
 windows{
