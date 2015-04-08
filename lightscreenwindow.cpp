@@ -137,8 +137,6 @@ LightscreenWindow::~LightscreenWindow()
 {
   settings()->setValue("lastScreenshot", mLastScreenshot);
   settings()->sync();
-
-  //GlobalShortcutManager::instance()->clear();
   delete mTrayIcon;
 }
 
@@ -623,7 +621,12 @@ void LightscreenWindow::showHistoryDialog()
 
 void LightscreenWindow::showOptions()
 {
-  //GlobalShortcutManager::clear();
+  mScreenShortcut.setEnabled(false);
+  mAreaShortcut.setEnabled(false);
+  mWindowShortcut.setEnabled(false);
+  mWindowPickerShortcut.setEnabled(false);
+  mOpenShortcut.setEnabled(false);
+  mDirectoryShortcut.setEnabled(false);
 
   QPointer<OptionsDialog> optionsDialog = new OptionsDialog(this);
 
@@ -851,43 +854,25 @@ void LightscreenWindow::connectHotkeys()
   bool area = mAreaShortcut.setShortcut(settings()->value("actions/area/hotkey").value<QKeySequence>());
   mAreaShortcut.setEnabled(settings()->value("actions/area/enabled").toBool());
 
-/*
+  bool window = mWindowShortcut.setShortcut(settings()->value("actions/window/hotkey").value<QKeySequence>());
+  mWindowShortcut.setEnabled(settings()->value("actions/window/enabled").toBool());
 
-  // Set to true because if the hotkey is disabled it will show an error.
-  bool screen = true, area = true, window = true, windowPicker = true, open = true, directory = true;
+  bool windowPicker = mWindowPickerShortcut.setShortcut(settings()->value("actions/windowPicker/hotkey").value<QKeySequence>());
+  mWindowPickerShortcut.setEnabled(settings()->value("actions/windowPicker/enabled").toBool());
 
-  if (settings()->value("actions/screen/enabled").toBool())
-    screen = GlobalShortcutManager::instance()->connect(settings()->value(
-        "actions/screen/hotkey").value<QKeySequence> (), this, SLOT(screenshotAction()));
+  bool open = mOpenShortcut.setShortcut(settings()->value("actions/open/hotkey").value<QKeySequence>());
+  mOpenShortcut.setEnabled(settings()->value("actions/open/enabled").toBool());
 
-  if (settings()->value("actions/area/enabled").toBool())
-    area   = GlobalShortcutManager::instance()->connect(settings()->value(
-        "actions/area/hotkey").value<QKeySequence> (), this, SLOT(areaHotkey()));
-
-  if (settings()->value("actions/window/enabled").toBool())
-    window = GlobalShortcutManager::instance()->connect(settings()->value(
-        "actions/window/hotkey").value<QKeySequence> (), this, SLOT(windowHotkey()));
-
-  if (settings()->value("actions/windowPicker/enabled").toBool())
-    windowPicker = GlobalShortcutManager::instance()->connect(settings()->value(
-        "actions/windowPicker/hotkey").value<QKeySequence> (), this, SLOT(windowPickerHotkey()));
-
-  if (settings()->value("actions/open/enabled").toBool())
-    open   = GlobalShortcutManager::instance()->connect(settings()->value(
-        "actions/open/hotkey").value<QKeySequence> (), this, SLOT(show()));
-
-  if (settings()->value("actions/directory/enabled").toBool())
-    directory = GlobalShortcutManager::instance()->connect(settings()->value(
-        "actions/directory/hotkey").value<QKeySequence> (), this, SLOT(goToFolder()));
-*/
+  bool directory = mOpenShortcut.setShortcut(settings()->value("actions/directory/hotkey").value<QKeySequence>());
+  mDirectoryShortcut.setEnabled(settings()->value("actions/directory/enabled").toBool());
 
   QStringList failed;
   if (!screen)       failed << "screen";
   if (!area)         failed << "area";
-  /*if (!window)       failed << "window";
+  if (!window)       failed << "window";
   if (!windowPicker) failed << "window picker";
   if (!open)         failed << "open";
-  if (!directory)    failed << "directory";*/
+  if (!directory)    failed << "directory";
 
   if (!failed.isEmpty())
     showHotkeyError(failed);

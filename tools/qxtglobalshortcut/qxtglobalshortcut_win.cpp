@@ -31,7 +31,6 @@
 
 #include <qt_windows.h>
 
-
 #if QT_VERSION < QT_VERSION_CHECK(5,0,0)
 bool QxtGlobalShortcutPrivate::eventFilter(void* message)
 {
@@ -43,6 +42,7 @@ bool QxtGlobalShortcutPrivate::nativeEventFilter(const QByteArray & eventType,
     Q_UNUSED(result);
 #endif
     MSG* msg = static_cast<MSG*>(message);
+
     if (msg->message == WM_HOTKEY)
     {
         const quint32 keycode = HIWORD(msg->lParam);
@@ -65,9 +65,6 @@ quint32 QxtGlobalShortcutPrivate::nativeModifiers(Qt::KeyboardModifiers modifier
         native |= MOD_ALT;
     if (modifiers & Qt::MetaModifier)
         native |= MOD_WIN;
-    // TODO: resolve these?
-    //if (modifiers & Qt::KeypadModifier)
-    //if (modifiers & Qt::GroupSwitchModifier)
     return native;
 }
 
@@ -92,7 +89,7 @@ quint32 QxtGlobalShortcutPrivate::nativeKeycode(Qt::Key key)
     case Qt::Key_Pause:
         return VK_PAUSE;
     case Qt::Key_Print:
-        return VK_PRINT;
+        return VK_SNAPSHOT;
     case Qt::Key_Clear:
         return VK_CLEAR;
     case Qt::Key_Home:
@@ -179,9 +176,6 @@ quint32 QxtGlobalShortcutPrivate::nativeKeycode(Qt::Key key)
         return VK_MEDIA_PLAY_PAUSE;
     case Qt::Key_MediaStop:
         return VK_MEDIA_STOP;
-        // couldn't find those in VK_*
-        //case Qt::Key_MediaLast:
-        //case Qt::Key_MediaRecord:
     case Qt::Key_VolumeDown:
         return VK_VOLUME_DOWN;
     case Qt::Key_VolumeUp:
