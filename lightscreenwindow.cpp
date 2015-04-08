@@ -46,7 +46,6 @@
 #include "dialogs/previewdialog.h"
 #include "dialogs/historydialog.h"
 
-
 #include "tools/os.h"
 #include "tools/screenshot.h"
 #include "tools/screenshotmanager.h"
@@ -123,6 +122,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   // Manager
   connect(ScreenshotManager::instance(), SIGNAL(confirm(Screenshot*)),                this, SLOT(preview(Screenshot*)));
   connect(ScreenshotManager::instance(), SIGNAL(windowCleanup(Screenshot::Options&)), this, SLOT(cleanup(Screenshot::Options&)));
+  connect(ScreenshotManager::instance(), SIGNAL(activeCountChange()),                 this, SLOT(updateStatus()));
 
   if (!settings()->contains("file/format")) {
     showOptions();  // There are no options (or the options config is invalid or incomplete)
@@ -218,7 +218,7 @@ void LightscreenWindow::cleanup(Screenshot::Options &options)
 
   }
 
-  updateUploadStatus();
+  updateStatus();
 
   if (options.result != Screenshot::Success)
     return;
@@ -458,7 +458,7 @@ void LightscreenWindow::restoreNotification()
     mTaskbarButton->clearOverlayIcon();
 #endif
 
-  updateUploadStatus();
+  updateStatus();
 }
 
 void LightscreenWindow::screenshotAction(int mode)
@@ -548,6 +548,7 @@ void LightscreenWindow::screenshotAction(int mode)
 
   options.mode = mode;
 
+  setStatus(tr("Processing..."));
   ScreenshotManager::instance()->take(options);
 }
 
@@ -616,7 +617,7 @@ void LightscreenWindow::showHistoryDialog()
   HistoryDialog historyDialog(this);
   historyDialog.exec();
 
-  updateUploadStatus();
+  updateStatus();
 }
 
 void LightscreenWindow::showOptions()
@@ -667,7 +668,7 @@ void LightscreenWindow::showScreenshotMessage(const Screenshot::Result &result, 
 void LightscreenWindow::showUploaderError(const QString &error)
 {
   mLastMessage = -1;
-  updateUploadStatus();
+  updateStatus();
 
   if (mTrayIcon && !error.isEmpty() && settings()->value("options/message").toBool()) {
     mTrayIcon->showMessage(tr("Upload error"), error);
@@ -688,7 +689,7 @@ void LightscreenWindow::showUploaderMessage(QString fileName, QString url)
     mTrayIcon->showMessage(tr("%1 uploaded").arg(screenshot), tr("Click here to go to %1").arg(url));
   }
 
-  updateUploadStatus();
+  updateStatus();
 }
 
 void LightscreenWindow::toggleVisibility(QSystemTrayIcon::ActivationReason reason)
@@ -705,17 +706,23 @@ void LightscreenWindow::toggleVisibility(QSystemTrayIcon::ActivationReason reaso
   }
 }
 
-void LightscreenWindow::updateUploadStatus()
+void LightscreenWindow::updateStatus()
 {
   int uploadCount = Uploader::instance()->uploading();
-  QString statusString;
+  int activeCount = ScreenshotManager::instance()->activeCount();
 
   if (uploadCount > 0) {
-    statusString = tr("%1 uploading - Lightscreen").arg(uploadCount);
+    setStatus(tr("%1 uploading").arg(uploadCount));
     emit uploading(true);
   }
   else {
-    statusString = tr("Lightscreen");
+    if (activeCount > 0) {
+      setStatus(tr("%1 processing").arg(activeCount));
+    }
+    else {
+      setStatus();
+    }
+
     emit uploading(false);
 
 #ifdef Q_OS_WIN
@@ -724,12 +731,6 @@ void LightscreenWindow::updateUploadStatus()
     }
 #endif
   }
-
-  if (mTrayIcon) {
-    mTrayIcon->setToolTip(statusString);
-  }
-
-  setWindowTitle(statusString);
 }
 
 void LightscreenWindow::updaterDone(bool result)
@@ -777,14 +778,14 @@ void LightscreenWindow::uploadCancel()
 
   if (confirm == 0) {
     Uploader::instance()->cancel();
-    updateUploadStatus();
+    updateStatus();
   }
 }
 
 void LightscreenWindow::uploadLast()
 {
   upload(mLastScreenshot);
-  updateUploadStatus();
+  updateStatus();
 }
 
 void LightscreenWindow::uploadProgress(int progress)
@@ -881,7 +882,7 @@ void LightscreenWindow::connectHotkeys()
 void LightscreenWindow::createTrayIcon()
 {
   mTrayIcon = new QSystemTrayIcon(QIcon(":/icons/lightscreen.small"), this);
-  updateUploadStatus();
+  updateStatus();
 
   connect(mTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(toggleVisibility(QSystemTrayIcon::ActivationReason)));
   connect(mTrayIcon, SIGNAL(messageClicked()), this, SLOT(messageClicked()));
@@ -958,6 +959,22 @@ void LightscreenWindow::createTrayIcon()
   trayIconMenu->addAction(quitAction);
 
   mTrayIcon->setContextMenu(trayIconMenu);
+}
+
+void LightscreenWindow::setStatus(QString status)
+{
+  if (status.isEmpty()) {
+    status = tr("Lightscreen");
+  }
+  else {
+    status += tr(" - Lightscreen");
+  }
+
+  if (mTrayIcon) {
+    mTrayIcon->setToolTip(status);
+  }
+
+  setWindowTitle(status);
 }
 
 QSettings *LightscreenWindow::settings() const

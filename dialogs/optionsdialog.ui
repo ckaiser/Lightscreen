@@ -566,146 +566,99 @@ Quality is related to file size and of course to readability and overall quality
       <attribute name="title">
        <string>Upload</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_12">
+      <layout class="QVBoxLayout" name="verticalLayout_11">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Service:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="serviceComboBox">
-           <item>
-            <property name="text">
-             <string>Imgur</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Puu.sh</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Dropbox</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>FTP</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
+        <widget class="QCheckBox" name="uploadCheckBox">
+         <property name="text">
+          <string>Upload all my screenshots automatically.</string>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="QStackedWidget" name="serviceStackedWidget">
-         <property name="currentIndex">
-          <number>0</number>
+        <widget class="QCheckBox" name="uploadDirectLinkCheckBox">
+         <property name="text">
+          <string>Get the direct image link when uploading.</string>
          </property>
-         <widget class="QWidget" name="imgur">
-          <layout class="QVBoxLayout" name="verticalLayout_11">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QGroupBox" name="imgurAuthGroupBox">
-             <property name="title">
-              <string>User Account</string>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-             <property name="checked">
-              <bool>false</bool>
-             </property>
-             <layout class="QFormLayout" name="userFormLayout">
-              <property name="fieldGrowthPolicy">
-               <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-              </property>
-              <item row="0" column="0">
-               <widget class="QLabel" name="imgurUserLabel">
-                <property name="text">
-                 <string>User:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <layout class="QHBoxLayout" name="horizontalLayout_3">
-                <item>
-                 <widget class="QLabel" name="imgurAuthUserLabel">
-                  <property name="text">
-                   <string>&lt;i&gt;none</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="imgurAuthButton">
-                  <property name="text">
-                   <string>Authorize</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="imgurAlbumLabel">
-                <property name="text">
-                 <string>Upload to album:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QComboBox" name="imgurAlbumComboBox">
-                <item>
-                 <property name="text">
-                  <string>- None -</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="imgurHelpLabel">
-             <property name="text">
-              <string>Help text on how Imgur OAuth works goes here</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="page_3"/>
-         <widget class="QWidget" name="page_4"/>
-         <widget class="QWidget" name="page_2"/>
         </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="imgurClipboardCheckBox">
+         <property name="text">
+          <string>After uploading, copy the imgur URL to the clipboard.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="imgurAuthGroupBox">
+         <property name="title">
+          <string>User Account</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <layout class="QFormLayout" name="userFormLayout">
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="imgurUserLabel">
+            <property name="text">
+             <string>User:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="imgurAuthUserLabel">
+              <property name="text">
+               <string>&lt;i&gt;none</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="imgurAuthButton">
+              <property name="text">
+               <string>Authorize</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="imgurAlbumLabel">
+            <property name="text">
+             <string>Upload to album:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="imgurAlbumComboBox">
+            <item>
+             <property name="text">
+              <string>- None -</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -755,7 +708,7 @@ Quality is related to file size and of course to readability and overall quality
             <x>0</x>
             <y>0</y>
             <width>358</width>
-            <height>775</height>
+            <height>706</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -1194,20 +1147,6 @@ Quality is related to file size and of course to readability and overall quality
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="uploadCheckBox">
-                <property name="text">
-                 <string>Upload all my screenshots automatically.</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="uploadDirectLinkCheckBox">
-                <property name="text">
-                 <string>Get the direct image link when uploading.</string>
-                </property>
-               </widget>
-              </item>
-              <item>
                <layout class="QHBoxLayout" name="horizontalLayout_5">
                 <item>
                  <widget class="QLabel" name="delayLabel">
@@ -1278,13 +1217,6 @@ Quality is related to file size and of course to readability and overall quality
                <widget class="QCheckBox" name="clipboardCheckBox">
                 <property name="text">
                  <string>&amp;Copy the screenshot to the clipboard.</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="imgurClipboardCheckBox">
-                <property name="text">
-                 <string>After uploading, copy the imgur URL to the clipboard.</string>
                 </property>
                </widget>
               </item>
@@ -1492,7 +1424,6 @@ Created by &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/
   <tabstop>optiPngCheckBox</tabstop>
   <tabstop>replaceCheckBox</tabstop>
   <tabstop>areaAutocloseCheckBox</tabstop>
-  <tabstop>uploadCheckBox</tabstop>
   <tabstop>delaySpinBox</tabstop>
   <tabstop>historyCheckBox</tabstop>
   <tabstop>historyPushButton</tabstop>
@@ -1547,22 +1478,6 @@ Created by &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/
     <hint type="destinationlabel">
      <x>302</x>
      <y>529</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>serviceComboBox</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>serviceStackedWidget</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>285</x>
-     <y>47</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>195</x>
-     <y>164</y>
     </hint>
    </hints>
   </connection>

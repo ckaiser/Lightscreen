@@ -18,8 +18,7 @@ HEADERS += dialogs/areadialog.h \
     tools/qtsingleapplication/qtsinglecoreapplication.h \
     tools/uploader/imageuploader.h \
     tools/uploader/imguruploader.h \
-    tools/uploader/uploader.h \
-    tools/qtwin.h
+    tools/uploader/uploader.h
 SOURCES += dialogs/areadialog.cpp \
     dialogs/historydialog.cpp \
     dialogs/namingdialog.cpp \
@@ -40,8 +39,7 @@ SOURCES += dialogs/areadialog.cpp \
     tools/qtsingleapplication/qtsinglecoreapplication.cpp \
     tools/uploader/imageuploader.cpp \
     tools/uploader/imguruploader.cpp \
-    tools/uploader/uploader.cpp \
-    tools/qtwin.cpp
+    tools/uploader/uploader.cpp
 FORMS += dialogs/historydialog.ui \
     dialogs/namingdialog.ui \
     dialogs/optionsdialog.ui \

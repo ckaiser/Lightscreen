@@ -58,6 +58,7 @@ public slots:
   void preview(Screenshot* screenshot);
   void quit();
   void restoreNotification();
+  void setStatus(QString status = "");
   void screenshotAction(int mode = 0);
   void screenshotActionTriggered(QAction* action);
   void screenHotkey();
@@ -68,7 +69,7 @@ public slots:
   void showUploaderError(const QString &error);
   void showUploaderMessage(QString fileName, QString url);
   void toggleVisibility(QSystemTrayIcon::ActivationReason reason = QSystemTrayIcon::DoubleClick);
-  void updateUploadStatus();
+  void updateStatus();
   void updaterDone(bool result);
   void upload(const QString &fileName);
   void uploadCancel();

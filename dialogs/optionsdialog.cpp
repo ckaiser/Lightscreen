@@ -359,7 +359,7 @@ void OptionsDialog::loadSettings()
   settings()->endGroup();
 
   settings()->beginGroup("upload");
-    ui.serviceComboBox->setCurrentIndex(settings()->value("service").toInt());
+    //ui.serviceComboBox->setCurrentIndex(settings()->value("service").toInt());
 
     settings()->beginGroup("imgur");
       ui.imgurAuthGroupBox->setChecked(!settings()->value("anonymous", false).toBool());
@@ -476,7 +476,7 @@ void OptionsDialog::saveSettings()
   settings()->endGroup();
 
   settings()->beginGroup("upload");
-    settings()->setValue("service", ui.serviceComboBox->currentIndex());
+    //settings()->setValue("service", ui.serviceComboBox->currentIndex());
 
     settings()->beginGroup("imgur");
       settings()->setValue("anonymous", !ui.imgurAuthGroupBox->isChecked());

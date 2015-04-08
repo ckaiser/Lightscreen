@@ -61,6 +61,7 @@ public slots:
 signals:
   void confirm(Screenshot* screenshot);
   void windowCleanup(Screenshot::Options &options);
+  void activeCountChange();
 
 private:
   static ScreenshotManager* mInstance;

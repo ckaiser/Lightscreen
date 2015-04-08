@@ -165,6 +165,7 @@ void ScreenshotManager::finished()
 {
   Screenshot* screenshot = qobject_cast<Screenshot*>(sender());
   mScreenshots.removeOne(screenshot);
+  emit activeCountChange();
   screenshot->deleteLater();
 }
 
