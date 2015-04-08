@@ -124,9 +124,6 @@ void ScreenshotManager::updateHistory(QString fileName, QString url, QString del
 
     updateQuery.exec();
   }
-  else {
-    saveHistory(fileName, url, deleteHash);
-  }
 }
 
 void ScreenshotManager::removeHistory(QString fileName, qint64 time)

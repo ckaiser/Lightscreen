@@ -83,12 +83,23 @@ HistoryDialog::HistoryDialog(QWidget *parent) :
     ui->clearButton->setEnabled(false);
   }
 
-  ui->uploadProgressBar->setValue(Uploader::instance()->progress());
+  if (Uploader::instance()->progress() > 0) {
+    ui->uploadProgressBar->setValue(Uploader::instance()->progress());
+  }
+  else {
+    ui->uploadProgressWidget->setVisible(false);
+  }
+
+  ui->cancelUploadButton->setIcon(os::icon("no"));
 
   connect(Uploader::instance(), SIGNAL(progress(int)), this, SLOT(uploadProgress(int)));
   connect(Uploader::instance(), SIGNAL(done(QString,QString,QString)), this, SLOT(refresh()));
-  connect(ui->uploadButton, SIGNAL(clicked()), this, SLOT(upload()));
-  connect(ui->clearButton , SIGNAL(clicked()), this, SLOT(clear()));
+
+  connect(ui->uploadButton      , SIGNAL(clicked()), this                    , SLOT(upload()));
+  connect(ui->cancelUploadButton, SIGNAL(clicked()), Uploader::instance()    , SLOT(cancel()));
+  connect(ui->cancelUploadButton, SIGNAL(clicked()), ui->uploadProgressWidget, SLOT(hide()));
+
+  connect(ui->clearButton       , SIGNAL(clicked()), this                , SLOT(clear()));
 }
 
 HistoryDialog::~HistoryDialog()
@@ -132,7 +143,6 @@ void HistoryDialog::contextMenu(QPoint point)
 
   if (mContextIndex.column() == 0) {
     connect(&locationAction, SIGNAL(triggered()), this, SLOT(location()));
-
     contextMenu.addAction(&locationAction);
   }
   else {
@@ -216,12 +226,12 @@ void HistoryDialog::selectionChanged(QItemSelection selected, QItemSelection des
 void HistoryDialog::upload()
 {
   Uploader::instance()->upload(mSelectedScreenshot);
-  ui->uploadButton->setEnabled(false);
+  ui->uploadProgressWidget->setVisible(true);
 }
 
 void HistoryDialog::uploadProgress(int progress)
 {
-  ui->uploadProgressBar->setEnabled(true);
+  ui->uploadProgressWidget->setVisible(true);
   ui->uploadProgressBar->setValue(progress);
 }
 
@@ -271,7 +281,6 @@ bool HistoryDialog::event(QEvent *event)
   {
     ScreenshotManager::instance()->settings()->setValue("geometry/historyDialog", saveGeometry());
   }
-
 
   return QDialog::event(event);
 }

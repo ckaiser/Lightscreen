@@ -56,6 +56,7 @@ QString Uploader::lastUrl() const
 void Uploader::cancel()
 {
   mUploaders.clear();
+  mProgress = 0;
   emit cancelAll();
 }
 

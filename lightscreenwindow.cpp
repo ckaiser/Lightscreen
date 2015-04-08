@@ -548,7 +548,6 @@ void LightscreenWindow::screenshotAction(int mode)
 
   options.mode = mode;
 
-  setStatus(tr("Processing..."));
   ScreenshotManager::instance()->take(options);
 }
 
@@ -716,8 +715,11 @@ void LightscreenWindow::updateStatus()
     emit uploading(true);
   }
   else {
-    if (activeCount > 0) {
+    if (activeCount > 1) {
       setStatus(tr("%1 processing").arg(activeCount));
+    }
+    else if (activeCount == 1) {
+      setStatus(tr("processing"));
     }
     else {
       setStatus();
