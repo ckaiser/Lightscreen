@@ -97,8 +97,11 @@ void Uploader::upload(const QString &fileName)
 void Uploader::uploaded(const QString &file, const QString &url, const QString &deleteHash)
 {
   mLastUrl = url;
-
   mUploaders.removeAll(qobject_cast<ImageUploader*>(sender()));
+
+  if (mUploaders.isEmpty())
+    mProgress = 0;
+
   sender()->deleteLater();
   emit done(file, url, deleteHash);
 }
@@ -163,6 +166,7 @@ void Uploader::uploaderError(ImageUploader::Error code, QString errorString, QSt
 {
   mUploaders.removeAll(qobject_cast<ImageUploader*>(sender()));
   sender()->deleteLater();
+  mProgress = 0;
 
   if (code != ImageUploader::CancelError) {
     if (errorString.isEmpty()) {
@@ -184,6 +188,7 @@ int Uploader::uploading()
 void Uploader::progressChange(int p)
 {
   if (mUploaders.size() <= 0) {
+    mProgress = p;
     emit progress(p);
     return;
   }

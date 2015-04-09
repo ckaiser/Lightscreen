@@ -31,7 +31,6 @@
 
 #include "ui_lightscreenwindow.h"
 
-class QHttp;
 class Updater;
 class QSettings;
 class QWinTaskbarButton;

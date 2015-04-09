@@ -29,6 +29,8 @@
 #include <QTimer>
 #include <QUrl>
 #include <QInputDialog>
+#include <QMenu>
+#include <QAction>
 
 #ifdef Q_OS_WIN
   #include <windows.h>
@@ -102,6 +104,27 @@ void OptionsDialog::checkUpdatesNow()
   updater.checkWithFeedback();
 }
 
+void OptionsDialog::exportSettings()
+{
+  QString exportFileName = QFileDialog::getSaveFileName(this,
+                                                    tr("Export Settings"),
+                                                    QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "config.ini",
+                                                    tr("Lightscreen Settings (*.ini)"));
+
+  if (exportFileName.isEmpty())
+    return;
+
+  if (QFile::exists(exportFileName)) {
+    QFile::remove(exportFileName);
+  }
+
+  QSettings exportedSettings(exportFileName, QSettings::IniFormat);
+
+  foreach(const QString &key, settings()->allKeys()) {
+    exportedSettings.setValue(key, settings()->value(key));
+  }
+}
+
 void OptionsDialog::imgurAuthorize()
 { // TODO: Tuck this into Uploader
   if (ui.imgurAuthButton->text() == tr("Deauthorize"))
@@ -169,6 +192,25 @@ void OptionsDialog::imgurToken()
   ui.imgurAuthButton->setText(tr("Deauthorize"));
 
   imgurRequestAlbumList();
+}
+
+void OptionsDialog::importSettings()
+{
+  QString importFileName = QFileDialog::getOpenFileName(this,
+                                                        tr("Import Settings"),
+                                                        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+                                                        tr("Lightscreen Settings (*.ini)"));
+
+  QSettings importedSettings(importFileName, QSettings::IniFormat);
+
+  saveSettings();
+
+  foreach(const QString &key, importedSettings.allKeys()) {
+    if (settings()->contains(key))
+      settings()->setValue(key, importedSettings.value(key));
+  }
+
+  loadSettings();
 }
 
 void OptionsDialog::imgurRequestAlbumList() {
@@ -573,25 +615,29 @@ void OptionsDialog::browse()
 void OptionsDialog::dialogButtonClicked(QAbstractButton *button)
 {
   if (ui.buttonBox->buttonRole(button) == QDialogButtonBox::ResetRole) {
-    QMessageBox msgBox;
-    msgBox.setWindowTitle(tr("Lightscreen - Restore Default Options"));
-    msgBox.setText(tr("Restoring the default options will cause you to lose all of your current configuration."));
-    msgBox.setIcon(QMessageBox::Warning);
-
-    QPushButton *restoreButton     = msgBox.addButton(tr("Restore"), QMessageBox::ActionRole);
-    QPushButton *dontRestoreButton = msgBox.addButton(tr("Don't Restore"), QMessageBox::ActionRole);
-
-    msgBox.setDefaultButton(dontRestoreButton);
-    msgBox.exec();
-
-    Q_UNUSED(restoreButton)
-
-    if (msgBox.clickedButton() == dontRestoreButton)
-      return;
-
-    settings()->clear();
-    loadSettings();
+    QPushButton *pb = qobject_cast<QPushButton*>(button);
+    pb->showMenu();
   }
+}
+
+void OptionsDialog::restoreDefaults()
+{
+  QMessageBox msgBox;
+  msgBox.setWindowTitle(tr("Lightscreen - Restore Default Options"));
+  msgBox.setText(tr("Restoring the default options will cause you to lose all of your current configuration."));
+  msgBox.setIcon(QMessageBox::Warning);
+
+  msgBox.addButton(tr("Restore"), QMessageBox::ActionRole);
+  QPushButton *dontRestoreButton = msgBox.addButton(tr("Don't Restore"), QMessageBox::ActionRole);
+
+  msgBox.setDefaultButton(dontRestoreButton);
+  msgBox.exec();
+
+  if (msgBox.clickedButton() == dontRestoreButton)
+    return;
+
+  settings()->clear();
+  loadSettings();
 }
 
 void OptionsDialog::flipToggled(bool checked)
@@ -631,7 +677,26 @@ void OptionsDialog::init()
   ui.browsePushButton->setIcon(os::icon("folder"));
   ui.namingOptionsButton->setIcon(os::icon("configure"));
 
-  ui.buttonBox->addButton(new QPushButton(" " + tr("Restore Defaults") + " ", this), QDialogButtonBox::ResetRole);
+  // Export/Import menu .
+  QMenu* optionsMenu = new QMenu(tr("Options"));
+
+  QAction *exportAction = new QAction(tr("&Export.."), optionsMenu);
+  connect(exportAction, SIGNAL(triggered()), this, SLOT(exportSettings()));
+
+  QAction *importAction = new QAction(tr("&Import.."), optionsMenu);
+  connect(importAction, SIGNAL(triggered()), this, SLOT(importSettings()));
+
+  QAction *restoreAction = new QAction(tr("&Restore Defaults"), optionsMenu);
+  connect(restoreAction, SIGNAL(triggered()), this, SLOT(restoreDefaults()));
+
+  optionsMenu->addAction(exportAction);
+  optionsMenu->addAction(importAction);
+  optionsMenu->addSeparator();
+  optionsMenu->addAction(restoreAction);
+
+  QPushButton *optionsButton = new QPushButton(tr("Options"), this);
+  optionsButton->setMenu(optionsMenu);
+  ui.buttonBox->addButton(optionsButton, QDialogButtonBox::ResetRole);
 
   // Set up the autocomplete for the directory.
   QCompleter *completer = new QCompleter(this);

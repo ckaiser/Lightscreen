@@ -60,8 +60,7 @@ int main(int argc, char *argv[])
     screenshotCategory->setVisible(true);
     screenshotCategory->addLink(os::icon("screen")    , QObject::tr("Screen")       , application.applicationFilePath(), QStringList("--screen"));
     screenshotCategory->addLink(os::icon("area")      , QObject::tr("Area")         , application.applicationFilePath(), QStringList("--area"));
-    screenshotCategory->addLink(os::icon("window")    , QObject::tr("Active Window"), application.applicationFilePath(), QStringList("--activewindow"));
-    screenshotCategory->addLink(os::icon("pickWindow"), QObject::tr("Pick Window")  , application.applicationFilePath(), QStringList("--activewindow"));
+    screenshotCategory->addLink(os::icon("pickWindow"), QObject::tr("Pick Window")  , application.applicationFilePath(), QStringList("--pickwindow"));
 
     QWinJumpListCategory* uploadCategory = new QWinJumpListCategory("Upload");
     uploadCategory->setVisible(true);
