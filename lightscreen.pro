@@ -10,7 +10,6 @@ HEADERS += dialogs/areadialog.h \
     tools/os.h \
     tools/screenshot.h \
     tools/screenshotmanager.h \
-    tools/uploader.h \
     tools/windowpicker.h \
     updater/updater.h \
     widgets/hotkeywidget.h \
@@ -61,6 +60,14 @@ windows{
     contains(QMAKE_CC, cl){
         LIBS += gdi32.lib user32.lib ole32.lib shell32.lib shlwapi.lib comctl32.lib
     }
+
+
+    QMAKE_LFLAGS_WINDOWS = /SUBSYSTEM:WINDOWS,5.01
+    QMAKE_LFLAGS_CONSOLE = /SUBSYSTEM:CONSOLE,5.01
+
+    DEFINES += _ATL_XP_TARGETING
+    QMAKE_CFLAGS += /D _USING_V110_SDK71
+    QMAKE_CXXFLAGS += /D _USING_V110_SDK71
 }
 
 unix:LIBS += -lX11

@@ -608,6 +608,9 @@ Quality is related to file size and of course to readability and overall quality
             <property name="text">
              <string>User:</string>
             </property>
+            <property name="buddy">
+             <cstring>imgurAuthButton</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="1">
@@ -633,6 +636,9 @@ Quality is related to file size and of course to readability and overall quality
             <property name="text">
              <string>Upload to album:</string>
             </property>
+            <property name="buddy">
+             <cstring>imgurAlbumComboBox</cstring>
+            </property>
            </widget>
           </item>
           <item row="1" column="1">
@@ -645,6 +651,16 @@ Quality is related to file size and of course to readability and overall quality
            </widget>
           </item>
          </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="imgurHelpLabel">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Note&lt;/span&gt;: Clicking on the &amp;quot;Authorize&amp;quot; button will open the Imgur website, where you will need to log in with the account you wish to use. They will provide an authentication PIN that you must input into Lightscreen.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>

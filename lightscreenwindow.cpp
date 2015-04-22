@@ -67,12 +67,6 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
 {
   ui.setupUi(this);
 
-  if (QtWin::isCompositionEnabled()) {
-    setAttribute(Qt::WA_NoSystemBackground);
-    QtWin::enableBlurBehindWindow(this);
-    QtWin::extendFrameIntoClientArea(this, QMargins(-1, -1, -1, -1));
-  }
-
   ui.screenPushButton->setIcon(os::icon("screen.big"));
   ui.areaPushButton->setIcon(os::icon("area.big"));
   ui.windowPushButton->setIcon(os::icon("pickWindow.big"));
@@ -81,20 +75,26 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   ui.folderPushButton->setIcon(os::icon("folder"));
   ui.imgurPushButton->setIcon(os::icon("imgur"));
 
-  setMaximumSize(size());
-  setMinimumSize(size());
-
-  setWindowFlags(windowFlags() ^ Qt::WindowMaximizeButtonHint);
-
 #ifdef Q_OS_WIN
   if (QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS7) {
     mTaskbarButton = new QWinTaskbarButton(this);
+
+    if (QtWin::isCompositionEnabled()) {
+      setAttribute(Qt::WA_NoSystemBackground);
+      QtWin::enableBlurBehindWindow(this);
+      QtWin::extendFrameIntoClientArea(this, QMargins(-1, -1, -1, -1));
+    }
   }
 
   if (QSysInfo::windowsVersion() < QSysInfo::WV_WINDOWS7) {
     ui.centralWidget->setStyleSheet("QPushButton { padding: 2px; border: 1px solid #acacac; background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #eaeaea, stop:1 #e5e5e5);} QPushButton:hover { border: 1px solid #7eb4ea;	background-color: #e4f0fc; }");
   }
 #endif
+
+  setMaximumSize(size());
+  setMinimumSize(size());
+
+  setWindowFlags(windowFlags() ^ Qt::WindowMaximizeButtonHint);
 
   // Actions
   connect(ui.screenPushButton, SIGNAL(clicked()), this, SLOT(screenshotAction()));

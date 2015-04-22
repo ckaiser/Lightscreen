@@ -119,7 +119,7 @@ private:
   QxtGlobalShortcut mDirectoryShortcut;
 
 #ifdef Q_OS_WIN
-  QWinTaskbarButton *mTaskbarButton;
+  QPointer<QWinTaskbarButton> mTaskbarButton;
 #endif
 };
 
