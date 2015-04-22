@@ -70,7 +70,6 @@ void Uploader::upload(const QString &fileName)
   QSettings *s = ScreenshotManager::instance()->settings();
   options["type"] = "imgur";
   options["networkManager"].setValue(mNetworkAccessManager);
-  options["directUrl"] = s->value("options/uploadDirectLink", false).toBool();
   options["anonymous"] = s->value("upload/imgur/anonymous", true).toBool();
   options["album"]     = s->value("upload/imgur/album", "").toString();
   options["access_token"]  = s->value("upload/imgur/access_token", "").toString();
