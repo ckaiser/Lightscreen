@@ -336,7 +336,6 @@ void OptionsDialog::loadSettings()
     ui.currentMonitorCheckBox->setChecked(settings()->value("currentMonitor", false).toBool());
     ui.replaceCheckBox->setChecked(settings()->value("replace", false).toBool());
     ui.uploadCheckBox->setChecked(settings()->value("uploadAuto", false).toBool());
-    ui.uploadDirectLinkCheckBox->setChecked(settings()->value("uploadDirectLink", false).toBool());
 
 #ifdef Q_OS_WIN
     if (!QFile::exists(qApp->applicationDirPath() + QDir::separator() + "optipng.exe")) {
@@ -479,12 +478,9 @@ void OptionsDialog::saveSettings()
 
     //Upload
     settings()->setValue("uploadAuto", ui.uploadCheckBox->isChecked());
-    settings()->setValue("uploadDirectLink", ui.uploadDirectLinkCheckBox->isChecked());
-
   settings()->endGroup();
 
   settings()->beginGroup("actions");
-
     settings()->beginGroup("screen");
       settings()->setValue("enabled", ui.screenCheckBox->isChecked());
       settings()->setValue("hotkey", ui.screenHotkeyWidget->hotkey());

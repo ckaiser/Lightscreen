@@ -29,7 +29,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="generalTab">
       <attribute name="title">
@@ -575,13 +575,6 @@ Quality is related to file size and of course to readability and overall quality
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="uploadDirectLinkCheckBox">
-         <property name="text">
-          <string>Get the direct image link when uploading.</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QCheckBox" name="imgurClipboardCheckBox">
          <property name="text">
           <string>After uploading, copy the imgur URL to the clipboard.</string>
@@ -592,6 +585,9 @@ Quality is related to file size and of course to readability and overall quality
         <widget class="QGroupBox" name="imgurAuthGroupBox">
          <property name="title">
           <string>User Account</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
          </property>
          <property name="checkable">
           <bool>true</bool>
