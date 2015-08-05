@@ -120,6 +120,8 @@ private:
 
 #ifdef Q_OS_WIN
   QPointer<QWinTaskbarButton> mTaskbarButton;
+#else
+  QPointer<QWidget> mTaskBarButton;
 #endif
 };
 

@@ -105,7 +105,7 @@ void ScreenshotManager::saveHistory(QString fileName, QString url, QString delet
 
 void ScreenshotManager::updateHistory(QString fileName, QString url, QString deleteHash)
 {
-  if (!mSettings->value("/options/history", true).toBool())
+  if (!mSettings->value("/options/history", true).toBool() || url.isEmpty())
     return;
 
   QSqlQuery query;
@@ -113,8 +113,7 @@ void ScreenshotManager::updateHistory(QString fileName, QString url, QString del
   query.addBindValue(fileName);
   query.exec();
 
-  if (query.record().count() > 0 && !url.isEmpty()) {
-    // Makes sure to only update the latest file, in case something weird happened with the files (deleted screenshots, etc). Though that might still happen in some edge cases that I'm too lazy to account for.
+  if (query.record().count() > 0) {
     QSqlQuery updateQuery;
     updateQuery.prepare("UPDATE history SET URL = ?, deleteURL = ?, time = ? WHERE fileName = ?");
     updateQuery.addBindValue(url);
@@ -123,6 +122,9 @@ void ScreenshotManager::updateHistory(QString fileName, QString url, QString del
     updateQuery.addBindValue(fileName);
 
     updateQuery.exec();
+  }
+  else {
+    saveHistory(fileName, url, deleteHash);
   }
 }
 

@@ -47,7 +47,7 @@ RESOURCES += lightscreen.qrc
 
 RC_FILE += lightscreen.rc
 CODECFORSRC = UTF-8
-QT += network core gui sql multimedia winextras
+QT += core gui network sql multimedia winextras
 
 include($$PWD/tools/qxtglobalshortcut/qxtglobalshortcut.pri)
 include($$PWD/tools/qtsingleapplication/qtsingleapplication.pri)

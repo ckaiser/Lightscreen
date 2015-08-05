@@ -38,6 +38,7 @@
 #include <QWidget>
 #include <string>
 #include <QMessageBox>
+#include <QPainter>
 
 #ifdef Q_OS_WIN
   #include <QtWin>
@@ -56,7 +57,16 @@
 void os::addToRecentDocuments(QString fileName)
 {
 #ifdef Q_OS_WIN
-  SHAddToRecentDocs (0x00000003, QDir::toNativeSeparators(fileName).utf16());
+  LPCWSTR szFileName = QDir::toNativeSeparators(fileName).toStdWString().c_str();
+  SHARDAPPIDINFO info;
+  IShellItem* item;
+
+  if (SUCCEEDED(SHCreateItemFromParsingName(szFileName, NULL, IID_PPV_ARGS(&item)))) {
+    info.psi = item;
+    info.pszAppID = L"K.Lightscreen";  // our AppID - see above
+
+    SHAddToRecentDocs (SHARD_APPIDINFO, &info);
+  }
 #else
   Q_UNUSED(fileName)
 #endif
@@ -294,50 +304,12 @@ QGraphicsEffect* os::shadow(QColor color, int blurRadius, int offset) {
   return shadowEffect;
 }
 
-void os::translate(QString language)
+QIcon os::icon(QString name, QColor backgroundColor)
 {
-  /*
-  static QTranslator *translator = 0;
-  static QTranslator *translator_qt = 0;
+  if (!backgroundColor.isValid())
+    backgroundColor = qApp->palette().color(QPalette::Button);
 
-  if ((language.compare("English", Qt::CaseInsensitive) == 0
-      || language.isEmpty()) && translator) {
-    qApp->removeTranslator(translator);
-    qApp->removeTranslator(translator_qt);
-    QLocale::setDefault(QLocale::c());
-    return;
-  }
-
-  if (translator) {
-    delete translator;
-    delete translator_qt;
-  }
-
-  translator    = new QTranslator(qApp);
-  translator_qt = new QTranslator(qApp);
-
-  if (language == "Español")
-    QLocale::setDefault(QLocale::Spanish);
-
-  if (translator->load(language, ":/translations")) {
-    qApp->installTranslator(translator);
-  }
-
-  if (translator_qt->load(language, ":/translations_qt")) {
-    qApp->installTranslator(translator_qt);
-  }
-  */
-}
-
-QIcon os::icon(QString name)
-{
-  static int value = -1;
-
-  if (value < 0) {
-    value = qApp->desktop()->palette().color(QPalette::Button).value();
-  }
-
-  if (value > 125) {
+  if (backgroundColor.value() > 125) {
     return QIcon(":/icons/" + name);
   }
   else {

@@ -63,7 +63,7 @@ namespace os
   void translate(QString language);
 
   // Returns a QIcon for the given icon name (taking into account color schemes and whatnot).
-  QIcon icon(QString name);
+  QIcon icon(QString name, QColor backgroundColor = QColor());
 
   // X11-specific functions for the Window Picker
 #if defined(Q_WS_X11)

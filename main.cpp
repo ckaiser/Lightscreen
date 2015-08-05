@@ -52,28 +52,36 @@ int main(int argc, char *argv[])
   LightscreenWindow lightscreen;
 
 #ifdef Q_OS_WIN
-  // Windows 7 jumplists.
   if (QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS7) {
     QWinJumpList* jumplist = new QWinJumpList(&lightscreen);
 
+    QColor backgroundColor = qApp->palette("QToolTip").color(QPalette::Background);
+
+    if (QSysInfo::windowsVersion() == QSysInfo::WV_WINDOWS10)
+    { // contrast r hard
+      backgroundColor = Qt::black;
+    }
+
     QWinJumpListCategory* screenshotCategory = new QWinJumpListCategory("Screenshot");
     screenshotCategory->setVisible(true);
-    screenshotCategory->addLink(os::icon("screen")    , QObject::tr("Screen")       , application.applicationFilePath(), QStringList("--screen"));
-    screenshotCategory->addLink(os::icon("area")      , QObject::tr("Area")         , application.applicationFilePath(), QStringList("--area"));
-    screenshotCategory->addLink(os::icon("pickWindow"), QObject::tr("Pick Window")  , application.applicationFilePath(), QStringList("--pickwindow"));
+    screenshotCategory->addLink(os::icon("screen", backgroundColor    ), QObject::tr("Screen")       , application.applicationFilePath(), QStringList("--screen"));
+    screenshotCategory->addLink(os::icon("area", backgroundColor      ), QObject::tr("Area")         , application.applicationFilePath(), QStringList("--area"));
+    screenshotCategory->addLink(os::icon("pickWindow", backgroundColor), QObject::tr("Pick Window")  , application.applicationFilePath(), QStringList("--pickwindow"));
 
     QWinJumpListCategory* uploadCategory = new QWinJumpListCategory("Upload");
     uploadCategory->setVisible(true);
-    uploadCategory->addLink(os::icon("imgur")       , QObject::tr("Upload Last") , application.applicationFilePath(), QStringList("--uploadlast"));
-    uploadCategory->addLink(os::icon("view-history"), QObject::tr("View History"), application.applicationFilePath(), QStringList("--viewhistory"));
+    uploadCategory->addLink(os::icon("imgur", backgroundColor       ), QObject::tr("Upload Last")    , application.applicationFilePath(), QStringList("--uploadlast"));
+    uploadCategory->addLink(os::icon("view-history", backgroundColor), QObject::tr("View History")   , application.applicationFilePath(), QStringList("--viewhistory"));
 
-    QWinJumpListCategory* folderCategory = new QWinJumpListCategory;
-    folderCategory->setVisible(true);
-    folderCategory->addLink(os::icon("folder"), QObject::tr("Go to Folder") , application.applicationFilePath(), QStringList("--folder"));
+    QWinJumpListCategory* actionsCategory = new QWinJumpListCategory("Actions");
+    actionsCategory->setVisible(true);
+    actionsCategory->addLink(os::icon("configure", backgroundColor), QObject::tr("Options")          , application.applicationFilePath(), QStringList("--options"));
+    actionsCategory->addLink(os::icon("folder", backgroundColor   ), QObject::tr("Go to Folder")     , application.applicationFilePath(), QStringList("--folder"));
+    actionsCategory->addLink(os::icon("no.big", backgroundColor   ), QObject::tr("Quit Lightscreen") , application.applicationFilePath(), QStringList("--quit"));
 
     jumplist->addCategory(screenshotCategory);
     jumplist->addCategory(uploadCategory);
-    jumplist->addCategory(folderCategory);
+    jumplist->addCategory(actionsCategory);
 }
 #endif
 

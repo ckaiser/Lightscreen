@@ -483,32 +483,32 @@ void OptionsDialog::saveSettings()
   settings()->beginGroup("actions");
     settings()->beginGroup("screen");
       settings()->setValue("enabled", ui.screenCheckBox->isChecked());
-      settings()->setValue("hotkey", ui.screenHotkeyWidget->hotkey());
+      settings()->setValue("hotkey" , ui.screenHotkeyWidget->hotkey());
     settings()->endGroup();
 
     settings()->beginGroup("area");
       settings()->setValue("enabled", ui.areaCheckBox->isChecked());
-      settings()->setValue("hotkey", ui.areaHotkeyWidget->hotkey());
+      settings()->setValue("hotkey" , ui.areaHotkeyWidget->hotkey());
     settings()->endGroup();
 
     settings()->beginGroup("window");
       settings()->setValue("enabled", ui.windowCheckBox->isChecked());
-      settings()->setValue("hotkey", ui.windowHotkeyWidget->hotkey());
+      settings()->setValue("hotkey" , ui.windowHotkeyWidget->hotkey());
     settings()->endGroup();
 
     settings()->beginGroup("windowPicker");
       settings()->setValue("enabled", ui.windowPickerCheckBox->isChecked());
-      settings()->setValue("hotkey", ui.windowPickerHotkeyWidget->hotkey());
+      settings()->setValue("hotkey" , ui.windowPickerHotkeyWidget->hotkey());
     settings()->endGroup();
 
     settings()->beginGroup("open");
       settings()->setValue("enabled", ui.openCheckBox->isChecked());
-      settings()->setValue("hotkey", ui.openHotkeyWidget->hotkey());
+      settings()->setValue("hotkey" , ui.openHotkeyWidget->hotkey());
     settings()->endGroup();
 
     settings()->beginGroup("directory");
       settings()->setValue("enabled", ui.directoryCheckBox->isChecked());
-      settings()->setValue("hotkey", ui.directoryHotkeyWidget->hotkey());
+      settings()->setValue("hotkey" , ui.directoryHotkeyWidget->hotkey());
     settings()->endGroup();
 
   settings()->endGroup();
@@ -517,8 +517,8 @@ void OptionsDialog::saveSettings()
     //settings()->setValue("service", ui.serviceComboBox->currentIndex());
 
     settings()->beginGroup("imgur");
-      settings()->setValue("anonymous", !ui.imgurAuthGroupBox->isChecked());
-      settings()->setValue("album", ui.imgurAlbumComboBox->property("currentData").toString()); // TODO
+      settings()->setValue("anonymous",!ui.imgurAuthGroupBox->isChecked());
+      settings()->setValue("album"    , ui.imgurAlbumComboBox->property("currentData").toString());
     settings()->endGroup();
 
   settings()->endGroup();

@@ -104,8 +104,6 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   connect(ui.optionsPushButton, SIGNAL(clicked()), this, SLOT(showOptions()));
   connect(ui.folderPushButton , SIGNAL(clicked()), this, SLOT(goToFolder()));
 
-  connect(ui.imgurPushButton, SIGNAL(clicked()), this, SLOT(createUploadMenu()));
-
   // Shortcuts
   connect(&mScreenShortcut      , &QxtGlobalShortcut::activated, this, &LightscreenWindow::screenHotkey);
   connect(&mAreaShortcut        , &QxtGlobalShortcut::activated, this, &LightscreenWindow::areaHotkey);
@@ -129,6 +127,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   }
   else {
     QTimer::singleShot(0   , this, SLOT(applySettings()));
+    QTimer::singleShot(0   , this, SLOT(createUploadMenu()));
     QTimer::singleShot(5000, this, SLOT(checkForUpdates()));
   }
 }
@@ -137,7 +136,6 @@ LightscreenWindow::~LightscreenWindow()
 {
   settings()->setValue("lastScreenshot", mLastScreenshot);
   settings()->sync();
-  delete mTrayIcon;
 }
 
 void LightscreenWindow::action(int mode)
@@ -303,7 +301,6 @@ void LightscreenWindow::createUploadMenu()
   connect(imgurMenu, SIGNAL(aboutToShow()), this, SLOT(uploadMenuShown()));
 
   ui.imgurPushButton->setMenu(imgurMenu);
-  ui.imgurPushButton->showMenu();
 }
 
 void LightscreenWindow::goToFolder()
@@ -369,6 +366,10 @@ void LightscreenWindow::messageReceived(const QString &message)
     uploadLast();
   else if (message == "--viewhistory")
     showHistoryDialog();
+  else if (message == "--options")
+    showOptions();
+  else if (message == "--quit")
+    qApp->quit();
 }
 
 void LightscreenWindow::notify(const Screenshot::Result &result)
@@ -378,21 +379,20 @@ void LightscreenWindow::notify(const Screenshot::Result &result)
   case Screenshot::Success:
     mTrayIcon->setIcon(QIcon(":/icons/lightscreen.yes"));
 
-#ifdef Q_OS_WIN
-    if (mTaskbarButton)
+    if (mTaskbarButton) {
       mTaskbarButton->setOverlayIcon(os::icon("yes"));
-#endif
+    }
 
     setWindowTitle(tr("Success!"));
     break;
   case Screenshot::Fail:
     mTrayIcon->setIcon(QIcon(":/icons/lightscreen.no"));
     setWindowTitle(tr("Failed!"));
-#ifdef Q_OS_WIN
+
     if (mTaskbarButton) {
       mTaskbarButton->setOverlayIcon(os::icon("no"));
     }
-#endif
+
     break;
   case Screenshot::Cancel:
     setWindowTitle(tr("Cancelled!"));
@@ -453,10 +453,12 @@ void LightscreenWindow::restoreNotification()
   if (mTrayIcon)
     mTrayIcon->setIcon(QIcon(":/icons/lightscreen.small"));
 
-#ifdef Q_OS_WIN
-  if (mTaskbarButton)
+  if (mTaskbarButton) {
     mTaskbarButton->clearOverlayIcon();
-#endif
+    mTaskbarButton->progress()->setVisible(false);
+    mTaskbarButton->progress()->stop();
+    mTaskbarButton->progress()->reset();
+  }
 
   updateStatus();
 }
@@ -710,28 +712,37 @@ void LightscreenWindow::updateStatus()
   int uploadCount = Uploader::instance()->uploading();
   int activeCount = ScreenshotManager::instance()->activeCount();
 
+  if (mTaskbarButton) {
+    mTaskbarButton->progress()->setPaused(true);
+    mTaskbarButton->progress()->setVisible(true);
+  }
+
   if (uploadCount > 0) {
     setStatus(tr("%1 uploading").arg(uploadCount));
+
+    if (mTaskbarButton) {
+      mTaskbarButton->progress()->setRange(0, 100);
+      mTaskbarButton->progress()->resume();
+    }
+
     emit uploading(true);
   }
   else {
     if (activeCount > 1) {
       setStatus(tr("%1 processing").arg(activeCount));
     }
-    else if (activeCount == 1) {
+    else if (activeCount == 1) {    
       setStatus(tr("processing"));
     }
     else {
       setStatus();
+
+      if (mTaskbarButton) {
+        mTaskbarButton->progress()->hide();
+      }
     }
 
     emit uploading(false);
-
-#ifdef Q_OS_WIN
-    if (mTaskbarButton) {
-      mTaskbarButton->progress()->setVisible(false);
-    }
-#endif
   }
 }
 
@@ -792,9 +803,8 @@ void LightscreenWindow::uploadLast()
 
 void LightscreenWindow::uploadProgress(int progress)
 {
-#ifdef Q_OS_WIN
   if (mTaskbarButton) {
-    mTaskbarButton->progress()->setRange(0, 100);
+    mTaskbarButton->progress()->setVisible(true);
     mTaskbarButton->progress()->setValue(progress);
   }
 
@@ -808,7 +818,6 @@ void LightscreenWindow::uploadProgress(int progress)
       setWindowTitle(tr("%1% - Lightscreen").arg(progress));
     }
   }
-#endif
 }
 
 void LightscreenWindow::uploadMenuShown()
@@ -829,14 +838,14 @@ void LightscreenWindow::windowPickerHotkey()
 
 void LightscreenWindow::applySettings()
 {
-  bool tray = settings()->value("options/tray").toBool();
+  bool tray = settings()->value("options/tray", true).toBool();
 
   if (tray && !mTrayIcon) {
     createTrayIcon();
-    mTrayIcon->show();
+    mTrayIcon->setVisible(true);
   }
   else if (!tray && mTrayIcon) {
-    mTrayIcon->deleteLater();
+    mTrayIcon->setVisible(false);
   }
 
   connectHotkeys();
@@ -987,7 +996,13 @@ QSettings *LightscreenWindow::settings() const
 // Event handling
 bool LightscreenWindow::event(QEvent *event)
 {
-  if (event->type() == QEvent::Hide) {
+  if (event->type() == QEvent::Show)
+  {
+    if (mTaskbarButton) {
+      mTaskbarButton->setWindow(windowHandle());
+    }
+  }
+  else if (event->type() == QEvent::Hide) {
     settings()->setValue("position", pos());
   }
   else if (event->type() == QEvent::Close) {

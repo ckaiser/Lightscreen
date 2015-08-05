@@ -25,7 +25,7 @@
 
 Uploader* Uploader::mInstance = 0;
 
-Uploader::Uploader(QObject *parent) : QObject(parent)
+Uploader::Uploader(QObject *parent) : QObject(parent), mProgress(0)
 {
   mNetworkAccessManager = new QNetworkAccessManager(this);
 }
@@ -70,8 +70,8 @@ void Uploader::upload(const QString &fileName)
   QSettings *s = ScreenshotManager::instance()->settings();
   options["type"] = "imgur";
   options["networkManager"].setValue(mNetworkAccessManager);
-  options["anonymous"] = s->value("upload/imgur/anonymous", true).toBool();
-  options["album"]     = s->value("upload/imgur/album", "").toString();
+  options["anonymous"]     = s->value("upload/imgur/anonymous", true).toBool();
+  options["album"]         = s->value("upload/imgur/album", "").toString();
   options["access_token"]  = s->value("upload/imgur/access_token", "").toString();
   options["refresh_token"] = s->value("upload/imgur/refresh_token", "").toString();
 
