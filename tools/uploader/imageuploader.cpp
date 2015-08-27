@@ -6,7 +6,7 @@ ImageUploader::ImageUploader(QVariantHash &options) : mOptions(options)
 
 }
 
-ImageUploader* ImageUploader::getNewUploader(QString name, QVariantHash &options)
+ImageUploader* ImageUploader::getNewUploader(QString name, QVariantHash options)
 {
   if (name == "imgur")
       return new ImgurUploader(options);

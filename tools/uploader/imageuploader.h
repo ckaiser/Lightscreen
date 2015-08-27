@@ -10,7 +10,7 @@ class ImageUploader : public QObject
 Q_OBJECT
 
 public:
-  static ImageUploader* getNewUploader(QString name, QVariantHash &options = QVariantHash());
+  static ImageUploader* getNewUploader(QString name, QVariantHash options = QVariantHash());
 
   enum Error {
     FileError,

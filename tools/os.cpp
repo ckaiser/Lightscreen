@@ -44,7 +44,7 @@
   #include <QtWin>
   #include <qt_windows.h>
   #include <shlobj.h>
-#elif defined(Q_WS_X11)
+#elif defined(Q_OS_LINUX)
   #include <QX11Info>
   #include <X11/X.h>
   #include <X11/Xlib.h>
@@ -283,14 +283,14 @@ void os::setStartup(bool startup, bool hide)
   init.endGroup();
 #endif
 
-#if defined(Q_WS_X11)
+#if defined(Q_OS_LINUX)
   QFile desktopFile(QDir::homePath() + "/.config/autostart/lightscreen.desktop");
 
   desktopFile.remove();
 
   if (startup) {
     desktopFile.open(QIODevice::WriteOnly);
-    desktopFile.write(QString("[Desktop Entry]\nExec=%1\nType=Application").arg(lightscreen).toAscii());
+    desktopFile.write(QString("[Desktop Entry]\nExec=%1\nType=Application").arg(lightscreen).toLatin1());
   }
 #endif
 }
@@ -317,7 +317,7 @@ QIcon os::icon(QString name, QColor backgroundColor)
   }
 }
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
 // Taken from KSnapshot. Oh KDE, what would I do without you :D
 Window os::findRealWindow(Window w, int depth)
 {

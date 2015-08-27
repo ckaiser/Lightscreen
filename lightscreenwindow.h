@@ -33,6 +33,7 @@
 
 class Updater;
 class QSettings;
+class QProgressBar;
 class QWinTaskbarButton;
 class LightscreenWindow : public QMainWindow
 {
@@ -118,10 +119,32 @@ private:
   QxtGlobalShortcut mOpenShortcut;
   QxtGlobalShortcut mDirectoryShortcut;
 
+  bool mHasTaskbarButton;
+
 #ifdef Q_OS_WIN
   QPointer<QWinTaskbarButton> mTaskbarButton;
 #else
-  QPointer<QWidget> mTaskBarButton;
+  class QWinTaskbarProgressDummy {
+  public:
+      void setVisible(bool v) { Q_UNUSED(v) }
+      void setPaused(bool p)  { Q_UNUSED(p) }
+      void resume() {}
+      void stop() {}
+      void reset() {}
+      void setRange(int m, int m2)  { Q_UNUSED(m) Q_UNUSED(m2) }
+      void setValue(int v)  { Q_UNUSED(v) }
+
+  };
+
+  class QWinTaskbarDummy : public QObject {
+  public:
+      void setOverlayIcon(QIcon i) { Q_UNUSED(i) }
+      void clearOverlayIcon() {}
+      QWinTaskbarProgressDummy* progress() { return 0; }
+      void setWindow(QWindow* w) { Q_UNUSED(w) }
+  };
+
+  QWinTaskbarDummy* mTaskbarButton;
 #endif
 };
 

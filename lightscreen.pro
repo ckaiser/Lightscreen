@@ -47,12 +47,14 @@ RESOURCES += lightscreen.qrc
 
 RC_FILE += lightscreen.rc
 CODECFORSRC = UTF-8
-QT += core gui network sql multimedia winextras
+QT += core gui network sql multimedia
 
 include($$PWD/tools/qxtglobalshortcut/qxtglobalshortcut.pri)
 include($$PWD/tools/qtsingleapplication/qtsingleapplication.pri)
 
-windows{
+windows {
+    QT += winextras
+
     contains(QMAKE_CC, gcc){
         LIBS += libgdi32 libgcc libuser32 libole32 libshell32 libshlwapi libcomctl32
         QMAKE_CXXFLAGS = -Wextra -Wall -Wpointer-arith
@@ -71,6 +73,7 @@ windows{
 }
 
 unix:LIBS += -lX11
+unix:QT += x11extras
 
 OTHER_FILES += TODO.txt
 

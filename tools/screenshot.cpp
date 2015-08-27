@@ -39,7 +39,7 @@
   #include <windows.h>
 #endif
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
   #include <QX11Info>
   #include <X11/X.h>
   #include <X11/Xlib.h>
@@ -383,7 +383,7 @@ void Screenshot::activeWindow()
   mPixmap = os::grabWindow((WId)GetForegroundWindow());
 #endif
 
-#if defined(Q_WS_X11)
+#if defined(Q_OS_LINUX)
   Window focus;
   int revert;
 

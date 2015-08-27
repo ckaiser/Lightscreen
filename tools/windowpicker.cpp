@@ -38,7 +38,7 @@
    #define GCL_HICONSM GCLP_HICONSM
 #endif
 
-#elif defined(Q_WS_X11)
+#elif defined(Q_OS_LINUX)
   #include <QX11Info>
   #include <X11/X.h>
   #include <X11/Xlib.h>
@@ -50,7 +50,7 @@ WindowPicker::WindowPicker() : QWidget(0), mCrosshair(":/icons/picker"), mWindow
 {
 #if defined(Q_OS_WIN)
   setWindowFlags(Qt::SplashScreen | Qt::WindowStaysOnTopHint);
-#elif defined(Q_WS_X11)
+#elif defined(Q_OS_LINUX)
   setWindowFlags(Qt::WindowStaysOnTopHint);
 #endif
 
@@ -170,7 +170,7 @@ void WindowPicker::mouseMoveEvent(QMouseEvent *event)
   else {
     mWindowIcon->setPixmap(QPixmap());
   }
-#elif defined(Q_WS_X11)
+#elif defined(Q_OS_LINUX)
   Window cWindow = os::windowUnderCursor(false);
 
   if (cWindow == mCurrentWindow) {
@@ -280,12 +280,12 @@ void WindowPicker::mouseReleaseEvent(QMouseEvent *event)
      mousePos.x = event->globalX();
      mousePos.y = event->globalY();
 
-     HWND window = GetAncestor(WindowFromPoint(mousePos), GA_ROOT);
-#elif defined(Q_WS_X11)
-    Window window = os::windowUnderCursor(false);
+     HWND nativeWindow = GetAncestor(WindowFromPoint(mousePos), GA_ROOT);
+#elif defined(Q_OS_LINUX)
+    Window nativeWindow = os::windowUnderCursor(false);
 #endif
 
-     if ((WId)window == winId()) {
+     if ((WId)nativeWindow == winId()) {
        cancel();
        return;
      }
@@ -295,10 +295,10 @@ void WindowPicker::mouseReleaseEvent(QMouseEvent *event)
      setWindowFlags(windowFlags() ^ Qt::WindowStaysOnTopHint);
      close();
 
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
      emit pixmap(QPixmap::grabWindow(mCurrentWindow));
 #else
-     emit pixmap(os::grabWindow((WId)window));
+     emit pixmap(os::grabWindow((WId)nativeWindow));
 #endif
 
      return;

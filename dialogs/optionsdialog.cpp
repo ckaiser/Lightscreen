@@ -51,7 +51,7 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
   ui.setupUi(this);
   setModal(true);
 
-#if defined(Q_WS_X11)
+#if defined(Q_OS_LINUX)
   // KDE-specific style tweaks.
   if (qApp->style()->objectName() == "oxygen") {
       ui.browsePushButton->setMaximumWidth(30);
@@ -342,7 +342,7 @@ void OptionsDialog::loadSettings()
       ui.optiPngCheckBox->setEnabled(false);
       ui.optiPngLabel->setText("optipng.exe not found");
     }
-#elif defined(Q_WS_X11)
+#elif defined(Q_OS_LINUX)
     if (!QProcess::startDetached("optipng")) {
       ui.optiPngCheckBox->setChecked(false);
       ui.optiPngCheckBox->setEnabled(false);
