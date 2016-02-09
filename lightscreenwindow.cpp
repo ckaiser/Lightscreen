@@ -75,6 +75,8 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   ui.folderPushButton->setIcon(os::icon("folder"));
   ui.imgurPushButton->setIcon(os::icon("imgur"));
 
+  createUploadMenu();
+
 #ifdef Q_OS_WIN
   if (QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS7) {
     mTaskbarButton = new QWinTaskbarButton(this);
@@ -128,7 +130,6 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   }
   else {
     QTimer::singleShot(0   , this, SLOT(applySettings()));
-    QTimer::singleShot(0   , this, SLOT(createUploadMenu()));
     QTimer::singleShot(5000, this, SLOT(checkForUpdates()));
   }
 }

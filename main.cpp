@@ -30,6 +30,10 @@
 
 int main(int argc, char *argv[])
 {
+#ifdef QT_DEBUG
+  qSetMessagePattern("%{message} @%{line}[%{function}()]");
+#endif
+
   QtSingleApplication application(argc, argv);
   application.setOrganizationName("K");
   application.setApplicationName ("Lightscreen");

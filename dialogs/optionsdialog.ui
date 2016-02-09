@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>393</width>
+    <width>399</width>
     <height>312</height>
    </rect>
   </property>
@@ -14,18 +14,6 @@
    <string>Options - Lightscreen</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
-   <property name="leftMargin">
-    <number>6</number>
-   </property>
-   <property name="topMargin">
-    <number>6</number>
-   </property>
-   <property name="rightMargin">
-    <number>6</number>
-   </property>
-   <property name="bottomMargin">
-    <number>6</number>
-   </property>
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
@@ -595,10 +583,7 @@ Quality is related to file size and of course to readability and overall quality
          <property name="checked">
           <bool>false</bool>
          </property>
-         <layout class="QFormLayout" name="userFormLayout">
-          <property name="fieldGrowthPolicy">
-           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-          </property>
+         <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="0">
            <widget class="QLabel" name="imgurUserLabel">
             <property name="text">
@@ -609,23 +594,12 @@ Quality is related to file size and of course to readability and overall quality
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="QLabel" name="imgurAuthUserLabel">
-              <property name="text">
-               <string>&lt;i&gt;none</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="imgurAuthButton">
-              <property name="text">
-               <string>Authorize</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+          <item row="0" column="3">
+           <widget class="QPushButton" name="imgurAuthButton">
+            <property name="text">
+             <string>Authorize</string>
+            </property>
+           </widget>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="imgurAlbumLabel">
@@ -637,13 +611,30 @@ Quality is related to file size and of course to readability and overall quality
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item row="1" column="3">
+           <widget class="QPushButton" name="imgurRefreshAlbumButton">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Refresh</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" colspan="2">
            <widget class="QComboBox" name="imgurAlbumComboBox">
             <item>
              <property name="text">
               <string>- None -</string>
              </property>
             </item>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="2">
+           <widget class="QLabel" name="imgurAuthUserLabel">
+            <property name="text">
+             <string>&lt;i&gt;none</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -962,6 +953,9 @@ Quality is related to file size and of course to readability and overall quality
                <widget class="QSpinBox" name="previewAutocloseTimeSpinBox">
                 <property name="suffix">
                  <string> seconds</string>
+                </property>
+                <property name="minimum">
+                 <number>1</number>
                 </property>
                </widget>
               </item>

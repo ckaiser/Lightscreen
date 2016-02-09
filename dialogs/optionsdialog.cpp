@@ -132,6 +132,7 @@ void OptionsDialog::imgurAuthorize()
     ui.imgurAuthUserLabel->setText(tr("<i>none</i>"));
     ui.imgurAuthButton->setText(tr("Authorize"));
 
+    ui.imgurRefreshAlbumButton->setEnabled(false);
     ui.imgurAlbumComboBox->setEnabled(false);
     ui.imgurAlbumComboBox->clear();
     ui.imgurAlbumComboBox->addItem(tr("- None -"));
@@ -187,11 +188,12 @@ void OptionsDialog::imgurToken()
   settings()->setValue("upload/imgur/refresh_token"   , imgurResponse.value("refresh_token").toString());
   settings()->setValue("upload/imgur/account_username", imgurResponse.value("account_username").toString());
   settings()->setValue("upload/imgur/expires_in"      , imgurResponse.value("expires_in").toInt());
+  settings()->sync();
 
   ui.imgurAuthUserLabel->setText("<b>" + imgurResponse.value("account_username").toString() + "</b>");
   ui.imgurAuthButton->setText(tr("Deauthorize"));
 
-  imgurRequestAlbumList();
+  QTimer::singleShot(0, this, &OptionsDialog::imgurRequestAlbumList);
 }
 
 void OptionsDialog::importSettings()
@@ -221,6 +223,7 @@ void OptionsDialog::imgurRequestAlbumList() {
     return;
   }
 
+  ui.imgurRefreshAlbumButton->setEnabled(true);
   ui.imgurAlbumComboBox->clear();
   ui.imgurAlbumComboBox->setEnabled(false);
   ui.imgurAlbumComboBox->addItem(tr("Loading album data..."));
@@ -239,7 +242,6 @@ void OptionsDialog::imgurAlbumList() {
     if (reply->error() == QNetworkReply::ContentOperationNotPermittedError ||
         reply->error() == QNetworkReply::AuthenticationRequiredError) {
       Uploader::instance()->imgurAuthRefresh();
-      connect(Uploader::instance(), &Uploader::imgurAuthRefreshed, this, &OptionsDialog::imgurRequestAlbumList);
     }
 
     ui.imgurAlbumComboBox->addItem(tr("Loading failed :("));
@@ -248,14 +250,16 @@ void OptionsDialog::imgurAlbumList() {
 
   QJsonObject imgurResponse = QJsonDocument::fromJson(reply->readAll()).object();
 
-  if (imgurResponse["success"].toBool() != true || imgurResponse["status"].toInt() != 200)
+  if (imgurResponse["success"].toBool() != true || imgurResponse["status"].toInt() != 200) {
     return;
+  }
 
   QJsonArray albumList = imgurResponse["data"].toArray();
 
   ui.imgurAlbumComboBox->clear();
   ui.imgurAlbumComboBox->setEnabled(true);
   ui.imgurAlbumComboBox->addItem(tr("- None -"), "");
+  ui.imgurRefreshAlbumButton->setEnabled(true);
 
   int settingsIndex = 0;
 
@@ -263,8 +267,9 @@ void OptionsDialog::imgurAlbumList() {
       QJsonObject album = albumValue.toObject();
       ui.imgurAlbumComboBox->addItem(album["title"].toString(), album["id"].toString());
 
-      if (album["id"].toString() == settings()->value("upload/imgur/album").toString())
+      if (album["id"].toString() == settings()->value("upload/imgur/album").toString()) {
         settingsIndex = ui.imgurAlbumComboBox->count() - 1;
+      }
   }
 
   ui.imgurAlbumComboBox->setCurrentIndex(settingsIndex);
@@ -403,16 +408,18 @@ void OptionsDialog::loadSettings()
     //ui.serviceComboBox->setCurrentIndex(settings()->value("service").toInt());
 
     settings()->beginGroup("imgur");
-      ui.imgurAuthGroupBox->setChecked(!settings()->value("anonymous", false).toBool());
+      ui.imgurAuthGroupBox->setChecked(!settings()->value("anonymous", true).toBool());
       ui.imgurAuthUserLabel->setText(settings()->value("account_username", tr("<i>none</i>")).toString());
 
       if (settings()->value("account_username").toString().isEmpty()) {
         ui.imgurAuthUserLabel->setText(tr("<i>none</i>"));
         ui.imgurAlbumComboBox->setEnabled(false);
+        ui.imgurRefreshAlbumButton->setEnabled(false);
       }
       else {
         ui.imgurAuthButton->setText(tr("Deauthorize"));
         ui.imgurAuthUserLabel->setText("<b>" + ui.imgurAuthUserLabel->text() + "</b>");
+        ui.imgurRefreshAlbumButton->setEnabled(true);
       }
     settings()->endGroup();
   settings()->endGroup();
@@ -716,6 +723,8 @@ void OptionsDialog::init()
   // Connections
   //
 
+  connect(Uploader::instance(), &Uploader::imgurAuthRefreshed, this, &OptionsDialog::imgurRequestAlbumList);
+
   connect(ui.buttonBox              , SIGNAL(clicked(QAbstractButton*)), this    , SLOT(dialogButtonClicked(QAbstractButton*)));
   connect(ui.buttonBox              , SIGNAL(accepted())               , this    , SLOT(accepted()));
   connect(ui.namingOptionsButton    , SIGNAL(clicked())                , this    , SLOT(namingOptions()));
@@ -728,6 +737,7 @@ void OptionsDialog::init()
   connect(ui.checkUpdatesPushButton , SIGNAL(clicked())                , this    , SLOT(checkUpdatesNow()));
   connect(ui.historyPushButton      , SIGNAL(clicked())                , this    , SLOT(viewHistory()));
   connect(ui.imgurAuthButton        , SIGNAL(clicked())                , this    , SLOT(imgurAuthorize()));
+  connect(ui.imgurRefreshAlbumButton, SIGNAL(clicked())                , this    , SLOT(imgurRequestAlbumList()));
 
   connect(ui.screenCheckBox      , SIGNAL(toggled(bool)), ui.screenHotkeyWidget   , SLOT(setEnabled(bool)));
   connect(ui.areaCheckBox        , SIGNAL(toggled(bool)), ui.areaHotkeyWidget     , SLOT(setEnabled(bool)));
