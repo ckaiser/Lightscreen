@@ -42,7 +42,7 @@ void Updater::check()
   platform = "Linux";
 #endif
 
-  QNetworkRequest request(QUrl("http://lightscreen.com.ar/version?from=" + qApp->applicationVersion() + "&platform=" + platform));
+  QNetworkRequest request(QUrl("https://lightscreen.com.ar/version?from=" + qApp->applicationVersion() + "&platform=" + platform));
   mNetwork.get(request);
 }
 

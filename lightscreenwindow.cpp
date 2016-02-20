@@ -769,7 +769,7 @@ void LightscreenWindow::updaterDone(bool result)
   msgBox.exec();
 
   if (msgBox.clickedButton() == yesButton) {
-    QDesktopServices::openUrl(QUrl("http://lightscreen.com.ar/whatsnew?from=" + qApp->applicationVersion()));
+    QDesktopServices::openUrl(QUrl("https://lightscreen.com.ar/whatsnew?from=" + qApp->applicationVersion()));
   }
   else if (msgBox.clickedButton() == turnOffButton) {
     settings()->setValue("options/disableUpdater", true);

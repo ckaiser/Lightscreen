@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>399</width>
-    <height>312</height>
+    <height>318</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -710,7 +710,7 @@ Quality is related to file size and of course to readability and overall quality
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>312</width>
+            <width>358</width>
             <height>706</height>
            </rect>
           </property>
@@ -1322,7 +1322,7 @@ Quality is related to file size and of course to readability and overall quality
         <widget class="QLabel" name="mainLabel">
          <property name="text">
           <string>Lightscreen is a simple tool to take screenshots, designed to be customizable and lightweight.&lt;br&gt;&lt;br&gt;
-Created by &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/a&gt;, using the &lt;a href=&quot;#aboutqt&quot;&gt;Qt toolkit&lt;/a&gt; for the graphical user interface.</string>
+Created by &lt;a href=&quot;https://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/a&gt;, using the &lt;a href=&quot;#aboutqt&quot;&gt;Qt toolkit&lt;/a&gt; for the graphical user interface.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -1359,7 +1359,7 @@ Created by &lt;a href=&quot;http://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/
        <item>
         <widget class="QLabel" name="linksLabel">
          <property name="text">
-          <string>&lt;a href=&quot;https://github.com/ckaiser/Lightscreen/&quot;&gt;GitHub page&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://lightscreen.com.ar/&quot;&gt;Lightscreen home page&lt;/a&gt;</string>
+          <string>&lt;a href=&quot;https://github.com/ckaiser/Lightscreen/&quot;&gt;GitHub page&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;https://lightscreen.com.ar/&quot;&gt;Lightscreen home page&lt;/a&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>

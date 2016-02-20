@@ -92,7 +92,7 @@ void ScreenshotManager::saveHistory(QString fileName, QString url, QString delet
   QString deleteUrl;
 
   if (!deleteHash.isEmpty())
-    deleteUrl = "http://imgur.com/delete/" + deleteHash;
+    deleteUrl = "https://imgur.com/delete/" + deleteHash;
 
   QSqlQuery query;
   query.prepare("INSERT INTO history (fileName, URL, deleteURL, time) VALUES(?, ?, ?, ?)");
@@ -117,7 +117,7 @@ void ScreenshotManager::updateHistory(QString fileName, QString url, QString del
     QSqlQuery updateQuery;
     updateQuery.prepare("UPDATE history SET URL = ?, deleteURL = ?, time = ? WHERE fileName = ?");
     updateQuery.addBindValue(url);
-    updateQuery.addBindValue("http://imgur.com/delete/" + deleteHash);
+    updateQuery.addBindValue("https://imgur.com/delete/" + deleteHash);
     updateQuery.addBindValue(QDateTime::currentMSecsSinceEpoch());
     updateQuery.addBindValue(fileName);
 

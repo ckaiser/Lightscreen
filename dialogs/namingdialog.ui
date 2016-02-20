@@ -161,7 +161,7 @@
              <string notr="true">margin-left: 4px</string>
             </property>
             <property name="text">
-             <string notr="true"> &lt;a href=&quot;http://lightscreen.com.ar/help#date&quot;&gt;[?]&lt;/a&gt;</string>
+             <string notr="true"> &lt;a href=&quot;https://lightscreen.com.ar/help#date&quot;&gt;[?]&lt;/a&gt;</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>

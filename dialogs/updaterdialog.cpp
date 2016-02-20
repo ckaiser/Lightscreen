@@ -47,7 +47,7 @@ QProgressDialog("", tr("Cancel"), 0, 0, parent)
 void UpdaterDialog::updateDone(bool result)
 {
   if (result) {
-    setLabelText(tr("There's a new version available,<br> please see <a href=\"http://lightscreen.com.ar/whatsnew/%1\">the Lighscreen website</a>.").arg(qApp->applicationVersion()));
+    setLabelText(tr("There's a new version available,<br> please see <a href=\"https://lightscreen.com.ar/whatsnew/%1\">the Lighscreen website</a>.").arg(qApp->applicationVersion()));
   }
   else {
     setLabelText(tr("No new versions available."));
