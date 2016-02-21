@@ -54,24 +54,6 @@
 
 #include "os.h"
 
-void os::addToRecentDocuments(QString fileName)
-{
-#ifdef Q_OS_WIN
-  LPCWSTR szFileName = QDir::toNativeSeparators(fileName).toStdWString().c_str();
-  SHARDAPPIDINFO info;
-  IShellItem* item;
-
-  if (SUCCEEDED(SHCreateItemFromParsingName(szFileName, NULL, IID_PPV_ARGS(&item)))) {
-    info.psi = item;
-    info.pszAppID = L"K.Lightscreen";  // our AppID - see above
-
-    SHAddToRecentDocs (SHARD_APPIDINFO, &info);
-  }
-#else
-  Q_UNUSED(fileName)
-#endif
-}
-
 QPixmap os::cursor()
 {
 #ifdef Q_OS_WIN

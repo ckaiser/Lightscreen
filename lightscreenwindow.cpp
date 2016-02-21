@@ -63,7 +63,8 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   mWasVisible(true),
   mLastMessage(0),
   mLastMode(-1),
-  mLastScreenshot()
+  mLastScreenshot(),
+  mHasTaskbarButton(false)
 {
   ui.setupUi(this);
 

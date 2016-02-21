@@ -35,9 +35,6 @@ class QIcon;
 
 namespace os
 {
-  // Adds the filename to the Windows recent document list (useful for Windows 7 jump lists)
-  void addToRecentDocuments(QString fileName);
-
   // Returns the cursor pixmap in Windows
   QPixmap cursor();
 

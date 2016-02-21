@@ -271,8 +271,6 @@ void Screenshot::save()
     else {
       result = Screenshot::Fail;
     }
-
-    os::addToRecentDocuments(fileName);
   }
 
   mOptions.fileName = fileName;
