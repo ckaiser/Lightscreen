@@ -166,14 +166,12 @@ QPixmap os::grabWindow(WId winId)
 
   GetWindowRect(hwndId, &rcWindow);
 
-  if (IsZoomed(hwndId)) {
-    int margin = GetSystemMetrics(SM_CXSIZEFRAME);
+  int margin = GetSystemMetrics(SM_CXSIZEFRAME) + GetSystemMetrics(SM_CXPADDEDBORDER);
 
-    rcWindow.right -= margin;
-    rcWindow.left += margin;
-    rcWindow.top += margin;
-    rcWindow.bottom -= margin;
-  }
+  rcWindow.right -= margin;
+  rcWindow.left += margin;
+  rcWindow.top += GetSystemMetrics(SM_CXPADDEDBORDER);
+  rcWindow.bottom -= margin;
 
   int width, height;
   width = rcWindow.right - rcWindow.left;
