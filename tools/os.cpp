@@ -166,11 +166,11 @@ QPixmap os::grabWindow(WId winId)
 
   GetWindowRect(hwndId, &rcWindow);
 
-  int margin = GetSystemMetrics(SM_CXSIZEFRAME) + GetSystemMetrics(SM_CXPADDEDBORDER);
+  int margin = GetSystemMetrics(SM_CXSIZEFRAME) + GetSystemMetrics(SM_CXPADDEDBORDER)/2;
 
   rcWindow.right -= margin;
   rcWindow.left += margin;
-  rcWindow.top += GetSystemMetrics(SM_CXPADDEDBORDER);
+  rcWindow.top += margin;
   rcWindow.bottom -= margin;
 
   int width, height;
