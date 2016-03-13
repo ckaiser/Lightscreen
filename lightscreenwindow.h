@@ -25,7 +25,6 @@
 
 #include "updater/updater.h"
 #include "tools/screenshot.h"
-#include "tools/qxtglobalshortcut/qxtglobalshortcut.h"
 
 #include "dialogs/previewdialog.h"
 
@@ -35,6 +34,7 @@ class Updater;
 class QSettings;
 class QProgressBar;
 class QWinTaskbarButton;
+class UGlobalHotkeys;
 class LightscreenWindow : public QMainWindow
 {
     Q_OBJECT
@@ -112,12 +112,7 @@ private:
   QPointer<Updater> mUpdater;
   Ui::LightscreenWindowClass ui;
 
-  QxtGlobalShortcut mScreenShortcut;
-  QxtGlobalShortcut mAreaShortcut;
-  QxtGlobalShortcut mWindowShortcut;
-  QxtGlobalShortcut mWindowPickerShortcut;
-  QxtGlobalShortcut mOpenShortcut;
-  QxtGlobalShortcut mDirectoryShortcut;
+  QPointer<UGlobalHotkeys> mGlobalHotkeys;
 
   bool mHasTaskbarButton;
 

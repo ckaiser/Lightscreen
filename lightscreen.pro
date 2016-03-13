@@ -49,8 +49,8 @@ RC_FILE += lightscreen.rc
 CODECFORSRC = UTF-8
 QT += core gui network sql multimedia
 
-include($$PWD/tools/qxtglobalshortcut/qxtglobalshortcut.pri)
 include($$PWD/tools/qtsingleapplication/qtsingleapplication.pri)
+include($$PWD/tools/UGlobalHotkey/uglobalhotkey.pri)
 
 windows {
     QT += winextras
@@ -63,7 +63,8 @@ windows {
         LIBS += gdi32.lib user32.lib ole32.lib shell32.lib shlwapi.lib comctl32.lib
     }
 
-
+    CONFIG += embed_manifest_exe
+    QMAKE_LFLAGS_WINDOWS += /MANIFESTUAC:level=\'asInvoker\'
     QMAKE_LFLAGS_WINDOWS = /SUBSYSTEM:WINDOWS,5.01
     QMAKE_LFLAGS_CONSOLE = /SUBSYSTEM:CONSOLE,5.01
 

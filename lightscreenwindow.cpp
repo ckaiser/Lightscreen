@@ -32,6 +32,7 @@
 #include <QToolTip>
 #include <QUrl>
 #include <QSound>
+#include <QKeyEvent>
 
 #ifdef Q_OS_WIN
   #include <windows.h>
@@ -49,8 +50,7 @@
 #include "tools/os.h"
 #include "tools/screenshot.h"
 #include "tools/screenshotmanager.h"
-#include "tools/qxtglobalshortcut/qxtglobalshortcut.h"
-
+#include "tools/UGlobalHotkey/uglobalhotkeys.h"
 #include "tools/uploader/uploader.h"
 
 #include "updater/updater.h"
@@ -79,7 +79,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   createUploadMenu();
 
 #ifdef Q_OS_WIN
-  if (QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS7) {
+  if (QSysInfo::WindowsVersion >= QSysInfo::WV_WINDOWS7) {
     mTaskbarButton = new QWinTaskbarButton(this);
     mHasTaskbarButton = true;
 
@@ -90,7 +90,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
     }
   }
 
-  if (QSysInfo::windowsVersion() < QSysInfo::WV_WINDOWS7) {
+  if (QSysInfo::WindowsVersion < QSysInfo::WV_WINDOWS7) {
     ui.centralWidget->setStyleSheet("QPushButton { padding: 2px; border: 1px solid #acacac; background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #eaeaea, stop:1 #e5e5e5);} QPushButton:hover { border: 1px solid #7eb4ea;	background-color: #e4f0fc; }");
   }
 #endif
@@ -109,12 +109,22 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   connect(ui.folderPushButton , SIGNAL(clicked()), this, SLOT(goToFolder()));
 
   // Shortcuts
-  connect(&mScreenShortcut      , &QxtGlobalShortcut::activated, this, &LightscreenWindow::screenHotkey);
-  connect(&mAreaShortcut        , &QxtGlobalShortcut::activated, this, &LightscreenWindow::areaHotkey);
-  connect(&mWindowShortcut      , &QxtGlobalShortcut::activated, this, &LightscreenWindow::windowHotkey);
-  connect(&mWindowPickerShortcut, &QxtGlobalShortcut::activated, this, &LightscreenWindow::windowPickerHotkey);
-  connect(&mOpenShortcut        , &QxtGlobalShortcut::activated, this, &LightscreenWindow::show);
-  connect(&mDirectoryShortcut   , &QxtGlobalShortcut::activated, this, &LightscreenWindow::goToFolder);
+  mGlobalHotkeys = new UGlobalHotkeys(this);
+
+  connect(mGlobalHotkeys, &UGlobalHotkeys::activated, [&](size_t id) {
+      if (id >= 0 && id <= 3) {
+        screenshotAction(id);
+      }
+      else if (id == 4) {
+          show();
+      }
+      else if (id == 5) {
+          goToFolder();
+      }
+      else {
+          qWarning() << "Uknown hotkey ID: " << id;
+      }
+  });
 
   // Uploader
   connect(Uploader::instance(), SIGNAL(progress(int)),        this, SLOT(uploadProgress(int)));
@@ -626,13 +636,7 @@ void LightscreenWindow::showHistoryDialog()
 
 void LightscreenWindow::showOptions()
 {
-  mScreenShortcut.setEnabled(false);
-  mAreaShortcut.setEnabled(false);
-  mWindowShortcut.setEnabled(false);
-  mWindowPickerShortcut.setEnabled(false);
-  mOpenShortcut.setEnabled(false);
-  mDirectoryShortcut.setEnabled(false);
-
+  mGlobalHotkeys->unregisterAllHotkeys();
   QPointer<OptionsDialog> optionsDialog = new OptionsDialog(this);
 
   optionsDialog->exec();
@@ -863,34 +867,23 @@ void LightscreenWindow::applySettings()
 
 void LightscreenWindow::connectHotkeys()
 {
-  bool screen = mScreenShortcut.setShortcut(settings()->value("actions/screen/hotkey").value<QKeySequence>());
-  mScreenShortcut.setEnabled(settings()->value("actions/screen/enabled").toBool());
+    QStringList failed;
+    QStringList actions = {"screen", "window", "area", "windowPicker", "open", "directory"};
+    size_t i = 0;
 
-  bool area = mAreaShortcut.setShortcut(settings()->value("actions/area/hotkey").value<QKeySequence>());
-  mAreaShortcut.setEnabled(settings()->value("actions/area/enabled").toBool());
+    foreach (const QString &action, actions) {
+        if (settings()->value("actions/" + action + "/enabled").toBool()) {
+            if (!mGlobalHotkeys->registerHotkey(settings()->value("actions/" + action + "/hotkey").toString(), i)) {
+                failed << action;
+            }
+        }
 
-  bool window = mWindowShortcut.setShortcut(settings()->value("actions/window/hotkey").value<QKeySequence>());
-  mWindowShortcut.setEnabled(settings()->value("actions/window/enabled").toBool());
+        i++;
+    }
 
-  bool windowPicker = mWindowPickerShortcut.setShortcut(settings()->value("actions/windowPicker/hotkey").value<QKeySequence>());
-  mWindowPickerShortcut.setEnabled(settings()->value("actions/windowPicker/enabled").toBool());
-
-  bool open = mOpenShortcut.setShortcut(settings()->value("actions/open/hotkey").value<QKeySequence>());
-  mOpenShortcut.setEnabled(settings()->value("actions/open/enabled").toBool());
-
-  bool directory = mOpenShortcut.setShortcut(settings()->value("actions/directory/hotkey").value<QKeySequence>());
-  mDirectoryShortcut.setEnabled(settings()->value("actions/directory/enabled").toBool());
-
-  QStringList failed;
-  if (!screen)       failed << "screen";
-  if (!area)         failed << "area";
-  if (!window)       failed << "window";
-  if (!windowPicker) failed << "window picker";
-  if (!open)         failed << "open";
-  if (!directory)    failed << "directory";
-
-  if (!failed.isEmpty())
-    showHotkeyError(failed);
+    if (!failed.isEmpty()) {
+        showHotkeyError(failed);
+    }
 }
 
 void LightscreenWindow::createTrayIcon()
