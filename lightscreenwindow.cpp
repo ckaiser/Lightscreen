@@ -324,15 +324,14 @@ void LightscreenWindow::goToFolder()
   }
   else {
 #endif
-    QString folder = settings()->value("file/target").toString();
+    QDir path(settings()->value("file/target").toString());
 
-    if (folder.isEmpty())
-      folder = qApp->applicationDirPath();
+    // We might want to go to the folder without it having been created by taking a screenshot yet.
+    if (!path.exists()) {
+        path.mkpath(path.absolutePath());
+    }
 
-    if (QDir::toNativeSeparators(folder.at(folder.size()-1)) != QDir::separator())
-      folder.append(QDir::separator());
-
-    QDesktopServices::openUrl("file:///"+folder);
+    QDesktopServices::openUrl(QUrl::fromLocalFile(path.absolutePath() + QDir::separator()));
 #ifdef Q_OS_WIN
   }
 #endif
