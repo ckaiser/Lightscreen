@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014  Christian Kaiser
+ * Copyright (C) 2016  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ void Updater::check()
   QString platform = "unknown";
 
 #ifdef Q_OS_WIN
-  platform = QString("Windows_%1").arg(QSysInfo::windowsVersion());
+  platform = QString("Windows_%1").arg(QSysInfo::WindowsVersion);
 #else
   platform = "Linux";
 #endif
