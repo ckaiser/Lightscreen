@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
   QtSingleApplication application(argc, argv);
   application.setOrganizationName("K");
   application.setApplicationName ("Lightscreen");
-  application.setApplicationVersion("2.1");
+  application.setApplicationVersion("2.2");
   application.setQuitOnLastWindowClosed(false);
 
   if (application.isRunning()) {
@@ -56,12 +56,12 @@ int main(int argc, char *argv[])
   LightscreenWindow lightscreen;
 
 #ifdef Q_OS_WIN
-  if (QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS7) {
+  if (QSysInfo::WindowsVersion >= QSysInfo::WV_WINDOWS7) {
     QWinJumpList* jumplist = new QWinJumpList(&lightscreen);
 
     QColor backgroundColor = qApp->palette("QToolTip").color(QPalette::Background);
 
-    if (QSysInfo::windowsVersion() == QSysInfo::WV_WINDOWS10)
+    if (QSysInfo::WindowsVersion == QSysInfo::WV_WINDOWS10)
     { // contrast r hard
       backgroundColor = Qt::black;
     }
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     jumplist->addCategory(screenshotCategory);
     jumplist->addCategory(uploadCategory);
     jumplist->addCategory(actionsCategory);
-}
+  }
 #endif
 
   if (application.arguments().size() > 1) {
