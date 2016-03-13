@@ -149,6 +149,7 @@ LightscreenWindow::~LightscreenWindow()
 {
   settings()->setValue("lastScreenshot", mLastScreenshot);
   settings()->sync();
+  mGlobalHotkeys->unregisterAllHotkeys();
 }
 
 void LightscreenWindow::action(int mode)
