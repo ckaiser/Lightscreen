@@ -11,7 +11,7 @@ class ImgurUploader : public ImageUploader
 Q_OBJECT
 
 public:
-  ImgurUploader(QVariantHash &options);
+  ImgurUploader(const QVariantHash &options);
 
 public slots:
   void upload(const QString &fileName);

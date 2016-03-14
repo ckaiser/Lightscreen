@@ -99,7 +99,7 @@ public:
 
   Screenshot::Options &options();
   QPixmap &pixmap();
-  static QString getName(NamingOptions options, QString prefix, QDir directory);
+  static QString getName(const NamingOptions &options, const QString &prefix, const QDir &directory);
   QString &unloadedFileName();
 
 public slots:

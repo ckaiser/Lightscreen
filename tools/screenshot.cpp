@@ -62,7 +62,7 @@ Screenshot::~Screenshot()
   }
 }
 
-QString Screenshot::getName(NamingOptions options, QString prefix, QDir directory)
+QString Screenshot::getName(const NamingOptions &options, const QString &prefix, const QDir &directory)
 {
   QString naming;
   int naming_largest = 0;

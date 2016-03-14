@@ -2,7 +2,7 @@
 #include <QNetworkAccessManager>
 #include <QtNetwork>
 
-ImgurUploader::ImgurUploader(QVariantHash &options) : ImageUploader(options) {}
+ImgurUploader::ImgurUploader(const QVariantHash &options) : ImageUploader(options) {}
 
 void ImgurUploader::upload(const QString &fileName)
 {

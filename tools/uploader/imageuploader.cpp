@@ -1,12 +1,7 @@
-#include "imageuploader.h"
+﻿#include "imageuploader.h"
 #include "imguruploader.h"
 
-ImageUploader::ImageUploader(QVariantHash &options) : mOptions(options)
-{
-
-}
-
-ImageUploader* ImageUploader::getNewUploader(QString name, QVariantHash options)
+ImageUploader* ImageUploader::getNewUploader(const QString &name, const QVariantHash &options)
 {
   if (name == "imgur")
       return new ImgurUploader(options);

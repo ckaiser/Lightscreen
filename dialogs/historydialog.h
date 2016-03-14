@@ -26,8 +26,8 @@ private slots:
   void location();
   void removeHistoryEntry();
   void refresh();
-  void open(QModelIndex index);
-  void selectionChanged(QItemSelection selected, QItemSelection deselected);
+  void open(const QModelIndex &index);
+  void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
   void upload();
   void uploadProgress(int progress);
 

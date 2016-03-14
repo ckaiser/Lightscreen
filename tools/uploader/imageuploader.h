@@ -10,7 +10,7 @@ class ImageUploader : public QObject
 Q_OBJECT
 
 public:
-  static ImageUploader* getNewUploader(QString name, QVariantHash options = QVariantHash());
+  static ImageUploader* getNewUploader(const QString &name, const QVariantHash &options = QVariantHash());
 
   enum Error {
     FileError,
@@ -21,7 +21,7 @@ public:
   };
 
 public:
-  ImageUploader(QVariantHash &options);
+  inline ImageUploader(const QVariantHash &options) : QObject(0), mProgress(0), mOptions(options) {}
   QVariantHash &options() { return mOptions; }
 
 public slots:

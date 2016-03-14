@@ -189,7 +189,7 @@ void HistoryDialog::refresh()
   mModel->select();
 }
 
-void HistoryDialog::open(QModelIndex index)
+void HistoryDialog::open(const QModelIndex &index)
 {
   if (index.column() == 0) {
     QDesktopServices::openUrl(QUrl("file:///" + index.data().toString()));
@@ -199,7 +199,7 @@ void HistoryDialog::open(QModelIndex index)
   }
 }
 
-void HistoryDialog::selectionChanged(QItemSelection selected, QItemSelection deselected)
+void HistoryDialog::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
   Q_UNUSED(deselected);
 
@@ -249,7 +249,7 @@ bool HistoryDialog::eventFilter(QObject *object, QEvent *event)
     }
     else if (event->type() == QEvent::FocusOut)
     {
-      if (ui->filterEdit->text() == "") {
+      if (ui->filterEdit->text().isEmpty()) {
         ui->filterEdit->setStyleSheet("color: palette(mid);");
         ui->filterEdit->setText(tr("Filter.."));
         mFilterModel->sort(3, Qt::DescendingOrder);
