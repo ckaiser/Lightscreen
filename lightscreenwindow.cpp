@@ -112,7 +112,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
   mGlobalHotkeys = new UGlobalHotkeys(this);
 
   connect(mGlobalHotkeys, &UGlobalHotkeys::activated, [&](size_t id) {
-      if (id >= 0 && id <= 3) {
+      if (id <= 3) {
         screenshotAction(id);
       }
       else if (id == 4) {
@@ -994,6 +994,12 @@ bool LightscreenWindow::event(QEvent *event)
 {
   if (event->type() == QEvent::Show)
   {
+    QPoint savedPosition = settings()->value("position").toPoint();
+
+    if (!savedPosition.isNull() && qApp->desktop()->availableGeometry().contains(QRect(savedPosition, size()))) {
+      move(savedPosition);
+    }
+
     if (mHasTaskbarButton) {
       mTaskbarButton->setWindow(windowHandle());
     }
@@ -1013,12 +1019,6 @@ bool LightscreenWindow::event(QEvent *event)
     else {
       quit();
     }
-  }
-  else if (event->type() == QEvent::Show) {
-    QPoint savedPosition = settings()->value("position").toPoint();
-
-    if (!savedPosition.isNull() && qApp->desktop()->availableGeometry().contains(QRect(savedPosition, size())))
-      move(savedPosition);
   }
   else if (event->type() == QEvent::KeyPress) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
