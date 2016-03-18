@@ -340,7 +340,7 @@ void AreaDialog::paintEvent(QPaintEvent* e)
   QColor overlayColor(0, 0, 0, mOverlayAlpha);
   QColor textColor = pal.color(QPalette::Active, QPalette::Text);
   QColor textBackgroundColor = pal.color(QPalette::Active, QPalette::Base);
-  painter.drawPixmap(0, 0, mScreenshot->pixmap());
+  mScreenshot->pixmap().setDevicePixelRatio(devicePixelRatio());
   painter.setFont(font);
 
   QRect r = mSelection.normalized().adjusted(0, 0, -1, -1);
