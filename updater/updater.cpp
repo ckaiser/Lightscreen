@@ -27,38 +27,38 @@
 #include "../dialogs/updaterdialog.cpp"
 
 Updater::Updater(QObject *parent) :
-  QObject(parent)
+    QObject(parent)
 {
-  connect(&mNetwork, SIGNAL(finished(QNetworkReply*)), this, SLOT(finished(QNetworkReply*)));
+    connect(&mNetwork, SIGNAL(finished(QNetworkReply *)), this, SLOT(finished(QNetworkReply *)));
 }
 
 void Updater::check()
 {
-  QString platform = "unknown";
+    QString platform = "unknown";
 
 #ifdef Q_OS_WIN
-  platform = QString("Windows_%1").arg(QSysInfo::WindowsVersion);
+    platform = QString("Windows_%1").arg(QSysInfo::WindowsVersion);
 #else
-  platform = "Linux";
+    platform = "Linux";
 #endif
 
-  QNetworkRequest request(QUrl("https://lightscreen.com.ar/version?from=" + qApp->applicationVersion() + "&platform=" + platform));
-  mNetwork.get(request);
+    QNetworkRequest request(QUrl("https://lightscreen.com.ar/version?from=" + qApp->applicationVersion() + "&platform=" + platform));
+    mNetwork.get(request);
 }
 
 void Updater::checkWithFeedback()
 {
-  UpdaterDialog updaterDialog;
-  connect(this, SIGNAL(done(bool)), &updaterDialog, SLOT(updateDone(bool)));
+    UpdaterDialog updaterDialog;
+    connect(this, SIGNAL(done(bool)), &updaterDialog, SLOT(updateDone(bool)));
 
-  check();
-  updaterDialog.exec();
+    check();
+    updaterDialog.exec();
 }
 
 void Updater::finished(QNetworkReply *reply)
 {
-  QByteArray data = reply->readAll();
-  double version  = QString(data).toDouble();
+    QByteArray data = reply->readAll();
+    double version  = QString(data).toDouble();
 
-  emit done((version > qApp->applicationVersion().toDouble()));
+    emit done((version > qApp->applicationVersion().toDouble()));
 }

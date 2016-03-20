@@ -26,31 +26,31 @@ class QRect;
 class QRubberBand;
 class WindowPicker : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  WindowPicker();
-  ~WindowPicker();
+    WindowPicker();
+    ~WindowPicker();
 
 signals:
-  void pixmap(QPixmap pixmap);
+    void pixmap(QPixmap pixmap);
 
 protected:
-  void closeEvent(QCloseEvent*);
-  void mouseMoveEvent(QMouseEvent *event);
-  void mousePressEvent(QMouseEvent *event);
-  void mouseReleaseEvent(QMouseEvent *event);
+    void closeEvent(QCloseEvent *);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 
 private:
-  void cancel();
+    void cancel();
 
 private:
-  QPixmap mCrosshair;
-  QLabel *mCrosshairLabel;
-  QLabel *mWindowIcon;
-  QLabel *mWindowLabel;
-  WId mCurrentWindow;
-  bool mTaken;
+    QPixmap mCrosshair;
+    QLabel *mCrosshairLabel;
+    QLabel *mWindowIcon;
+    QLabel *mWindowLabel;
+    WId mCurrentWindow;
+    bool mTaken;
 };
 
 #endif // WINDOWPICKER_H

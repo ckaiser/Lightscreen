@@ -25,117 +25,111 @@
 
 class Screenshot : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  enum Format
-  {
-    PNG  = 0,
-    JPEG = 1,
-    BMP  = 2,
-    TIFF = 3
-  };
+    enum Format {
+        PNG  = 0,
+        JPEG = 1,
+        BMP  = 2,
+        TIFF = 3
+    };
 
-  enum Naming
-  {
-    Numeric = 0,
-    Date = 1,
-    Timestamp = 2,
-    Empty = 3
-  };
+    enum Naming {
+        Numeric = 0,
+        Date = 1,
+        Timestamp = 2,
+        Empty = 3
+    };
 
-  enum Mode
-  {
-    WholeScreen  = 0,
-    ActiveWindow = 1,
-    SelectedArea = 2,
-    SelectedWindow = 3
-  };
+    enum Mode {
+        WholeScreen  = 0,
+        ActiveWindow = 1,
+        SelectedArea = 2,
+        SelectedWindow = 3
+    };
 
-  enum Result
-  {
-    Fail = 0,
-    Success = 1,
-    Cancel = 2
-  };
+    enum Result {
+        Fail = 0,
+        Success = 1,
+        Cancel = 2
+    };
 
-  struct NamingOptions
-  {
-    Naming naming;
-    bool flip;
-    int leadingZeros;
-    QString dateFormat;
-  };
+    struct NamingOptions {
+        Naming naming;
+        bool flip;
+        int leadingZeros;
+        QString dateFormat;
+    };
 
-  struct Options
-  {
-    QString fileName;
-    Result result;
+    struct Options {
+        QString fileName;
+        Result result;
 
-    Format format;
-    NamingOptions namingOptions;
-    QDir directory;
-    QString prefix;
+        Format format;
+        NamingOptions namingOptions;
+        QDir directory;
+        QString prefix;
 
-    int mode;
-    int quality;
+        int mode;
+        int quality;
 
-    bool animations;
-    bool clipboard;
-    bool imgurClipboard;
-    bool currentMonitor;
-    bool cursor;
-    bool file;
-    bool magnify;
-    bool optimize;
-    bool preview;
-    bool replace;
-    bool saveAs;
-    bool upload;
-  };
+        bool animations;
+        bool clipboard;
+        bool imgurClipboard;
+        bool currentMonitor;
+        bool cursor;
+        bool file;
+        bool magnify;
+        bool optimize;
+        bool preview;
+        bool replace;
+        bool saveAs;
+        bool upload;
+    };
 
-  Screenshot(QObject *parent, Screenshot::Options options);
-  ~Screenshot();
+    Screenshot(QObject *parent, Screenshot::Options options);
+    ~Screenshot();
 
-  Screenshot::Options &options();
-  QPixmap &pixmap();
-  static QString getName(const NamingOptions &options, const QString &prefix, const QDir &directory);
-  QString &unloadedFileName();
+    Screenshot::Options &options();
+    QPixmap &pixmap();
+    static QString getName(const NamingOptions &options, const QString &prefix, const QDir &directory);
+    QString &unloadedFileName();
 
 public slots:
-  void confirm(bool result = true);
-  void confirmation();
-  void discard();
-  void markUpload();
-  void optimize();
-  void optimizationDone();
-  void save();
-  void setPixmap(QPixmap pixmap);
-  void take();
-  void upload();
-  void uploadDone(QString url);
+    void confirm(bool result = true);
+    void confirmation();
+    void discard();
+    void markUpload();
+    void optimize();
+    void optimizationDone();
+    void save();
+    void setPixmap(QPixmap pixmap);
+    void take();
+    void upload();
+    void uploadDone(QString url);
 
 signals:
-  void askConfirmation();
-  void cleanup();
-  void finished();
+    void askConfirmation();
+    void cleanup();
+    void finished();
 
 private:
-  void activeWindow();
-  QString extension() const;
-  void grabDesktop();
-  QString newFileName() const;
-  void selectedArea();
-  void selectedWindow();
-  bool unloadPixmap();
-  void wholeScreen();
+    void activeWindow();
+    QString extension() const;
+    void grabDesktop();
+    QString newFileName() const;
+    void selectedArea();
+    void selectedWindow();
+    bool unloadPixmap();
+    void wholeScreen();
 
 private:
-  Screenshot::Options mOptions;
-  QPixmap mPixmap;
-  bool mPixmapDelay;
-  bool mUnloaded;
-  QString mUnloadFilename;
+    Screenshot::Options mOptions;
+    QPixmap mPixmap;
+    bool mPixmapDelay;
+    bool mUnloaded;
+    QString mUnloadFilename;
 
 };
 

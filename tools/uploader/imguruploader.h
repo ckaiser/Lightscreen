@@ -8,23 +8,23 @@
 
 class ImgurUploader : public ImageUploader
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-  ImgurUploader(const QVariantHash &options);
+    ImgurUploader(const QVariantHash &options);
 
 public slots:
-  void upload(const QString &fileName);
-  void retry();
-  void cancel();
+    void upload(const QString &fileName);
+    void retry();
+    void cancel();
 
 private slots:
-  void finished();
-  void uploadProgress(qint64 bytesReceived, qint64 bytesTotal);
+    void finished();
+    void uploadProgress(qint64 bytesReceived, qint64 bytesTotal);
 
 signals:
-  void cancelRequest();
-  void needAuthRefresh();
+    void cancelRequest();
+    void needAuthRefresh();
 
 };
 

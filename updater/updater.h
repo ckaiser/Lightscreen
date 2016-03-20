@@ -24,22 +24,22 @@
 
 class Updater : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  Updater(QObject *parent = 0);
+    Updater(QObject *parent = 0);
 
 signals:
-  void done(bool result);
+    void done(bool result);
 
 public slots:
-  void check();
-  void checkWithFeedback();
+    void check();
+    void checkWithFeedback();
 
 private slots:
-  void finished(QNetworkReply* reply);
+    void finished(QNetworkReply *reply);
 
 private:
-  QNetworkAccessManager mNetwork;
+    QNetworkAccessManager mNetwork;
 
 };
 

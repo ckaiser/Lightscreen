@@ -27,39 +27,38 @@
 #include "../tools/os.h"
 
 UpdaterDialog::UpdaterDialog(QWidget *parent) :
-QProgressDialog("", tr("Cancel"), 0, 0, parent)
+    QProgressDialog("", tr("Cancel"), 0, 0, parent)
 {
-  setWindowTitle(tr("Updater - Lightscreen"));
-  setWindowFlags(windowFlags() ^ Qt::WindowContextHelpButtonHint);
-  setAutoClose(false);
+    setWindowTitle(tr("Updater - Lightscreen"));
+    setWindowFlags(windowFlags() ^ Qt::WindowContextHelpButtonHint);
+    setAutoClose(false);
 
-  QProgressBar *bar = new QProgressBar(this);
-  bar->setTextVisible(false);
-  bar->setRange(0, 0);
+    QProgressBar *bar = new QProgressBar(this);
+    bar->setTextVisible(false);
+    bar->setRange(0, 0);
 
-  QLabel *label = new QLabel(tr("Checking for updates..."), this);
-  connect(label, SIGNAL(linkActivated(QString)), this, SLOT(link(QString)));
+    QLabel *label = new QLabel(tr("Checking for updates..."), this);
+    connect(label, SIGNAL(linkActivated(QString)), this, SLOT(link(QString)));
 
-  setLabel(label);
-  setBar(bar);
+    setLabel(label);
+    setBar(bar);
 }
 
 void UpdaterDialog::updateDone(bool result)
 {
-  if (result) {
-    setLabelText(tr("There's a new version available,<br> please see <a href=\"https://lightscreen.com.ar/whatsnew/%1\">the Lighscreen website</a>.").arg(qApp->applicationVersion()));
-  }
-  else {
-    setLabelText(tr("No new versions available."));
-  }
+    if (result) {
+        setLabelText(tr("There's a new version available,<br> please see <a href=\"https://lightscreen.com.ar/whatsnew/%1\">the Lighscreen website</a>.").arg(qApp->applicationVersion()));
+    } else {
+        setLabelText(tr("No new versions available."));
+    }
 
-  setMaximum(1);
+    setMaximum(1);
 
-  setCancelButtonText(tr("Close"));
+    setCancelButtonText(tr("Close"));
 }
 
 void UpdaterDialog::link(QString url)
 {
-  QDesktopServices::openUrl(url);
+    QDesktopServices::openUrl(url);
 }
 

@@ -29,43 +29,42 @@ class QGraphicsEffect;
 class QIcon;
 
 #if defined(Q_OS_LINUX)
-  typedef unsigned long XID;
-  typedef XID Window;
+    typedef unsigned long XID;
+    typedef XID Window;
 #endif
 
-namespace os
-{
-  // Returns the cursor pixmap in Windows
-  QPixmap cursor();
+namespace os {
+// Returns the cursor pixmap in Windows
+QPixmap cursor();
 
-  // A QTimeLine based effect for a slot (TODO: look at the new effect classes)
-  void effect(QObject* target, const char* slot, int frames, int duration = 400, const char* cleanup = 0);
+// A QTimeLine based effect for a slot (TODO: look at the new effect classes)
+void effect(QObject *target, const char *slot, int frames, int duration = 400, const char *cleanup = 0);
 
-  // Returns the current users's Documents/My Documents folder
-  QString getDocumentsPath();
+// Returns the current users's Documents/My Documents folder
+QString getDocumentsPath();
 
-  // Returns the pixmap of the given window id.
-  QPixmap grabWindow(WId winId);
+// Returns the pixmap of the given window id.
+QPixmap grabWindow(WId winId);
 
-  // Set the target window as the foreground window (Windows only)
-  void setForegroundWindow(QWidget *window);
+// Set the target window as the foreground window (Windows only)
+void setForegroundWindow(QWidget *window);
 
-  // Adds lightscreen to the startup list in Windows & Linux (KDE, Gnome and Xfce for now).
-  void setStartup(bool startup, bool hide);
+// Adds lightscreen to the startup list in Windows & Linux (KDE, Gnome and Xfce for now).
+void setStartup(bool startup, bool hide);
 
-  // Creates a new QGraphicsDropShadowEffect to apply to widgets.
-  QGraphicsEffect* shadow(QColor color = Qt::black, int blurRadius = 6, int offset = 1);
+// Creates a new QGraphicsDropShadowEffect to apply to widgets.
+QGraphicsEffect *shadow(QColor color = Qt::black, int blurRadius = 6, int offset = 1);
 
-  // Translates the ui to the given language name.
-  void translate(QString language);
+// Translates the ui to the given language name.
+void translate(QString language);
 
-  // Returns a QIcon for the given icon name (taking into account color schemes and whatnot).
-  QIcon icon(QString name, QColor backgroundColor = QColor());
+// Returns a QIcon for the given icon name (taking into account color schemes and whatnot).
+QIcon icon(QString name, QColor backgroundColor = QColor());
 
-  // X11-specific functions for the Window Picker
+// X11-specific functions for the Window Picker
 #if defined(Q_OS_LINUX)
-  Window findRealWindow(Window w, int depth = 0);
-  Window windowUnderCursor(bool includeDecorations = true);
+    Window findRealWindow(Window w, int depth = 0);
+    Window windowUnderCursor(bool includeDecorations = true);
 #endif
 }
 

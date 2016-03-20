@@ -40,106 +40,108 @@ class LightscreenWindow : public QMainWindow
     Q_OBJECT
 
 public:
-  LightscreenWindow(QWidget *parent = 0);
-  ~LightscreenWindow();
+    LightscreenWindow(QWidget *parent = 0);
+    ~LightscreenWindow();
 
 public slots:
-  void action(int mode = 3);
-  void areaHotkey();
-  void checkForUpdates();
-  void cleanup(Screenshot::Options &options);
-  void closeToTrayWarning();
-  bool closingWithoutTray();
-  void createUploadMenu();
-  void goToFolder();
-  void messageClicked();
-  void messageReceived(const QString &message);
-  void notify(const Screenshot::Result &result);
-  void preview(Screenshot* screenshot);
-  void quit();
-  void restoreNotification();
-  void setStatus(QString status = "");
-  void screenshotAction(int mode = 0);
-  void screenshotActionTriggered(QAction* action);
-  void screenHotkey();
-  void showHotkeyError(const QStringList &hotkeys);
-  void showHistoryDialog();
-  void showOptions();
-  void showScreenshotMessage(const Screenshot::Result &result, const QString &fileName);
-  void showUploaderError(const QString &error);
-  void showUploaderMessage(QString fileName, QString url);
-  void toggleVisibility(QSystemTrayIcon::ActivationReason reason = QSystemTrayIcon::DoubleClick);
-  void updateStatus();
-  void updaterDone(bool result);
-  void upload(const QString &fileName);
-  void uploadCancel();
-  void uploadLast();
-  void uploadProgress(int progress);
-  void uploadMenuShown();
-  void windowHotkey();
-  void windowPickerHotkey();
+    void action(int mode = 3);
+    void areaHotkey();
+    void checkForUpdates();
+    void cleanup(Screenshot::Options &options);
+    void closeToTrayWarning();
+    bool closingWithoutTray();
+    void createUploadMenu();
+    void goToFolder();
+    void messageClicked();
+    void messageReceived(const QString &message);
+    void notify(const Screenshot::Result &result);
+    void preview(Screenshot *screenshot);
+    void quit();
+    void restoreNotification();
+    void setStatus(QString status = "");
+    void screenshotAction(int mode = 0);
+    void screenshotActionTriggered(QAction *action);
+    void screenHotkey();
+    void showHotkeyError(const QStringList &hotkeys);
+    void showHistoryDialog();
+    void showOptions();
+    void showScreenshotMessage(const Screenshot::Result &result, const QString &fileName);
+    void showUploaderError(const QString &error);
+    void showUploaderMessage(QString fileName, QString url);
+    void toggleVisibility(QSystemTrayIcon::ActivationReason reason = QSystemTrayIcon::DoubleClick);
+    void updateStatus();
+    void updaterDone(bool result);
+    void upload(const QString &fileName);
+    void uploadCancel();
+    void uploadLast();
+    void uploadProgress(int progress);
+    void uploadMenuShown();
+    void windowHotkey();
+    void windowPickerHotkey();
 
 private slots:
-  void applySettings();
+    void applySettings();
 
 signals:
-  void uploading(bool uploading);
-  void finished();
+    void uploading(bool uploading);
+    void finished();
 
 private:
-  void connectHotkeys();
-  void createTrayIcon();
+    void connectHotkeys();
+    void createTrayIcon();
 
 #ifdef Q_OS_WIN
-  bool winEvent(MSG *message, long *result);
+    bool winEvent(MSG *message, long *result);
 #endif
-  // Convenience function
-  QSettings *settings() const;
+    // Convenience function
+    QSettings *settings() const;
 
 protected:
-  bool event(QEvent *event);
+    bool event(QEvent *event);
 
 private:
-  bool mDoCache;
-  bool mHideTrigger;
-  bool mReviveMain;
-  bool mWasVisible;
-  int  mLastMessage;
-  int  mLastMode;
-  QString mLastScreenshot;
-  QPointer<QSystemTrayIcon> mTrayIcon;
-  QPointer<PreviewDialog> mPreviewDialog;
-  QPointer<Updater> mUpdater;
-  Ui::LightscreenWindowClass ui;
+    bool mDoCache;
+    bool mHideTrigger;
+    bool mReviveMain;
+    bool mWasVisible;
+    int  mLastMessage;
+    int  mLastMode;
+    QString mLastScreenshot;
+    QPointer<QSystemTrayIcon> mTrayIcon;
+    QPointer<PreviewDialog> mPreviewDialog;
+    QPointer<Updater> mUpdater;
+    Ui::LightscreenWindowClass ui;
 
-  QPointer<UGlobalHotkeys> mGlobalHotkeys;
+    QPointer<UGlobalHotkeys> mGlobalHotkeys;
 
-  bool mHasTaskbarButton;
+    bool mHasTaskbarButton;
 
 #ifdef Q_OS_WIN
-  QPointer<QWinTaskbarButton> mTaskbarButton;
+    QPointer<QWinTaskbarButton> mTaskbarButton;
 #else
-  class QWinTaskbarProgressDummy {
-  public:
-      void setVisible(bool v) { Q_UNUSED(v) }
-      void setPaused(bool p)  { Q_UNUSED(p) }
-      void resume() {}
-      void stop() {}
-      void reset() {}
-      void setRange(int m, int m2)  { Q_UNUSED(m) Q_UNUSED(m2) }
-      void setValue(int v)  { Q_UNUSED(v) }
+    class QWinTaskbarProgressDummy
+    {
+    public:
+        void setVisible(bool v) { Q_UNUSED(v) }
+        void setPaused(bool p)  { Q_UNUSED(p) }
+        void resume() {}
+        void stop() {}
+        void reset() {}
+        void setRange(int m, int m2)  { Q_UNUSED(m) Q_UNUSED(m2) }
+        void setValue(int v)  { Q_UNUSED(v) }
 
-  };
+    };
 
-  class QWinTaskbarDummy : public QObject {
-  public:
-      void setOverlayIcon(QIcon i) { Q_UNUSED(i) }
-      void clearOverlayIcon() {}
-      QWinTaskbarProgressDummy* progress() { return 0; }
-      void setWindow(QWindow* w) { Q_UNUSED(w) }
-  };
+    class QWinTaskbarDummy : public QObject
+    {
+    public:
+        void setOverlayIcon(QIcon i) { Q_UNUSED(i) }
+        void clearOverlayIcon() {}
+        QWinTaskbarProgressDummy *progress() { return 0; }
+        void setWindow(QWindow *w) { Q_UNUSED(w) }
+    };
 
-  QWinTaskbarDummy* mTaskbarButton;
+    QWinTaskbarDummy *mTaskbarButton;
 #endif
 };
 

@@ -42,367 +42,357 @@
 PreviewDialog::PreviewDialog(QWidget *parent) :
     QDialog(parent), mAutoclose(0)
 {
-  setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
-  setWindowTitle(tr("Screenshot Preview"));
+    setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
+    setWindowTitle(tr("Screenshot Preview"));
 
-  QSettings *settings = ScreenshotManager::instance()->settings();
+    QSettings *settings = ScreenshotManager::instance()->settings();
 
-  mSize      = settings->value("options/previewSize", 300).toInt();
-  mPosition  = settings->value("options/previewPosition", 3).toInt();
+    mSize      = settings->value("options/previewSize", 300).toInt();
+    mPosition  = settings->value("options/previewPosition", 3).toInt();
 
-  if (settings->value("options/previewAutoclose", false).toBool()) {
-    mAutoclose = settings->value("options/previewAutocloseTime").toInt();
-    mAutocloseReset = mAutoclose;
-    mAutocloseAction = settings->value("options/previewAutocloseAction").toInt();
-  }
+    if (settings->value("options/previewAutoclose", false).toBool()) {
+        mAutoclose = settings->value("options/previewAutocloseTime").toInt();
+        mAutocloseReset = mAutoclose;
+        mAutocloseAction = settings->value("options/previewAutocloseAction").toInt();
+    }
 
-  QHBoxLayout *l = new QHBoxLayout;
-  mStack = new QStackedLayout;
-  connect(mStack, SIGNAL(currentChanged(int)), this, SLOT(indexChanged(int)));
+    QHBoxLayout *l = new QHBoxLayout;
+    mStack = new QStackedLayout;
+    connect(mStack, SIGNAL(currentChanged(int)), this, SLOT(indexChanged(int)));
 
-  mPrevButton = new QPushButton(os::icon("arrow-left"), "", this);
-  connect(mPrevButton, SIGNAL(clicked()), this, SLOT(previous()));
+    mPrevButton = new QPushButton(os::icon("arrow-left"), "", this);
+    connect(mPrevButton, SIGNAL(clicked()), this, SLOT(previous()));
 
-  mNextButton = new QPushButton(os::icon("arrow-right"), "", this);
-  connect(mNextButton, SIGNAL(clicked()), this, SLOT(next()));
+    mNextButton = new QPushButton(os::icon("arrow-right"), "", this);
+    connect(mNextButton, SIGNAL(clicked()), this, SLOT(next()));
 
-  mPrevButton->setCursor(Qt::PointingHandCursor);
-  mPrevButton->setFlat(true);
-  mPrevButton->setGraphicsEffect(os::shadow(Qt::white));
-  mPrevButton->setIconSize(QSize(24, 24));
-  mPrevButton->setVisible(false);
+    mPrevButton->setCursor(Qt::PointingHandCursor);
+    mPrevButton->setFlat(true);
+    mPrevButton->setGraphicsEffect(os::shadow(Qt::white));
+    mPrevButton->setIconSize(QSize(24, 24));
+    mPrevButton->setVisible(false);
 
-  mNextButton->setCursor(Qt::PointingHandCursor);
-  mNextButton->setFlat(true);
-  mNextButton->setGraphicsEffect(os::shadow(Qt::white));
-  mNextButton->setIconSize(QSize(24, 24));
-  mNextButton->setVisible(false);
+    mNextButton->setCursor(Qt::PointingHandCursor);
+    mNextButton->setFlat(true);
+    mNextButton->setGraphicsEffect(os::shadow(Qt::white));
+    mNextButton->setIconSize(QSize(24, 24));
+    mNextButton->setVisible(false);
 
-  l->addWidget(mPrevButton);
-  l->addLayout(mStack);
-  l->addWidget(mNextButton);
+    l->addWidget(mPrevButton);
+    l->addLayout(mStack);
+    l->addWidget(mNextButton);
 
-  l->setMargin(0);
-  l->setContentsMargins(6, 6, 6, 6);
+    l->setMargin(0);
+    l->setContentsMargins(6, 6, 6, 6);
 
-  mStack->setMargin(0);
+    mStack->setMargin(0);
 
-  setMaximumHeight(mSize);
-  setLayout(l);
+    setMaximumHeight(mSize);
+    setLayout(l);
 
-  if (mAutoclose) {
-    startTimer(1000);
-  }
+    if (mAutoclose) {
+        startTimer(1000);
+    }
 }
 
 void PreviewDialog::add(Screenshot *screenshot)
 {
-  if (!isVisible()) {
-    show();
-  }
-
-  if (mAutoclose) {
-    mAutoclose = mAutocloseReset;
-  }
-
-  QLabel *label = new QLabel(this);
-  label->setGraphicsEffect(os::shadow());
-
-  bool small = false;
-
-  QSize size = screenshot->pixmap().size();
-
-  if (size.width() > mSize || size.height() > mSize) {
-    size.scale(mSize, mSize, Qt::KeepAspectRatio);
-  }
-  else {
-    small = true;
-  }
-
-  QPixmap thumbnail = screenshot->pixmap().scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-  label->setPixmap(thumbnail);
-
-  thumbnail = QPixmap();
-
-  label->setAlignment(Qt::AlignCenter);
-
-  if (size.height() < 120) {
-    label->setMinimumHeight(120);
-  }
-
-  if (size.width() < 140) {
-    label->setMinimumWidth(140);
-  }
-
-  label->resize(size);
-
-  QPushButton *discardPushButton = new QPushButton(os::icon("no")   , "", label);
-  QPushButton *enlargePushButton = new QPushButton(os::icon("preview"), "", label);
-  QToolButton *confirmPushButton = new QToolButton(label);
-
-  confirmPushButton->setIconSize(QSize(24, 24));
-  confirmPushButton->setCursor(Qt::PointingHandCursor);
-  confirmPushButton->setGraphicsEffect(os::shadow(Qt::white));
-
-  if (ScreenshotManager::instance()->settings()->value("options/previewDefaultAction", 0).toInt() == 0
-      || ScreenshotManager::instance()->settings()->value("options/uploadAuto").toBool()) {
-    // Default button, confirm & upload.
-    confirmPushButton->setIcon(os::icon("yes"));
-
-    if (!ScreenshotManager::instance()->settings()->value("options/uploadAuto").toBool()) {
-      QMenu *confirmMenu = new QMenu(confirmPushButton);
-      confirmMenu->setObjectName("confirmMenu");
-
-      QAction *uploadAction = new QAction(os::icon("imgur"), tr("Upload"), confirmPushButton);
-      connect(uploadAction, SIGNAL(triggered()), screenshot,   SLOT(markUpload()));
-      connect(uploadAction, SIGNAL(triggered()), screenshot,   SLOT(confirm()));
-      connect(uploadAction, SIGNAL(triggered()), this,         SLOT(closePreview()));
-      connect(this,         SIGNAL(uploadAll()), uploadAction, SLOT(trigger()));
-
-      confirmMenu->addAction(uploadAction);
-      confirmPushButton->setMenu(confirmMenu);
-      confirmPushButton->setPopupMode(QToolButton::MenuButtonPopup);
+    if (!isVisible()) {
+        show();
     }
 
-    connect(this, SIGNAL(acceptAll()), confirmPushButton, SLOT(click()));
-    connect(confirmPushButton, SIGNAL(clicked()), screenshot, SLOT(confirm()));
-    connect(confirmPushButton, SIGNAL(clicked()), this, SLOT(closePreview()));
-  }
-  else {
-    // Reversed button, upload & confirm.
-    confirmPushButton->setIcon(os::icon("imgur"));
+    if (mAutoclose) {
+        mAutoclose = mAutocloseReset;
+    }
 
-    QMenu *confirmMenu = new QMenu(confirmPushButton);
-    confirmMenu->setObjectName("confirmMenu");
+    QLabel *label = new QLabel(this);
+    label->setGraphicsEffect(os::shadow());
 
-    QAction *confirmAction = new QAction(os::icon("yes"), tr("Save"), confirmPushButton);
-    connect(this, SIGNAL(acceptAll()), confirmAction, SLOT(trigger()));
-    connect(confirmAction, SIGNAL(triggered()), screenshot, SLOT(confirm()));
-    connect(confirmAction, SIGNAL(triggered()), this, SLOT(closePreview()));
+    bool small = false;
 
-    connect(confirmPushButton, SIGNAL(clicked()), screenshot,   SLOT(markUpload()));
-    connect(confirmPushButton, SIGNAL(clicked()), screenshot,   SLOT(confirm()));
-    connect(confirmPushButton, SIGNAL(clicked()), this,         SLOT(closePreview()));
-    connect(this,         SIGNAL(uploadAll()), confirmPushButton, SLOT(click()));
+    QSize size = screenshot->pixmap().size();
 
-    confirmMenu->addAction(confirmAction);
-    confirmPushButton->setMenu(confirmMenu);
-    confirmPushButton->setPopupMode(QToolButton::MenuButtonPopup);
-  }
+    if (size.width() > mSize || size.height() > mSize) {
+        size.scale(mSize, mSize, Qt::KeepAspectRatio);
+    } else {
+        small = true;
+    }
 
-  confirmPushButton->setAutoRaise(true);
-  confirmPushButton->setVisible(false);
+    QPixmap thumbnail = screenshot->pixmap().scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-  discardPushButton->setIconSize(QSize(24, 24));
-  discardPushButton->setCursor(Qt::PointingHandCursor);
-  discardPushButton->setGraphicsEffect(os::shadow(Qt::white));
-  discardPushButton->setFlat(true);
-  discardPushButton->setVisible(false);
+    label->setPixmap(thumbnail);
 
-  enlargePushButton->setIconSize(QSize(22, 22));
-  enlargePushButton->setCursor(Qt::PointingHandCursor);
-  enlargePushButton->setGraphicsEffect(os::shadow(Qt::white));
-  enlargePushButton->setFlat(true);
-  enlargePushButton->setVisible(false);
+    thumbnail = QPixmap();
 
-  enlargePushButton->setDisabled(small);
+    label->setAlignment(Qt::AlignCenter);
 
-  connect(this, SIGNAL(rejectAll()), discardPushButton, SLOT(click()));
+    if (size.height() < 120) {
+        label->setMinimumHeight(120);
+    }
 
-  connect(discardPushButton, SIGNAL(clicked()), screenshot, SLOT(discard()));
-  connect(discardPushButton, SIGNAL(clicked()), this, SLOT(closePreview()));
+    if (size.width() < 140) {
+        label->setMinimumWidth(140);
+    }
 
-  connect(enlargePushButton, SIGNAL(clicked()), this, SLOT(enlargePreview()));
+    label->resize(size);
 
-  QHBoxLayout *wlayout = new QHBoxLayout;
-  wlayout->addWidget(confirmPushButton);
-  wlayout->addStretch();
-  wlayout->addWidget(enlargePushButton);
-  wlayout->addStretch();
-  wlayout->addWidget(discardPushButton);
-  wlayout->setMargin(0);
+    QPushButton *discardPushButton = new QPushButton(os::icon("no")   , "", label);
+    QPushButton *enlargePushButton = new QPushButton(os::icon("preview"), "", label);
+    QToolButton *confirmPushButton = new QToolButton(label);
 
-  QVBoxLayout *wl = new QVBoxLayout;
-  wl->addStretch();
-  wl->addLayout(wlayout);
-  wl->setMargin(0);
+    confirmPushButton->setIconSize(QSize(24, 24));
+    confirmPushButton->setCursor(Qt::PointingHandCursor);
+    confirmPushButton->setGraphicsEffect(os::shadow(Qt::white));
 
-  label->setLayout(wl);
+    if (ScreenshotManager::instance()->settings()->value("options/previewDefaultAction", 0).toInt() == 0
+            || ScreenshotManager::instance()->settings()->value("options/uploadAuto").toBool()) {
+        // Default button, confirm & upload.
+        confirmPushButton->setIcon(os::icon("yes"));
 
-  mStack->addWidget(label);
-  mStack->setCurrentIndex(mStack->count()-1);
+        if (!ScreenshotManager::instance()->settings()->value("options/uploadAuto").toBool()) {
+            QMenu *confirmMenu = new QMenu(confirmPushButton);
+            confirmMenu->setObjectName("confirmMenu");
 
-  mNextButton->setEnabled(false);
+            QAction *uploadAction = new QAction(os::icon("imgur"), tr("Upload"), confirmPushButton);
+            connect(uploadAction, SIGNAL(triggered()), screenshot,   SLOT(markUpload()));
+            connect(uploadAction, SIGNAL(triggered()), screenshot,   SLOT(confirm()));
+            connect(uploadAction, SIGNAL(triggered()), this,         SLOT(closePreview()));
+            connect(this,         SIGNAL(uploadAll()), uploadAction, SLOT(trigger()));
 
-  if (mStack->count() >= 2 && !mNextButton->isVisible()) {
-    mNextButton->setVisible(true);
-    mPrevButton->setVisible(true);
-  }
+            confirmMenu->addAction(uploadAction);
+            confirmPushButton->setMenu(confirmMenu);
+            confirmPushButton->setPopupMode(QToolButton::MenuButtonPopup);
+        }
 
-  relocate();
+        connect(this, SIGNAL(acceptAll()), confirmPushButton, SLOT(click()));
+        connect(confirmPushButton, SIGNAL(clicked()), screenshot, SLOT(confirm()));
+        connect(confirmPushButton, SIGNAL(clicked()), this, SLOT(closePreview()));
+    } else {
+        // Reversed button, upload & confirm.
+        confirmPushButton->setIcon(os::icon("imgur"));
+
+        QMenu *confirmMenu = new QMenu(confirmPushButton);
+        confirmMenu->setObjectName("confirmMenu");
+
+        QAction *confirmAction = new QAction(os::icon("yes"), tr("Save"), confirmPushButton);
+        connect(this, SIGNAL(acceptAll()), confirmAction, SLOT(trigger()));
+        connect(confirmAction, SIGNAL(triggered()), screenshot, SLOT(confirm()));
+        connect(confirmAction, SIGNAL(triggered()), this, SLOT(closePreview()));
+
+        connect(confirmPushButton, SIGNAL(clicked()), screenshot,   SLOT(markUpload()));
+        connect(confirmPushButton, SIGNAL(clicked()), screenshot,   SLOT(confirm()));
+        connect(confirmPushButton, SIGNAL(clicked()), this,         SLOT(closePreview()));
+        connect(this,         SIGNAL(uploadAll()), confirmPushButton, SLOT(click()));
+
+        confirmMenu->addAction(confirmAction);
+        confirmPushButton->setMenu(confirmMenu);
+        confirmPushButton->setPopupMode(QToolButton::MenuButtonPopup);
+    }
+
+    confirmPushButton->setAutoRaise(true);
+    confirmPushButton->setVisible(false);
+
+    discardPushButton->setIconSize(QSize(24, 24));
+    discardPushButton->setCursor(Qt::PointingHandCursor);
+    discardPushButton->setGraphicsEffect(os::shadow(Qt::white));
+    discardPushButton->setFlat(true);
+    discardPushButton->setVisible(false);
+
+    enlargePushButton->setIconSize(QSize(22, 22));
+    enlargePushButton->setCursor(Qt::PointingHandCursor);
+    enlargePushButton->setGraphicsEffect(os::shadow(Qt::white));
+    enlargePushButton->setFlat(true);
+    enlargePushButton->setVisible(false);
+
+    enlargePushButton->setDisabled(small);
+
+    connect(this, SIGNAL(rejectAll()), discardPushButton, SLOT(click()));
+
+    connect(discardPushButton, SIGNAL(clicked()), screenshot, SLOT(discard()));
+    connect(discardPushButton, SIGNAL(clicked()), this, SLOT(closePreview()));
+
+    connect(enlargePushButton, SIGNAL(clicked()), this, SLOT(enlargePreview()));
+
+    QHBoxLayout *wlayout = new QHBoxLayout;
+    wlayout->addWidget(confirmPushButton);
+    wlayout->addStretch();
+    wlayout->addWidget(enlargePushButton);
+    wlayout->addStretch();
+    wlayout->addWidget(discardPushButton);
+    wlayout->setMargin(0);
+
+    QVBoxLayout *wl = new QVBoxLayout;
+    wl->addStretch();
+    wl->addLayout(wlayout);
+    wl->setMargin(0);
+
+    label->setLayout(wl);
+
+    mStack->addWidget(label);
+    mStack->setCurrentIndex(mStack->count() - 1);
+
+    mNextButton->setEnabled(false);
+
+    if (mStack->count() >= 2 && !mNextButton->isVisible()) {
+        mNextButton->setVisible(true);
+        mPrevButton->setVisible(true);
+    }
+
+    relocate();
 }
 
 int PreviewDialog::count() const
 {
-  return mStack->count();
+    return mStack->count();
 }
 
 //
 
 void PreviewDialog::closePreview()
 {
-  QWidget *widget = mStack->currentWidget();
-  mStack->removeWidget(widget);
-  widget->deleteLater();
+    QWidget *widget = mStack->currentWidget();
+    mStack->removeWidget(widget);
+    widget->deleteLater();
 
-  if (mStack->count() == 0) {
-    close();
-  }
-  else {
-    relocate();
-  }
+    if (mStack->count() == 0) {
+        close();
+    } else {
+        relocate();
+    }
 }
 
 void PreviewDialog::enlargePreview()
 {
-  Screenshot *screenshot = qobject_cast<Screenshot*>(ScreenshotManager::instance()->children().at(mStack->currentIndex()));
+    Screenshot *screenshot = qobject_cast<Screenshot *>(ScreenshotManager::instance()->children().at(mStack->currentIndex()));
 
-  if (screenshot) {
-    QFileInfo info(screenshot->unloadedFileName());
-    QDesktopServices::openUrl(QUrl(info.absoluteFilePath()));
-  }
+    if (screenshot) {
+        QFileInfo info(screenshot->unloadedFileName());
+        QDesktopServices::openUrl(QUrl(info.absoluteFilePath()));
+    }
 }
 
 void PreviewDialog::indexChanged(int i)
 {
-  if (i == mStack->count()-1) {
-    mNextButton->setEnabled(false);
-    mPrevButton->setEnabled(true);
-  }
+    if (i == mStack->count() - 1) {
+        mNextButton->setEnabled(false);
+        mPrevButton->setEnabled(true);
+    }
 
-  if (i == 0 && mStack->count() > 1) {
-    mNextButton->setEnabled(true);
-    mPrevButton->setEnabled(false);
-  }
+    if (i == 0 && mStack->count() > 1) {
+        mNextButton->setEnabled(true);
+        mPrevButton->setEnabled(false);
+    }
 
-  if (i != 0 && i != mStack->count()-1) {
-    mNextButton->setEnabled(true);
-    mPrevButton->setEnabled(true);
-  }
+    if (i != 0 && i != mStack->count() - 1) {
+        mNextButton->setEnabled(true);
+        mPrevButton->setEnabled(true);
+    }
 
-  if (mStack->count() < 2) {
-    mNextButton->setEnabled(false);
-    mPrevButton->setEnabled(false);
-  }
+    if (mStack->count() < 2) {
+        mNextButton->setEnabled(false);
+        mPrevButton->setEnabled(false);
+    }
 
-  if (mStack->widget(i)) {
-    mStack->widget(i)->setFocus();
-  }
+    if (mStack->widget(i)) {
+        mStack->widget(i)->setFocus();
+    }
 
-  if (mStack->count() > 1) {
-    setWindowTitle(tr("Screenshot Preview (%1 of %2)").arg(mStack->currentIndex()+1).arg(mStack->count()));
-  }
-  else {
-    setWindowTitle(tr("Screenshot Preview"));
-  }
+    if (mStack->count() > 1) {
+        setWindowTitle(tr("Screenshot Preview (%1 of %2)").arg(mStack->currentIndex() + 1).arg(mStack->count()));
+    } else {
+        setWindowTitle(tr("Screenshot Preview"));
+    }
 }
 
 void PreviewDialog::next()
 {
-  mStack->setCurrentIndex(mStack->currentIndex()+1);
-  relocate();
+    mStack->setCurrentIndex(mStack->currentIndex() + 1);
+    relocate();
 }
 
 void PreviewDialog::previous()
 {
-  mStack->setCurrentIndex(mStack->currentIndex()-1);
-  relocate();
+    mStack->setCurrentIndex(mStack->currentIndex() - 1);
+    relocate();
 }
 
 
 void PreviewDialog::relocate()
 {
-  updateGeometry();
-  resize(minimumSizeHint());
-  QApplication::sendEvent(this, new QEvent(QEvent::Enter)); // Ensures the buttons are visible.
+    updateGeometry();
+    resize(minimumSizeHint());
+    QApplication::sendEvent(this, new QEvent(QEvent::Enter)); // Ensures the buttons are visible.
 
-  QPoint where;
-  switch (mPosition)
-  {
-  case 0:
-    where = QApplication::desktop()->availableGeometry(this).topLeft();
-    break;
-  case 1:
-    where = QApplication::desktop()->availableGeometry(this).topRight();
-    where.setX(where.x() - frameGeometry().width());
-    break;
-  case 2:
-    where = QApplication::desktop()->availableGeometry(this).bottomLeft();
-    where.setY(where.y() - frameGeometry().height());
-    break;
-  case 3:
-  default:
-    where = QApplication::desktop()->availableGeometry(this).bottomRight();
-    where.setX(where.x() - frameGeometry().width());
-    where.setY(where.y() - frameGeometry().height());
-    break;
-  }
+    QPoint where;
+    switch (mPosition) {
+    case 0:
+        where = QApplication::desktop()->availableGeometry(this).topLeft();
+        break;
+    case 1:
+        where = QApplication::desktop()->availableGeometry(this).topRight();
+        where.setX(where.x() - frameGeometry().width());
+        break;
+    case 2:
+        where = QApplication::desktop()->availableGeometry(this).bottomLeft();
+        where.setY(where.y() - frameGeometry().height());
+        break;
+    case 3:
+    default:
+        where = QApplication::desktop()->availableGeometry(this).bottomRight();
+        where.setX(where.x() - frameGeometry().width());
+        where.setY(where.y() - frameGeometry().height());
+        break;
+    }
 
-  move(where);
+    move(where);
 }
 
 //
 
 bool PreviewDialog::event(QEvent *event)
 {
-  if ((event->type() == QEvent::Enter || event->type() == QEvent::Leave)
-      && mStack->currentWidget())
-  {
-    foreach (QObject *child, mStack->currentWidget()->children()) {
-      QWidget *widget = qobject_cast<QWidget*>(child);
+    if ((event->type() == QEvent::Enter || event->type() == QEvent::Leave)
+            && mStack->currentWidget()) {
+        foreach (QObject *child, mStack->currentWidget()->children()) {
+            QWidget *widget = qobject_cast<QWidget *>(child);
 
-      if (widget) {
-        // Lets avoid disappearing buttons and bail if the menu is open.
-        QMenu *confirmMenu = widget->findChild<QMenu*>("confirmMenu");
-        if (confirmMenu && confirmMenu->isVisible())
-          return false;
+            if (widget) {
+                // Lets avoid disappearing buttons and bail if the menu is open.
+                QMenu *confirmMenu = widget->findChild<QMenu *>("confirmMenu");
+                if (confirmMenu && confirmMenu->isVisible()) {
+                    return false;
+                }
 
-        widget->setVisible((event->type() == QEvent::Enter));
-      }
+                widget->setVisible((event->type() == QEvent::Enter));
+            }
+        }
+    } else if (event->type() == QEvent::Close) {
+        if (mStack->count() != 0) {
+            emit rejectAll();
+        }
+
+        deleteLater();
+    } else if (event->type() == QEvent::MouseButtonDblClick) {
+        enlargePreview();
     }
-  }
-  else if (event->type() == QEvent::Close) {
-    if (mStack->count() != 0)
-      emit rejectAll();
 
-    deleteLater();
-  }
-  else if (event->type() == QEvent::MouseButtonDblClick) {
-    enlargePreview();
-  }
-
-  return QDialog::event(event);
+    return QDialog::event(event);
 }
 
 void PreviewDialog::timerEvent(QTimerEvent *event)
 {
-  if (mAutoclose == 0) {
-    if (mAutocloseAction == 0) {
-      emit acceptAll();
+    if (mAutoclose == 0) {
+        if (mAutocloseAction == 0) {
+            emit acceptAll();
+        } else if (mAutocloseAction == 1) {
+            emit uploadAll();
+        } else {
+            emit rejectAll();
+        }
+    } else if (mAutoclose < 0) {
+        killTimer(event->timerId());
+    } else {
+        setWindowTitle(tr("Preview: Closing in %1").arg(mAutoclose));
+        mAutoclose--;
     }
-    else if (mAutocloseAction == 1) {
-      emit uploadAll();
-    }
-    else {
-      emit rejectAll();
-    }
-  }
-  else if (mAutoclose < 0) {
-    killTimer(event->timerId());
-  }
-  else {
-    setWindowTitle(tr("Preview: Closing in %1").arg(mAutoclose));
-    mAutoclose--;
-  }
 }

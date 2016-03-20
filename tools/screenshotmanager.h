@@ -27,48 +27,47 @@
 class QSettings;
 class ScreenshotManager : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  enum State
-  {
-    Idle  = 0,
-    Busy = 1,
-    Disabled  = 2
-  };
+    enum State {
+        Idle  = 0,
+        Busy = 1,
+        Disabled  = 2
+    };
 
 public:
-  ScreenshotManager(QObject *parent);
-  ~ScreenshotManager();
-  static ScreenshotManager *instance();
+    ScreenshotManager(QObject *parent);
+    ~ScreenshotManager();
+    static ScreenshotManager *instance();
 
-  void initHistory();
-  int activeCount() const;
-  bool portableMode();
-  void saveHistory(QString fileName, QString url = "", QString deleteHash = "");
-  void updateHistory(QString fileName, QString url, QString deleteHash);
-  void removeHistory(QString fileName, qint64 time);
-  void clearHistory();
-  QSettings *settings() const { return mSettings; }
+    void initHistory();
+    int activeCount() const;
+    bool portableMode();
+    void saveHistory(QString fileName, QString url = "", QString deleteHash = "");
+    void updateHistory(QString fileName, QString url, QString deleteHash);
+    void removeHistory(QString fileName, qint64 time);
+    void clearHistory();
+    QSettings *settings() const { return mSettings; }
 
 public slots:
-  void askConfirmation();
-  void cleanup();
-  void finished();
-  void take(Screenshot::Options &options);
-  void uploadDone(QString fileName, QString url, QString deleteHash);
+    void askConfirmation();
+    void cleanup();
+    void finished();
+    void take(Screenshot::Options &options);
+    void uploadDone(QString fileName, QString url, QString deleteHash);
 
 signals:
-  void confirm(Screenshot* screenshot);
-  void windowCleanup(Screenshot::Options &options);
-  void activeCountChange();
+    void confirm(Screenshot *screenshot);
+    void windowCleanup(Screenshot::Options &options);
+    void activeCountChange();
 
 private:
-  static ScreenshotManager* mInstance;
-  QList<Screenshot*> mScreenshots;
-  QSettings *mSettings;
-  QString mHistoryPath;
-  bool mPortableMode;
+    static ScreenshotManager *mInstance;
+    QList<Screenshot *> mScreenshots;
+    QSettings *mSettings;
+    QString mHistoryPath;
+    bool mPortableMode;
 };
 
 #endif // SCREENSHOTMANAGER_H

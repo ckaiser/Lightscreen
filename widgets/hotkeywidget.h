@@ -23,37 +23,37 @@
 
 class HotkeyWidget : public QPushButton
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  HotkeyWidget(QWidget *parent = 0);
+    HotkeyWidget(QWidget *parent = 0);
 
-  void setHotkey(QString hotkey);
-  QString hotkey() const;
+    void setHotkey(QString hotkey);
+    QString hotkey() const;
 
 signals:
-  void invalidHotkeyError();
+    void invalidHotkeyError();
 
 private:
-  void setHotkeyText();
-  void showError();
+    void setHotkeyText();
+    void showError();
 
 private slots:
-  void hideError();
+    void hideError();
 
 protected:
-  // Event overrides:
-  bool event(QEvent* event);
-  void keyPressEvent(QKeyEvent* event);
+    // Event overrides:
+    bool event(QEvent *event);
+    void keyPressEvent(QKeyEvent *event);
 
 private:
-  QKeySequence mHotkey;
-  bool mShowingError;
-  bool mKeyboardFocus;
-  QString mDefaultStyleSheet;
+    QKeySequence mHotkey;
+    bool mShowingError;
+    bool mKeyboardFocus;
+    QString mDefaultStyleSheet;
 
-  bool isValid(int key) const;
-  bool isModifier(int key) const;
+    bool isValid(int key) const;
+    bool isModifier(int key) const;
 };
 
 #endif // HOTKEYWIDGET_H

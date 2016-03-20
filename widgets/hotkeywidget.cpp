@@ -26,142 +26,137 @@
 #include "hotkeywidget.h"
 
 HotkeyWidget::HotkeyWidget(QWidget *parent) :
-  QPushButton(parent), mHotkey(QKeySequence()), mShowingError(false), mKeyboardFocus(false)
+    QPushButton(parent), mHotkey(QKeySequence()), mShowingError(false), mKeyboardFocus(false)
 {
-  mDefaultStyleSheet = "text-align: left; padding: 3px 6px;";
-  setStyleSheet(mDefaultStyleSheet);
+    mDefaultStyleSheet = "text-align: left; padding: 3px 6px;";
+    setStyleSheet(mDefaultStyleSheet);
 
-  setText(tr("Click to select hotkey..."));
-  setObjectName("HotkeyWidget");
+    setText(tr("Click to select hotkey..."));
+    setObjectName("HotkeyWidget");
 
-  if (qApp->style()->objectName() == "oxygen") {
-    setMinimumWidth(130);
-  }
-  else {
-    setMinimumWidth(110);
-  }
+    if (qApp->style()->objectName() == "oxygen") {
+        setMinimumWidth(130);
+    } else {
+        setMinimumWidth(110);
+    }
 }
 
 void HotkeyWidget::setHotkey(QString hotkeyString)
 {
-  mHotkey = QKeySequence().fromString(hotkeyString, QKeySequence::NativeText);
-  setHotkeyText();
+    mHotkey = QKeySequence().fromString(hotkeyString, QKeySequence::NativeText);
+    setHotkeyText();
 }
 
 QString HotkeyWidget::hotkey() const
 {
-  return mHotkey.toString(QKeySequence::PortableText);
+    return mHotkey.toString(QKeySequence::PortableText);
 }
 
 void HotkeyWidget::showError()
 {
-  if (mShowingError)
-    return;
+    if (mShowingError) {
+        return;
+    }
 
-  mShowingError = true;
+    mShowingError = true;
 
-  setStyleSheet(mDefaultStyleSheet + "color: #d90000;");
-  QTimer::singleShot(1000, this, SLOT(hideError()));
+    setStyleSheet(mDefaultStyleSheet + "color: #d90000;");
+    QTimer::singleShot(1000, this, SLOT(hideError()));
 }
 
 void HotkeyWidget::setHotkeyText()
 {
-  QString hotkeyText = mHotkey.toString(QKeySequence::NativeText);
+    QString hotkeyText = mHotkey.toString(QKeySequence::NativeText);
 
-  setText(hotkeyText);
-  parentWidget()->setFocus();
+    setText(hotkeyText);
+    parentWidget()->setFocus();
 }
 
 bool HotkeyWidget::event(QEvent *event)
 {
-  if (event->type() == QEvent::LanguageChange) {
-    setHotkeyText();
-  }
-  else if (event->type() == QEvent::KeyPress) {
-    keyPressEvent(static_cast<QKeyEvent *>(event));
-    return true;
-  }
-  else if (event->type() == QEvent::FocusIn) {
-    QFocusEvent* focusEvent = static_cast<QFocusEvent*>(event);
+    if (event->type() == QEvent::LanguageChange) {
+        setHotkeyText();
+    } else if (event->type() == QEvent::KeyPress) {
+        keyPressEvent(static_cast<QKeyEvent *>(event));
+        return true;
+    } else if (event->type() == QEvent::FocusIn) {
+        QFocusEvent *focusEvent = static_cast<QFocusEvent *>(event);
 
-    if (focusEvent->reason() != Qt::TabFocusReason) {
-      setText(tr("Type your hotkey"));
-      mKeyboardFocus = false;
-      grabKeyboard();
-    }
-    else {
-      mKeyboardFocus = true;
-    }
-  }
-  else if (event->type() == QEvent::FocusOut) {
-    if (text() == tr("Invalid hotkey")) {
-      emit invalidHotkeyError();
-      showError();
+        if (focusEvent->reason() != Qt::TabFocusReason) {
+            setText(tr("Type your hotkey"));
+            mKeyboardFocus = false;
+            grabKeyboard();
+        } else {
+            mKeyboardFocus = true;
+        }
+    } else if (event->type() == QEvent::FocusOut) {
+        if (text() == tr("Invalid hotkey")) {
+            emit invalidHotkeyError();
+            showError();
+        }
+
+        releaseKeyboard();
+        setHotkeyText(); // Reset the text
+    } else if ((event->type() == QEvent::KeyPress || event->type() == QEvent::ShortcutOverride || event->type() == QEvent::Shortcut) && hasFocus()) {
+        event->accept();
+        return true;
     }
 
-    releaseKeyboard();
-    setHotkeyText(); // Reset the text
-  }
-  else if ((event->type() == QEvent::KeyPress || event->type() == QEvent::ShortcutOverride || event->type() == QEvent::Shortcut) && hasFocus()) {
-      event->accept();
-      return true;
-  }
-
-  return QPushButton::event(event);
+    return QPushButton::event(event);
 }
 
 void HotkeyWidget::keyPressEvent(QKeyEvent *event)
 {
-  if (mKeyboardFocus)
-    return;
+    if (mKeyboardFocus) {
+        return;
+    }
 
-  if (isModifier(event->key()))
-    return;
+    if (isModifier(event->key())) {
+        return;
+    }
 
-  if (!isValid(event->key())) {
-    setText(tr("Invalid hotkey"));
-    parentWidget()->setFocus();
-    return;
-  }
+    if (!isValid(event->key())) {
+        setText(tr("Invalid hotkey"));
+        parentWidget()->setFocus();
+        return;
+    }
 
-  mHotkey = QKeySequence(event->key() + (event->modifiers() & ~Qt::KeypadModifier));
+    mHotkey = QKeySequence(event->key() + (event->modifiers() & ~Qt::KeypadModifier));
 
-  setHotkeyText();
+    setHotkeyText();
 }
 
 void HotkeyWidget::hideError()
 {
-  setStyleSheet(mDefaultStyleSheet);
-  mShowingError = false;
+    setStyleSheet(mDefaultStyleSheet);
+    mShowingError = false;
 }
 
 bool HotkeyWidget::isValid(int key) const
 {
-  switch (key)
-  {
+    switch (key) {
     case 0:
     case Qt::Key_Escape:
     case Qt::Key_unknown:
-      return false;
-  }
+        return false;
+    }
 
-  return !isModifier(key);
+    return !isModifier(key);
 }
 
 bool HotkeyWidget::isModifier(int key) const
 {
-  switch (key)
-  {
-      case Qt::Key_Shift:
-      case Qt::Key_Control:
-      case Qt::Key_Meta:
-      case Qt::Key_Alt:
-      case Qt::Key_AltGr:
-      case Qt::Key_Super_L:
-      case Qt::Key_Super_R:
-      case Qt::Key_Menu:
+    switch (key) {
+    case Qt::Key_Shift:
+    case Qt::Key_Control:
+    case Qt::Key_Meta:
+    case Qt::Key_Alt:
+    case Qt::Key_AltGr:
+    case Qt::Key_Super_L:
+    case Qt::Key_Super_R:
+    case Qt::Key_Menu:
         return true;
-  }
+    }
 
-  return false;
+    return false;
 }

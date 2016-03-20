@@ -32,100 +32,101 @@
 
 ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent)
 {
-  if (QFile::exists(qApp->applicationDirPath() + QDir::separator() + "config.ini")) {
-    mSettings     = new QSettings(qApp->applicationDirPath() + QDir::separator() + "config.ini", QSettings::IniFormat);
-    mPortableMode = true;
-    mHistoryPath  = qApp->applicationDirPath() + QDir::separator();
-  }
-  else {
-    mSettings     = new QSettings();
-    mPortableMode = false;
-    mHistoryPath  = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator();
-  }
+    if (QFile::exists(qApp->applicationDirPath() + QDir::separator() + "config.ini")) {
+        mSettings     = new QSettings(qApp->applicationDirPath() + QDir::separator() + "config.ini", QSettings::IniFormat);
+        mPortableMode = true;
+        mHistoryPath  = qApp->applicationDirPath() + QDir::separator();
+    } else {
+        mSettings     = new QSettings();
+        mPortableMode = false;
+        mHistoryPath  = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator();
+    }
 
-  initHistory();
+    initHistory();
 
-  connect(Uploader::instance(), SIGNAL(done(QString, QString, QString)), this, SLOT(uploadDone(QString, QString, QString)));
+    connect(Uploader::instance(), SIGNAL(done(QString, QString, QString)), this, SLOT(uploadDone(QString, QString, QString)));
 }
 
 ScreenshotManager::~ScreenshotManager()
 {
-  delete mSettings;
+    delete mSettings;
 }
 
 void ScreenshotManager::initHistory()
 {
-  // Creating the SQLite database.
-  QSqlDatabase history = QSqlDatabase::addDatabase("QSQLITE");
+    // Creating the SQLite database.
+    QSqlDatabase history = QSqlDatabase::addDatabase("QSQLITE");
 
-  QDir hp(mHistoryPath);
+    QDir hp(mHistoryPath);
 
-  if (!hp.exists())
-    hp.mkpath(mHistoryPath);
+    if (!hp.exists()) {
+        hp.mkpath(mHistoryPath);
+    }
 
-  history.setHostName("localhost");
-  history.setDatabaseName(mHistoryPath + "history.sqlite");
+    history.setHostName("localhost");
+    history.setDatabaseName(mHistoryPath + "history.sqlite");
 
-  if (history.open()) {
-    history.exec("CREATE TABLE IF NOT EXISTS history (fileName text, URL text, deleteURL text, time integer)");
-  }
-  else {
-    qCritical() << "Could not open SQLite DB.";
-  }
+    if (history.open()) {
+        history.exec("CREATE TABLE IF NOT EXISTS history (fileName text, URL text, deleteURL text, time integer)");
+    } else {
+        qCritical() << "Could not open SQLite DB.";
+    }
 }
 
 int ScreenshotManager::activeCount() const
 {
-  return mScreenshots.count();
+    return mScreenshots.count();
 }
 
 bool ScreenshotManager::portableMode()
 {
-  return mPortableMode;
+    return mPortableMode;
 }
 
 void ScreenshotManager::saveHistory(QString fileName, QString url, QString deleteHash)
 {
-  if (!mSettings->value("/options/history", true).toBool())
-    return;
+    if (!mSettings->value("/options/history", true).toBool()) {
+        return;
+    }
 
-  QString deleteUrl;
+    QString deleteUrl;
 
-  if (!deleteHash.isEmpty())
-    deleteUrl = "https://imgur.com/delete/" + deleteHash;
+    if (!deleteHash.isEmpty()) {
+        deleteUrl = "https://imgur.com/delete/" + deleteHash;
+    }
 
-  QSqlQuery query;
-  query.prepare("INSERT INTO history (fileName, URL, deleteURL, time) VALUES(?, ?, ?, ?)");
-  query.addBindValue(fileName);
-  query.addBindValue(url);
-  query.addBindValue(deleteUrl);
-  query.addBindValue(QDateTime::currentMSecsSinceEpoch());
-  query.exec();
+    QSqlQuery query;
+    query.prepare("INSERT INTO history (fileName, URL, deleteURL, time) VALUES(?, ?, ?, ?)");
+    query.addBindValue(fileName);
+    query.addBindValue(url);
+    query.addBindValue(deleteUrl);
+    query.addBindValue(QDateTime::currentMSecsSinceEpoch());
+    query.exec();
 }
 
 void ScreenshotManager::updateHistory(QString fileName, QString url, QString deleteHash)
 {
-  if (!mSettings->value("/options/history", true).toBool() || url.isEmpty())
-    return;
+    if (!mSettings->value("/options/history", true).toBool() || url.isEmpty()) {
+        return;
+    }
 
-  QSqlQuery query;
-  query.prepare("SELECT fileName FROM history WHERE URL IS NOT EMPTY AND fileName = ?");
-  query.addBindValue(fileName);
-  query.exec();
+    QSqlQuery query;
+    query.prepare("SELECT fileName FROM history WHERE URL IS NOT EMPTY AND fileName = ?");
+    query.addBindValue(fileName);
+    query.exec();
 
-  if (query.record().count() > 0) {
-    QSqlQuery updateQuery;
-    updateQuery.prepare("UPDATE history SET URL = ?, deleteURL = ?, time = ? WHERE fileName = ?");
-    updateQuery.addBindValue(url);
-    updateQuery.addBindValue("https://imgur.com/delete/" + deleteHash);
-    updateQuery.addBindValue(QDateTime::currentMSecsSinceEpoch());
-    updateQuery.addBindValue(fileName);
+    if (query.record().count() > 0) {
+        QSqlQuery updateQuery;
+        updateQuery.prepare("UPDATE history SET URL = ?, deleteURL = ?, time = ? WHERE fileName = ?");
+        updateQuery.addBindValue(url);
+        updateQuery.addBindValue("https://imgur.com/delete/" + deleteHash);
+        updateQuery.addBindValue(QDateTime::currentMSecsSinceEpoch());
+        updateQuery.addBindValue(fileName);
 
-    updateQuery.exec();
-  }
-  else {
-    saveHistory(fileName, url, deleteHash);
-  }
+        updateQuery.exec();
+    } else {
+        saveHistory(fileName, url, deleteHash);
+    }
 }
 
 void ScreenshotManager::removeHistory(QString fileName, qint64 time)
@@ -140,75 +141,75 @@ void ScreenshotManager::removeHistory(QString fileName, qint64 time)
 
 void ScreenshotManager::clearHistory()
 {
-  QSqlQuery clearQuery("DROP TABLE history");
-  clearQuery.exec();
+    QSqlQuery clearQuery("DROP TABLE history");
+    clearQuery.exec();
 
-  initHistory();
+    initHistory();
 }
 
 //
 
 void ScreenshotManager::askConfirmation()
 {
-  Screenshot* s = qobject_cast<Screenshot*>(sender());
-  emit confirm(s);
+    Screenshot *s = qobject_cast<Screenshot *>(sender());
+    emit confirm(s);
 }
 
 void ScreenshotManager::cleanup()
 {
-  Screenshot* screenshot = qobject_cast<Screenshot*>(sender());
-  emit windowCleanup(screenshot->options());
+    Screenshot *screenshot = qobject_cast<Screenshot *>(sender());
+    emit windowCleanup(screenshot->options());
 }
 
 void ScreenshotManager::finished()
 {
-  Screenshot* screenshot = qobject_cast<Screenshot*>(sender());
-  mScreenshots.removeOne(screenshot);
-  emit activeCountChange();
-  screenshot->deleteLater();
+    Screenshot *screenshot = qobject_cast<Screenshot *>(sender());
+    mScreenshots.removeOne(screenshot);
+    emit activeCountChange();
+    screenshot->deleteLater();
 }
 
 void ScreenshotManager::take(Screenshot::Options &options)
 {
-  Screenshot* newScreenshot = new Screenshot(this, options);
-  mScreenshots.append(newScreenshot);
+    Screenshot *newScreenshot = new Screenshot(this, options);
+    mScreenshots.append(newScreenshot);
 
-  connect(newScreenshot, SIGNAL(askConfirmation()), this, SLOT(askConfirmation()));
-  connect(newScreenshot, SIGNAL(cleanup())        , this, SLOT(cleanup()));
-  connect(newScreenshot, SIGNAL(finished())       , this, SLOT(finished()));
+    connect(newScreenshot, SIGNAL(askConfirmation()), this, SLOT(askConfirmation()));
+    connect(newScreenshot, SIGNAL(cleanup())        , this, SLOT(cleanup()));
+    connect(newScreenshot, SIGNAL(finished())       , this, SLOT(finished()));
 
-  newScreenshot->take();
+    newScreenshot->take();
 }
 
 void ScreenshotManager::uploadDone(QString fileName, QString url, QString deleteHash)
 {
-  foreach (Screenshot* screenshot, mScreenshots) {
-    if (screenshot->options().fileName == fileName
-        || screenshot->unloadedFileName() == fileName) {
-      screenshot->uploadDone(url);
+    foreach (Screenshot *screenshot, mScreenshots) {
+        if (screenshot->options().fileName == fileName
+                || screenshot->unloadedFileName() == fileName) {
+            screenshot->uploadDone(url);
 
-      if (screenshot->options().file) {
-        updateHistory(fileName, url, deleteHash);
-      }
-      else {
-        saveHistory("", url, deleteHash);
-      }
+            if (screenshot->options().file) {
+                updateHistory(fileName, url, deleteHash);
+            } else {
+                saveHistory("", url, deleteHash);
+            }
 
-      return;
+            return;
+        }
     }
-  }
 
-  // If we get here, it's because the screenshot upload wasn't on the current screenshot list, which means it's a View History/Upload Later upload.
-  updateHistory(fileName, url, deleteHash);
+    // If we get here, it's because the screenshot upload wasn't on the current screenshot list, which means it's a View History/Upload Later upload.
+    updateHistory(fileName, url, deleteHash);
 }
 
 // Singleton
-ScreenshotManager* ScreenshotManager::mInstance = 0;
+ScreenshotManager *ScreenshotManager::mInstance = 0;
 
 ScreenshotManager *ScreenshotManager::instance()
 {
-  if (!mInstance)
-    mInstance = new ScreenshotManager();
+    if (!mInstance) {
+        mInstance = new ScreenshotManager();
+    }
 
-  return mInstance;
+    return mInstance;
 }

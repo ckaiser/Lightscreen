@@ -25,40 +25,40 @@
 
 class Uploader : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  Uploader(QObject *parent = 0);
-  static Uploader* instance();
-  QString lastUrl() const;
-  int progress() const;
-  QNetworkAccessManager *nam();
+    Uploader(QObject *parent = 0);
+    static Uploader *instance();
+    QString lastUrl() const;
+    int progress() const;
+    QNetworkAccessManager *nam();
 
 public slots:
-  void cancel();
-  //void error(const QString &file, const QtImgur::Error e);
-  void upload(const QString &fileName);
-  void uploaded(const QString &fileName, const QString &url, const QString &deleteHash);
-  void uploaderError(ImageUploader::Error code, QString errorString, QString fileName);
-  int  uploading();
-  void progressChange(int p);
-  void imgurAuthRefresh();
-  void imgurToken();
+    void cancel();
+    //void error(const QString &file, const QtImgur::Error e);
+    void upload(const QString &fileName);
+    void uploaded(const QString &fileName, const QString &url, const QString &deleteHash);
+    void uploaderError(ImageUploader::Error code, QString errorString, QString fileName);
+    int  uploading();
+    void progressChange(int p);
+    void imgurAuthRefresh();
+    void imgurToken();
 
 signals:
-  void done(QString, QString, QString);
-  void error(QString);
-  void progress(int);
-  void cancelAll();
-  void imgurAuthRefreshed();
+    void done(QString, QString, QString);
+    void error(QString);
+    void progress(int);
+    void cancelAll();
+    void imgurAuthRefreshed();
 
 private:
-  static Uploader* mInstance;
-  QNetworkAccessManager *mNetworkAccessManager;
+    static Uploader *mInstance;
+    QNetworkAccessManager *mNetworkAccessManager;
 
-  int mProgress;
-  QString mLastUrl;
-  QList<ImageUploader*> mUploaders;
+    int mProgress;
+    QString mLastUrl;
+    QList<ImageUploader *> mUploaders;
 };
 
 #endif // UPLOADER_H
