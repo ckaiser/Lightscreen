@@ -291,7 +291,7 @@ QGraphicsEffect *os::shadow(QColor color, int blurRadius, int offset)
     return shadowEffect;
 }
 
-QIcon os::icon(QString name, QColor backgroundColor)
+QIcon os::icon(const QString &name, QColor backgroundColor)
 {
     if (!backgroundColor.isValid()) {
         backgroundColor = qApp->palette().color(QPalette::Button);

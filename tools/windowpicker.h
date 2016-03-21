@@ -33,7 +33,7 @@ public:
     ~WindowPicker();
 
 signals:
-    void pixmap(QPixmap pixmap);
+    void pixmap(const QPixmap &pixmap);
 
 protected:
     void closeEvent(QCloseEvent *);

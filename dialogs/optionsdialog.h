@@ -33,38 +33,38 @@ public:
     OptionsDialog(QWidget *parent = 0);
 
 public slots:
-  void accepted();
-  void checkUpdatesNow();
-  void exportSettings();
-  void imgurAlbumList();
-  void imgurAuthorize();
-  void imgurRequestAlbumList();
-  void imgurToken();
-  void importSettings();
-  void loadSettings();
-  void openUrl(QString url);
-  void restoreDefaults();
-  void saveSettings();
-  void updatePreview();
-  void viewHistory();
+    void accepted();
+    void checkUpdatesNow();
+    void exportSettings();
+    void imgurAlbumList();
+    void imgurAuthorize();
+    void imgurRequestAlbumList();
+    void imgurToken();
+    void importSettings();
+    void loadSettings();
+    void openUrl(QString url);
+    void restoreDefaults();
+    void saveSettings();
+    void updatePreview();
+    void viewHistory();
 
 protected:
-  bool event(QEvent *event);
+    bool event(QEvent *event);
 
 #ifdef Q_OS_WIN
-  bool nativeEvent(const QByteArray &eventType, void *message, long *result);
+    bool nativeEvent(const QByteArray &eventType, void *message, long *result);
 #endif
 
 private slots:
-  void browse();
-  void dialogButtonClicked(QAbstractButton *button);
-  void flipToggled(bool checked);
-  void init();
-  void namingOptions();
+    void browse();
+    void dialogButtonClicked(QAbstractButton *button);
+    void flipToggled(bool checked);
+    void init();
+    void namingOptions();
 
 private:
-  bool hotkeyCollision();
-  QSettings *settings() const;
+    bool hotkeyCollision();
+    QSettings *settings() const;
 
 private:
     Ui::OptionsDialog ui;

@@ -117,7 +117,7 @@ void HistoryDialog::clear()
     close();
 }
 
-void HistoryDialog::contextMenu(QPoint point)
+void HistoryDialog::contextMenu(const QPoint &point)
 {
     mContextIndex = ui->tableView->indexAt(point);;
 

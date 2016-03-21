@@ -28,7 +28,7 @@ class HotkeyWidget : public QPushButton
 public:
     HotkeyWidget(QWidget *parent = 0);
 
-    void setHotkey(QString hotkey);
+    void setHotkey(const QString &hotkey);
     QString hotkey() const;
 
 signals:

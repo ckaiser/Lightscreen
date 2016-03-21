@@ -23,16 +23,16 @@
 
 class UpdaterDialog : public QProgressDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  UpdaterDialog(QWidget* parent = 0);
+    UpdaterDialog(QWidget *parent = 0);
 
 public slots:
-  void updateDone(bool result);
+    void updateDone(bool result);
 
 private slots:
-  void link(QString url);
+    void link(QString url);
 
 };
 

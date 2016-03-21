@@ -29,41 +29,41 @@ class PreviewDialog : public QDialog
     Q_OBJECT
 
 public:
-  PreviewDialog(QWidget *parent);
+    PreviewDialog(QWidget *parent);
 
-  void add(Screenshot* screenshot);
-  int count() const;
+    void add(Screenshot *screenshot);
+    int count() const;
 
 public slots:
-  void setWidth(int w)  { resize(w, height()); }
-  void setHeight(int h) { resize(width(), h);  }
+    void setWidth(int w)  { resize(w, height()); }
+    void setHeight(int h) { resize(width(), h);  }
 
 signals:
-  void acceptAll();
-  void rejectAll();
-  void uploadAll();
+    void acceptAll();
+    void rejectAll();
+    void uploadAll();
 
 private slots:
-  void closePreview();
-  void enlargePreview();
-  void indexChanged(int i);
-  void next();
-  void previous();
-  void relocate();
+    void closePreview();
+    void enlargePreview();
+    void indexChanged(int i);
+    void next();
+    void previous();
+    void relocate();
 
 protected:
-  bool event(QEvent *event);
-  void timerEvent(QTimerEvent *event);
+    bool event(QEvent *event);
+    void timerEvent(QTimerEvent *event);
 
 private:
-  int mAutoclose;
-  int mAutocloseAction;
-  int mAutocloseReset;
-  int mPosition; //0: top left, 1: top right, 2: bottom left, 3: bottom rigth (default)
-  int mSize;
-  QPushButton*    mNextButton;
-  QPushButton*    mPrevButton;
-  QStackedLayout* mStack;
+    int mAutoclose;
+    int mAutocloseAction;
+    int mAutocloseReset;
+    int mPosition; //0: top left, 1: top right, 2: bottom left, 3: bottom rigth (default)
+    int mSize;
+    QPushButton    *mNextButton;
+    QPushButton    *mPrevButton;
+    QStackedLayout *mStack;
 };
 
 #endif // PREVIEWDIALOG_H

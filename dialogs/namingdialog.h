@@ -32,11 +32,11 @@ public:
     explicit NamingDialog(Screenshot::Naming naming, QWidget *parent = 0);
 
 private slots:
-  void openUrl(QString url);
-  void saveSettings();
+    void openUrl(const QString &url);
+    void saveSettings();
 
 protected:
-  bool eventFilter(QObject *object, QEvent *event);
+    bool eventFilter(QObject *object, QEvent *event);
 
 private:
     Ui::NamingDialog ui;

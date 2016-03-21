@@ -55,11 +55,8 @@ void setStartup(bool startup, bool hide);
 // Creates a new QGraphicsDropShadowEffect to apply to widgets.
 QGraphicsEffect *shadow(QColor color = Qt::black, int blurRadius = 6, int offset = 1);
 
-// Translates the ui to the given language name.
-void translate(QString language);
-
 // Returns a QIcon for the given icon name (taking into account color schemes and whatnot).
-QIcon icon(QString name, QColor backgroundColor = QColor());
+QIcon icon(const QString &name, QColor backgroundColor = QColor());
 
 // X11-specific functions for the Window Picker
 #if defined(Q_OS_LINUX)

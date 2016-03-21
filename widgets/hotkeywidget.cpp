@@ -41,7 +41,7 @@ HotkeyWidget::HotkeyWidget(QWidget *parent) :
     }
 }
 
-void HotkeyWidget::setHotkey(QString hotkeyString)
+void HotkeyWidget::setHotkey(const QString &hotkeyString)
 {
     mHotkey = QKeySequence().fromString(hotkeyString, QKeySequence::NativeText);
     setHotkeyText();

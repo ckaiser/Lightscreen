@@ -104,10 +104,10 @@ public slots:
     void optimize();
     void optimizationDone();
     void save();
-    void setPixmap(QPixmap pixmap);
+    void setPixmap(const QPixmap &pixmap);
     void take();
     void upload();
-    void uploadDone(QString url);
+    void uploadDone(const QString &url);
 
 signals:
     void askConfirmation();

@@ -61,7 +61,7 @@ NamingDialog::NamingDialog(Screenshot::Naming naming, QWidget *parent) :
     resize(minimumSizeHint());
 }
 
-void NamingDialog::openUrl(QString url)
+void NamingDialog::openUrl(const QString &url)
 {
     QDesktopServices::openUrl(QUrl(url));
 }

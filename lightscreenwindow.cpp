@@ -675,7 +675,7 @@ void LightscreenWindow::showUploaderError(const QString &error)
     notify(Screenshot::Fail);
 }
 
-void LightscreenWindow::showUploaderMessage(QString fileName, QString url)
+void LightscreenWindow::showUploaderMessage(const QString &fileName, const QString &url)
 {
     if (mTrayIcon && settings()->value("options/message").toBool() && !url.isEmpty()) {
         QString screenshot = QFileInfo(fileName).fileName();

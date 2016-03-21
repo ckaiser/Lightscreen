@@ -42,7 +42,7 @@ class AreaDialog : public QDialog
     Q_OBJECT
 
 public:
-    AreaDialog(Screenshot* screenshot);
+    AreaDialog(Screenshot *screenshot);
     QRect &resultRect();
 
 protected slots:
@@ -52,22 +52,22 @@ protected slots:
     void grabRect();
 
 signals:
-    void regionGrabbed( const QPixmap & );
+    void regionGrabbed(const QPixmap &);
 
 protected:
-    void keyPressEvent( QKeyEvent* e );
-    void mouseDoubleClickEvent( QMouseEvent* );
-    void mouseMoveEvent( QMouseEvent* e );
-    void mousePressEvent( QMouseEvent* e );
-    void mouseReleaseEvent( QMouseEvent* e );
-    void paintEvent( QPaintEvent* e );
-    void resizeEvent( QResizeEvent* e );
-    void showEvent( QShowEvent* e );
+    void keyPressEvent(QKeyEvent *e);
+    void mouseDoubleClickEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
+    void paintEvent(QPaintEvent *e);
+    void resizeEvent(QResizeEvent *e);
+    void showEvent(QShowEvent *e);
 
     void updateHandles();
     QRegion handleMask() const;
 
-    QPoint limitPointToRect( const QPoint &p, const QRect &r ) const;
+    QPoint limitPointToRect(const QPoint &p, const QRect &r) const;
 
     bool   mAutoclose;
     QPoint mDragStartPoint;
@@ -92,7 +92,7 @@ protected:
     QRect mTLHandle, mTRHandle, mBLHandle, mBRHandle;
     QRect mLHandle, mTHandle, mRHandle, mBHandle;
 
-    QVector<QRect*>   mHandles;
+    QVector<QRect *>   mHandles;
     QPointer<QWidget> mAcceptWidget;
 };
 

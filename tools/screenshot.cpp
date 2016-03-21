@@ -286,7 +286,7 @@ void Screenshot::save()
     }
 }
 
-void Screenshot::setPixmap(QPixmap pixmap)
+void Screenshot::setPixmap(const QPixmap &pixmap)
 {
     mPixmap = pixmap;
 
@@ -339,7 +339,7 @@ void Screenshot::upload()
     }
 }
 
-void Screenshot::uploadDone(QString url)
+void Screenshot::uploadDone(const QString &url)
 {
     if (mOptions.imgurClipboard && !url.isEmpty()) {
         QApplication::clipboard()->setText(url, QClipboard::Clipboard);

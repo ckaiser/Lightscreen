@@ -44,9 +44,9 @@ public:
     void initHistory();
     int activeCount() const;
     bool portableMode();
-    void saveHistory(QString fileName, QString url = "", QString deleteHash = "");
-    void updateHistory(QString fileName, QString url, QString deleteHash);
-    void removeHistory(QString fileName, qint64 time);
+    void saveHistory(const QString &fileName, const QString &url = "", const QString &deleteHash = "");
+    void updateHistory(const QString &fileName, const QString &url, const QString &deleteHash);
+    void removeHistory(const QString &fileName, qint64 time);
     void clearHistory();
     QSettings *settings() const { return mSettings; }
 
@@ -55,7 +55,7 @@ public slots:
     void cleanup();
     void finished();
     void take(Screenshot::Options &options);
-    void uploadDone(QString fileName, QString url, QString deleteHash);
+    void uploadDone(const QString &fileName, const QString &url, const QString &deleteHash);
 
 signals:
     void confirm(Screenshot *screenshot);

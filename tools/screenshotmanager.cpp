@@ -83,7 +83,7 @@ bool ScreenshotManager::portableMode()
     return mPortableMode;
 }
 
-void ScreenshotManager::saveHistory(QString fileName, QString url, QString deleteHash)
+void ScreenshotManager::saveHistory(const QString &fileName, const QString &url, const QString &deleteHash)
 {
     if (!mSettings->value("/options/history", true).toBool()) {
         return;
@@ -104,7 +104,7 @@ void ScreenshotManager::saveHistory(QString fileName, QString url, QString delet
     query.exec();
 }
 
-void ScreenshotManager::updateHistory(QString fileName, QString url, QString deleteHash)
+void ScreenshotManager::updateHistory(const QString &fileName, const QString &url, const QString &deleteHash)
 {
     if (!mSettings->value("/options/history", true).toBool() || url.isEmpty()) {
         return;
@@ -129,7 +129,7 @@ void ScreenshotManager::updateHistory(QString fileName, QString url, QString del
     }
 }
 
-void ScreenshotManager::removeHistory(QString fileName, qint64 time)
+void ScreenshotManager::removeHistory(const QString &fileName, qint64 time)
 {
     QSqlQuery removeQuery;
     removeQuery.prepare("DELETE FROM history WHERE fileName = ? AND time = ?");
@@ -181,7 +181,7 @@ void ScreenshotManager::take(Screenshot::Options &options)
     newScreenshot->take();
 }
 
-void ScreenshotManager::uploadDone(QString fileName, QString url, QString deleteHash)
+void ScreenshotManager::uploadDone(const QString &fileName, const QString &url, const QString &deleteHash)
 {
     foreach (Screenshot *screenshot, mScreenshots) {
         if (screenshot->options().fileName == fileName
