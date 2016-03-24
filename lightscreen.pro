@@ -13,8 +13,6 @@ HEADERS += dialogs/areadialog.h \
     tools/windowpicker.h \
     updater/updater.h \
     widgets/hotkeywidget.h \
-    tools/qtsingleapplication/qtlockedfile.h \
-    tools/qtsingleapplication/qtsinglecoreapplication.h \
     tools/uploader/imageuploader.h \
     tools/uploader/imguruploader.h \
     tools/uploader/uploader.h
@@ -32,10 +30,6 @@ SOURCES += dialogs/areadialog.cpp \
     tools/windowpicker.cpp \
     updater/updater.cpp \
     widgets/hotkeywidget.cpp \
-    tools/qtsingleapplication/qtlockedfile.cpp \
-    tools/qtsingleapplication/qtlockedfile_unix.cpp \
-    tools/qtsingleapplication/qtlockedfile_win.cpp \
-    tools/qtsingleapplication/qtsinglecoreapplication.cpp \
     tools/uploader/imageuploader.cpp \
     tools/uploader/imguruploader.cpp \
     tools/uploader/uploader.cpp
@@ -47,9 +41,9 @@ RESOURCES += lightscreen.qrc
 
 RC_FILE += lightscreen.rc
 CODECFORSRC = UTF-8
-QT += core gui network sql multimedia
+QT += core gui widgets network sql multimedia
 
-include($$PWD/tools/qtsingleapplication/qtsingleapplication.pri)
+include($$PWD/tools/SingleApplication/singleapplication.pri)
 include($$PWD/tools/UGlobalHotkey/uglobalhotkey.pri)
 
 windows {

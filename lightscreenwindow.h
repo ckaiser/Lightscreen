@@ -53,7 +53,8 @@ public slots:
     void createUploadMenu();
     void goToFolder();
     void messageClicked();
-    void messageReceived(const QString &message);
+    void executeArgument(const QString &message);
+    void executeArguments(const QStringList arguments);
     void notify(const Screenshot::Result &result);
     void preview(Screenshot *screenshot);
     void quit();

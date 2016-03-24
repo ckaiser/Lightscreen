@@ -39,9 +39,9 @@
     #include <QtWinExtras>
 #endif
 
-/*
- * Lightscreen includes
- */
+//
+//Lightscreen includes
+//
 #include "lightscreenwindow.h"
 #include "dialogs/optionsdialog.h"
 #include "dialogs/previewdialog.h"
@@ -344,21 +344,19 @@ void LightscreenWindow::messageClicked()
     }
 }
 
-void LightscreenWindow::messageReceived(const QString &message)
+void LightscreenWindow::executeArgument(const QString &message)
 {
     if (message.contains(' ')) {
         foreach (QString argument, message.split(' ')) {
-            messageReceived(argument);
+            executeArgument(argument);
         }
     }
 
     if (message == "--wake") {
         show();
-        qApp->alert(this, 500);
-        return;
-    }
-
-    if (message == "--screen") {
+        os::setForegroundWindow(this);
+        qApp->alert(this, 2000);
+    } else if (message == "--screen") {
         screenshotAction();
     } else if (message == "--area") {
         screenshotAction(2);
@@ -376,6 +374,19 @@ void LightscreenWindow::messageReceived(const QString &message)
         showOptions();
     } else if (message == "--quit") {
         qApp->quit();
+    }
+}
+
+void LightscreenWindow::executeArguments(const QStringList arguments)
+{
+    // If we just have the default argument, call "--wake"
+    if (arguments.count() == 1 && (arguments.at(0) == qApp->arguments().at(0) || arguments.at(0) == QFileInfo(qApp->applicationFilePath()).fileName())) {
+        executeArgument("--wake");
+        return;
+    }
+
+    foreach (const QString argument, arguments) {
+        executeArgument(argument);
     }
 }
 

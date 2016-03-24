@@ -25,7 +25,8 @@
 #endif
 
 #include "tools/os.h"
-#include <QtSingleApplication>
+#include "tools/SingleApplication/singleapplication.h"
+
 #include "lightscreenwindow.h"
 
 int main(int argc, char *argv[])
@@ -34,23 +35,11 @@ int main(int argc, char *argv[])
     qSetMessagePattern("%{message} @%{line}[%{function}()]");
 #endif
 
-    QtSingleApplication application(argc, argv);
+    SingleApplication application(argc, argv);
     application.setOrganizationName("K");
     application.setApplicationName("Lightscreen");
     application.setApplicationVersion("2.2");
     application.setQuitOnLastWindowClosed(false);
-
-    if (application.isRunning()) {
-        if (application.arguments().size() > 1) {
-            QStringList arguments = application.arguments();
-            arguments.removeFirst();
-            application.sendMessage(arguments.join(" "));
-        } else {
-            application.sendMessage("--wake");
-        }
-
-        return 0;
-    }
 
     LightscreenWindow lightscreen;
 
@@ -89,14 +78,12 @@ int main(int argc, char *argv[])
 #endif
 
     if (application.arguments().size() > 1) {
-        foreach (QString argument, application.arguments()) {
-            lightscreen.messageReceived(argument);
-        }
+        lightscreen.executeArguments(application.arguments());
     } else {
         lightscreen.show();
     }
 
-    QObject::connect(&application, SIGNAL(messageReceived(const QString &)), &lightscreen, SLOT(messageReceived(const QString &)));
+    QObject::connect(&application, SIGNAL(instanceArguments(const QStringList)), &lightscreen, SLOT(executeArguments(const QStringList)));
     QObject::connect(&lightscreen, SIGNAL(finished()), &application, SLOT(quit()));
 
     int result = application.exec();
