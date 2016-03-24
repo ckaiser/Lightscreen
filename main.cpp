@@ -35,10 +35,12 @@ int main(int argc, char *argv[])
     qSetMessagePattern("%{message} @%{line}[%{function}()]");
 #endif
 
+    QApplication::setOrganizationName("K");
+    QApplication::setApplicationName("Lightscreen");
+    QApplication::setApplicationVersion("2.2");
+
     SingleApplication application(argc, argv);
-    application.setOrganizationName("K");
-    application.setApplicationName("Lightscreen");
-    application.setApplicationVersion("2.2");
+
     application.setQuitOnLastWindowClosed(false);
 
     LightscreenWindow lightscreen;
