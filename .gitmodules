@@ -1,6 +1,7 @@
 [submodule "tools/UGlobalHotkey"]
 	path = tools/UGlobalHotkey
 	url = https://github.com/ckaiser/UGlobalHotkey.git
+	
 [submodule "tools/SingleApplication"]
 	path = tools/SingleApplication
 	url = https://github.com/ckaiser/SingleApplication.git
