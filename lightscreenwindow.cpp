@@ -346,12 +346,6 @@ void LightscreenWindow::messageClicked()
 
 void LightscreenWindow::executeArgument(const QString &message)
 {
-    if (message.contains(' ')) {
-        foreach (QString argument, message.split(' ')) {
-            executeArgument(argument);
-        }
-    }
-
     if (message == "--wake") {
         show();
         os::setForegroundWindow(this);
@@ -380,7 +374,7 @@ void LightscreenWindow::executeArgument(const QString &message)
 void LightscreenWindow::executeArguments(const QStringList arguments)
 {
     // If we just have the default argument, call "--wake"
-    if (arguments.count() == 1 && (arguments.at(0) == qApp->arguments().at(0) || arguments.at(0) == QFileInfo(qApp->applicationFilePath()).fileName())) {
+    if (arguments.count() == 1 && (arguments.at(0) == qApp->arguments().at(0) || arguments.at(0).contains(QFileInfo(qApp->applicationFilePath()).fileName()))) {
         executeArgument("--wake");
         return;
     }
