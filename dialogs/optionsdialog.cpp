@@ -73,8 +73,8 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
     }
 #endif
 
-    QTimer::singleShot(0, this, SLOT(init()));
-    QTimer::singleShot(1, this, SLOT(loadSettings()));
+    QMetaObject::invokeMethod(this, "init"        , Qt::QueuedConnection);
+    QMetaObject::invokeMethod(this, "loadSettings", Qt::QueuedConnection);
 }
 
 void OptionsDialog::accepted()
@@ -219,7 +219,6 @@ void OptionsDialog::importSettings()
 
 void OptionsDialog::imgurRequestAlbumList()
 {
-
     QString username = settings()->value("upload/imgur/account_username").toString();
 
     if (username.isEmpty()) {
@@ -426,8 +425,8 @@ void OptionsDialog::loadSettings()
     settings()->endGroup();
     settings()->endGroup();
 
-    QTimer::singleShot(0, this, SLOT(updatePreview()));
-    QTimer::singleShot(1, this, SLOT(imgurRequestAlbumList()));
+    QMetaObject::invokeMethod(this, "updatePreview", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(this, "imgurRequestAlbumList", Qt::QueuedConnection);
 
     setEnabled(true);
     setUpdatesEnabled(true);
@@ -577,7 +576,7 @@ bool OptionsDialog::event(QEvent *event)
             event->ignore();
             return false;
         }
-    } else if (event->type() == QEvent::Show) {
+    } else if (event->type() == QEvent::Show && settings()->contains("geometry/optionsDialog")) {
         restoreGeometry(settings()->value("geometry/optionsDialog").toByteArray());
     }
 
