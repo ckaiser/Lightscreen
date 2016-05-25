@@ -38,7 +38,7 @@
 
 AreaDialog::AreaDialog(Screenshot *screenshot) :
     QDialog(0), mScreenshot(screenshot), mMouseDown(false), mMouseMagnifier(false),
-    mNewSelection(false),  mHandleSize(10), mMouseOverHandle(0), mIdleTimer(),
+    mNewSelection(false), mHandleSize(10), mMouseOverHandle(0),
     mShowHelp(true), mGrabbing(false), mOverlayAlpha(1), mAutoclose(false),
     mTLHandle(0, 0, mHandleSize, mHandleSize), mTRHandle(0, 0, mHandleSize, mHandleSize),
     mBLHandle(0, 0, mHandleSize, mHandleSize), mBRHandle(0, 0, mHandleSize, mHandleSize),

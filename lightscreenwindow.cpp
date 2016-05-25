@@ -371,7 +371,7 @@ void LightscreenWindow::executeArgument(const QString &message)
     }
 }
 
-void LightscreenWindow::executeArguments(const QStringList arguments)
+void LightscreenWindow::executeArguments(const QStringList &arguments)
 {
     // If we just have the default argument, call "--wake"
     if (arguments.count() == 1 && (arguments.at(0) == qApp->arguments().at(0) || arguments.at(0).contains(QFileInfo(qApp->applicationFilePath()).fileName()))) {
@@ -379,7 +379,7 @@ void LightscreenWindow::executeArguments(const QStringList arguments)
         return;
     }
 
-    foreach (const QString argument, arguments) {
+    foreach (const QString &argument, arguments) {
         executeArgument(argument);
     }
 }

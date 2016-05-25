@@ -147,15 +147,15 @@ void Uploader::imgurToken()
     s->setValue("upload/imgur/account_username", imgurResponse["account_username"].toString());
     s->setValue("upload/imgur/expires_in"      , imgurResponse["expires_in"].toString());
 
-    for (int i = 0; i < mUploaders.size(); ++i) {
-        if (mUploaders[i]->options().value("type") == "imgur") {
-            mUploaders[i]->options().remove("access_token");
-            mUploaders[i]->options().remove("refresh_token");
+    foreach (ImageUploader *uploader, mUploaders) {
+        if (uploader->options().value("type") == "imgur") {
+            uploader->options().remove("access_token");
+            uploader->options().remove("refresh_token");
 
-            mUploaders[i]->options().insert("access_token" , imgurResponse["access_token"].toString());
-            mUploaders[i]->options().insert("refresh_token", imgurResponse["refresh_token"].toString());
+            uploader->options().insert("access_token" , imgurResponse["access_token"].toString());
+            uploader->options().insert("refresh_token", imgurResponse["refresh_token"].toString());
 
-            mUploaders[i]->retry();
+            uploader->retry();
         }
     }
 

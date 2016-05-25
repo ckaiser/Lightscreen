@@ -54,7 +54,7 @@ public slots:
     void goToFolder();
     void messageClicked();
     void executeArgument(const QString &message);
-    void executeArguments(const QStringList arguments);
+    void executeArguments(const QStringList &arguments);
     void notify(const Screenshot::Result &result);
     void preview(Screenshot *screenshot);
     void quit();

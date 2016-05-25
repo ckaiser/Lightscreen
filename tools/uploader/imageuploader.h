@@ -21,7 +21,7 @@ public:
     };
 
 public:
-    inline ImageUploader(const QVariantHash &options) : QObject(0), mProgress(0), mOptions(options) {}
+    inline ImageUploader(const QVariantHash &options) : QObject(0), mOptions(options), mProgress(0) {}
     QVariantHash &options() { return mOptions; }
 
 public slots:

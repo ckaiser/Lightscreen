@@ -710,7 +710,7 @@ Quality is related to file size and of course to readability and overall quality
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>358</width>
+            <width>312</width>
             <height>706</height>
            </rect>
           </property>
@@ -1386,7 +1386,7 @@ Created by &lt;a href=&quot;https://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;
   <customwidget>
    <class>HotkeyWidget</class>
    <extends>QPushButton</extends>
-   <header>../widgets/hotkeywidget.h</header>
+   <header location="global">widgets/hotkeywidget.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

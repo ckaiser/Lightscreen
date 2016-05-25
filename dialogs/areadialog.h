@@ -69,21 +69,21 @@ protected:
 
     QPoint limitPointToRect(const QPoint &p, const QRect &r) const;
 
-    bool   mAutoclose;
+    Screenshot *mScreenshot;
     QPoint mDragStartPoint;
-    bool   mGrabbing;
-    const int mHandleSize;
-    QTimer mIdleTimer;
     bool mMouseDown;
     bool mMouseMagnifier;
+    bool mNewSelection;
+    const int mHandleSize;
     QRect *mMouseOverHandle;
     QPoint mMousePos;
-    bool mNewSelection;
-    int  mOverlayAlpha;
-    Screenshot *mScreenshot;
+    QTimer mIdleTimer;
     QRect mSelection;
     QRect mSelectionBeforeDrag;
     bool  mShowHelp;
+    bool  mGrabbing;
+    int   mOverlayAlpha;
+    bool  mAutoclose;
 
     // naming convention for handles
     // T top, B bottom, R Right, L left

@@ -30,7 +30,7 @@
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlRecord>
 
-ScreenshotManager::ScreenshotManager(QObject *parent = 0) : QObject(parent)
+ScreenshotManager::ScreenshotManager(QObject *parent) : QObject(parent)
 {
     if (QFile::exists(qApp->applicationDirPath() + QDir::separator() + "config.ini")) {
         mSettings     = new QSettings(qApp->applicationDirPath() + QDir::separator() + "config.ini", QSettings::IniFormat);

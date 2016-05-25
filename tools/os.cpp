@@ -44,6 +44,11 @@
     #include <QtWin>
     #include <qt_windows.h>
     #include <shlobj.h>
+
+    // Define for MinGW
+    #ifndef SM_CXPADDEDBORDER
+    #define SM_CXPADDEDBORDER 92
+    #endif
 #elif defined(Q_OS_LINUX)
     #include <QX11Info>
     #include <X11/X.h>
