@@ -21,7 +21,9 @@
 
 HistoryDialog::HistoryDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::HistoryDialog)
+    ui(new Ui::HistoryDialog),
+    mModel(Q_NULLPTR),
+    mFilterModel(Q_NULLPTR)
 {
     ui->setupUi(this);
 
@@ -229,7 +231,7 @@ void HistoryDialog::uploadProgress(int progress)
 
 bool HistoryDialog::eventFilter(QObject *object, QEvent *event)
 {
-    if (object == ui->filterEdit) {
+    if (object == ui->filterEdit && mFilterModel) {
         if (event->type() == QEvent::FocusIn) {
             if (ui->filterEdit->text() == tr("Filter..")) {
                 ui->filterEdit->setStyleSheet("");

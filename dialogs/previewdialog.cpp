@@ -40,7 +40,7 @@
 
 
 PreviewDialog::PreviewDialog(QWidget *parent) :
-    QDialog(parent), mAutoclose(0)
+    QDialog(parent), mAutoclose(0), mAutocloseAction(0), mAutocloseReset(0), mPosition(0), mSize(0)
 {
     setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
     setWindowTitle(tr("Screenshot Preview"));
