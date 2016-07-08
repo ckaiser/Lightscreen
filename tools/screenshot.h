@@ -34,6 +34,7 @@ public:
         BMP  = 2,
         TIFF = 3
     };
+    Q_ENUM(Format)
 
     enum Naming {
         Numeric = 0,
@@ -41,6 +42,7 @@ public:
         Timestamp = 2,
         Empty = 3
     };
+    Q_ENUM(Naming)
 
     enum Mode {
         WholeScreen  = 0,
@@ -48,12 +50,14 @@ public:
         SelectedArea = 2,
         SelectedWindow = 3
     };
+    Q_ENUM(Mode)
 
     enum Result {
         Fail = 0,
         Success = 1,
         Cancel = 2
     };
+    Q_ENUM(Result)
 
     struct NamingOptions {
         Naming naming;

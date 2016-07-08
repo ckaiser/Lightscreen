@@ -41,7 +41,7 @@ HistoryDialog::HistoryDialog(QWidget *parent) :
     connect(ui->cancelUploadButton, SIGNAL(clicked()), Uploader::instance()    , SLOT(cancel()));
     connect(ui->cancelUploadButton, SIGNAL(clicked()), ui->uploadProgressWidget, SLOT(hide()));
 
-    connect(ui->clearButton       , SIGNAL(clicked()), this                , SLOT(clear()));
+    connect(ui->clearButton       , SIGNAL(clicked()), this, SLOT(clear()));
 
     QTimer::singleShot(0, this, &HistoryDialog::init);
 }

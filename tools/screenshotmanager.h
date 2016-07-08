@@ -35,8 +35,8 @@ public:
         Busy = 1,
         Disabled  = 2
     };
+    Q_ENUM(State)
 
-public:
     ScreenshotManager(QObject *parent = 0);
     static ScreenshotManager *instance();
 

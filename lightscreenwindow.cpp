@@ -119,12 +119,12 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
         } else if (id == 5) {
             goToFolder();
         } else {
-            qWarning() << "Uknown hotkey ID: " << id;
+            qWarning() << "Unknown hotkey ID: " << id;
         }
     });
 
     // Uploader
-    connect(Uploader::instance(), SIGNAL(progress(int)),        this, SLOT(uploadProgress(int)));
+    connect(Uploader::instance(), SIGNAL(progress(int)),                   this, SLOT(uploadProgress(int)));
     connect(Uploader::instance(), SIGNAL(done(QString, QString, QString)), this, SLOT(showUploaderMessage(QString, QString)));
     connect(Uploader::instance(), SIGNAL(error(QString)),                  this, SLOT(showUploaderError(QString)));
 
@@ -136,7 +136,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
     if (!settings()->contains("file/format")) {
         showOptions();  // There are no options (or the options config is invalid or incomplete)
     } else {
-        QTimer::singleShot(0   , this, SLOT(applySettings()));
+        QTimer::singleShot(0   , this, SLOT(applySettings())); // TODO: Benchmark me
         QTimer::singleShot(5000, this, SLOT(checkForUpdates()));
     }
 }
@@ -748,6 +748,8 @@ void LightscreenWindow::updateStatus()
 
 void LightscreenWindow::updaterDone(bool result)
 {
+    mUpdater->deleteLater();
+
     settings()->setValue("lastUpdateCheck", QDate::currentDate().dayOfYear());
 
     if (!result) {
@@ -772,8 +774,6 @@ void LightscreenWindow::updaterDone(bool result)
     } else if (msgBox.clickedButton() == turnOffButton) {
         settings()->setValue("options/disableUpdater", true);
     }
-
-    mUpdater->deleteLater();
 }
 
 void LightscreenWindow::upload(const QString &fileName)

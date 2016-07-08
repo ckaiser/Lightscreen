@@ -19,6 +19,7 @@ public:
         CancelError,
         OtherError
     };
+    Q_ENUM(Error)
 
 public:
     inline ImageUploader(const QVariantHash &options) : QObject(0), mOptions(options), mProgress(0) {}
