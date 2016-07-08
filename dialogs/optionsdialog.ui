@@ -710,7 +710,7 @@ Quality is related to file size and of course to readability and overall quality
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>312</width>
+            <width>358</width>
             <height>706</height>
            </rect>
           </property>
@@ -1322,7 +1322,7 @@ Quality is related to file size and of course to readability and overall quality
         <widget class="QLabel" name="mainLabel">
          <property name="text">
           <string>Lightscreen is a simple tool to take screenshots, designed to be customizable and lightweight.&lt;br&gt;&lt;br&gt;
-Created by &lt;a href=&quot;https://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/a&gt;, using the &lt;a href=&quot;#aboutqt&quot;&gt;Qt toolkit&lt;/a&gt; for the graphical user interface.</string>
+Created by &lt;a href=&quot;https://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;/a&gt;, with &lt;a href=&quot;#aboutqt&quot;&gt;Qt&lt;/a&gt;.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>

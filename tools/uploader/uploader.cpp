@@ -147,7 +147,7 @@ void Uploader::imgurToken()
     s->setValue("upload/imgur/account_username", imgurResponse["account_username"].toString());
     s->setValue("upload/imgur/expires_in"      , imgurResponse["expires_in"].toString());
 
-    foreach (ImageUploader *uploader, mUploaders) {
+    for (ImageUploader *uploader : qAsConst(mUploaders)) {
         if (uploader->options().value("type") == "imgur") {
             uploader->options().remove("access_token");
             uploader->options().remove("refresh_token");

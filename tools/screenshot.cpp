@@ -76,7 +76,7 @@ QString Screenshot::getName(const NamingOptions &options, const QString &prefix,
     switch (options.naming) {
     case Screenshot::Numeric: // Numeric
         // Iterating through the folder to find the largest numeric naming.
-        foreach (QString file, directory.entryList(QDir::Files)) {
+        for (auto file : directory.entryList(QDir::Files)) {
             if (file.contains(prefix)) {
                 file.chop(file.size() - file.lastIndexOf("."));
                 file.remove(prefix);
@@ -217,7 +217,7 @@ void Screenshot::save()
 
         QString naming = QFileInfo(name).fileName();
 
-        foreach (QString file, QFileInfo(name + extension()).dir().entryList(QDir::Files)) {
+        for (auto file : QFileInfo(name + extension()).dir().entryList(QDir::Files)) {
             if (file.contains(naming)) {
                 file.remove(naming);
                 file.remove(" (");
@@ -400,7 +400,7 @@ void Screenshot::grabDesktop()
     if (mOptions.currentMonitor) {
         geometry = QApplication::primaryScreen()->geometry();
     } else {
-        foreach (QScreen *screen, QGuiApplication::screens()) {
+        for (QScreen *screen : QGuiApplication::screens()) {
             geometry = geometry.united(screen->geometry());
         }
     }

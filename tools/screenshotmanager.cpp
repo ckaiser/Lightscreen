@@ -30,30 +30,27 @@
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlRecord>
 
-ScreenshotManager::ScreenshotManager(QObject *parent) : QObject(parent)
+ScreenshotManager::ScreenshotManager(QObject *parent) : QObject(parent), mHistoryInitialized(false)
 {
     if (QFile::exists(qApp->applicationDirPath() + QDir::separator() + "config.ini")) {
-        mSettings     = new QSettings(qApp->applicationDirPath() + QDir::separator() + "config.ini", QSettings::IniFormat);
+        mSettings     = new QSettings(qApp->applicationDirPath() + QDir::separator() + "config.ini", QSettings::IniFormat, this);
         mPortableMode = true;
         mHistoryPath  = qApp->applicationDirPath() + QDir::separator();
     } else {
-        mSettings     = new QSettings();
+        mSettings     = new QSettings(this);
         mPortableMode = false;
         mHistoryPath  = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator();
     }
 
-    initHistory();
-
     connect(Uploader::instance(), SIGNAL(done(QString, QString, QString)), this, SLOT(uploadDone(QString, QString, QString)));
-}
-
-ScreenshotManager::~ScreenshotManager()
-{
-    delete mSettings;
 }
 
 void ScreenshotManager::initHistory()
 {
+    if (mHistoryInitialized) {
+        return;
+    }
+
     // Creating the SQLite database.
     QSqlDatabase history = QSqlDatabase::addDatabase("QSQLITE");
 
@@ -68,6 +65,7 @@ void ScreenshotManager::initHistory()
 
     if (history.open()) {
         history.exec("CREATE TABLE IF NOT EXISTS history (fileName text, URL text, deleteURL text, time integer)");
+        mHistoryInitialized = true;
     } else {
         qCritical() << "Could not open SQLite DB.";
     }
@@ -87,6 +85,10 @@ void ScreenshotManager::saveHistory(const QString &fileName, const QString &url,
 {
     if (!mSettings->value("/options/history", true).toBool()) {
         return;
+    }
+
+    if (!mHistoryInitialized) {
+        initHistory();
     }
 
     QString deleteUrl;
@@ -110,6 +112,10 @@ void ScreenshotManager::updateHistory(const QString &fileName, const QString &ur
         return;
     }
 
+    if (!mHistoryInitialized) {
+        initHistory();
+    }
+
     QSqlQuery query;
     query.prepare("SELECT fileName FROM history WHERE URL IS NOT EMPTY AND fileName = ?");
     query.addBindValue(fileName);
@@ -131,6 +137,10 @@ void ScreenshotManager::updateHistory(const QString &fileName, const QString &ur
 
 void ScreenshotManager::removeHistory(const QString &fileName, qint64 time)
 {
+    if (!mHistoryInitialized) {
+        initHistory();
+    }
+
     QSqlQuery removeQuery;
     removeQuery.prepare("DELETE FROM history WHERE fileName = ? AND time = ?");
     removeQuery.addBindValue(fileName);
@@ -141,10 +151,15 @@ void ScreenshotManager::removeHistory(const QString &fileName, qint64 time)
 
 void ScreenshotManager::clearHistory()
 {
-    QSqlQuery clearQuery("DROP TABLE history");
-    clearQuery.exec();
+    if (!mHistoryInitialized) {
+        initHistory();
+    }
 
-    initHistory();
+    QSqlQuery deleteQuery("DELETE FROM history");
+    deleteQuery.exec();
+
+    QSqlQuery vacQuery("VACUUM");
+    vacQuery.exec();
 }
 
 //
@@ -183,7 +198,7 @@ void ScreenshotManager::take(Screenshot::Options &options)
 
 void ScreenshotManager::uploadDone(const QString &fileName, const QString &url, const QString &deleteHash)
 {
-    foreach (Screenshot *screenshot, mScreenshots) {
+    for (Screenshot *screenshot : qAsConst(mScreenshots)) {
         if (screenshot->options().fileName == fileName
                 || screenshot->unloadedFileName() == fileName) {
             screenshot->uploadDone(url);

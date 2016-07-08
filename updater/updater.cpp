@@ -34,15 +34,13 @@ Updater::Updater(QObject *parent) :
 
 void Updater::check()
 {
-    QString platform = "unknown";
-
 #ifdef Q_OS_WIN
-    platform = QString("Windows_%1").arg(QSysInfo::WindowsVersion);
+    QString platform = QString("Windows_%1").arg(QSysInfo::WindowsVersion);
 #else
-    platform = "Linux";
+    QString platform = QSysInfo::productType();
 #endif
 
-    QNetworkRequest request(QUrl("https://lightscreen.com.ar/version?from=" + qApp->applicationVersion() + "&platform=" + platform));
+    QNetworkRequest request(QUrl::fromUserInput("https://lightscreen.com.ar/version?from=" + qApp->applicationVersion() + "&platform=" + platform));
     mNetwork.get(request);
 }
 

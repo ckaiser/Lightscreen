@@ -379,7 +379,7 @@ void LightscreenWindow::executeArguments(const QStringList &arguments)
         return;
     }
 
-    foreach (const QString &argument, arguments) {
+    for (auto argument : arguments) {
         executeArgument(argument);
     }
 }
@@ -589,7 +589,7 @@ void LightscreenWindow::showHotkeyError(const QStringList &hotkeys)
     if (hotkeys.count() > 1) {
         messageText += tr("<br>The failed hotkeys are the following:") + "<ul>";
 
-        foreach (const QString &hotkey, hotkeys) {
+        for (auto hotkey : hotkeys) {
             messageText += QString("%1%2%3").arg("<li><b>").arg(hotkey).arg("</b></li>");
         }
 
@@ -616,7 +616,7 @@ void LightscreenWindow::showHotkeyError(const QStringList &hotkeys)
     } else if (msgBox.clickedButton() == changeButton) {
         showOptions();
     } else if (msgBox.clickedButton() == disableButton) {
-        foreach (const QString &hotkey, hotkeys) {
+        for (auto hotkey : hotkeys) {
             settings()->setValue(QString("actions/%1/enabled").arg(hotkey), false);
         }
     }
@@ -859,11 +859,11 @@ void LightscreenWindow::applySettings()
 
 void LightscreenWindow::connectHotkeys()
 {
+    const QStringList actions = {"screen", "window", "area", "windowPicker", "open", "directory"};
     QStringList failed;
-    QStringList actions = {"screen", "window", "area", "windowPicker", "open", "directory"};
     size_t i = 0;
 
-    foreach (const QString &action, actions) {
+    for (auto action : actions) {
         if (settings()->value("actions/" + action + "/enabled").toBool()) {
             if (!mGlobalHotkeys->registerHotkey(settings()->value("actions/" + action + "/hotkey").toString(), i)) {
                 failed << action;

@@ -26,10 +26,11 @@ private slots:
     void location();
     void removeHistoryEntry();
     void refresh();
-    void open(const QModelIndex &index);
+    void openUrl(const QModelIndex &index);
     void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     void upload();
     void uploadProgress(int progress);
+    void init();
 
 protected:
     bool eventFilter(QObject *object, QEvent *event);

@@ -38,7 +38,6 @@ public:
 
 public:
     ScreenshotManager(QObject *parent = 0);
-    ~ScreenshotManager();
     static ScreenshotManager *instance();
 
     void initHistory();
@@ -68,6 +67,7 @@ private:
     QSettings *mSettings;
     QString mHistoryPath;
     bool mPortableMode;
+    bool mHistoryInitialized;
 };
 
 #endif // SCREENSHOTMANAGER_H

@@ -121,7 +121,7 @@ void OptionsDialog::exportSettings()
 
     QSettings exportedSettings(exportFileName, QSettings::IniFormat);
 
-    foreach (const QString &key, settings()->allKeys()) {
+    for (auto key : settings()->allKeys()) {
         exportedSettings.setValue(key, settings()->value(key));
     }
 }
@@ -208,7 +208,7 @@ void OptionsDialog::importSettings()
 
     saveSettings();
 
-    foreach (const QString &key, importedSettings.allKeys()) {
+    for (auto key : importedSettings.allKeys()) {
         if (settings()->contains(key)) {
             settings()->setValue(key, importedSettings.value(key));
         }
@@ -257,7 +257,7 @@ void OptionsDialog::imgurAlbumList()
         return;
     }
 
-    QJsonArray albumList = imgurResponse["data"].toArray();
+    const QJsonArray albumList = imgurResponse["data"].toArray();
 
     ui.imgurAlbumComboBox->clear();
     ui.imgurAlbumComboBox->setEnabled(true);
@@ -266,7 +266,7 @@ void OptionsDialog::imgurAlbumList()
 
     int settingsIndex = 0;
 
-    foreach (const QJsonValue &albumValue, albumList) {
+    for (auto albumValue : albumList) {
         QJsonObject album = albumValue.toObject();
         ui.imgurAlbumComboBox->addItem(album["title"].toString(), album["id"].toString());
 

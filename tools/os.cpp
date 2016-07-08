@@ -234,7 +234,6 @@ QPixmap os::grabWindow(WId winId)
     DeleteObject(hbmCapture);
 
     return pixmap;
-
 #else
     return QPixmap::grabWindow(winId);
 #endif
@@ -286,7 +285,7 @@ void os::setStartup(bool startup, bool hide)
 #endif
 }
 
-QGraphicsEffect *os::shadow(QColor color, int blurRadius, int offset)
+QGraphicsEffect *os::shadow(const QColor &color, int blurRadius, int offset)
 {
     QGraphicsDropShadowEffect *shadowEffect = new QGraphicsDropShadowEffect;
     shadowEffect->setBlurRadius(blurRadius);

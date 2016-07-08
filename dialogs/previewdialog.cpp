@@ -353,7 +353,7 @@ bool PreviewDialog::event(QEvent *event)
 {
     if ((event->type() == QEvent::Enter || event->type() == QEvent::Leave)
             && mStack->currentWidget()) {
-        foreach (QObject *child, mStack->currentWidget()->children()) {
+        for (QObject *child : mStack->currentWidget()->children()) {
             QWidget *widget = qobject_cast<QWidget *>(child);
 
             if (widget) {
