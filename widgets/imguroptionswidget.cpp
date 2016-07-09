@@ -13,11 +13,9 @@
 ImgurOptionsWidget::ImgurOptionsWidget(QWidget *parent) : QWidget(parent)
 {
     ui.setupUi(this);
-    connect(Uploader::instance(), &Uploader::imgurAuthRefreshed, this, &ImgurOptionsWidget::requestAlbumList);
-
     connect(ui.authButton        , &QPushButton::clicked, this, &ImgurOptionsWidget::authorize);
     connect(ui.refreshAlbumButton, &QPushButton::clicked, this, &ImgurOptionsWidget::requestAlbumList);
-    connect(ui.authUserLabel     , &QLabel::linkActivated, this, [](const QString &link) {
+    connect(ui.authUserLabel     , &QLabel::linkActivated, this, [](const QString & link) {
         QDesktopServices::openUrl(link);
     });
 }
@@ -48,7 +46,7 @@ void ImgurOptionsWidget::setUser(const QString &username)
         settings()->setValue("upload/imgur/expires_in", 0);
     } else {
         ui.authButton->setText(tr("Deauthorize"));
-        ui.authUserLabel->setText("<b><a href=\"http://"+ username +".imgur.com/all/\">" + username + "</a></b>");
+        ui.authUserLabel->setText(tr("<b><a href=\"http://%1.imgur.com/all/\">%1</a></b>").arg(username));
         ui.refreshAlbumButton->setEnabled(true);
         ui.helpLabel->setEnabled(false);
     }
@@ -63,50 +61,27 @@ void ImgurOptionsWidget::authorize()
         return;
     }
 
-    QDesktopServices::openUrl(QUrl("https://api.imgur.com/oauth2/authorize?client_id=" + ImgurUploader::clientId() + "&response_type=pin")); //TODO: get the client-id from somewhere?
+    QDesktopServices::openUrl(QUrl("https://api.imgur.com/oauth2/authorize?client_id=" + ImgurUploader::clientId() + "&response_type=pin"));
 
     bool ok;
     QString pin = QInputDialog::getText(this, tr("Imgur Authorization"),
                                         tr("Authentication PIN:"), QLineEdit::Normal,
                                         "", &ok);
     if (ok) {
-        QByteArray parameters;
-        parameters.append(QString("client_id=").toUtf8());
-        parameters.append(QUrl::toPercentEncoding(ImgurUploader::clientId()));
-        parameters.append(QString("&client_secret=").toUtf8());
-        parameters.append(QUrl::toPercentEncoding(ImgurUploader::clientSecret()));
-        parameters.append(QString("&grant_type=pin").toUtf8());
-        parameters.append(QString("&pin=").toUtf8());
-        parameters.append(QUrl::toPercentEncoding(pin));
-
-        QNetworkRequest request(QUrl("https://api.imgur.com/oauth2/token"));
-        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-
-        QNetworkReply *reply = Uploader::instance()->nam()->post(request, parameters);
-        connect(reply, &QNetworkReply::finished, this, [&, reply] {
-            ui.authButton->setEnabled(true);
-
-            if (reply->error() != QNetworkReply::NoError) {
-                QMessageBox::critical(this, tr("Imgur Authorization Error"), tr("There's been an error authorizing your account with Imgur, please try again."));
-                setUser("");
-                return;
-            }
-
-            QJsonObject imgurResponse = QJsonDocument::fromJson(reply->readAll()).object();
-
-            settings()->setValue("upload/imgur/access_token"    , imgurResponse.value("access_token").toString());
-            settings()->setValue("upload/imgur/refresh_token"   , imgurResponse.value("refresh_token").toString());
-            settings()->setValue("upload/imgur/account_username", imgurResponse.value("account_username").toString());
-            settings()->setValue("upload/imgur/expires_in"      , imgurResponse.value("expires_in").toInt());
-            settings()->sync();
-
-            setUser(imgurResponse.value("account_username").toString());
-
-            QTimer::singleShot(0, this, &ImgurOptionsWidget::requestAlbumList);
-        });
-
         ui.authButton->setText(tr("Authorizing.."));
         ui.authButton->setEnabled(false);
+
+        ImgurUploader::authorize(pin, [&](bool result) {
+            ui.authButton->setEnabled(true);
+
+            if (result) {
+                setUser(settings()->value("upload/imgur/account_username").toString());
+                QTimer::singleShot(0, this, &ImgurOptionsWidget::requestAlbumList);
+            } else {
+                QMessageBox::critical(this, tr("Imgur Authorization Error"), tr("There's been an error authorizing your account with Imgur, please try again."));
+                setUser("");
+            }
+        });
     }
 }
 
@@ -127,11 +102,19 @@ void ImgurOptionsWidget::requestAlbumList()
     QNetworkReply *reply = Uploader::instance()->nam()->get(request);
 
     connect(reply, &QNetworkReply::finished, this, [&, reply] {
-        if (reply->error() != QNetworkReply::NoError) {
+        if (mCurrentUser.isEmpty()) return;
+
+        if (reply->error() != QNetworkReply::NoError)
+        {
             if (reply->error() == QNetworkReply::ContentOperationNotPermittedError ||
-                    reply->error() == QNetworkReply::AuthenticationRequiredError) {
-                Uploader::instance()->imgurAuthRefresh();
-                qDebug() << "Attempting imgur auth refresh";
+            reply->error() == QNetworkReply::AuthenticationRequiredError) {
+                ImgurUploader::refreshAuthorization(settings()->value("upload/imgur/refresh_token", "").toString(), [&](bool result) {
+                    if (result) {
+                        QTimer::singleShot(50, this, &ImgurOptionsWidget::requestAlbumList);
+                    } else {
+                        setUser("");
+                    }
+                });
             }
 
             ui.albumComboBox->addItem(tr("Loading failed :("));
@@ -140,7 +123,8 @@ void ImgurOptionsWidget::requestAlbumList()
 
         const QJsonObject imgurResponse = QJsonDocument::fromJson(reply->readAll()).object();
 
-        if (imgurResponse["success"].toBool() != true || imgurResponse["status"].toInt() != 200) {
+        if (imgurResponse["success"].toBool() != true || imgurResponse["status"].toInt() != 200)
+        {
             return;
         }
 

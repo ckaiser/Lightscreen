@@ -1,8 +1,16 @@
 #include "imguruploader.h"
+#include "../uploader/uploader.h"
+
 #include <QNetworkAccessManager>
 #include <QtNetwork>
+#include <QJsonDocument>
+#include <QJsonObject>
 
-ImgurUploader::ImgurUploader(const QVariantHash &options) : ImageUploader(options) {}
+ImgurUploader::ImgurUploader(QObject *parent) : ImageUploader(parent)
+{
+    mUploaderType = "imgur";
+    loadSettings();
+}
 
 const QString ImgurUploader::clientId()
 {
@@ -12,6 +20,52 @@ const QString ImgurUploader::clientId()
 const QString ImgurUploader::clientSecret()
 {
     return QString("0546b05d6a80b2092dcea86c57b792c9c9faebf0");
+}
+
+void ImgurUploader::authorize(const QString &pin, AuthorizationCallback callback)
+{
+    if (pin.isEmpty()) {
+        callback(false);
+        return;
+    }
+
+    QByteArray parameters;
+    parameters.append(QString("client_id=").toUtf8());
+    parameters.append(QUrl::toPercentEncoding(clientId()));
+    parameters.append(QString("&client_secret=").toUtf8());
+    parameters.append(QUrl::toPercentEncoding(clientSecret()));
+    parameters.append(QString("&grant_type=pin").toUtf8());
+    parameters.append(QString("&pin=").toUtf8());
+    parameters.append(QUrl::toPercentEncoding(pin));
+
+    QNetworkRequest request(QUrl("https://api.imgur.com/oauth2/token"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+    QNetworkReply *reply = Uploader::instance()->nam()->post(request, parameters);
+    authorizationReply(reply, callback);
+}
+
+void ImgurUploader::refreshAuthorization(const QString &refresh_token, AuthorizationCallback callback)
+{
+    if (refresh_token.isEmpty()) {
+        callback(false);
+        return;
+    }
+
+    QByteArray parameters;
+    parameters.append(QString("refresh_token=").toUtf8());
+    parameters.append(QUrl::toPercentEncoding(refresh_token));
+    parameters.append(QString("&client_id=").toUtf8());
+    parameters.append(QUrl::toPercentEncoding(clientId()));
+    parameters.append(QString("&client_secret=").toUtf8());
+    parameters.append(QUrl::toPercentEncoding(clientSecret()));
+    parameters.append(QString("&grant_type=refresh_token").toUtf8());
+
+    QNetworkRequest request(QUrl("https://api.imgur.com/oauth2/token"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+    QNetworkReply *reply = Uploader::instance()->nam()->post(request, parameters);
+    authorizationReply(reply, callback);
 }
 
 void ImgurUploader::upload(const QString &fileName)
@@ -29,13 +83,13 @@ void ImgurUploader::upload(const QString &fileName)
 
     QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
-    if (!mOptions.value("anonymous", true).toBool()) {
-        request.setRawHeader("Authorization", QByteArray("Bearer ") + mOptions.value("access_token").toByteArray());
+    if (!mSettings.value("anonymous", true).toBool()) {
+        request.setRawHeader("Authorization", QByteArray("Bearer ") + mSettings.value("access_token").toByteArray());
 
-        if (!mOptions.value("album").toString().isEmpty()) {
+        if (!mSettings.value("album").toString().isEmpty()) {
             QHttpPart albumPart;
             albumPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"album\""));
-            albumPart.setBody(mOptions.value("album").toByteArray());
+            albumPart.setBody(mSettings.value("album").toByteArray());
             multiPart->append(albumPart);
         }
     }
@@ -48,18 +102,20 @@ void ImgurUploader::upload(const QString &fileName)
     file->setParent(multiPart);
     multiPart->append(imagePart);
 
-    QNetworkReply *reply = mOptions.value("networkManager").value<QNetworkAccessManager *>()->post(request, multiPart);
+    QNetworkReply *reply = Uploader::instance()->nam()->post(request, multiPart);
     reply->setProperty("fileName", fileName);
     this->setProperty("fileName", fileName);
 
     connect(reply, SIGNAL(uploadProgress(qint64, qint64)), this, SLOT(uploadProgress(qint64, qint64)));
     connect(this , SIGNAL(cancelRequest()), reply, SLOT(abort()));
     connect(this , SIGNAL(cancelRequest()), reply, SLOT(deleteLater()));
+
     connect(reply, SIGNAL(finished()), this, SLOT(finished()));
 }
 
 void ImgurUploader::retry()
 {
+    loadSettings();
     upload(property("fileName").toString());
 }
 
@@ -80,7 +136,15 @@ void ImgurUploader::finished()
             emit error(ImageUploader::CancelError, "", fileName);
         } else if (reply->error() == QNetworkReply::ContentOperationNotPermittedError ||
                    reply->error() == QNetworkReply::AuthenticationRequiredError) {
-            emit needAuthRefresh();
+
+            refreshAuthorization(mSettings["refresh_token"].toString(), [&](bool result) {
+                if (result) {
+                    QTimer::singleShot(50, this, &ImgurUploader::retry);
+                } else {
+                    cancel();
+                    emit error(ImageUploader::AuthorizationError, tr("Imgur user authentication failed"), fileName);
+                }
+            });
         } else {
             emit error(ImageUploader::NetworkError, reply->errorString(), fileName);
         }
@@ -109,6 +173,27 @@ void ImgurUploader::uploadProgress(qint64 bytesReceived, qint64 bytesTotal)
     float b = (float) bytesReceived / bytesTotal;
     int p = qRound(b * 100);
     setProgress(p);
-    emit progressChange(p);
+}
+
+void ImgurUploader::authorizationReply(QNetworkReply *reply, AuthorizationCallback callback)
+{
+    connect(reply, &QNetworkReply::finished, [reply, callback] {
+        bool authorized = false;
+
+        const QJsonObject imgurResponse = QJsonDocument::fromJson(reply->readAll()).object();
+
+        if (!imgurResponse.isEmpty() && imgurResponse.contains("access_token")) {
+            QVariantHash newSettings;
+            newSettings["access_token"]     = imgurResponse.value("access_token").toString();
+            newSettings["refresh_token"]    = imgurResponse.value("refresh_token").toString();
+            newSettings["account_username"] = imgurResponse.value("account_username").toString();
+            newSettings["expires_in"]       = imgurResponse.value("expires_in").toInt();
+            saveSettings("imgur", newSettings);
+
+            authorized = true;
+        }
+
+        callback(authorized);
+    });
 }
 
