@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+#include <QToolTip>
 #include <QCompleter>
 #include <QDate>
 #include <QDesktopServices>
@@ -581,42 +582,77 @@ void OptionsDialog::init()
     // Connections
     //
 
-    connect(ui.buttonBox              , SIGNAL(clicked(QAbstractButton *)), this    , SLOT(dialogButtonClicked(QAbstractButton *)));
-    connect(ui.buttonBox              , SIGNAL(accepted())               , this    , SLOT(accepted()));
-    connect(ui.namingOptionsButton    , SIGNAL(clicked())                , this    , SLOT(namingOptions()));
+    connect(ui.buttonBox, &QDialogButtonBox::clicked     , this, &OptionsDialog::dialogButtonClicked);
+    connect(ui.buttonBox, &QDialogButtonBox::accepted    , this, &OptionsDialog::accepted);
+    connect(ui.namingOptionsButton, &QPushButton::clicked, this, &OptionsDialog::namingOptions);
 
-    connect(ui.prefixLineEdit         , SIGNAL(textEdited(QString))      , this    , SLOT(updatePreview()));
-    connect(ui.formatComboBox         , SIGNAL(currentIndexChanged(int)) , this    , SLOT(updatePreview()));
-    connect(ui.namingComboBox         , SIGNAL(currentIndexChanged(int)) , this    , SLOT(updatePreview()));
+    connect(ui.prefixLineEdit, &QLineEdit::textEdited, this, [&] { updatePreview(); });
+    connect(ui.formatComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [&](int i) { updatePreview(); Q_UNUSED(i) });
+    connect(ui.namingComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [&](int i) { updatePreview(); Q_UNUSED(i) });
 
-    connect(ui.browsePushButton       , SIGNAL(clicked())                , this    , SLOT(browse()));
-    connect(ui.checkUpdatesPushButton , SIGNAL(clicked())                , this    , SLOT(checkUpdatesNow()));
-    connect(ui.historyPushButton      , SIGNAL(clicked())                , this    , SLOT(viewHistory()));
+    connect(ui.browsePushButton       , &QPushButton::clicked, this, &OptionsDialog::browse);
+    connect(ui.checkUpdatesPushButton , &QPushButton::clicked, this, &OptionsDialog::checkUpdatesNow);
+    connect(ui.historyPushButton      , &QPushButton::clicked, this, &OptionsDialog::viewHistory);
 
-    connect(ui.screenCheckBox      , SIGNAL(toggled(bool)), ui.screenHotkeyWidget   , SLOT(setEnabled(bool)));
-    connect(ui.areaCheckBox        , SIGNAL(toggled(bool)), ui.areaHotkeyWidget     , SLOT(setEnabled(bool)));
-    connect(ui.windowCheckBox      , SIGNAL(toggled(bool)), ui.windowHotkeyWidget   , SLOT(setEnabled(bool)));
-    connect(ui.windowPickerCheckBox, SIGNAL(toggled(bool)), ui.windowPickerHotkeyWidget, SLOT(setEnabled(bool)));
-    connect(ui.openCheckBox        , SIGNAL(toggled(bool)), ui.openHotkeyWidget     , SLOT(setEnabled(bool)));
-    connect(ui.directoryCheckBox   , SIGNAL(toggled(bool)), ui.directoryHotkeyWidget, SLOT(setEnabled(bool)));
+    connect(ui.windowPickerCheckBox, &QCheckBox::toggled, ui.windowPickerHotkeyWidget, &HotkeyWidget::setEnabled);
+
+    connect(ui.screenCheckBox      , &QCheckBox::toggled, ui.screenHotkeyWidget   , &HotkeyWidget::setEnabled);
+    connect(ui.areaCheckBox        , &QCheckBox::toggled, ui.areaHotkeyWidget     , &HotkeyWidget::setEnabled);
+    connect(ui.windowCheckBox      , &QCheckBox::toggled, ui.windowHotkeyWidget   , &HotkeyWidget::setEnabled);
+    connect(ui.openCheckBox        , &QCheckBox::toggled, ui.openHotkeyWidget     , &HotkeyWidget::setEnabled);
+    connect(ui.directoryCheckBox   , &QCheckBox::toggled, ui.directoryHotkeyWidget, &HotkeyWidget::setEnabled);
 
     // "Save as" disables the file target input field.
-    connect(ui.saveAsCheckBox      , SIGNAL(toggled(bool)), ui.targetLineEdit       , SLOT(setDisabled(bool)));
-    connect(ui.saveAsCheckBox      , SIGNAL(toggled(bool)), ui.browsePushButton     , SLOT(setDisabled(bool)));
-    connect(ui.saveAsCheckBox      , SIGNAL(toggled(bool)), ui.directoryLabel       , SLOT(setDisabled(bool)));
+    connect(ui.saveAsCheckBox, &QCheckBox::toggled, [&](bool checked) {
+        ui.targetLineEdit->setDisabled(checked);
+        ui.browsePushButton->setDisabled(checked);
+        ui.directoryLabel->setDisabled(checked);
+    });
 
-    connect(ui.startupCheckBox     , SIGNAL(toggled(bool)), ui.startupHideCheckBox  , SLOT(setEnabled(bool)));
-    connect(ui.qualitySlider       , SIGNAL(valueChanged(int)), ui.qualityValueLabel, SLOT(setNum(int)));
-    connect(ui.trayCheckBox        , SIGNAL(toggled(bool)), ui.messageCheckBox      , SLOT(setEnabled(bool)));
+    connect(ui.qualitySlider, QOverload<int>::of(&QSlider::valueChanged), ui.qualityValueLabel, QOverload<int>::of(&QLabel::setNum));
+    connect(ui.startupCheckBox, &QCheckBox::toggled   , ui.startupHideCheckBox, &QCheckBox::setEnabled);
+    connect(ui.trayCheckBox   , &QCheckBox::toggled   , ui.messageCheckBox    , &QCheckBox::setEnabled);
 
     // Auto-upload disables the default action button in the previews.
-    connect(ui.uploadCheckBox      , SIGNAL(toggled(bool)), ui.previewDefaultActionLabel   , SLOT(setDisabled(bool)));
-    connect(ui.uploadCheckBox      , SIGNAL(toggled(bool)), ui.previewDefaultActionComboBox, SLOT(setDisabled(bool)));
-    connect(ui.directoryCheckBox   , SIGNAL(toggled(bool)), ui.directoryHotkeyWidget, SLOT(setEnabled(bool)));
+    connect(ui.uploadCheckBox, &QCheckBox::toggled, [&](bool checked) {
+        ui.previewDefaultActionLabel->setDisabled(checked);
+        ui.previewDefaultActionComboBox->setDisabled(checked);
+        ui.directoryHotkeyWidget->setEnabled(checked);
+    });
 
-    connect(ui.mainLabel ,        SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
-    connect(ui.licenseAboutLabel, SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
-    connect(ui.linksLabel,        SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
+    auto conflictWarning = [](bool fullConflict, QWidget *w) {
+        if (fullConflict) {
+            QToolTip::showText(QCursor::pos(), tr("<font color=\"darkRed\">This setting conflicts with the Screenshot Clipboard setting, which has been disabled.</font>"), w);
+        } else {
+            QToolTip::showText(QCursor::pos(), tr("<b>This setting might conflict with the Screenshot Clipboard setting!</b>"), w);
+        }
+    };
+
+    connect(ui.uploadCheckBox, &QCheckBox::toggled, [&](bool checked) {
+        if (ui.urlClipboardCheckBox->isChecked() && ui.clipboardCheckBox->isChecked()) {
+            ui.clipboardGroupBox->setDisabled(checked);
+
+            if (checked) {
+                conflictWarning(true, ui.uploadCheckBox);
+            }
+        }
+    });
+
+    connect(ui.urlClipboardCheckBox, &QCheckBox::toggled, [&](bool checked) {
+        if (ui.uploadCheckBox->isChecked() && ui.clipboardCheckBox->isChecked()) {
+            ui.clipboardGroupBox->setDisabled(checked);
+
+            if (checked) {
+                conflictWarning(true, ui.urlClipboardCheckBox);
+            }
+        } else if (ui.clipboardCheckBox->isChecked()) {
+            conflictWarning(false, ui.urlClipboardCheckBox);
+        }
+    });
+
+    connect(ui.mainLabel ,        &QLabel::linkActivated, this, &OptionsDialog::openUrl);
+    connect(ui.licenseAboutLabel, &QLabel::linkActivated, this, &OptionsDialog::openUrl);
+    connect(ui.linksLabel,        &QLabel::linkActivated, this, &OptionsDialog::openUrl);
 
     connect(ui.tabWidget, &QTabWidget::currentChanged, [&](int index) {
         if (index == 2) {

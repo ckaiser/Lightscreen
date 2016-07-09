@@ -65,7 +65,7 @@ void ImgurOptions::authorize()
 
     bool ok;
     QString pin = QInputDialog::getText(this, tr("Imgur Authorization"),
-                                        tr("PIN:"), QLineEdit::Normal,
+                                        tr("Authentication PIN:"), QLineEdit::Normal,
                                         "", &ok);
     if (ok) {
         QByteArray parameters;
@@ -119,7 +119,7 @@ void ImgurOptions::requestAlbumList()
     ui.albumComboBox->setEnabled(false);
     ui.albumComboBox->addItem(tr("Loading album data..."));
 
-    QNetworkRequest request(QUrl::fromUserInput("https://api..com/3/account/" + mCurrentUser + "/albums/"));
+    QNetworkRequest request(QUrl::fromUserInput("https://api.imgur.com/3/account/" + mCurrentUser + "/albums/"));
     request.setRawHeader("Authorization", QByteArray("Bearer ") + settings()->value("upload/imgur/access_token").toByteArray());
 
     QNetworkReply *reply = Uploader::instance()->nam()->get(request);
