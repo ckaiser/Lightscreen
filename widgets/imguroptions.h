@@ -10,14 +10,11 @@ class ImgurOptions : public QWidget
     Q_OBJECT
 public:
     explicit ImgurOptions(QWidget *parent = 0);
-
     QSettings *settings();
 
 private slots:
-    void imgurAlbumList();
-    void imgurAuthorize();
-    void imgurRequestAlbumList();
-    void imgurToken();
+    void requestAlbumList();
+    void authorize();
 
 private:
     Ui::ImgurOptions ui;

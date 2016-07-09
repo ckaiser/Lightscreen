@@ -293,7 +293,7 @@ void OptionsDialog::loadSettings()
     settings()->endGroup();
 
     QMetaObject::invokeMethod(this, "updatePreview", Qt::QueuedConnection);
-    QMetaObject::invokeMethod(ui.imgurOptions, "imgurRequestAlbumList", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(ui.imgurOptions, "requestAlbumList", Qt::QueuedConnection);
 
     setEnabled(true);
     setUpdatesEnabled(true);
