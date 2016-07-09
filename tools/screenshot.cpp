@@ -235,7 +235,7 @@ void Screenshot::save()
         name = name + " (" + QString::number(count + 1) + ")";
     }
 
-    if (mOptions.clipboard && !(mOptions.upload && mOptions.imgurClipboard)) {
+    if (mOptions.clipboard && !(mOptions.upload && mOptions.urlClipboard)) {
         if (mUnloaded) {
             mUnloaded = false;
             mPixmap = QPixmap(mUnloadFilename);
@@ -341,7 +341,7 @@ void Screenshot::upload()
 
 void Screenshot::uploadDone(const QString &url)
 {
-    if (mOptions.imgurClipboard && !url.isEmpty()) {
+    if (mOptions.urlClipboard && !url.isEmpty()) {
         QApplication::clipboard()->setText(url, QClipboard::Clipboard);
     }
 

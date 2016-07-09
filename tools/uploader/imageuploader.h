@@ -23,7 +23,7 @@ public:
 
 public:
     inline ImageUploader(const QVariantHash &options) : QObject(0), mOptions(options), mProgress(0) {}
-    QVariantHash &options() { return mOptions; }
+    QVariantHash options() const { return mOptions; }
 
 public slots:
     virtual void upload(const QString &fileName) = 0;

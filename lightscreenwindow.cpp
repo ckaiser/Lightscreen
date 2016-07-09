@@ -538,7 +538,7 @@ void LightscreenWindow::screenshotAction(int mode)
         options.quality        = settings()->value("options/quality", 100).toInt();
         options.currentMonitor = settings()->value("options/currentMonitor", false).toBool();
         options.clipboard      = settings()->value("options/clipboard",      true).toBool();
-        options.imgurClipboard = settings()->value("options/imgurClipboard", false).toBool();
+        options.urlClipboard   = settings()->value("options/urlClipboard", false).toBool();
         options.preview        = settings()->value("options/preview",        false).toBool();
         options.magnify        = settings()->value("options/magnify",        false).toBool();
         options.cursor         = settings()->value("options/cursor",         true).toBool();

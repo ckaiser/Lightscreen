@@ -80,7 +80,7 @@ public:
 
         bool animations;
         bool clipboard;
-        bool imgurClipboard;
+        bool urlClipboard;
         bool currentMonitor;
         bool cursor;
         bool file;

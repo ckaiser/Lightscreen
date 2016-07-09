@@ -16,7 +16,8 @@ HEADERS += dialogs/areadialog.h \
     widgets/hotkeywidget.h \
     tools/uploader/imageuploader.h \
     tools/uploader/imguruploader.h \
-    tools/uploader/uploader.h
+    tools/uploader/uploader.h \
+    widgets/imguroptions.h
 
 SOURCES += dialogs/areadialog.cpp \
     dialogs/historydialog.cpp \
@@ -34,12 +35,14 @@ SOURCES += dialogs/areadialog.cpp \
     widgets/hotkeywidget.cpp \
     tools/uploader/imageuploader.cpp \
     tools/uploader/imguruploader.cpp \
-    tools/uploader/uploader.cpp
+    tools/uploader/uploader.cpp \
+    widgets/imguroptions.cpp
 
 FORMS += dialogs/historydialog.ui \
     dialogs/namingdialog.ui \
     dialogs/optionsdialog.ui \
-    lightscreenwindow.ui
+    lightscreenwindow.ui \
+    widgets/imguroptions.ui
 
 RESOURCES += lightscreen.qrc
 CODECFORSRC = UTF-8
