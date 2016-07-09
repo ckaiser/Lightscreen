@@ -4,30 +4,30 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 
-#include "imguroptions.h"
+#include "imguroptionswidget.h"
 #include "../uploader/uploader.h"
 #include "../uploader/imguruploader.h"
 
 #include "../screenshotmanager.h"
 
-ImgurOptions::ImgurOptions(QWidget *parent) : QWidget(parent)
+ImgurOptionsWidget::ImgurOptionsWidget(QWidget *parent) : QWidget(parent)
 {
     ui.setupUi(this);
-    connect(Uploader::instance(), &Uploader::imgurAuthRefreshed, this, &ImgurOptions::requestAlbumList);
+    connect(Uploader::instance(), &Uploader::imgurAuthRefreshed, this, &ImgurOptionsWidget::requestAlbumList);
 
-    connect(ui.authButton        , &QPushButton::clicked, this, &ImgurOptions::authorize);
-    connect(ui.refreshAlbumButton, &QPushButton::clicked, this, &ImgurOptions::requestAlbumList);
+    connect(ui.authButton        , &QPushButton::clicked, this, &ImgurOptionsWidget::authorize);
+    connect(ui.refreshAlbumButton, &QPushButton::clicked, this, &ImgurOptionsWidget::requestAlbumList);
     connect(ui.authUserLabel     , &QLabel::linkActivated, this, [](const QString &link) {
         QDesktopServices::openUrl(link);
     });
 }
 
-QSettings *ImgurOptions::settings()
+QSettings *ImgurOptionsWidget::settings()
 {
     return ScreenshotManager::instance()->settings();
 }
 
-void ImgurOptions::setUser(const QString &username)
+void ImgurOptionsWidget::setUser(const QString &username)
 {
     mCurrentUser = username;
 
@@ -56,7 +56,7 @@ void ImgurOptions::setUser(const QString &username)
     setUpdatesEnabled(true);
 }
 
-void ImgurOptions::authorize()
+void ImgurOptionsWidget::authorize()
 {
     if (!mCurrentUser.isEmpty()) {
         setUser("");
@@ -102,7 +102,7 @@ void ImgurOptions::authorize()
 
             setUser(imgurResponse.value("account_username").toString());
 
-            QTimer::singleShot(0, this, &ImgurOptions::requestAlbumList);
+            QTimer::singleShot(0, this, &ImgurOptionsWidget::requestAlbumList);
         });
 
         ui.authButton->setText(tr("Authorizing.."));
@@ -110,7 +110,7 @@ void ImgurOptions::authorize()
     }
 }
 
-void ImgurOptions::requestAlbumList()
+void ImgurOptionsWidget::requestAlbumList()
 {
     if (mCurrentUser.isEmpty()) {
         return;

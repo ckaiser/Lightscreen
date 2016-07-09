@@ -656,7 +656,7 @@ void OptionsDialog::init()
 
     connect(ui.tabWidget, &QTabWidget::currentChanged, [&](int index) {
         if (index == 2 && !ui.imgurOptions->mCurrentUser.isEmpty() && ui.imgurOptions->ui.albumComboBox->count() == 1) {
-            QTimer::singleShot(20, ui.imgurOptions, &ImgurOptions::requestAlbumList);
+            QTimer::singleShot(20, ui.imgurOptions, &ImgurOptionsWidget::requestAlbumList);
         }
     });
 }

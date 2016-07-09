@@ -17,7 +17,7 @@ HEADERS += dialogs/areadialog.h \
     tools/uploader/imageuploader.h \
     tools/uploader/imguruploader.h \
     tools/uploader/uploader.h \
-    widgets/imguroptions.h
+    widgets/imguroptionswidget.h
 
 SOURCES += dialogs/areadialog.cpp \
     dialogs/historydialog.cpp \
@@ -36,7 +36,7 @@ SOURCES += dialogs/areadialog.cpp \
     tools/uploader/imageuploader.cpp \
     tools/uploader/imguruploader.cpp \
     tools/uploader/uploader.cpp \
-    widgets/imguroptions.cpp
+    widgets/imguroptionswidget.cpp
 
 FORMS += dialogs/historydialog.ui \
     dialogs/namingdialog.ui \

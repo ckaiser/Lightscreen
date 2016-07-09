@@ -624,7 +624,7 @@ Quality is related to file size and of course to readability and overall quality
            <number>4</number>
           </property>
           <item>
-           <widget class="ImgurOptions" name="imgurOptions" native="true"/>
+           <widget class="ImgurOptionsWidget" name="imgurOptions" native="true"/>
           </item>
          </layout>
         </widget>
@@ -1355,9 +1355,9 @@ Created by &lt;a href=&quot;https://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;
    <header location="global">widgets/hotkeywidget.h</header>
   </customwidget>
   <customwidget>
-   <class>ImgurOptions</class>
+   <class>ImgurOptionsWidget</class>
    <extends>QWidget</extends>
-   <header location="global">widgets/imguroptions.h</header>
+   <header location="global">widgets/imguroptionswidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

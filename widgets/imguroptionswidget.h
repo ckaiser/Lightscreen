@@ -5,11 +5,11 @@
 #include "ui_imguroptions.h"
 
 class QSettings;
-class ImgurOptions : public QWidget
+class ImgurOptionsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ImgurOptions(QWidget *parent = 0);
+    explicit ImgurOptionsWidget(QWidget *parent = 0);
     QSettings *settings();
     void setUser(const QString &username);
 
