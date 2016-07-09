@@ -11,12 +11,14 @@ class ImgurOptions : public QWidget
 public:
     explicit ImgurOptions(QWidget *parent = 0);
     QSettings *settings();
+    void setUser(const QString &username);
 
 private slots:
     void requestAlbumList();
     void authorize();
 
 private:
+    QString mCurrentUser;
     Ui::ImgurOptions ui;
     friend class OptionsDialog;
 };

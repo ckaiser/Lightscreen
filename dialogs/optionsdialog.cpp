@@ -278,22 +278,11 @@ void OptionsDialog::loadSettings()
     ui.uploadServiceComboBox->setCurrentIndex(settings()->value("service").toInt());
 
     settings()->beginGroup("imgur");
-    ui.imgurOptions->ui.imgurAuthUserLabel->setText(settings()->value("account_username", tr("<i>none</i>")).toString());
-
-    if (settings()->value("account_username").toString().isEmpty()) {
-        ui.imgurOptions->ui.imgurAuthUserLabel->setText(tr("<i>none</i>"));
-        ui.imgurOptions->ui.imgurAlbumComboBox->setEnabled(false);
-        ui.imgurOptions->ui.imgurRefreshAlbumButton->setEnabled(false);
-    } else {
-        ui.imgurOptions->ui.imgurAuthButton->setText(tr("Deauthorize"));
-        ui.imgurOptions->ui.imgurAuthUserLabel->setText("<b>" + ui.imgurOptions->ui.imgurAuthUserLabel->text() + "</b>");
-        ui.imgurOptions->ui.imgurRefreshAlbumButton->setEnabled(true);
-    }
+    ui.imgurOptions->setUser(settings()->value("account_username", "").toString());
     settings()->endGroup();
     settings()->endGroup();
 
-    QMetaObject::invokeMethod(this, "updatePreview", Qt::QueuedConnection);
-    QMetaObject::invokeMethod(ui.imgurOptions, "requestAlbumList", Qt::QueuedConnection);
+    QTimer::singleShot(0, this, &OptionsDialog::updatePreview);
 
     setEnabled(true);
     setUpdatesEnabled(true);
@@ -392,7 +381,7 @@ void OptionsDialog::saveSettings()
 
     settings()->beginGroup("imgur");
     settings()->setValue("anonymous", settings()->value("account_username").toString().isEmpty());
-    settings()->setValue("album"    , ui.imgurOptions->ui.imgurAlbumComboBox->property("currentData").toString());
+    settings()->setValue("album"    , ui.imgurOptions->ui.albumComboBox->property("currentData").toString());
     settings()->endGroup();
 
     settings()->endGroup();
@@ -628,6 +617,12 @@ void OptionsDialog::init()
     connect(ui.mainLabel ,        SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
     connect(ui.licenseAboutLabel, SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
     connect(ui.linksLabel,        SIGNAL(linkActivated(QString)), this, SLOT(openUrl(QString)));
+
+    connect(ui.tabWidget, &QTabWidget::currentChanged, [&](int index) {
+        if (index == 2) {
+            ui.imgurOptions->requestAlbumList();
+        }
+    });
 }
 
 void OptionsDialog::namingOptions()
