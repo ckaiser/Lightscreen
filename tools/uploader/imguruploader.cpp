@@ -4,6 +4,16 @@
 
 ImgurUploader::ImgurUploader(const QVariantHash &options) : ImageUploader(options) {}
 
+const QString ImgurUploader::clientId()
+{
+    return QString("3ebe94c791445c1");
+}
+
+const QString ImgurUploader::clientSecret()
+{
+    return QString("0546b05d6a80b2092dcea86c57b792c9c9faebf0");
+}
+
 void ImgurUploader::upload(const QString &fileName)
 {
     QFile *file = new QFile(fileName);
@@ -15,7 +25,7 @@ void ImgurUploader::upload(const QString &fileName)
     }
 
     QNetworkRequest request(QUrl("https://api.imgur.com/3/image"));
-    request.setRawHeader("Authorization", "Client-ID 3ebe94c791445c1");
+    request.setRawHeader("Authorization", QString("Client-ID %1").arg(clientId()).toLatin1());
 
     QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 

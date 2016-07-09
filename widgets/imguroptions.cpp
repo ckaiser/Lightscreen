@@ -6,6 +6,8 @@
 
 #include "imguroptions.h"
 #include "../uploader/uploader.h"
+#include "../uploader/imguruploader.h"
+
 #include "../screenshotmanager.h"
 
 ImgurOptions::ImgurOptions(QWidget *parent) : QWidget(parent)
@@ -46,7 +48,7 @@ void ImgurOptions::setUser(const QString &username)
         settings()->setValue("upload/imgur/expires_in", 0);
     } else {
         ui.authButton->setText(tr("Deauthorize"));
-        ui.authUserLabel->setText("<b><a href=\"http://"+ username +"..com/all/\">" + username + "</a></b>");
+        ui.authUserLabel->setText("<b><a href=\"http://"+ username +".imgur.com/all/\">" + username + "</a></b>");
         ui.refreshAlbumButton->setEnabled(true);
         ui.helpLabel->setEnabled(false);
     }
@@ -61,7 +63,7 @@ void ImgurOptions::authorize()
         return;
     }
 
-    QDesktopServices::openUrl(QUrl("https://api..com/oauth2/authorize?client_id=3ebe94c791445c1&response_type=pin")); //TODO: get the client-id from somewhere?
+    QDesktopServices::openUrl(QUrl("https://api.imgur.com/oauth2/authorize?client_id=" + ImgurUploader::clientId() + "&response_type=pin")); //TODO: get the client-id from somewhere?
 
     bool ok;
     QString pin = QInputDialog::getText(this, tr("Imgur Authorization"),
@@ -70,14 +72,14 @@ void ImgurOptions::authorize()
     if (ok) {
         QByteArray parameters;
         parameters.append(QString("client_id=").toUtf8());
-        parameters.append(QUrl::toPercentEncoding("3ebe94c791445c1"));
+        parameters.append(QUrl::toPercentEncoding(ImgurUploader::clientId()));
         parameters.append(QString("&client_secret=").toUtf8());
-        parameters.append(QUrl::toPercentEncoding("0546b05d6a80b2092dcea86c57b792c9c9faebf0")); // TODO: TA.png
+        parameters.append(QUrl::toPercentEncoding(ImgurUploader::clientSecret()));
         parameters.append(QString("&grant_type=pin").toUtf8());
         parameters.append(QString("&pin=").toUtf8());
         parameters.append(QUrl::toPercentEncoding(pin));
 
-        QNetworkRequest request(QUrl("https://api..com/oauth2/token"));
+        QNetworkRequest request(QUrl("https://api.imgur.com/oauth2/token"));
         request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
         QNetworkReply *reply = Uploader::instance()->nam()->post(request, parameters);

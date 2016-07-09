@@ -12,6 +12,8 @@ class ImgurUploader : public ImageUploader
 
 public:
     ImgurUploader(const QVariantHash &options);
+    static const QString clientId();
+    static const QString clientSecret();
 
 public slots:
     void upload(const QString &fileName);
