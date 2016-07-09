@@ -125,6 +125,7 @@ void ImgurOptions::requestAlbumList()
     request.setRawHeader("Authorization", QByteArray("Bearer ") + settings()->value("upload/imgur/access_token").toByteArray());
 
     QNetworkReply *reply = Uploader::instance()->nam()->get(request);
+
     connect(reply, &QNetworkReply::finished, this, [&, reply] {
         if (reply->error() != QNetworkReply::NoError) {
             if (reply->error() == QNetworkReply::ContentOperationNotPermittedError ||
@@ -144,6 +145,8 @@ void ImgurOptions::requestAlbumList()
         }
 
         const QJsonArray albumList = imgurResponse["data"].toArray();
+
+        setUpdatesEnabled(false);
 
         ui.albumComboBox->clear();
         ui.albumComboBox->setEnabled(true);
@@ -169,5 +172,7 @@ void ImgurOptions::requestAlbumList()
         }
 
         ui.albumComboBox->setCurrentIndex(settingsIndex);
+
+        setUpdatesEnabled(true);
     });
 }

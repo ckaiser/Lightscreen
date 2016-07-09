@@ -655,8 +655,8 @@ void OptionsDialog::init()
     connect(ui.linksLabel,        &QLabel::linkActivated, this, &OptionsDialog::openUrl);
 
     connect(ui.tabWidget, &QTabWidget::currentChanged, [&](int index) {
-        if (index == 2) {
-            ui.imgurOptions->requestAlbumList();
+        if (index == 2 && !ui.imgurOptions->mCurrentUser.isEmpty() && ui.imgurOptions->ui.albumComboBox->count() == 1) {
+            QTimer::singleShot(20, ui.imgurOptions, &ImgurOptions::requestAlbumList);
         }
     });
 }
