@@ -36,7 +36,7 @@ public:
 
 public slots:
     void cancel();
-    void upload(const QString &fileName);
+    void upload(const QString &fileName, const QString &uploadService);
     int  uploading();
     void progressChanged(int p); //TODO: Rename
 

@@ -331,9 +331,9 @@ void Screenshot::take()
 void Screenshot::upload()
 {
     if (mOptions.file) {
-        Uploader::instance()->upload(mOptions.fileName);
+        Uploader::instance()->upload(mOptions.fileName, mOptions.uploadService);
     } else if (unloadPixmap()) {
-        Uploader::instance()->upload(mUnloadFilename);
+        Uploader::instance()->upload(mUnloadFilename, mOptions.uploadService);
     } else {
         emit finished();
     }

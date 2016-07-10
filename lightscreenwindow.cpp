@@ -538,7 +538,7 @@ void LightscreenWindow::screenshotAction(int mode)
         options.quality        = settings()->value("options/quality", 100).toInt();
         options.currentMonitor = settings()->value("options/currentMonitor", false).toBool();
         options.clipboard      = settings()->value("options/clipboard",      true).toBool();
-        options.urlClipboard   = settings()->value("options/urlClipboard", false).toBool();
+        options.urlClipboard   = settings()->value("options/urlClipboard",   false).toBool();
         options.preview        = settings()->value("options/preview",        false).toBool();
         options.magnify        = settings()->value("options/magnify",        false).toBool();
         options.cursor         = settings()->value("options/cursor",         true).toBool();
@@ -547,6 +547,8 @@ void LightscreenWindow::screenshotAction(int mode)
         options.replace        = settings()->value("options/replace",        false).toBool();
         options.upload         = settings()->value("options/uploadAuto",     false).toBool();
         options.optimize       = settings()->value("options/optipng",        false).toBool();
+
+        options.uploadService  = settings()->value("options/upload/service", "imgur").toString();
 
         Screenshot::NamingOptions namingOptions;
         namingOptions.naming       = (Screenshot::Naming) settings()->value("file/naming").toInt();
@@ -778,7 +780,7 @@ void LightscreenWindow::updaterDone(bool result)
 
 void LightscreenWindow::upload(const QString &fileName)
 {
-    Uploader::instance()->upload(fileName);
+    Uploader::instance()->upload(fileName, settings()->value("options/upload/service", "imgur").toString());
 }
 
 void LightscreenWindow::uploadCancel()

@@ -74,6 +74,7 @@ public:
         NamingOptions namingOptions;
         QDir directory;
         QString prefix;
+        QString uploadService;
 
         int mode;
         int quality;

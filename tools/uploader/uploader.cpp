@@ -61,13 +61,13 @@ void Uploader::cancel()
     emit cancelAll();
 }
 
-void Uploader::upload(const QString &fileName)
+void Uploader::upload(const QString &fileName, const QString &uploadService)
 {
     if (fileName.isEmpty()) {
         return;
     }
 
-    ImageUploader *uploader = ImageUploader::factory("imgur");
+    ImageUploader *uploader = ImageUploader::factory(uploadService);
 
     connect(uploader, &ImageUploader::progressChanged, this    , &Uploader::progressChanged);
     connect(this    , &Uploader::cancelAll           , uploader, &ImageUploader::cancel);
@@ -101,8 +101,8 @@ void Uploader::upload(const QString &fileName)
         emit done(file, url, deleteHash);
     });
 
-    uploader->upload(fileName);
     mUploaders.append(uploader);
+    uploader->upload(fileName);
 }
 
 int Uploader::uploading()
