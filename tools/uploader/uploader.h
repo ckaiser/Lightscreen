@@ -33,6 +33,7 @@ public:
     QString lastUrl() const;
     int progress() const;
     QNetworkAccessManager *nam();
+    static QString serviceName(int index);
 
 public slots:
     void cancel();

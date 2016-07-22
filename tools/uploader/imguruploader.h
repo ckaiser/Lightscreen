@@ -14,7 +14,7 @@ class ImgurUploader : public ImageUploader
 public:
     typedef std::function<void(bool)> AuthorizationCallback;
 
-    ImgurUploader(QObject *parent);
+    ImgurUploader(QObject *parent = 0);
     static const QString clientId();
     static const QString clientSecret();
     static void authorize(const QString &pin, AuthorizationCallback callback);

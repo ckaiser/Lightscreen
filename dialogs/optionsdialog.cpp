@@ -281,6 +281,19 @@ void OptionsDialog::loadSettings()
     settings()->beginGroup("imgur");
     ui.imgurOptions->setUser(settings()->value("account_username", "").toString());
     settings()->endGroup();
+
+    settings()->beginGroup("pomf");
+    QString pomf_url = settings()->value("pomf_url", "").toString();
+
+    if (!pomf_url.isEmpty()) {
+        if (ui.pomfOptions->ui.pomfUrlComboBox->findText(pomf_url, Qt::MatchFixedString) == -1) {
+            ui.pomfOptions->ui.pomfUrlComboBox->addItem(pomf_url);
+        }
+
+        ui.pomfOptions->ui.pomfUrlComboBox->setCurrentText(settings()->value("pomf_url", "").toString());
+    }
+    settings()->endGroup();
+
     settings()->endGroup();
 
     QTimer::singleShot(0, this, &OptionsDialog::updatePreview);
@@ -381,8 +394,12 @@ void OptionsDialog::saveSettings()
     settings()->setValue("service", ui.uploadServiceComboBox->currentIndex());
 
     settings()->beginGroup("imgur");
-    settings()->setValue("anonymous", settings()->value("account_username").toString().isEmpty());
-    settings()->setValue("album"    , ui.imgurOptions->ui.albumComboBox->property("currentData").toString());
+        settings()->setValue("anonymous", settings()->value("account_username").toString().isEmpty());
+        settings()->setValue("album"    , ui.imgurOptions->ui.albumComboBox->property("currentData").toString());
+    settings()->endGroup();
+
+    settings()->beginGroup("pomf");
+        settings()->setValue("pomf_url", ui.pomfOptions->ui.pomfUrlComboBox->currentText());
     settings()->endGroup();
 
     settings()->endGroup();
@@ -576,6 +593,8 @@ void OptionsDialog::init()
     // Version
     ui.versionLabel->setText(tr("Version %1").arg(qApp->applicationVersion()));
 
+    ui.uploadSslWarningLabel->setVisible(!QSslSocket::supportsSsl());
+
     setEnabled(false); // We disable the widgets to prevent any user interaction until the settings have loaded.
 
     //
@@ -650,12 +669,13 @@ void OptionsDialog::init()
         }
     });
 
-    connect(ui.mainLabel ,        &QLabel::linkActivated, this, &OptionsDialog::openUrl);
-    connect(ui.licenseAboutLabel, &QLabel::linkActivated, this, &OptionsDialog::openUrl);
-    connect(ui.linksLabel,        &QLabel::linkActivated, this, &OptionsDialog::openUrl);
+    connect(ui.mainLabel ,           &QLabel::linkActivated, this, &OptionsDialog::openUrl);
+    connect(ui.licenseAboutLabel,    &QLabel::linkActivated, this, &OptionsDialog::openUrl);
+    connect(ui.linksLabel,           &QLabel::linkActivated, this, &OptionsDialog::openUrl);
+    connect(ui.uploadSslWarningLabel,&QLabel::linkActivated, this, &OptionsDialog::openUrl);
 
     connect(ui.tabWidget, &QTabWidget::currentChanged, [&](int index) {
-        if (index == 2 && !ui.imgurOptions->mCurrentUser.isEmpty() && ui.imgurOptions->ui.albumComboBox->count() == 1) {
+        if (index == 2 && ui.uploadServiceStackWidget->currentIndex() == 0 && !ui.imgurOptions->mCurrentUser.isEmpty() && ui.imgurOptions->ui.albumComboBox->count() == 1) {
             QTimer::singleShot(20, ui.imgurOptions, &ImgurOptionsWidget::requestAlbumList);
         }
     });

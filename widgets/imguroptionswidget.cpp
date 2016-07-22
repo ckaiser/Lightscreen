@@ -71,7 +71,10 @@ void ImgurOptionsWidget::authorize()
         ui.authButton->setText(tr("Authorizing.."));
         ui.authButton->setEnabled(false);
 
-        ImgurUploader::authorize(pin, [&](bool result) {
+        QPointer<QWidget> guard(parentWidget());
+        ImgurUploader::authorize(pin, [&, guard](bool result) {
+            if (guard.isNull()) return;
+
             ui.authButton->setEnabled(true);
 
             if (result) {
@@ -100,9 +103,10 @@ void ImgurOptionsWidget::requestAlbumList()
     request.setRawHeader("Authorization", QByteArray("Bearer ") + settings()->value("upload/imgur/access_token").toByteArray());
 
     QNetworkReply *reply = Uploader::instance()->nam()->get(request);
+    QPointer<QWidget> guard(parentWidget());
 
-    connect(reply, &QNetworkReply::finished, this, [&, reply] {
-        if (mCurrentUser.isEmpty()) return;
+    connect(reply, &QNetworkReply::finished, this, [&, guard, reply] {
+        if (mCurrentUser.isEmpty() || guard.isNull()) return;
 
         if (reply->error() != QNetworkReply::NoError)
         {

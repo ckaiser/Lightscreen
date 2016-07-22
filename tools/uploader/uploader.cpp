@@ -49,6 +49,17 @@ QNetworkAccessManager *Uploader::nam()
     return mNetworkAccessManager;
 }
 
+QString Uploader::serviceName(int index)
+{ // TODO: Move somewhere else? Use indexes everywhere? an enum?
+    switch (index) {
+        case 1:
+            return "pomf";
+        case 0:
+        default:
+            return "imgur";
+    }
+}
+
 QString Uploader::lastUrl() const
 {
     return mLastUrl;

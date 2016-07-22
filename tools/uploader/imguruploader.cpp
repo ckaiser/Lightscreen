@@ -105,6 +105,7 @@ void ImgurUploader::upload(const QString &fileName)
     QNetworkReply *reply = Uploader::instance()->nam()->post(request, multiPart);
     reply->setProperty("fileName", fileName);
     this->setProperty("fileName", fileName);
+    multiPart->setParent(reply);
 
     connect(reply, SIGNAL(uploadProgress(qint64, qint64)), this, SLOT(uploadProgress(qint64, qint64)));
     connect(this , SIGNAL(cancelRequest()), reply, SLOT(abort()));
@@ -177,6 +178,8 @@ void ImgurUploader::uploadProgress(qint64 bytesReceived, qint64 bytesTotal)
 
 void ImgurUploader::authorizationReply(QNetworkReply *reply, AuthorizationCallback callback)
 {
+    reply->deleteLater();
+
     connect(reply, &QNetworkReply::finished, [reply, callback] {
         bool authorized = false;
 

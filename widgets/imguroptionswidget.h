@@ -1,8 +1,9 @@
-#ifndef IMGUROPTIONS_H
-#define IMGUROPTIONS_H
+#ifndef IMGUROPTIONSWIDGET_H
+#define IMGUROPTIONSWIDGET_H
 
 #include <QWidget>
-#include "ui_imguroptions.h"
+
+#include "ui_imguroptionswidget.h"
 
 class QSettings;
 class ImgurOptionsWidget : public QWidget
@@ -23,4 +24,4 @@ private:
     friend class OptionsDialog;
 };
 
-#endif // IMGUROPTIONS_H
+#endif // IMGUROPTIONSWIDGET_H

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>399</width>
+    <width>401</width>
     <height>318</height>
    </rect>
   </property>
@@ -556,6 +556,22 @@ Quality is related to file size and of course to readability and overall quality
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_12">
        <item>
+        <widget class="QLabel" name="uploadSslWarningLabel">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel { padding: 4px; border: 1px solid red; background-color: rgba(248, 182, 182, 60); }</string>
+         </property>
+         <property name="text">
+          <string>WARNING: You have no SSL support, &lt;a href=&quot;http://lightscreen.com.ar/help#SSL&quot;&gt;click here&lt;/a&gt; to learn more.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QCheckBox" name="uploadCheckBox">
          <property name="text">
           <string>Upload all my screenshots automatically.</string>
@@ -583,6 +599,11 @@ Quality is related to file size and of course to readability and overall quality
            <item>
             <property name="text">
              <string>Imgur</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Pomf-clone</string>
             </property>
            </item>
           </widget>
@@ -624,7 +645,55 @@ Quality is related to file size and of course to readability and overall quality
            <number>4</number>
           </property>
           <item>
-           <widget class="ImgurOptionsWidget" name="imgurOptions" native="true"/>
+           <widget class="QStackedWidget" name="uploadServiceStackWidget">
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="QWidget" name="page">
+             <layout class="QVBoxLayout" name="verticalLayout_13">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="ImgurOptionsWidget" name="imgurOptions" native="true"/>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_2">
+             <layout class="QVBoxLayout" name="verticalLayout_14">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="PomfOptionsWidget" name="pomfOptions" native="true"/>
+              </item>
+             </layout>
+            </widget>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -676,7 +745,7 @@ Quality is related to file size and of course to readability and overall quality
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>358</width>
+            <width>360</width>
             <height>706</height>
            </rect>
           </property>
@@ -1360,6 +1429,12 @@ Created by &lt;a href=&quot;https://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;
    <header location="global">widgets/imguroptionswidget.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>PomfOptionsWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">widgets/pomfoptionswidget.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>fileGroupBox</tabstop>
@@ -1456,6 +1531,22 @@ Created by &lt;a href=&quot;https://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;
     <hint type="destinationlabel">
      <x>302</x>
      <y>529</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>uploadServiceComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>uploadServiceStackWidget</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>92</x>
+     <y>96</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>198</x>
+     <y>196</y>
     </hint>
    </hints>
   </connection>

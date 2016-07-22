@@ -548,7 +548,7 @@ void LightscreenWindow::screenshotAction(int mode)
         options.upload         = settings()->value("options/uploadAuto",     false).toBool();
         options.optimize       = settings()->value("options/optipng",        false).toBool();
 
-        options.uploadService  = settings()->value("options/upload/service", "imgur").toString();
+        options.uploadService  = Uploader::serviceName(settings()->value("upload/service", 0).toInt());
 
         Screenshot::NamingOptions namingOptions;
         namingOptions.naming       = (Screenshot::Naming) settings()->value("file/naming").toInt();
@@ -780,7 +780,7 @@ void LightscreenWindow::updaterDone(bool result)
 
 void LightscreenWindow::upload(const QString &fileName)
 {
-    Uploader::instance()->upload(fileName, settings()->value("options/upload/service", "imgur").toString());
+    Uploader::instance()->upload(fileName, Uploader::serviceName(settings()->value("upload/service", 0).toInt()));
 }
 
 void LightscreenWindow::uploadCancel()

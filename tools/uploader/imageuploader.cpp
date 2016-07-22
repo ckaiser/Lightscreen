@@ -1,5 +1,6 @@
 ﻿#include "imageuploader.h"
 #include "imguruploader.h"
+#include "pomfuploader.h"
 
 #include <QSettings>
 #include "../screenshotmanager.h"
@@ -7,7 +8,9 @@
 ImageUploader *ImageUploader::factory(const QString &name)
 {
     if (name == "imgur") {
-        return new ImgurUploader(0);
+        return new ImgurUploader;
+    } else if (name == "pomf") {
+        return new PomfUploader;
     }
 
     return 0;
