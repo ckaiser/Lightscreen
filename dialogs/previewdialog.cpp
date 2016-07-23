@@ -24,12 +24,15 @@
 #include <QApplication>
 #include <QDesktopServices>
 #include <QDesktopWidget>
+#include <QDrag>
 #include <QGraphicsDropShadowEffect>
 #include <QHBoxLayout>
 #include <QIcon>
 #include <QLabel>
 #include <QList>
 #include <QMenu>
+#include <QMimeData>
+#include <QMouseEvent>
 #include <QObject>
 #include <QPalette>
 #include <QPushButton>
@@ -37,7 +40,6 @@
 #include <QStackedLayout>
 #include <QToolButton>
 #include <QUrl>
-
 
 PreviewDialog::PreviewDialog(QWidget *parent) :
     QDialog(parent), mAutoclose(0), mAutocloseAction(0), mAutocloseReset(0), mPosition(0), mSize(0)
@@ -227,6 +229,7 @@ void PreviewDialog::add(Screenshot *screenshot)
     wl->setMargin(0);
 
     label->setLayout(wl);
+    label->setProperty("screenshotObject", QVariant::fromValue<Screenshot *>(screenshot));
 
     mStack->addWidget(label);
     mStack->setCurrentIndex(mStack->count() - 1);
@@ -263,7 +266,7 @@ void PreviewDialog::closePreview()
 
 void PreviewDialog::enlargePreview()
 {
-    Screenshot *screenshot = qobject_cast<Screenshot *>(ScreenshotManager::instance()->children().at(mStack->currentIndex()));
+    Screenshot *screenshot = mStack->currentWidget()->property("screenshotObject").value<Screenshot *>();
 
     if (screenshot) {
         QFileInfo info(screenshot->unloadedFileName());
@@ -325,23 +328,23 @@ void PreviewDialog::relocate()
 
     QPoint where;
     switch (mPosition) {
-    case 0:
-        where = QApplication::desktop()->availableGeometry(this).topLeft();
-        break;
-    case 1:
-        where = QApplication::desktop()->availableGeometry(this).topRight();
-        where.setX(where.x() - frameGeometry().width());
-        break;
-    case 2:
-        where = QApplication::desktop()->availableGeometry(this).bottomLeft();
-        where.setY(where.y() - frameGeometry().height());
-        break;
-    case 3:
-    default:
-        where = QApplication::desktop()->availableGeometry(this).bottomRight();
-        where.setX(where.x() - frameGeometry().width());
-        where.setY(where.y() - frameGeometry().height());
-        break;
+        case 0:
+            where = QApplication::desktop()->availableGeometry(this).topLeft();
+            break;
+        case 1:
+            where = QApplication::desktop()->availableGeometry(this).topRight();
+            where.setX(where.x() - frameGeometry().width());
+            break;
+        case 2:
+            where = QApplication::desktop()->availableGeometry(this).bottomLeft();
+            where.setY(where.y() - frameGeometry().height());
+            break;
+        case 3:
+        default:
+            where = QApplication::desktop()->availableGeometry(this).bottomRight();
+            where.setX(where.x() - frameGeometry().width());
+            where.setY(where.y() - frameGeometry().height());
+            break;
     }
 
     move(where);
@@ -372,11 +375,46 @@ bool PreviewDialog::event(QEvent *event)
         }
 
         deleteLater();
-    } else if (event->type() == QEvent::MouseButtonDblClick) {
-        enlargePreview();
     }
 
     return QDialog::event(event);
+}
+
+void PreviewDialog::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+    enlargePreview();
+}
+
+void PreviewDialog::mousePressEvent(QMouseEvent *event)
+{
+    if (!(event->buttons() & Qt::LeftButton))
+        return;
+
+    if ((event->pos() - mDragStartPosition).manhattanLength()
+            < QApplication::startDragDistance())
+        return;
+
+    Screenshot *screenshot = mStack->currentWidget()->property("screenshotObject").value<Screenshot *>();
+
+    if (screenshot) {
+        QFileInfo info(screenshot->unloadedFileName());
+
+        QDrag *drag = new QDrag(this);
+        QMimeData *mimeData = new QMimeData;
+
+        mimeData->setUrls(QList<QUrl>() << QUrl::fromLocalFile(info.absoluteFilePath()));
+        drag->setMimeData(mimeData);
+
+        drag->exec(Qt::CopyAction);
+    }
+}
+
+void PreviewDialog::mouseMoveEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        mDragStartPosition = event->pos();
+    }
 }
 
 void PreviewDialog::timerEvent(QTimerEvent *event)

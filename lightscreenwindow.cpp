@@ -95,9 +95,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
     }
 #endif
 
-    setMaximumSize(size());
     setMinimumSize(size());
-
     setWindowFlags(windowFlags() ^ Qt::WindowMaximizeButtonHint);
 
     // Actions
@@ -156,7 +154,6 @@ void LightscreenWindow::action(int mode)
         show();
     }
 }
-
 
 void LightscreenWindow::areaHotkey()
 {
