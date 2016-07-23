@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationName("K");
     QApplication::setApplicationName("Lightscreen");
     QApplication::setApplicationVersion(APP_VERSION);
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     SingleApplication application(argc, argv);
 

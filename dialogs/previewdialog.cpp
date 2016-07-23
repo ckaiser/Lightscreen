@@ -406,7 +406,7 @@ void PreviewDialog::mousePressEvent(QMouseEvent *event)
         mimeData->setUrls(QList<QUrl>() << QUrl::fromLocalFile(info.absoluteFilePath()));
         drag->setMimeData(mimeData);
 
-        drag->exec(Qt::CopyAction);
+        drag->exec(Qt::CopyAction | Qt::MoveAction);
     }
 }
 
