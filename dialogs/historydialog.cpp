@@ -195,6 +195,7 @@ void HistoryDialog::init()
         mFilterModel->setSortCaseSensitivity(Qt::CaseInsensitive);
         mFilterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
         mFilterModel->setFilterKeyColumn(-1);
+        mFilterModel->sort(3, Qt::DescendingOrder);
 
         while (mModel->canFetchMore()) {
             mModel->fetchMore();
@@ -219,14 +220,13 @@ void HistoryDialog::init()
         ui->tableView->setAlternatingRowColors(true);
         ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
         ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
-        ui->tableView->setSortingEnabled(true);
+        ui->tableView->setSortingEnabled(false);
 
         if (ui->tableView->model()->rowCount() > 0) {
             ui->tableView->setEnabled(true);
             ui->clearButton->setEnabled(true);
             ui->filterEdit->setEnabled(true);
         }
-
         connect(ui->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), this, SLOT(selectionChanged(QItemSelection, QItemSelection)));
         connect(ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(openUrl(QModelIndex)));
         connect(ui->tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
