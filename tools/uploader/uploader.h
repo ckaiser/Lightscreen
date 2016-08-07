@@ -33,24 +33,19 @@ public:
     QString lastUrl() const;
     int progress() const;
     QNetworkAccessManager *nam();
+    static QString serviceName(int index);
 
 public slots:
     void cancel();
-    //void error(const QString &file, const QtImgur::Error e);
-    void upload(const QString &fileName);
-    void uploaded(const QString &fileName, const QString &url, const QString &deleteHash);
-    void uploaderError(ImageUploader::Error code, QString errorString, QString fileName);
+    void upload(const QString &fileName, const QString &uploadService);
     int  uploading();
-    void progressChange(int p);
-    void imgurAuthRefresh();
-    void imgurToken();
+    void progressChanged(int p); //TODO: Rename
 
 signals:
-    void done(QString, QString, QString);
-    void error(QString);
-    void progress(int);
+    void done(const QString &fileName, const QString &url, const QString &deleteHash);
+    void error(const QString &errorString);
+    void progress(int progress);
     void cancelAll();
-    void imgurAuthRefreshed();
 
 private:
     static Uploader *mInstance;

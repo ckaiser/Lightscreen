@@ -168,7 +168,7 @@ void HistoryDialog::selectionChanged(const QItemSelection &selected, const QItem
 
 void HistoryDialog::upload()
 {
-    Uploader::instance()->upload(mSelectedScreenshot);
+    Uploader::instance()->upload(mSelectedScreenshot, ScreenshotManager::instance()->settings()->value("options/upload/service", "imgur").toString());
     ui->uploadProgressWidget->setVisible(true);
 }
 

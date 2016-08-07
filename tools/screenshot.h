@@ -74,13 +74,14 @@ public:
         NamingOptions namingOptions;
         QDir directory;
         QString prefix;
+        QString uploadService;
 
         int mode;
         int quality;
 
         bool animations;
         bool clipboard;
-        bool imgurClipboard;
+        bool urlClipboard;
         bool currentMonitor;
         bool cursor;
         bool file;

@@ -5,13 +5,20 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include "imageuploader.h"
+#include <functional>
 
 class ImgurUploader : public ImageUploader
 {
     Q_OBJECT
 
 public:
-    ImgurUploader(const QVariantHash &options);
+    typedef std::function<void(bool)> AuthorizationCallback;
+
+    ImgurUploader(QObject *parent = 0);
+    static const QString clientId();
+    static const QString clientSecret();
+    static void authorize(const QString &pin, AuthorizationCallback callback);
+    static void refreshAuthorization(const QString &refresh_token, AuthorizationCallback callback);
 
 public slots:
     void upload(const QString &fileName);
@@ -24,7 +31,9 @@ private slots:
 
 signals:
     void cancelRequest();
-    void needAuthRefresh();
+
+private:
+    static void authorizationReply(QNetworkReply *reply, AuthorizationCallback callback);
 
 };
 

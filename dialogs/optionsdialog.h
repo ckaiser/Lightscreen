@@ -36,10 +36,6 @@ public slots:
     void accepted();
     void checkUpdatesNow();
     void exportSettings();
-    void imgurAlbumList();
-    void imgurAuthorize();
-    void imgurRequestAlbumList();
-    void imgurToken();
     void importSettings();
     void loadSettings();
     void openUrl(QString url);

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>399</width>
+    <width>401</width>
     <height>318</height>
    </rect>
   </property>
@@ -554,7 +554,23 @@ Quality is related to file size and of course to readability and overall quality
       <attribute name="title">
        <string>Upload</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_11">
+      <layout class="QVBoxLayout" name="verticalLayout_12">
+       <item>
+        <widget class="QLabel" name="uploadSslWarningLabel">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel { padding: 4px; border: 1px solid red; background-color: rgba(248, 182, 182, 60); }</string>
+         </property>
+         <property name="text">
+          <string>WARNING: You have no SSL support, &lt;a href=&quot;http://lightscreen.com.ar/help#SSL&quot;&gt;click here&lt;/a&gt; to learn more.</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QCheckBox" name="uploadCheckBox">
          <property name="text">
@@ -563,105 +579,124 @@ Quality is related to file size and of course to readability and overall quality
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="imgurClipboardCheckBox">
+        <widget class="QCheckBox" name="urlClipboardCheckBox">
          <property name="text">
-          <string>After uploading, copy the imgur URL to the clipboard.</string>
+          <string>After uploading, copy the URL to the clipboard.</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="imgurAuthGroupBox">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="uploadServiceLabel">
+           <property name="text">
+            <string>Service:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="uploadServiceComboBox">
+           <item>
+            <property name="text">
+             <string>Imgur</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Pomf-clone</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="uploadServiceOptionsGroupBox">
          <property name="title">
-          <string>User Account</string>
+          <string>Upload Service Options</string>
          </property>
-         <property name="flat">
-          <bool>true</bool>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="0">
-           <widget class="QLabel" name="imgurUserLabel">
-            <property name="text">
-             <string>User:</string>
+         <layout class="QVBoxLayout" name="verticalLayout_11">
+          <property name="spacing">
+           <number>2</number>
+          </property>
+          <property name="leftMargin">
+           <number>4</number>
+          </property>
+          <property name="topMargin">
+           <number>4</number>
+          </property>
+          <property name="rightMargin">
+           <number>4</number>
+          </property>
+          <property name="bottomMargin">
+           <number>4</number>
+          </property>
+          <item>
+           <widget class="QStackedWidget" name="uploadServiceStackWidget">
+            <property name="currentIndex">
+             <number>0</number>
             </property>
-            <property name="buddy">
-             <cstring>imgurAuthButton</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QPushButton" name="imgurAuthButton">
-            <property name="text">
-             <string>Authorize</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="imgurAlbumLabel">
-            <property name="text">
-             <string>Upload to album:</string>
-            </property>
-            <property name="buddy">
-             <cstring>imgurAlbumComboBox</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
-           <widget class="QPushButton" name="imgurRefreshAlbumButton">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Refresh</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1" colspan="2">
-           <widget class="QComboBox" name="imgurAlbumComboBox">
-            <item>
-             <property name="text">
-              <string>- None -</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="0" column="1" colspan="2">
-           <widget class="QLabel" name="imgurAuthUserLabel">
-            <property name="text">
-             <string>&lt;i&gt;none</string>
-            </property>
+            <widget class="QWidget" name="page">
+             <layout class="QVBoxLayout" name="verticalLayout_13">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="ImgurOptionsWidget" name="imgurOptions" native="true"/>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_2">
+             <layout class="QVBoxLayout" name="verticalLayout_14">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="PomfOptionsWidget" name="pomfOptions" native="true"/>
+              </item>
+             </layout>
+            </widget>
            </widget>
           </item>
          </layout>
         </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="imgurHelpLabel">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Note&lt;/span&gt;: Clicking on the &amp;quot;Authorize&amp;quot; button will open the Imgur website, where you will need to log in with the account you wish to use. They will provide an authentication PIN that you must input into Lightscreen.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -710,7 +745,7 @@ Quality is related to file size and of course to readability and overall quality
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>358</width>
+            <width>360</width>
             <height>706</height>
            </rect>
           </property>
@@ -1388,6 +1423,18 @@ Created by &lt;a href=&quot;https://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;
    <extends>QPushButton</extends>
    <header location="global">widgets/hotkeywidget.h</header>
   </customwidget>
+  <customwidget>
+   <class>ImgurOptionsWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">widgets/imguroptionswidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PomfOptionsWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">widgets/pomfoptionswidget.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>fileGroupBox</tabstop>
@@ -1484,6 +1531,22 @@ Created by &lt;a href=&quot;https://ckaiser.com.ar&quot;&gt;Christian Kaiser&lt;
     <hint type="destinationlabel">
      <x>302</x>
      <y>529</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>uploadServiceComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>uploadServiceStackWidget</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>92</x>
+     <y>96</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>198</x>
+     <y>196</y>
     </hint>
    </hints>
   </connection>

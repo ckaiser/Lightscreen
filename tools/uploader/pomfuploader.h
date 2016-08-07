@@ -1,0 +1,27 @@
+#ifndef POMFUPLOADER_H
+#define POMFUPLOADER_H
+
+#include "imageuploader.h"
+#include <functional>
+
+class PomfUploader : public ImageUploader
+{
+    Q_OBJECT
+
+public:
+    PomfUploader(QObject *parent = 0);
+
+    typedef std::function<void(bool)> VerificationCallback;
+    static void verify(const QString &url, VerificationCallback callback);
+
+public slots:
+    void upload(const QString &fileName);
+    void retry();
+    void cancel();
+
+signals:
+    void cancelRequest();
+
+};
+
+#endif // POMFUPLOADER_H
