@@ -16,16 +16,20 @@ PomfOptionsWidget::PomfOptionsWidget(QWidget *parent) : QWidget(parent)
 {
     ui.setupUi(this);
 
+    ui.progressIndicatorBar->setVisible(false);
+
     connect(ui.verifyButton, &QPushButton::clicked, this, [&]() {
         ui.verifyButton->setEnabled(false);
-        ui.pomfUrlComboBox->setEnabled(false);
+        ui.downloadListButton->setEnabled(false);
+        ui.progressIndicatorBar->setVisible(true);
 
         QPointer<QWidget> guard(parentWidget());
         PomfUploader::verify(ui.pomfUrlComboBox->currentText(), [&, guard](bool result) {
             if (guard.isNull()) return;
 
             ui.verifyButton->setEnabled(true);
-            ui.pomfUrlComboBox->setEnabled(true);
+            ui.downloadListButton->setEnabled(true);
+            ui.progressIndicatorBar->setVisible(false);
 
             if (result) {
                 ui.verifyButton->setText(tr("Valid uploader!"));
@@ -34,7 +38,7 @@ PomfOptionsWidget::PomfOptionsWidget(QWidget *parent) : QWidget(parent)
             } else {
                 ui.verifyButton->setStyleSheet("color: red;");
                 ui.verifyButton->setIcon(os::icon("no"));
-                ui.verifyButton->setText(tr("Invalid :("));
+                ui.verifyButton->setText(tr("Invalid uploader :("));
             }
         });
     });
@@ -45,7 +49,6 @@ PomfOptionsWidget::PomfOptionsWidget(QWidget *parent) : QWidget(parent)
             validUrl = true;
         }
 
-        ui.visitButton->setEnabled(validUrl);
         ui.verifyButton->setEnabled(validUrl);
 
         if (ui.verifyButton->styleSheet().count() > 0) {
@@ -55,7 +58,41 @@ PomfOptionsWidget::PomfOptionsWidget(QWidget *parent) : QWidget(parent)
         }
     });
 
-    connect(ui.visitButton, &QPushButton::clicked, this, [&]() {
-        QDesktopServices::openUrl(ui.pomfUrlComboBox->currentText());
+    connect(ui.helpLabel, &QLabel::linkActivated, this, [&](const QString &url) {
+        QDesktopServices::openUrl(url);
+    });
+
+    connect(ui.downloadListButton, &QPushButton::clicked, this, [&]() {
+        ui.verifyButton->setEnabled(false);
+        ui.downloadListButton->setEnabled(false);
+        ui.progressIndicatorBar->setVisible(true);
+
+        auto pomflistReply = Uploader::instance()->nam()->get(QNetworkRequest(QUrl("https://lightscreen.com.ar/pomf.json")));
+
+        QPointer<QWidget> guard(parentWidget());
+        connect(pomflistReply, &QNetworkReply::finished, [&, guard, pomflistReply] {
+            if (guard.isNull()) return;
+
+            ui.verifyButton->setEnabled(true);
+            ui.downloadListButton->setEnabled(true);
+            ui.progressIndicatorBar->setVisible(false);
+
+            if (pomflistReply->error() != QNetworkReply::NoError) {
+                QMessageBox::warning(parentWidget(), tr("Connection error"), pomflistReply->errorString());
+                return;
+            }
+
+            auto pomfListData = QJsonDocument::fromJson(pomflistReply->readAll()).object();
+
+            if (pomfListData.contains("url")) {
+                auto urlList = pomfListData["url"].toArray();
+
+                for (auto url : qAsConst(urlList)) {
+                    ui.pomfUrlComboBox->addItem(url.toString());
+                }
+
+                ui.pomfUrlComboBox->showPopup();
+            }
+        });
     });
 }

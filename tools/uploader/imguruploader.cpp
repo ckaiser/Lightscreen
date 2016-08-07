@@ -191,7 +191,7 @@ void ImgurUploader::authorizationReply(QNetworkReply *reply, AuthorizationCallba
             newSettings["refresh_token"]    = imgurResponse.value("refresh_token").toString();
             newSettings["account_username"] = imgurResponse.value("account_username").toString();
             newSettings["expires_in"]       = imgurResponse.value("expires_in").toInt();
-            saveSettings("imgur", newSettings);
+            ImgurUploader::saveSettings("imgur", newSettings);
 
             authorized = true;
         }
