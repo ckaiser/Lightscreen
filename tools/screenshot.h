@@ -45,10 +45,11 @@ public:
     Q_ENUM(Naming)
 
     enum Mode {
-        WholeScreen  = 0,
-        ActiveWindow = 1,
-        SelectedArea = 2,
-        SelectedWindow = 3
+        None         = 0,
+        WholeScreen  = 1,
+        ActiveWindow = 2,
+        SelectedArea = 3,
+        SelectedWindow = 4
     };
     Q_ENUM(Mode)
 

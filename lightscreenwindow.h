@@ -40,6 +40,12 @@ class LightscreenWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    enum Action {
+        ShowMainWindow = 5,
+        OpenScreenshotFolder = 6
+    };
+    Q_ENUM(Action)
+
     LightscreenWindow(QWidget *parent = 0);
     ~LightscreenWindow();
 

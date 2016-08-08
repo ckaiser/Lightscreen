@@ -110,15 +110,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
     mGlobalHotkeys = new UGlobalHotkeys(this);
 
     connect(mGlobalHotkeys, &UGlobalHotkeys::activated, [&](size_t id) {
-        if (id <= 3) {
-            screenshotAction(id);
-        } else if (id == 4) {
-            show();
-        } else if (id == 5) {
-            goToFolder();
-        } else {
-            qWarning() << "Unknown hotkey ID: " << id;
-        }
+        action(id);
     });
 
     // Uploader
@@ -148,16 +140,20 @@ LightscreenWindow::~LightscreenWindow()
 
 void LightscreenWindow::action(int mode)
 {
-    if (mode == 4) {
+    if (mode <= Screenshot::SelectedWindow) {
+        screenshotAction(mode);
+    } else if (mode == ShowMainWindow) {
+        show();
+    } else if (mode == OpenScreenshotFolder) {
         goToFolder();
     } else {
-        show();
+        qWarning() << "Unknown hotkey ID: " << mode;
     }
 }
 
 void LightscreenWindow::areaHotkey()
 {
-    screenshotAction(2);
+    screenshotAction(Screenshot::SelectedArea);
 }
 
 void LightscreenWindow::checkForUpdates()
@@ -348,15 +344,15 @@ void LightscreenWindow::executeArgument(const QString &message)
         os::setForegroundWindow(this);
         qApp->alert(this, 2000);
     } else if (message == "--screen") {
-        screenshotAction();
+        screenshotAction(Screenshot::WholeScreen);
     } else if (message == "--area") {
-        screenshotAction(2);
+        screenshotAction(Screenshot::SelectedArea);
     } else if (message == "--activewindow") {
-        screenshotAction(1);
+        screenshotAction(Screenshot::ActiveWindow);
     } else if (message == "--pickwindow") {
-        screenshotAction(3);
+        screenshotAction(Screenshot::SelectedWindow);
     } else if (message == "--folder") {
-        action(4);
+        action(OpenScreenshotFolder);
     } else if (message == "--uploadlast") {
         uploadLast();
     } else if (message == "--viewhistory") {
@@ -570,7 +566,7 @@ void LightscreenWindow::screenshotActionTriggered(QAction *action)
 
 void LightscreenWindow::screenHotkey()
 {
-    screenshotAction(0);
+    screenshotAction(Screenshot::WholeScreen);
 }
 
 void LightscreenWindow::showHotkeyError(const QStringList &hotkeys)
@@ -860,16 +856,16 @@ void LightscreenWindow::connectHotkeys()
 {
     const QStringList actions = {"screen", "window", "area", "windowPicker", "open", "directory"};
     QStringList failed;
-    size_t i = 0;
+    size_t id = Screenshot::WholeScreen;
 
     for (auto action : actions) {
         if (settings()->value("actions/" + action + "/enabled").toBool()) {
-            if (!mGlobalHotkeys->registerHotkey(settings()->value("actions/" + action + "/hotkey").toString(), i)) {
+            if (!mGlobalHotkeys->registerHotkey(settings()->value("actions/" + action + "/hotkey").toString(), id)) {
                 failed << action;
             }
         }
 
-        i++;
+        id++;
     }
 
     if (!failed.isEmpty()) {
