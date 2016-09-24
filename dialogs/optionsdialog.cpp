@@ -605,9 +605,9 @@ void OptionsDialog::init()
     connect(ui.buttonBox, &QDialogButtonBox::accepted    , this, &OptionsDialog::accepted);
     connect(ui.namingOptionsButton, &QPushButton::clicked, this, &OptionsDialog::namingOptions);
 
-    connect(ui.prefixLineEdit, &QLineEdit::textEdited, this, [&] { updatePreview(); });
-    connect(ui.formatComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [&](int i) { updatePreview(); Q_UNUSED(i) });
-    connect(ui.namingComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [&](int i) { updatePreview(); Q_UNUSED(i) });
+    connect(ui.prefixLineEdit, &QLineEdit::textEdited, this, &OptionsDialog::updatePreview);
+    connect(ui.formatComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &OptionsDialog::updatePreview);
+    connect(ui.namingComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &OptionsDialog::updatePreview);
 
     connect(ui.browsePushButton       , &QPushButton::clicked, this, &OptionsDialog::browse);
     connect(ui.checkUpdatesPushButton , &QPushButton::clicked, this, &OptionsDialog::checkUpdatesNow);
