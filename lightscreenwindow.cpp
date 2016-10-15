@@ -99,12 +99,12 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
     setWindowFlags(windowFlags() ^ Qt::WindowMaximizeButtonHint);
 
     // Actions
-    connect(ui.screenPushButton, SIGNAL(clicked()), this, SLOT(screenshotAction()));
-    connect(ui.areaPushButton  , SIGNAL(clicked()), this, SLOT(areaHotkey()));
-    connect(ui.windowPushButton, SIGNAL(clicked()), this, SLOT(windowPickerHotkey()));
+    connect(ui.screenPushButton, &QPushButton::clicked, this, &LightscreenWindow::screenshotAction);
+    connect(ui.areaPushButton  , &QPushButton::clicked, this, &LightscreenWindow::areaHotkey);
+    connect(ui.windowPushButton, &QPushButton::clicked, this, &LightscreenWindow::windowPickerHotkey);
 
-    connect(ui.optionsPushButton, SIGNAL(clicked()), this, SLOT(showOptions()));
-    connect(ui.folderPushButton , SIGNAL(clicked()), this, SLOT(goToFolder()));
+    connect(ui.optionsPushButton, &QPushButton::clicked, this, &LightscreenWindow::showOptions);
+    connect(ui.folderPushButton , &QPushButton::clicked, this, &LightscreenWindow::goToFolder);
 
     // Shortcuts
     mGlobalHotkeys = new UGlobalHotkeys(this);
@@ -119,15 +119,15 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
     connect(Uploader::instance(), SIGNAL(error(QString)),                  this, SLOT(showUploaderError(QString)));
 
     // Manager
-    connect(ScreenshotManager::instance(), SIGNAL(confirm(Screenshot *)),                this, SLOT(preview(Screenshot *)));
-    connect(ScreenshotManager::instance(), SIGNAL(windowCleanup(Screenshot::Options &)), this, SLOT(cleanup(Screenshot::Options &)));
-    connect(ScreenshotManager::instance(), SIGNAL(activeCountChange()),                 this, SLOT(updateStatus()));
+    connect(ScreenshotManager::instance(), &ScreenshotManager::confirm,           this, &LightscreenWindow::preview);
+    connect(ScreenshotManager::instance(), &ScreenshotManager::windowCleanup,     this, &LightscreenWindow::cleanup);
+    connect(ScreenshotManager::instance(), &ScreenshotManager::activeCountChange, this, &LightscreenWindow::updateStatus);
 
     if (!settings()->contains("file/format")) {
         showOptions();  // There are no options (or the options config is invalid or incomplete)
     } else {
-        QTimer::singleShot(0   , this, SLOT(applySettings())); // TODO: Benchmark me
-        QTimer::singleShot(5000, this, SLOT(checkForUpdates()));
+        QTimer::singleShot(0   , this, &LightscreenWindow::applySettings);
+        QTimer::singleShot(5000, this, &LightscreenWindow::checkForUpdates);
     }
 }
 
@@ -169,7 +169,7 @@ void LightscreenWindow::checkForUpdates()
 
     mUpdater = new Updater(this);
 
-    connect(mUpdater, SIGNAL(done(bool)), this, SLOT(updaterDone(bool)));
+    connect(mUpdater, &Updater::done, this, &LightscreenWindow::updaterDone);
     mUpdater->check();
 }
 
@@ -251,13 +251,10 @@ bool LightscreenWindow::closingWithoutTray()
 
     msgBox.setStyleSheet("QPushButton { padding: 4px 8px; }");
 
-    QPushButton *enableButton = msgBox.addButton(tr("Hide but enable tray"),
-                                QMessageBox::ActionRole);
-    QPushButton *enableAndDenotifyButton = msgBox.addButton(tr("Hide and don't warn"),
-                                           QMessageBox::ActionRole);
-    QPushButton *hideButton = msgBox.addButton(tr("Just hide"),
-                              QMessageBox::ActionRole);
-    QPushButton *abortButton = msgBox.addButton(QMessageBox::Cancel);
+    auto enableButton      = msgBox.addButton(tr("Hide but enable tray"), QMessageBox::ActionRole);
+    auto enableQuietButton = msgBox.addButton(tr("Hide and don't warn"), QMessageBox::ActionRole);
+    auto hideButton        = msgBox.addButton(tr("Just hide"), QMessageBox::ActionRole);
+    auto abortButton       = msgBox.addButton(QMessageBox::Cancel);
 
     Q_UNUSED(abortButton);
 
@@ -265,7 +262,7 @@ bool LightscreenWindow::closingWithoutTray()
 
     if (msgBox.clickedButton() == hideButton) {
         return true;
-    } else if (msgBox.clickedButton() == enableAndDenotifyButton) {
+    } else if (msgBox.clickedButton() == enableQuietButton) {
         settings()->setValue("options/disableHideAlert", true);
         applySettings();
         return true;
@@ -280,28 +277,28 @@ bool LightscreenWindow::closingWithoutTray()
 
 void LightscreenWindow::createUploadMenu()
 {
-    QMenu *imgurMenu = new QMenu(tr("Upload"));
+    auto imgurMenu = new QMenu(tr("Upload"));
 
-    QAction *uploadAction = new QAction(os::icon("imgur"), tr("&Upload last"), imgurMenu);
+    auto uploadAction = new QAction(os::icon("imgur"), tr("&Upload last"), imgurMenu);
     uploadAction->setToolTip(tr("Upload the last screenshot you took to imgur.com"));
-    connect(uploadAction, SIGNAL(triggered()), this, SLOT(uploadLast()));
+    connect(uploadAction, &QAction::triggered, this, &LightscreenWindow::uploadLast);
 
-    QAction *cancelAction = new QAction(os::icon("no"), tr("&Cancel upload"), imgurMenu);
+    auto cancelAction = new QAction(os::icon("no"), tr("&Cancel upload"), imgurMenu);
     cancelAction->setToolTip(tr("Cancel the currently uploading screenshots"));
     cancelAction->setEnabled(false);
 
-    connect(this, SIGNAL(uploading(bool)), cancelAction, SLOT(setEnabled(bool)));
-    connect(cancelAction, SIGNAL(triggered()), this, SLOT(uploadCancel()));
+    connect(this, &LightscreenWindow::uploading, cancelAction, &QAction::setEnabled);
+    connect(cancelAction, &QAction::triggered, this, &LightscreenWindow::uploadCancel);
 
-    QAction *historyAction = new QAction(os::icon("view-history"), tr("View &History"), imgurMenu);
-    connect(historyAction, SIGNAL(triggered()), this, SLOT(showHistoryDialog()));
+    auto historyAction = new QAction(os::icon("view-history"), tr("View &History"), imgurMenu);
+    connect(historyAction, &QAction::triggered, this, &LightscreenWindow::showHistoryDialog);
 
     imgurMenu->addAction(uploadAction);
     imgurMenu->addAction(cancelAction);
     imgurMenu->addAction(historyAction);
     imgurMenu->addSeparator();
 
-    connect(imgurMenu, SIGNAL(aboutToShow()), this, SLOT(uploadMenuShown()));
+    connect(imgurMenu, &QMenu::aboutToShow, this, &LightscreenWindow::uploadMenuShown);
 
     ui.imgurPushButton->setMenu(imgurMenu);
 }
@@ -331,7 +328,7 @@ void LightscreenWindow::messageClicked()
     if (mLastMessage == 1) {
         goToFolder();
     } else if (mLastMessage == 3) {
-        QTimer::singleShot(0, this, SLOT(showOptions()));
+        QTimer::singleShot(0, this, &LightscreenWindow::showOptions);
     } else {
         QDesktopServices::openUrl(QUrl(Uploader::instance()->lastUrl()));
     }
@@ -389,7 +386,7 @@ void LightscreenWindow::notify(const Screenshot::Result &result)
 
         setWindowTitle(tr("Success!"));
         break;
-    case Screenshot::Fail:
+    case Screenshot::Failure:
         mTrayIcon->setIcon(QIcon(":/icons/lightscreen.no"));
         setWindowTitle(tr("Failed!"));
 
@@ -403,7 +400,7 @@ void LightscreenWindow::notify(const Screenshot::Result &result)
         break;
     }
 
-    QTimer::singleShot(2000, this, SLOT(restoreNotification()));
+    QTimer::singleShot(2000, this, &LightscreenWindow::restoreNotification);
 }
 
 void LightscreenWindow::preview(Screenshot *screenshot)
@@ -672,7 +669,7 @@ void LightscreenWindow::showUploaderError(const QString &error)
         mTrayIcon->showMessage(tr("Upload error"), error);
     }
 
-    notify(Screenshot::Fail);
+    notify(Screenshot::Failure);
 }
 
 void LightscreenWindow::showUploaderMessage(const QString &fileName, const QString &url)
@@ -691,12 +688,8 @@ void LightscreenWindow::showUploaderMessage(const QString &fileName, const QStri
     updateStatus();
 }
 
-void LightscreenWindow::toggleVisibility(QSystemTrayIcon::ActivationReason reason)
+void LightscreenWindow::toggleVisibility()
 {
-    if (reason != QSystemTrayIcon::DoubleClick) {
-        return;
-    }
-
     if (isVisible()) {
         hide();
     } else {
@@ -878,70 +871,73 @@ void LightscreenWindow::createTrayIcon()
     mTrayIcon = new QSystemTrayIcon(QIcon(":/icons/lightscreen.small"), this);
     updateStatus();
 
-    connect(mTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(toggleVisibility(QSystemTrayIcon::ActivationReason)));
-    connect(mTrayIcon, SIGNAL(messageClicked()), this, SLOT(messageClicked()));
+    connect(mTrayIcon, &QSystemTrayIcon::messageClicked, this, &LightscreenWindow::messageClicked);
+    connect(mTrayIcon, &QSystemTrayIcon::activated     , this, [&](QSystemTrayIcon::ActivationReason reason) {
+        if (reason != QSystemTrayIcon::DoubleClick) return;
+        toggleVisibility();
+    });
 
-    QAction *hideAction = new QAction(QIcon(":/icons/lightscreen.small"), tr("Show&/Hide"), mTrayIcon);
-    connect(hideAction, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
+    auto hideAction = new QAction(QIcon(":/icons/lightscreen.small"), tr("Show&/Hide"), mTrayIcon);
+    connect(hideAction, &QAction::triggered, this, &LightscreenWindow::toggleVisibility);
 
-    QAction *screenAction = new QAction(os::icon("screen"), tr("&Screen"), mTrayIcon);
+    auto screenAction = new QAction(os::icon("screen"), tr("&Screen"), mTrayIcon);
     screenAction->setData(QVariant(0));
 
-    QAction *windowAction = new QAction(os::icon("window"), tr("Active &Window"), this);
+    auto windowAction = new QAction(os::icon("window"), tr("Active &Window"), this);
     windowAction->setData(QVariant(1));
 
-    QAction *windowPickerAction = new QAction(os::icon("pickWindow"), tr("&Pick Window"), this);
+    auto windowPickerAction = new QAction(os::icon("pickWindow"), tr("&Pick Window"), this);
     windowPickerAction->setData(QVariant(3));
 
-    QAction *areaAction = new QAction(os::icon("area"), tr("&Area"), mTrayIcon);
+    auto areaAction = new QAction(os::icon("area"), tr("&Area"), mTrayIcon);
     areaAction->setData(QVariant(2));
 
-    QActionGroup *screenshotGroup = new QActionGroup(mTrayIcon);
+    auto screenshotGroup = new QActionGroup(mTrayIcon);
     screenshotGroup->addAction(screenAction);
     screenshotGroup->addAction(areaAction);
     screenshotGroup->addAction(windowAction);
     screenshotGroup->addAction(windowPickerAction);
 
-    connect(screenshotGroup, SIGNAL(triggered(QAction *)), this, SLOT(screenshotActionTriggered(QAction *)));
+    connect(screenshotGroup, &QActionGroup::triggered, this, &LightscreenWindow::screenshotActionTriggered);
 
     // Duplicated for the screenshot button :(
-    QAction *uploadAction = new QAction(os::icon("imgur"), tr("&Upload last"), mTrayIcon);
+    auto uploadAction = new QAction(os::icon("imgur"), tr("&Upload last"), mTrayIcon);
     uploadAction->setToolTip(tr("Upload the last screenshot you took to imgur.com"));
-    connect(uploadAction, SIGNAL(triggered()), this, SLOT(uploadLast()));
+    connect(uploadAction, &QAction::triggered, this, &LightscreenWindow::uploadLast);
 
-    QAction *cancelAction = new QAction(os::icon("no"), tr("&Cancel upload"), mTrayIcon);
+    auto cancelAction = new QAction(os::icon("no"), tr("&Cancel upload"), mTrayIcon);
     cancelAction->setToolTip(tr("Cancel the currently uploading screenshots"));
     cancelAction->setEnabled(false);
-    connect(this, SIGNAL(uploading(bool)), cancelAction, SLOT(setEnabled(bool)));
-    connect(cancelAction, SIGNAL(triggered()), this, SLOT(uploadCancel()));
+    connect(this, &LightscreenWindow::uploading, cancelAction, &QAction::setEnabled);
+    connect(cancelAction, &QAction::triggered, this, &LightscreenWindow::uploadCancel);
 
-    QAction *historyAction = new QAction(os::icon("view-history"), tr("View History"), mTrayIcon);
-    connect(historyAction, SIGNAL(triggered()), this, SLOT(showHistoryDialog()));
+    auto historyAction = new QAction(os::icon("view-history"), tr("View History"), mTrayIcon);
+    connect(historyAction, &QAction::triggered, this, &LightscreenWindow::showHistoryDialog);
     //
 
-    QAction *optionsAction = new QAction(os::icon("configure"), tr("View &Options"), mTrayIcon);
-    connect(optionsAction, SIGNAL(triggered()), this, SLOT(showOptions()));
+    auto optionsAction = new QAction(os::icon("configure"), tr("View &Options"), mTrayIcon);
+    connect(optionsAction, &QAction::triggered, this, &LightscreenWindow::showOptions);
 
-    QAction *goAction = new QAction(os::icon("folder"), tr("&Go to Folder"), mTrayIcon);
-    connect(goAction, SIGNAL(triggered()), this, SLOT(goToFolder()));
+    auto goAction = new QAction(os::icon("folder"), tr("&Go to Folder"), mTrayIcon);
+    connect(goAction, &QAction::triggered, this, &LightscreenWindow::goToFolder);
 
-    QAction *quitAction = new QAction(tr("&Quit"), mTrayIcon);
-    connect(quitAction, SIGNAL(triggered()), this, SLOT(quit()));
+    auto quitAction = new QAction(tr("&Quit"), mTrayIcon);
+    connect(quitAction, &QAction::triggered, this, &LightscreenWindow::quit);
 
-    QMenu *screenshotMenu = new QMenu(tr("Screenshot"));
+    auto screenshotMenu = new QMenu(tr("Screenshot"));
     screenshotMenu->addAction(screenAction);
     screenshotMenu->addAction(areaAction);
     screenshotMenu->addAction(windowAction);
     screenshotMenu->addAction(windowPickerAction);
 
     // Duplicated for the screenshot button :(
-    QMenu *imgurMenu = new QMenu(tr("Upload"));
+    auto imgurMenu = new QMenu(tr("Upload"));
     imgurMenu->addAction(uploadAction);
     imgurMenu->addAction(cancelAction);
     imgurMenu->addAction(historyAction);
     imgurMenu->addSeparator();
 
-    QMenu *trayIconMenu = new QMenu;
+    auto trayIconMenu = new QMenu;
     trayIconMenu->addAction(hideAction);
     trayIconMenu->addSeparator();
     trayIconMenu->addMenu(imgurMenu);

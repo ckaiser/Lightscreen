@@ -202,7 +202,7 @@ void Screenshot::save()
 {
     QString name = "";
     QString fileName = "";
-    Screenshot::Result result = Screenshot::Fail;
+    Screenshot::Result result = Screenshot::Failure;
 
     if (mOptions.file && !mOptions.saveAs)  {
         name = newFileName();
@@ -244,22 +244,21 @@ void Screenshot::save()
         QApplication::clipboard()->setPixmap(mPixmap, QClipboard::Clipboard);
 
         if (!mOptions.file) {
-            result = (Screenshot::Result)1;
+            result = Screenshot::Success;
         }
     }
 
-    // In the following code I use  (Screenshot::Result)1 instead of Screenshot::Success because of some weird issue with the X11 headers. //TODO
     if (mOptions.file) {
         fileName = name + extension();
 
         if (name.isEmpty()) {
             result = Screenshot::Cancel;
         } else if (mUnloaded) {
-            result = (QFile::rename(mUnloadFilename, fileName)) ? (Screenshot::Result)1 : Screenshot::Fail;
+            result = (QFile::rename(mUnloadFilename, fileName)) ? Screenshot::Success : Screenshot::Failure;
         } else if (mPixmap.save(fileName, 0, mOptions.quality)) {
-            result = (Screenshot::Result)1;
+            result = Screenshot::Success;
         } else {
-            result = Screenshot::Fail;
+            result = Screenshot::Failure;
         }
     }
 
@@ -381,14 +380,14 @@ QString Screenshot::extension() const
 {
     switch (mOptions.format) {
     case Screenshot::PNG:
-        return ".png";
+        return QStringLiteral(".png");
         break;
     case Screenshot::BMP:
-        return ".bmp";
+        return QStringLiteral(".bmp");
         break;
     case Screenshot::JPEG:
     default:
-        return ".jpg";
+        return QStringLiteral(".jpg");
         break;
     }
 }
@@ -469,7 +468,7 @@ bool Screenshot::unloadPixmap()
     }
 
     // Unloading the pixmap to reduce memory usage during previews
-    mUnloadFilename = mOptions.directory.path() + QDir::separator() + QString(".lstemp.%1%2").arg(qrand() * qrand() + QDateTime::currentDateTime().toTime_t()).arg(extension());
+    mUnloadFilename = mOptions.directory.path() + QDir::separator() + QString(".screenshot.%1%2").arg(qrand() * qrand() + QDateTime::currentDateTime().toTime_t()).arg(extension());
     mUnloaded       = mPixmap.save(mUnloadFilename, 0, mOptions.quality);
 
     if (mUnloaded) {
@@ -483,5 +482,3 @@ void Screenshot::wholeScreen()
 {
     grabDesktop();
 }
-
-

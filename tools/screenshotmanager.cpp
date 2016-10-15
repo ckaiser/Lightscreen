@@ -42,7 +42,7 @@ ScreenshotManager::ScreenshotManager(QObject *parent) : QObject(parent), mHistor
         mHistoryPath  = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator();
     }
 
-    connect(Uploader::instance(), SIGNAL(done(QString, QString, QString)), this, SLOT(uploadDone(QString, QString, QString)));
+    connect(Uploader::instance(), &Uploader::done, this, &ScreenshotManager::uploadDone);
 }
 
 void ScreenshotManager::initHistory()
@@ -218,7 +218,7 @@ void ScreenshotManager::uploadDone(const QString &fileName, const QString &url, 
 }
 
 // Singleton
-ScreenshotManager *ScreenshotManager::mInstance = 0;
+ScreenshotManager *ScreenshotManager::mInstance = nullptr;
 
 ScreenshotManager *ScreenshotManager::instance()
 {

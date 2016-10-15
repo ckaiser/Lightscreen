@@ -56,7 +56,7 @@ AreaDialog::AreaDialog(Screenshot *screenshot) :
 
     setCursor(Qt::CrossCursor);
 
-    connect(&mIdleTimer, SIGNAL(timeout()), this, SLOT(displayHelp()));
+    connect(&mIdleTimer, &QTimer::timeout, this, &AreaDialog::displayHelp);
     mIdleTimer.start(2000);
 
     mAutoclose = ScreenshotManager::instance()->settings()->value("options/areaAutoclose").toBool();
@@ -71,17 +71,17 @@ AreaDialog::AreaDialog(Screenshot *screenshot) :
     mAcceptWidget->setWindowOpacity(0.4);
     mAcceptWidget->setStyleSheet("QWidget { background: rgba(255, 255, 255, 200); border: 4px solid #232323; padding: 0; } QPushButton { background: transparent; border: none; height: 50px; padding: 5px; } QPushButton:hover { cursor: hand; }");
 
-    QPushButton *awAcceptButton = new QPushButton(QIcon(":/icons/yes.big"), "", this);
-    connect(awAcceptButton, SIGNAL(clicked()), this, SLOT(grabRect()));
+    auto awAcceptButton = new QPushButton(QIcon(":/icons/yes.big"), "", this);
+    connect(awAcceptButton, &QPushButton::clicked, this, &AreaDialog::grabRect);
     awAcceptButton->setCursor(Qt::PointingHandCursor);
     awAcceptButton->setIconSize(QSize(48, 48));
 
-    QPushButton *awRejectButton = new QPushButton(QIcon(":/icons/no.big"), "", this);
-    connect(awRejectButton, SIGNAL(clicked()), this, SLOT(cancel()));
+    auto awRejectButton = new QPushButton(QIcon(":/icons/no.big"), "", this);
+    connect(awRejectButton, &QPushButton::clicked, this, &AreaDialog::cancel);
     awRejectButton->setCursor(Qt::PointingHandCursor);
     awRejectButton->setIconSize(QSize(48, 48));
 
-    QHBoxLayout *awLayout = new QHBoxLayout(this);
+    auto awLayout = new QHBoxLayout(this);
     awLayout->addWidget(awAcceptButton);
     awLayout->addWidget(awRejectButton);
     awLayout->setMargin(0);

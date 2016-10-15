@@ -54,7 +54,7 @@ public:
     Q_ENUM(Mode)
 
     enum Result {
-        Fail = 0,
+        Failure = 0,
         Success = 1,
         Cancel = 2
     };

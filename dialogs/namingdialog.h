@@ -31,10 +31,6 @@ class NamingDialog : public QDialog
 public:
     explicit NamingDialog(Screenshot::Naming naming, QWidget *parent = 0);
 
-private slots:
-    void openUrl(const QString &url);
-    void saveSettings();
-
 protected:
     bool eventFilter(QObject *object, QEvent *event);
 

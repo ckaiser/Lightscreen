@@ -13,7 +13,7 @@ ImageUploader *ImageUploader::factory(const QString &name)
         return new PomfUploader;
     }
 
-    return 0;
+    return nullptr;
 }
 
 QVariantHash ImageUploader::loadSettings(const QString &uploaderType)

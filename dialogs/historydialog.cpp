@@ -35,13 +35,13 @@ HistoryDialog::HistoryDialog(QWidget *parent) :
     ui->clearButton->setEnabled(false);
 
     connect(Uploader::instance(), SIGNAL(progress(int)), this, SLOT(uploadProgress(int)));
-    connect(Uploader::instance(), SIGNAL(done(QString, QString, QString)), this, SLOT(refresh()));
+    connect(Uploader::instance(), &Uploader::done    , this, &HistoryDialog::refresh);
 
-    connect(ui->uploadButton      , SIGNAL(clicked()), this                    , SLOT(upload()));
-    connect(ui->cancelUploadButton, SIGNAL(clicked()), Uploader::instance()    , SLOT(cancel()));
-    connect(ui->cancelUploadButton, SIGNAL(clicked()), ui->uploadProgressWidget, SLOT(hide()));
+    connect(ui->uploadButton      , &QPushButton::clicked, this                    , &HistoryDialog::upload);
+    connect(ui->cancelUploadButton, &QPushButton::clicked, Uploader::instance()    , &Uploader::cancel);
+    connect(ui->cancelUploadButton, &QPushButton::clicked, ui->uploadProgressWidget, &QWidget::hide);
 
-    connect(ui->clearButton       , SIGNAL(clicked()), this, SLOT(clear()));
+    connect(ui->clearButton, &QPushButton::clicked, this, &HistoryDialog::clear);
 
     QTimer::singleShot(0, this, &HistoryDialog::init);
 }
@@ -70,12 +70,12 @@ void HistoryDialog::clear()
 
 void HistoryDialog::contextMenu(const QPoint &point)
 {
-    mContextIndex = ui->tableView->indexAt(point);;
+    mContextIndex = ui->tableView->indexAt(point);
 
     QMenu contextMenu(ui->tableView);
 
     QAction copyAction((mContextIndex.column() == 0) ? tr("Copy Path") : tr("Copy URL"), &contextMenu);
-    connect(&copyAction, SIGNAL(triggered()), this, SLOT(copy()));
+    connect(&copyAction, &QAction::triggered, this, &HistoryDialog::copy);
     contextMenu.addAction(&copyAction);
 
     QAction deleteAction(tr("Delete from imgur.com"), &contextMenu);
@@ -89,14 +89,14 @@ void HistoryDialog::contextMenu(const QPoint &point)
     }
 
     if (mContextIndex.column() == 0) {
-        connect(&locationAction, SIGNAL(triggered()), this, SLOT(location()));
+        connect(&locationAction, &QAction::triggered, this, &HistoryDialog::location);
         contextMenu.addAction(&locationAction);
     } else {
-        connect(&deleteAction, SIGNAL(triggered()), this, SLOT(deleteImage()));
+        connect(&deleteAction, &QAction::triggered, this, &HistoryDialog::deleteImage);
         contextMenu.addAction(&deleteAction);
     }
 
-    connect(&removeAction, SIGNAL(triggered()), this, SLOT(removeHistoryEntry()));
+    connect(&removeAction, &QAction::triggered, this, &HistoryDialog::removeHistoryEntry);
     contextMenu.addAction(&removeAction);
     contextMenu.exec(QCursor::pos());
 }
@@ -183,6 +183,8 @@ void HistoryDialog::init()
     ScreenshotManager::instance()->initHistory();
 
     if (QSqlDatabase::database().isOpen()) {
+        setUpdatesEnabled(false);
+
         mModel = new QSqlTableModel(this);
         mModel->setTable("history");
         mModel->setHeaderData(0, Qt::Horizontal, tr("Screenshot"));
@@ -199,6 +201,7 @@ void HistoryDialog::init()
 
         while (mModel->canFetchMore()) {
             mModel->fetchMore();
+            qApp->processEvents();
         }
 
         ui->tableView->setWordWrap(false);
@@ -227,9 +230,12 @@ void HistoryDialog::init()
             ui->clearButton->setEnabled(true);
             ui->filterEdit->setEnabled(true);
         }
-        connect(ui->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), this, SLOT(selectionChanged(QItemSelection, QItemSelection)));
-        connect(ui->tableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(openUrl(QModelIndex)));
-        connect(ui->tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenu(QPoint)));
+
+        connect(ui->tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &HistoryDialog::selectionChanged);
+        connect(ui->tableView, &QTableView::doubleClicked, this, &HistoryDialog::openUrl);
+        connect(ui->tableView, &QTableView::customContextMenuRequested, this, &HistoryDialog::contextMenu);
+
+        setUpdatesEnabled(true);
     }
 
     if (Uploader::instance()->progress() > 0) {

@@ -47,7 +47,7 @@ void Updater::check()
 void Updater::checkWithFeedback()
 {
     UpdaterDialog updaterDialog;
-    connect(this, SIGNAL(done(bool)), &updaterDialog, SLOT(updateDone(bool)));
+    connect(this, &Updater::done, &updaterDialog, &UpdaterDialog::updateDone);
 
     check();
     updaterDialog.exec();

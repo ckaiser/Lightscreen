@@ -75,7 +75,7 @@ public slots:
     void showScreenshotMessage(const Screenshot::Result &result, const QString &fileName);
     void showUploaderError(const QString &error);
     void showUploaderMessage(const QString &fileName, const QString &url);
-    void toggleVisibility(QSystemTrayIcon::ActivationReason reason = QSystemTrayIcon::DoubleClick);
+    void toggleVisibility();
     void updateStatus();
     void updaterDone(bool result);
     void upload(const QString &fileName);
