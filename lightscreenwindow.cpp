@@ -62,7 +62,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
     mReviveMain(false),
     mWasVisible(true),
     mLastMessage(0),
-    mLastMode(-1),
+    mLastMode(Screenshot::None),
     mLastScreenshot(),
     mHasTaskbarButton(false)
 {
@@ -99,7 +99,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
     setWindowFlags(windowFlags() ^ Qt::WindowMaximizeButtonHint);
 
     // Actions
-    connect(ui.screenPushButton, &QPushButton::clicked, this, &LightscreenWindow::screenshotAction);
+    connect(ui.screenPushButton, &QPushButton::clicked, this, &LightscreenWindow::screenHotkey);
     connect(ui.areaPushButton  , &QPushButton::clicked, this, &LightscreenWindow::areaHotkey);
     connect(ui.windowPushButton, &QPushButton::clicked, this, &LightscreenWindow::windowPickerHotkey);
 
@@ -141,7 +141,7 @@ LightscreenWindow::~LightscreenWindow()
 void LightscreenWindow::action(int mode)
 {
     if (mode <= Screenshot::SelectedWindow) {
-        screenshotAction(mode);
+        screenshotAction((Screenshot::Mode)mode);
     } else if (mode == ShowMainWindow) {
         show();
     } else if (mode == OpenScreenshotFolder) {
@@ -464,7 +464,7 @@ void LightscreenWindow::restoreNotification()
     updateStatus();
 }
 
-void LightscreenWindow::screenshotAction(int mode)
+void LightscreenWindow::screenshotAction(Screenshot::Mode mode)
 {
     int delayms = -1;
 
@@ -501,14 +501,16 @@ void LightscreenWindow::screenshotAction(int mode)
     // The delayed functions works using the static variable lastMode
     // which keeps the argument so a QTimer can call this function again.
     if (delayms > 0) {
-        if (mLastMode < 0) {
+        if (mLastMode == Screenshot::None) {
             mLastMode = mode;
 
-            QTimer::singleShot(delayms, this, SLOT(screenshotAction()));
+            QTimer::singleShot(delayms, this, [&] {
+                screenshotAction(mLastMode);
+            });
             return;
         } else {
             mode = mLastMode;
-            mLastMode = -1;
+            mLastMode = Screenshot::None;
         }
     }
 
@@ -558,7 +560,7 @@ void LightscreenWindow::screenshotAction(int mode)
 
 void LightscreenWindow::screenshotActionTriggered(QAction *action)
 {
-    screenshotAction(action->data().toInt());
+    screenshotAction((Screenshot::Mode) action->data().toInt());
 }
 
 void LightscreenWindow::screenHotkey()
@@ -815,12 +817,12 @@ void LightscreenWindow::uploadMenuShown()
 
 void LightscreenWindow::windowHotkey()
 {
-    screenshotAction(1);
+    screenshotAction(Screenshot::ActiveWindow);
 }
 
 void LightscreenWindow::windowPickerHotkey()
 {
-    screenshotAction(3);
+    screenshotAction(Screenshot::SelectedWindow);
 }
 
 void LightscreenWindow::applySettings()

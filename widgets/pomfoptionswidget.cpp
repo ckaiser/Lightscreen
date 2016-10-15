@@ -88,7 +88,9 @@ PomfOptionsWidget::PomfOptionsWidget(QWidget *parent) : QWidget(parent)
                 auto urlList = pomfListData["url"].toArray();
 
                 for (auto url : qAsConst(urlList)) {
-                    ui.pomfUrlComboBox->addItem(url.toString());
+                    if (ui.pomfUrlComboBox->findText(url.toString(), Qt::MatchExactly) < 0) {
+                        ui.pomfUrlComboBox->addItem(url.toString());
+                    }
                 }
 
                 ui.pomfUrlComboBox->showPopup();

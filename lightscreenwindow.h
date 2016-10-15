@@ -66,7 +66,7 @@ public slots:
     void quit();
     void restoreNotification();
     void setStatus(QString status = "");
-    void screenshotAction(int mode = 0);
+    void screenshotAction(Screenshot::Mode mode = Screenshot::None);
     void screenshotActionTriggered(QAction *action);
     void screenHotkey();
     void showHotkeyError(const QStringList &hotkeys);
@@ -112,7 +112,7 @@ private:
     bool mReviveMain;
     bool mWasVisible;
     int  mLastMessage;
-    int  mLastMode;
+    Screenshot::Mode  mLastMode;
     QString mLastScreenshot;
     QPointer<QSystemTrayIcon> mTrayIcon;
     QPointer<PreviewDialog> mPreviewDialog;

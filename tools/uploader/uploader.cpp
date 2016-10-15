@@ -83,7 +83,7 @@ void Uploader::upload(const QString &fileName, const QString &uploadService)
     connect(uploader, &ImageUploader::progressChanged, this    , &Uploader::progressChanged);
     connect(this    , &Uploader::cancelAll           , uploader, &ImageUploader::cancel);
 
-    connect(uploader, &ImageUploader::error, [&](ImageUploader::Error errorCode, const QString &errorString, const QString &fileName) {
+    connect(uploader, &ImageUploader::error, [&, uploader](ImageUploader::Error errorCode, const QString &errorString, const QString &fileName) {
         mUploaders.removeAll(uploader);
         uploader->deleteLater();
 
@@ -100,7 +100,7 @@ void Uploader::upload(const QString &fileName, const QString &uploadService)
         emit done(fileName, "", "");
     });
 
-    connect(uploader, &ImageUploader::uploaded, [&](const QString &file, const QString &url, const QString &deleteHash) {
+    connect(uploader, &ImageUploader::uploaded, [&, uploader](const QString &file, const QString &url, const QString &deleteHash) {
         mLastUrl = url;
         mUploaders.removeAll(uploader);
 
