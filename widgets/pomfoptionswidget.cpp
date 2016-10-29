@@ -67,7 +67,19 @@ PomfOptionsWidget::PomfOptionsWidget(QWidget *parent) : QWidget(parent)
         ui.downloadListButton->setEnabled(false);
         ui.progressIndicatorBar->setVisible(true);
 
-        auto pomflistReply = Uploader::instance()->nam()->get(QNetworkRequest(QUrl("https://lightscreen.com.ar/pomf.json")));
+        QUrl pomfRepoURL = QUrl(ScreenshotManager::instance()->settings()->value("options/upload/pomfRepo").toString());
+
+        if (pomfRepoURL.isEmpty()) {
+            if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
+                // XP doesn't like my SNI cert
+                pomfRepoURL = QUrl("http://lightscreen.com.ar/pomf.json");
+            }
+            else {
+                pomfRepoURL = QUrl("https://lightscreen.com.ar/pomf.json");
+            }
+        }
+
+        auto pomflistReply = Uploader::network()->get(QNetworkRequest(pomfRepoURL));
 
         QPointer<QWidget> guard(parentWidget());
         connect(pomflistReply, &QNetworkReply::finished, [&, guard, pomflistReply] {

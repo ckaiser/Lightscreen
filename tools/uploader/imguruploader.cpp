@@ -41,7 +41,7 @@ void ImgurUploader::authorize(const QString &pin, AuthorizationCallback callback
     QNetworkRequest request(QUrl("https://api.imgur.com/oauth2/token"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
-    QNetworkReply *reply = Uploader::instance()->nam()->post(request, parameters);
+    QNetworkReply *reply = Uploader::network()->post(request, parameters);
     authorizationReply(reply, callback);
 }
 
@@ -64,7 +64,7 @@ void ImgurUploader::refreshAuthorization(const QString &refresh_token, Authoriza
     QNetworkRequest request(QUrl("https://api.imgur.com/oauth2/token"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
-    QNetworkReply *reply = Uploader::instance()->nam()->post(request, parameters);
+    QNetworkReply *reply = Uploader::network()->post(request, parameters);
     authorizationReply(reply, callback);
 }
 
@@ -102,7 +102,7 @@ void ImgurUploader::upload(const QString &fileName)
     file->setParent(multiPart);
     multiPart->append(imagePart);
 
-    QNetworkReply *reply = Uploader::instance()->nam()->post(request, multiPart);
+    QNetworkReply *reply = Uploader::network()->post(request, multiPart);
     reply->setProperty("fileName", fileName);
     this->setProperty("fileName", fileName);
     multiPart->setParent(reply);

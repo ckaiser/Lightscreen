@@ -114,9 +114,9 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
     });
 
     // Uploader
-    connect(Uploader::instance(), SIGNAL(progress(int)),                   this, SLOT(uploadProgress(int)));
-    connect(Uploader::instance(), SIGNAL(done(QString, QString, QString)), this, SLOT(showUploaderMessage(QString, QString)));
-    connect(Uploader::instance(), SIGNAL(error(QString)),                  this, SLOT(showUploaderError(QString)));
+    connect(Uploader::instance(), &Uploader::progressChanged, this, &LightscreenWindow::uploadProgress);
+    connect(Uploader::instance(), &Uploader::done           , this, &LightscreenWindow::showUploaderMessage);
+    connect(Uploader::instance(), &Uploader::error          , this, &LightscreenWindow::showUploaderError);
 
     // Manager
     connect(ScreenshotManager::instance(), &ScreenshotManager::confirm,           this, &LightscreenWindow::preview);

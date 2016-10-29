@@ -39,14 +39,14 @@ Uploader *Uploader::instance()
     return mInstance;
 }
 
+QNetworkAccessManager *Uploader::network()
+{
+    return instance()->mNetworkAccessManager;
+}
+
 int Uploader::progress() const
 {
     return mProgress;
-}
-
-QNetworkAccessManager *Uploader::nam()
-{
-    return mNetworkAccessManager;
 }
 
 QString Uploader::serviceName(int index)
@@ -80,7 +80,7 @@ void Uploader::upload(const QString &fileName, const QString &uploadService)
 
     auto uploader = ImageUploader::factory(uploadService);
 
-    connect(uploader, &ImageUploader::progressChanged, this    , &Uploader::progressChanged);
+    connect(uploader, &ImageUploader::progressChanged, this    , &Uploader::reportProgress);
     connect(this    , &Uploader::cancelAll           , uploader, &ImageUploader::cancel);
 
     connect(uploader, &ImageUploader::error, [&, uploader](ImageUploader::Error errorCode, const QString &errorString, const QString &fileName) {
@@ -121,11 +121,11 @@ int Uploader::uploading()
     return mUploaders.count();
 }
 
-void Uploader::progressChanged(int p)
+void Uploader::reportProgress(int progress)
 {
     if (mUploaders.size() <= 0) {
-        mProgress = p;
-        emit progress(p);
+        mProgress = progress;
+        emit progressChanged(progress);
         return;
     }
 
@@ -136,6 +136,6 @@ void Uploader::progressChanged(int p)
     }
 
     mProgress = totalProgress / mUploaders.size();
-    emit progress(mProgress);
+    emit progressChanged(mProgress);
 }
 

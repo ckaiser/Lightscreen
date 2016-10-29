@@ -34,8 +34,8 @@ HistoryDialog::HistoryDialog(QWidget *parent) :
     ui->tableView->setEnabled(false);
     ui->clearButton->setEnabled(false);
 
-    connect(Uploader::instance(), SIGNAL(progress(int)), this, SLOT(uploadProgress(int)));
-    connect(Uploader::instance(), &Uploader::done    , this, &HistoryDialog::refresh);
+    connect(Uploader::instance(), &Uploader::progressChanged, this, &HistoryDialog::uploadProgress);
+    connect(Uploader::instance(), &Uploader::done           , this, &HistoryDialog::refresh);
 
     connect(ui->uploadButton      , &QPushButton::clicked, this                    , &HistoryDialog::upload);
     connect(ui->cancelUploadButton, &QPushButton::clicked, Uploader::instance()    , &Uploader::cancel);

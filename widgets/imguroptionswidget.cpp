@@ -102,7 +102,7 @@ void ImgurOptionsWidget::requestAlbumList()
     QNetworkRequest request(QUrl::fromUserInput("https://api.imgur.com/3/account/" + mCurrentUser + "/albums/"));
     request.setRawHeader("Authorization", QByteArray("Bearer ") + settings()->value("upload/imgur/access_token").toByteArray());
 
-    QNetworkReply *reply = Uploader::instance()->nam()->get(request);
+    QNetworkReply *reply = Uploader::network()->get(request);
     QPointer<QWidget> guard(parentWidget());
 
     connect(reply, &QNetworkReply::finished, this, [&, guard, reply] {

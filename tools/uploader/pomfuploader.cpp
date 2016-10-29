@@ -19,7 +19,7 @@ void PomfUploader::verify(const QString &url, VerificationCallback callback)
         callback(false);
     }
 
-    QNetworkReply *reply = Uploader::instance()->nam()->get(request);
+    QNetworkReply *reply = Uploader::network()->get(request);
 
     connect(reply, &QNetworkReply::finished, [reply, callback] {
         reply->deleteLater();
@@ -65,7 +65,7 @@ void PomfUploader::upload(const QString &fileName)
     file->setParent(multiPart);
     multiPart->append(imagePart);
 
-    QNetworkReply *reply = Uploader::instance()->nam()->post(request, multiPart);
+    QNetworkReply *reply = Uploader::network()->post(request, multiPart);
     this->setProperty("fileName", fileName);
     multiPart->setParent(reply);
 

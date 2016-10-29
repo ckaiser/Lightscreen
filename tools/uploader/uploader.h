@@ -26,25 +26,29 @@
 class Uploader : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(int progress READ progress NOTIFY progressChanged)
+    Q_PROPERTY(QString lastUrl READ lastUrl)
 
 public:
     Uploader(QObject *parent = 0);
+
     static Uploader *instance();
+    static QNetworkAccessManager *network();
+    static QString serviceName(int index);
+
     QString lastUrl() const;
     int progress() const;
-    QNetworkAccessManager *nam();
-    static QString serviceName(int index);
 
 public slots:
     void cancel();
     void upload(const QString &fileName, const QString &uploadService);
     int  uploading();
-    void progressChanged(int p); //TODO: Rename
+    void reportProgress(int progressChanged);
 
 signals:
     void done(const QString &fileName, const QString &url, const QString &deleteHash);
     void error(const QString &errorString);
-    void progress(int progress);
+    void progressChanged(int progressChanged);
     void cancelAll();
 
 private:

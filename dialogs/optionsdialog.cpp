@@ -560,13 +560,13 @@ void OptionsDialog::init()
     QMenu *optionsMenu = new QMenu(tr("Options"));
 
     QAction *exportAction = new QAction(tr("&Export.."), optionsMenu);
-    connect(exportAction, SIGNAL(triggered()), this, SLOT(exportSettings()));
+    connect(exportAction, &QAction::triggered, this, &OptionsDialog::exportSettings);
 
     QAction *importAction = new QAction(tr("&Import.."), optionsMenu);
-    connect(importAction, SIGNAL(triggered()), this, SLOT(importSettings()));
+    connect(importAction, &QAction::triggered, this, &OptionsDialog::importSettings);
 
     QAction *restoreAction = new QAction(tr("&Restore Defaults"), optionsMenu);
-    connect(restoreAction, SIGNAL(triggered()), this, SLOT(restoreDefaults()));
+    connect(restoreAction, &QAction::triggered, this, &OptionsDialog::restoreDefaults);
 
     optionsMenu->addAction(exportAction);
     optionsMenu->addAction(importAction);
