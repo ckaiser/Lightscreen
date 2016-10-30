@@ -45,7 +45,8 @@ PomfOptionsWidget::PomfOptionsWidget(QWidget *parent) : QWidget(parent)
 
     connect(ui.pomfUrlComboBox, &QComboBox::currentTextChanged, [&](const QString &text) {
         bool validUrl = false;
-        if (text.startsWith("http://") || text.startsWith("https://")) { // TODO: Something a bit more complex
+
+        if (!text.isEmpty() && (text.startsWith("http://") || text.startsWith("https://"))) { // TODO: Something a bit more complex
             validUrl = true;
         }
 
@@ -70,13 +71,7 @@ PomfOptionsWidget::PomfOptionsWidget(QWidget *parent) : QWidget(parent)
         QUrl pomfRepoURL = QUrl(ScreenshotManager::instance()->settings()->value("options/upload/pomfRepo").toString());
 
         if (pomfRepoURL.isEmpty()) {
-            if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
-                // XP doesn't like my SNI cert
-                pomfRepoURL = QUrl("http://lightscreen.com.ar/pomf.json");
-            }
-            else {
-                pomfRepoURL = QUrl("https://lightscreen.com.ar/pomf.json");
-            }
+            pomfRepoURL = QUrl("https://lightscreen.com.ar/pomf.json");
         }
 
         auto pomflistReply = Uploader::network()->get(QNetworkRequest(pomfRepoURL));
@@ -106,6 +101,13 @@ PomfOptionsWidget::PomfOptionsWidget(QWidget *parent) : QWidget(parent)
                 }
 
                 ui.pomfUrlComboBox->showPopup();
+            }
+        });
+
+        connect(pomflistReply, &QNetworkReply::sslErrors, [pomflistReply](const QList<QSslError> &errors) {
+            Q_UNUSED(errors);
+            if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
+                pomflistReply->ignoreSslErrors();
             }
         });
     });

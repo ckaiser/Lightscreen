@@ -283,6 +283,8 @@ void OptionsDialog::loadSettings()
     settings()->endGroup();
 
     settings()->beginGroup("pomf");
+
+    // TODO: Move to pomfuploader in a more generic way.
     QString pomf_url = settings()->value("pomf_url", "").toString();
 
     if (!pomf_url.isEmpty()) {
@@ -291,9 +293,10 @@ void OptionsDialog::loadSettings()
         }
 
         ui.pomfOptions->ui.pomfUrlComboBox->setCurrentText(settings()->value("pomf_url", "").toString());
+        ui.pomfOptions->ui.verifyButton->setEnabled(!settings()->value("pomf_url", "").toString().isEmpty());
     }
-    settings()->endGroup();
 
+    settings()->endGroup();
     settings()->endGroup();
 
     QTimer::singleShot(0, this, &OptionsDialog::updatePreview);

@@ -111,6 +111,13 @@ void ImgurUploader::upload(const QString &fileName)
     connect(this , SIGNAL(cancelRequest()), reply, SLOT(abort()));
     connect(this , SIGNAL(cancelRequest()), reply, SLOT(deleteLater()));
 
+    connect(reply, &QNetworkReply::sslErrors, [reply](const QList<QSslError> &errors) {
+        Q_UNUSED(errors);
+        if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
+            reply->ignoreSslErrors();
+        }
+    });
+
     connect(reply, SIGNAL(finished()), this, SLOT(finished()));
 }
 

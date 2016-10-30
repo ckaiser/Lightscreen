@@ -32,6 +32,13 @@ void PomfUploader::verify(const QString &url, VerificationCallback callback)
             callback(false);
         }
     });
+
+    connect(reply, &QNetworkReply::sslErrors, [reply](const QList<QSslError> &errors) {
+        Q_UNUSED(errors);
+        if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
+            reply->ignoreSslErrors();
+        }
+    });
 }
 
 void PomfUploader::upload(const QString &fileName)
@@ -105,6 +112,13 @@ void PomfUploader::upload(const QString &fileName)
             }
 
             emit error(ImageUploader::HostError, description, fileName);
+        }
+    });
+
+    connect(reply, &QNetworkReply::sslErrors, [reply](const QList<QSslError> &errors) {
+        Q_UNUSED(errors);
+        if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
+            reply->ignoreSslErrors();
         }
     });
 }
