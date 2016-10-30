@@ -40,10 +40,10 @@ void ImgurOptionsWidget::setUser(const QString &username)
         ui.authButton->setText(tr("Authorize"));
         ui.helpLabel->setEnabled(true);
 
-        settings()->setValue("upload/imgur/access_token", "");
-        settings()->setValue("upload/imgur/refresh_token", "");
-        settings()->setValue("upload/imgur/account_username", "");
-        settings()->setValue("upload/imgur/expires_in", 0);
+        settings()->setValue("access_token", "");
+        settings()->setValue("refresh_token", "");
+        settings()->setValue("account_username", "");
+        settings()->setValue("expires_in", 0);
     } else {
         ui.authButton->setText(tr("Deauthorize"));
         ui.authUserLabel->setText(tr("<b><a href=\"http://%1.imgur.com/all/\">%1</a></b>").arg(username));
