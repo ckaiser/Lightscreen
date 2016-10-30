@@ -453,8 +453,12 @@ bool OptionsDialog::event(QEvent *event)
             event->ignore();
             return false;
         }
-    } else if (event->type() == QEvent::Show && settings()->contains("geometry/optionsDialog")) {
-        restoreGeometry(settings()->value("geometry/optionsDialog").toByteArray());
+    } else if (event->type() == QEvent::Show) {
+        if (settings()->contains("geometry/optionsDialog")) {
+            restoreGeometry(settings()->value("geometry/optionsDialog").toByteArray());
+        } else {
+            move(QApplication::desktop()->screenGeometry(this).center() - rect().center());
+        }
     }
 
     return QDialog::event(event);
