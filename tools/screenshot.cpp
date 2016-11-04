@@ -397,7 +397,7 @@ void Screenshot::grabDesktop()
     QRect geometry;
 
     if (mOptions.currentMonitor) {
-        geometry = QApplication::primaryScreen()->geometry();
+        geometry = QApplication::desktop()->screenGeometry(QCursor::pos());
     } else {
         for (QScreen *screen : QGuiApplication::screens()) {
             geometry = geometry.united(screen->geometry());
