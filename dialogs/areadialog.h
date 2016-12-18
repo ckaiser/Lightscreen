@@ -43,7 +43,7 @@ class AreaDialog : public QDialog
 
 public:
     AreaDialog(Screenshot *screenshot);
-    QRect &resultRect();
+    QRect resultRect() const;
 
 protected slots:
     void animationTick(int frame);

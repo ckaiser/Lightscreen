@@ -405,13 +405,14 @@ void Screenshot::grabDesktop()
     }
 
     mPixmap = QApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId(), geometry.x(), geometry.y(), geometry.width(), geometry.height());
+    mPixmap.setDevicePixelRatio(QApplication::desktop()->devicePixelRatio());
 
     if (mOptions.cursor && !mPixmap.isNull()) {
         QPainter painter(&mPixmap);
-        painter.drawPixmap(QCursor::pos(), os::cursor());
+        QPixmap cursor = os::cursor();
+        cursor.setDevicePixelRatio(QApplication::desktop()->devicePixelRatio());
+        painter.drawPixmap(QCursor::pos(), cursor);
     }
-
-    mPixmap.setDevicePixelRatio(QApplication::desktop()->devicePixelRatio());
 }
 
 QString Screenshot::newFileName() const

@@ -91,9 +91,14 @@ AreaDialog::AreaDialog(Screenshot *screenshot) :
     mAcceptWidget->setVisible(false);
 }
 
-QRect &AreaDialog::resultRect()
+QRect AreaDialog::resultRect() const
 {
-    return mSelection;
+    auto devicePixelRatio = mScreenshot->pixmap().devicePixelRatio();
+
+    return QRect(mSelection.left()   * devicePixelRatio,
+                 mSelection.top()    * devicePixelRatio,
+                 mSelection.width()  * devicePixelRatio,
+                 mSelection.height() * devicePixelRatio);
 }
 
 void AreaDialog::animationTick(int frame)
