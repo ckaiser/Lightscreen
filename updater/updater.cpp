@@ -21,7 +21,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
-
+#include <QVersionNumber>
 
 #include "updater.h"
 #include "../dialogs/updaterdialog.cpp"
@@ -56,7 +56,9 @@ void Updater::checkWithFeedback()
 void Updater::finished(QNetworkReply *reply)
 {
     QByteArray data = reply->readAll();
-    double version  = QString(data).toDouble();
 
-    emit done((version > qApp->applicationVersion().toDouble()));
+    auto currentVersion = QVersionNumber::fromString(qApp->applicationVersion()).normalized();
+    auto remoteVersion  = QVersionNumber::fromString(QString(data)).normalized();
+
+    emit done(remoteVersion > currentVersion);
 }
