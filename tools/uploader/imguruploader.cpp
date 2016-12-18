@@ -185,9 +185,9 @@ void ImgurUploader::uploadProgress(qint64 bytesReceived, qint64 bytesTotal)
 
 void ImgurUploader::authorizationReply(QNetworkReply *reply, AuthorizationCallback callback)
 {
-    reply->deleteLater();
-
     connect(reply, &QNetworkReply::finished, [reply, callback] {
+        reply->deleteLater();
+
         bool authorized = false;
 
         const QJsonObject imgurResponse = QJsonDocument::fromJson(reply->readAll()).object();
