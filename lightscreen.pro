@@ -53,7 +53,7 @@ FORMS += dialogs/historydialog.ui \
 RESOURCES += lightscreen.qrc
 CODECFORSRC = UTF-8
 
-QT += core gui widgets network sql multimedia
+QT += core gui widgets network sql multimedia concurrent
 
 include($$PWD/tools/SingleApplication/singleapplication.pri)
 include($$PWD/tools/UGlobalHotkey/uglobalhotkey.pri)

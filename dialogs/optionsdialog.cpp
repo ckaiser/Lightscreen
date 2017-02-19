@@ -33,6 +33,9 @@
 #include <QMenu>
 #include <QAction>
 
+#include <QFutureWatcher>
+#include <QtConcurrent>
+
 #ifdef Q_OS_WIN
     #include <windows.h>
 #endif
@@ -74,6 +77,7 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
     }
 #endif
 
+    setEnabled(false); // We disable the widgets to prevent any user interaction until the settings have loaded.
     QMetaObject::invokeMethod(this, "init"        , Qt::QueuedConnection);
     QMetaObject::invokeMethod(this, "loadSettings", Qt::QueuedConnection);
 }
@@ -207,7 +211,7 @@ void OptionsDialog::loadSettings()
     // Advanced
     ui.clipboardCheckBox->setChecked(settings()->value("clipboard", true).toBool());
     ui.urlClipboardCheckBox->setChecked(settings()->value("urlClipboard", false).toBool());
-    ui.optiPngCheckBox->setChecked(settings()->value("optipng", true).toBool());
+    ui.optiPngCheckBox->setChecked(settings()->value("optipng", false).toBool());
     ui.closeHideCheckBox->setChecked(settings()->value("closeHide", true).toBool());
     ui.currentMonitorCheckBox->setChecked(settings()->value("currentMonitor", false).toBool());
     ui.replaceCheckBox->setChecked(settings()->value("replace", false).toBool());
@@ -433,6 +437,9 @@ void OptionsDialog::updatePreview()
     }
 
     ui.previewLabel->setText(preview);
+
+    ui.qualitySlider->setEnabled(ui.formatComboBox->currentText() != "PNG");
+    ui.qualityLabel->setEnabled(ui.qualitySlider->isEnabled());
 }
 
 void OptionsDialog::viewHistory()
@@ -600,9 +607,16 @@ void OptionsDialog::init()
     // Version
     ui.versionLabel->setText(tr("Version %1").arg(qApp->applicationVersion()));
 
-    ui.uploadSslWarningLabel->setVisible(!QSslSocket::supportsSsl());
+    ui.uploadSslWarningLabel->setVisible(false);
 
-    setEnabled(false); // We disable the widgets to prevent any user interaction until the settings have loaded.
+    // Run the SSL check in another thread (slows down dialog startup considerably).
+    auto futureWatcher = new QFutureWatcher<bool>(this);
+    connect(futureWatcher, &QFutureWatcher<bool>::finished, futureWatcher, &QFutureWatcher<bool>::deleteLater);
+    connect(futureWatcher, &QFutureWatcher<bool>::finished, this, [&, futureWatcher] {
+        ui.uploadSslWarningLabel->setVisible(!futureWatcher->future().result());
+    });
+
+    futureWatcher->setFuture(QtConcurrent::run([]() -> bool { return QSslSocket::supportsSsl(); }));
 
     //
     // Connections

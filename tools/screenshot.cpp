@@ -53,7 +53,9 @@ Screenshot::Screenshot(QObject *parent, Screenshot::Options options):
     mUnloaded(false),
     mUnloadFilename()
 {
-    // Here be crickets
+    if (mOptions.format == Screenshot::PNG) {
+        mOptions.quality = 80;
+    }
 }
 
 Screenshot::~Screenshot()
