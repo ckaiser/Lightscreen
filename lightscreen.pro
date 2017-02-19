@@ -1,5 +1,6 @@
 TEMPLATE = app
 TARGET = lightscreen
+DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += dialogs/areadialog.h \
     dialogs/historydialog.h \

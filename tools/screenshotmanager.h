@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  Christian Kaiser
+ * Copyright (C) 2017  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ public slots:
 
 signals:
     void confirm(Screenshot *screenshot);
-    void windowCleanup(Screenshot::Options &options);
+    void windowCleanup(const Screenshot::Options &options);
     void activeCountChange();
 
 private:

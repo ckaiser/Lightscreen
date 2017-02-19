@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  Christian Kaiser
+ * Copyright (C) 2017  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -173,7 +173,7 @@ void LightscreenWindow::checkForUpdates()
     mUpdater->check();
 }
 
-void LightscreenWindow::cleanup(Screenshot::Options &options)
+void LightscreenWindow::cleanup(const Screenshot::Options &options)
 {
     // Reversing settings
     if (settings()->value("options/hide").toBool()) {

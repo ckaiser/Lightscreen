@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  Christian Kaiser
+ * Copyright (C) 2017  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,10 +97,10 @@ public:
     Screenshot(QObject *parent, Screenshot::Options options);
     ~Screenshot();
 
-    Screenshot::Options &options();
+    const Screenshot::Options &options();
     QPixmap &pixmap();
     static QString getName(const NamingOptions &options, const QString &prefix, const QDir &directory);
-    QString &unloadedFileName();
+    const QString &unloadedFileName();
 
 public slots:
     void confirm(bool result = true);
@@ -122,9 +122,9 @@ signals:
 
 private:
     void activeWindow();
-    QString extension() const;
+    const QString extension() const;
     void grabDesktop();
-    QString newFileName() const;
+    const QString newFileName() const;
     void selectedArea();
     void selectedWindow();
     bool unloadPixmap();

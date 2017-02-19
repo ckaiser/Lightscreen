@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  Christian Kaiser
+ * Copyright (C) 2017  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,20 +54,23 @@ void ScreenshotManager::initHistory()
     // Creating the SQLite database.
     QSqlDatabase history = QSqlDatabase::addDatabase("QSQLITE");
 
-    QDir hp(mHistoryPath);
+    QDir historyPath(mHistoryPath);
 
-    if (!hp.exists()) {
-        hp.mkpath(mHistoryPath);
+    if (!historyPath.exists()) {
+        historyPath.mkpath(mHistoryPath);
     }
 
     history.setHostName("localhost");
     history.setDatabaseName(mHistoryPath + "history.sqlite");
 
     if (history.open()) {
-        history.exec("CREATE TABLE IF NOT EXISTS history (fileName text, URL text, deleteURL text, time integer)");
-        mHistoryInitialized = true;
+        QSqlQuery tableQuery;
+        mHistoryInitialized = tableQuery.exec("CREATE TABLE IF NOT EXISTS history (fileName text, URL text, deleteURL text, time integer)");
+
+        history.exec("CREATE INDEX IF NOT EXISTS fileName_index ON history(fileName)");
     } else {
         qCritical() << "Could not open SQLite DB.";
+        mHistoryInitialized = false;
     }
 }
 
@@ -97,13 +100,13 @@ void ScreenshotManager::saveHistory(const QString &fileName, const QString &url,
         deleteUrl = "https://imgur.com/delete/" + deleteHash;
     }
 
-    QSqlQuery query;
-    query.prepare("INSERT INTO history (fileName, URL, deleteURL, time) VALUES(?, ?, ?, ?)");
-    query.addBindValue(fileName);
-    query.addBindValue(url);
-    query.addBindValue(deleteUrl);
-    query.addBindValue(QDateTime::currentMSecsSinceEpoch());
-    query.exec();
+    QSqlQuery saveHistoryQuery;
+    saveHistoryQuery.prepare("INSERT INTO history (fileName, URL, deleteURL, time) VALUES(?, ?, ?, ?)");
+    saveHistoryQuery.addBindValue(fileName);
+    saveHistoryQuery.addBindValue(url);
+    saveHistoryQuery.addBindValue(deleteUrl);
+    saveHistoryQuery.addBindValue(QDateTime::currentMSecsSinceEpoch());
+    saveHistoryQuery.exec();
 }
 
 void ScreenshotManager::updateHistory(const QString &fileName, const QString &url, const QString &deleteHash)

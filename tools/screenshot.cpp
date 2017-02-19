@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016  Christian Kaiser
+ * Copyright (C) 2017  Christian Kaiser
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@
 #include <QProcess>
 #include <QTextStream>
 #include <QScreen>
+#include <QStringBuilder>
 
 #include "windowpicker.h"
 #include "../dialogs/areadialog.h"
@@ -68,9 +69,9 @@ QString Screenshot::getName(const NamingOptions &options, const QString &prefix,
     int naming_largest = 0;
 
     if (options.flip) {
-        naming = "%1" + prefix;
+        naming = "%1" % prefix;
     } else {
-        naming = prefix + "%1";
+        naming = prefix % "%1";
     }
 
     switch (options.naming) {
@@ -111,12 +112,12 @@ QString Screenshot::getName(const NamingOptions &options, const QString &prefix,
     return naming;
 }
 
-QString &Screenshot::unloadedFileName()
+const QString &Screenshot::unloadedFileName()
 {
     return mUnloadFilename;
 }
 
-Screenshot::Options &Screenshot::options()
+const Screenshot::Options &Screenshot::options()
 {
     return mOptions;
 }
@@ -174,7 +175,7 @@ void Screenshot::optimize()
 #ifdef Q_OS_UNIX
     optiPNG = "optipng";
 #else
-    optiPNG = qApp->applicationDirPath() + QDir::separator() + "optipng.exe";
+    optiPNG = qApp->applicationDirPath() % QDir::separator() % "optipng.exe";
 #endif
 
     if (!QFile::exists(optiPNG)) {
@@ -207,17 +208,17 @@ void Screenshot::save()
     if (mOptions.file && !mOptions.saveAs)  {
         name = newFileName();
     } else if (mOptions.file && mOptions.saveAs) {
-        name = QFileDialog::getSaveFileName(0, tr("Save as.."), newFileName(), "*" + extension());
+        name = QFileDialog::getSaveFileName(0, tr("Save as.."), newFileName(), "*" % extension());
     }
 
-    if (!mOptions.replace && QFile::exists(name + extension())) {
+    if (!mOptions.replace && QFile::exists(name % extension())) {
         // Ugly? You should see my wife!
         int count = 0;
         int cunt  = 0;
 
         QString naming = QFileInfo(name).fileName();
 
-        for (auto file : QFileInfo(name + extension()).dir().entryList(QDir::Files)) {
+        for (auto file : QFileInfo(name % extension()).dir().entryList(QDir::Files)) {
             if (file.contains(naming)) {
                 file.remove(naming);
                 file.remove(" (");
@@ -232,7 +233,7 @@ void Screenshot::save()
             }
         }
 
-        name = name + " (" + QString::number(count + 1) + ")";
+        name = name % " (" % QString::number(count % 1) % ")";
     }
 
     if (mOptions.clipboard && !(mOptions.upload && mOptions.urlClipboard)) {
@@ -249,7 +250,7 @@ void Screenshot::save()
     }
 
     if (mOptions.file) {
-        fileName = name + extension();
+        fileName = name % extension();
 
         if (name.isEmpty()) {
             result = Screenshot::Cancel;
@@ -376,7 +377,7 @@ void Screenshot::activeWindow()
 #endif
 }
 
-QString Screenshot::extension() const
+const QString Screenshot::extension() const
 {
     switch (mOptions.format) {
     case Screenshot::PNG:
@@ -415,7 +416,7 @@ void Screenshot::grabDesktop()
     }
 }
 
-QString Screenshot::newFileName() const
+const QString Screenshot::newFileName() const
 {
     if (!mOptions.directory.exists()) {
         mOptions.directory.mkpath(mOptions.directory.path());
@@ -469,7 +470,7 @@ bool Screenshot::unloadPixmap()
     }
 
     // Unloading the pixmap to reduce memory usage during previews
-    mUnloadFilename = mOptions.directory.path() + QDir::separator() + QString(".screenshot.%1%2").arg(qrand() * qrand() + QDateTime::currentDateTime().toTime_t()).arg(extension());
+    mUnloadFilename = QString("%1/.screenshot.%2%3").arg(mOptions.directory.path()).arg(qrand() * qrand() + QDateTime::currentDateTime().toTime_t()).arg(extension());
     mUnloaded       = mPixmap.save(mUnloadFilename, 0, mOptions.quality);
 
     if (mUnloaded) {
