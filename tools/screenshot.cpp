@@ -388,6 +388,9 @@ const QString Screenshot::extension() const
     case Screenshot::BMP:
         return QStringLiteral(".bmp");
         break;
+    case Screenshot::WEBP:
+        return QStringLiteral(".webp");
+        break;
     case Screenshot::JPEG:
     default:
         return QStringLiteral(".jpg");

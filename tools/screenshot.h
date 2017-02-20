@@ -32,7 +32,7 @@ public:
         PNG  = 0,
         JPEG = 1,
         BMP  = 2,
-        TIFF = 3
+        WEBP = 3
     };
     Q_ENUM(Format)
 
