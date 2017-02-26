@@ -148,14 +148,12 @@ void AreaDialog::mouseMoveEvent(QMouseEvent *e)
     mMouseMagnifier = false;
 
     if (mMouseDown) {
-
         mMousePos = e->pos();
 
         if (mNewSelection) {
-            QRect r = rect();
-
-            mSelection = QRect(mDragStartPoint, limitPointToRect(mMousePos, r)).normalized();
-        } else if (mMouseOverHandle == 0) { // moving the whole selection
+            mSelection = QRect(mDragStartPoint, limitPointToRect(mMousePos, rect())).normalized();
+        } else if (mMouseOverHandle == 0) {
+            // Moving the whole selection
             QRect r = rect().normalized(), s = mSelectionBeforeDrag.normalized();
             QPoint p = s.topLeft() + e->pos() - mDragStartPoint;
             r.setBottomRight(r.bottomRight() - QPoint(s.width(), s.height()));
@@ -163,39 +161,63 @@ void AreaDialog::mouseMoveEvent(QMouseEvent *e)
             if (!r.isNull() && r.isValid()) {
                 mSelection.moveTo(limitPointToRect(p, r));
             }
-        } else { // dragging a handle
+        } else {
+            // Dragging a handle
             QRect r = mSelectionBeforeDrag;
             QPoint offset = e->pos() - mDragStartPoint;
+
+            bool symmetryMod = qApp->keyboardModifiers() & Qt::ShiftModifier;
+            bool aspectRatioMod = qApp->keyboardModifiers() & Qt::ControlModifier;
 
             if (mMouseOverHandle == &mTLHandle || mMouseOverHandle == &mTHandle
                     || mMouseOverHandle == &mTRHandle) { // dragging one of the top handles
                 r.setTop(r.top() + offset.y());
+
+                if (symmetryMod) {
+                    r.setBottom(r.bottom() - offset.y());
+                }
             }
 
             if (mMouseOverHandle == &mTLHandle || mMouseOverHandle == &mLHandle
                     || mMouseOverHandle == &mBLHandle) { // dragging one of the left handles
                 r.setLeft(r.left() + offset.x());
+
+                if (symmetryMod) {
+                    r.setRight(r.right() - offset.x());
+                }
             }
 
             if (mMouseOverHandle == &mBLHandle || mMouseOverHandle == &mBHandle
                     || mMouseOverHandle == &mBRHandle) { // dragging one of the bottom handles
                 r.setBottom(r.bottom() + offset.y());
+
+                if (symmetryMod) {
+                    r.setTop(r.top() - offset.y());
+                }
             }
 
             if (mMouseOverHandle == &mTRHandle || mMouseOverHandle == &mRHandle
                     || mMouseOverHandle == &mBRHandle) { // dragging one of the right handles
                 r.setRight(r.right() + offset.x());
+
+                if (symmetryMod) {
+                    r.setLeft(r.left() - offset.x());
+                }
             }
 
             r = r.normalized();
             r.setTopLeft(limitPointToRect(r.topLeft(), rect()));
             r.setBottomRight(limitPointToRect(r.bottomRight(), rect()));
-            mSelection = r;
-        }
 
-        if (qApp->keyboardModifiers() & Qt::ControlModifier) {
-            // The lazy 1:1 aspect ratio approach!
-            mSelection.setHeight(mSelection.width());
+            if (aspectRatioMod) {
+                if (mMouseOverHandle == &mBLHandle || mMouseOverHandle == &mBRHandle || mMouseOverHandle == &mLHandle || mMouseOverHandle == &mRHandle) {
+                    r.setHeight(r.width());
+                } else {
+                    r.setWidth(r.height());
+                }
+            }
+
+            mSelection = r;
         }
 
         if (mAcceptWidget) {
@@ -471,8 +493,8 @@ void AreaDialog::paintEvent(QPaintEvent *e)
         magEnd = magStart;
         drawPosition = mSelection.bottomRight();
 
-        magStart -= QPoint(50, 50);
-        magEnd   += QPoint(50, 50);
+        magStart -= QPoint(48, 48);
+        magEnd   += QPoint(48, 48);
 
         newRect = QRect(magStart, magEnd);
 
@@ -501,7 +523,10 @@ void AreaDialog::paintEvent(QPaintEvent *e)
     magPainter.drawRect(magnified.rect());
 
     if (!mMouseMagnifier) {
-        magPainter.drawText(magnified.rect().center() - QPoint(4, -4), "+"); //Center minus the 4 pixels wide and across of the "+" -- TODO: Test alternative DPI settings.
+        magPainter.setCompositionMode(QPainter::CompositionMode_Exclusion);
+        magPainter.setPen(QPen(QBrush(QColor(255, 255, 255, 180)), 1));
+        magPainter.drawLine(QLine(magnified.rect().left(), magnified.rect().width()/2, magnified.rect().right(), magnified.rect().width()/2));
+        magPainter.drawLine(QLine(magnified.rect().width()/2, 0, magnified.rect().height()/2, magnified.height()));
     }
 
     painter.drawPixmap(drawPosition, magnified);
