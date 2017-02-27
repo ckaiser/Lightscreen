@@ -46,11 +46,12 @@ PreviewDialog::PreviewDialog(QWidget *parent) :
 {
     setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
     setWindowTitle(tr("Screenshot Preview"));
+    setContextMenuPolicy(Qt::CustomContextMenu);
 
-    QSettings *settings = ScreenshotManager::instance()->settings();
+    auto settings = ScreenshotManager::instance()->settings();
 
-    mSize      = settings->value("options/previewSize", 300).toInt();
-    mPosition  = settings->value("options/previewPosition", 3).toInt();
+    mSize     = settings->value("options/previewSize", 300).toInt();
+    mPosition = settings->value("options/previewPosition", 3).toInt();
 
     if (settings->value("options/previewAutoclose", false).toBool()) {
         mAutoclose = settings->value("options/previewAutocloseTime").toInt();
@@ -58,15 +59,15 @@ PreviewDialog::PreviewDialog(QWidget *parent) :
         mAutocloseAction = settings->value("options/previewAutocloseAction").toInt();
     }
 
-    QHBoxLayout *l = new QHBoxLayout;
+    auto layout = new QHBoxLayout;
     mStack = new QStackedLayout;
-    connect(mStack, SIGNAL(currentChanged(int)), this, SLOT(indexChanged(int)));
+    connect(mStack, &QStackedLayout::currentChanged, this, &PreviewDialog::indexChanged);
 
     mPrevButton = new QPushButton(os::icon("arrow-left"), "", this);
-    connect(mPrevButton, SIGNAL(clicked()), this, SLOT(previous()));
+    connect(mPrevButton, &QPushButton::clicked, this, &PreviewDialog::previous);
 
     mNextButton = new QPushButton(os::icon("arrow-right"), "", this);
-    connect(mNextButton, SIGNAL(clicked()), this, SLOT(next()));
+    connect(mNextButton, &QPushButton::clicked, this, &PreviewDialog::next);
 
     mPrevButton->setCursor(Qt::PointingHandCursor);
     mPrevButton->setFlat(true);
@@ -80,21 +81,34 @@ PreviewDialog::PreviewDialog(QWidget *parent) :
     mNextButton->setIconSize(QSize(24, 24));
     mNextButton->setVisible(false);
 
-    l->addWidget(mPrevButton);
-    l->addLayout(mStack);
-    l->addWidget(mNextButton);
+    layout->addWidget(mPrevButton);
+    layout->addLayout(mStack);
+    layout->addWidget(mNextButton);
 
-    l->setMargin(0);
-    l->setContentsMargins(6, 6, 6, 6);
+    layout->setMargin(0);
+    layout->setContentsMargins(6, 6, 6, 6);
 
     mStack->setMargin(0);
 
     setMaximumHeight(mSize);
-    setLayout(l);
+    setLayout(layout);
 
     if (mAutoclose) {
         startTimer(1000);
     }
+
+    auto contextMenu = new QMenu(this);
+
+    contextMenu->setTitle(tr("Global Preview Actions"));
+    contextMenu->addAction(os::icon("yes")  , tr("Save All")  , this, &PreviewDialog::acceptAll);
+    contextMenu->addAction(os::icon("imgur"), tr("Upload All"), this, &PreviewDialog::uploadAll);
+    contextMenu->addSeparator();
+    contextMenu->addAction(os::icon("no")   , tr("Cancel All"), this, &PreviewDialog::rejectAll);
+
+    connect(this, &PreviewDialog::customContextMenuRequested, contextMenu, [contextMenu](const QPoint &pos) {
+        Q_UNUSED(pos)
+        contextMenu->popup(QCursor::pos());
+    });
 }
 
 void PreviewDialog::add(Screenshot *screenshot)
@@ -110,14 +124,14 @@ void PreviewDialog::add(Screenshot *screenshot)
     QLabel *label = new QLabel(this);
     label->setGraphicsEffect(os::shadow());
 
-    bool small = false;
+    bool smallShot = false;
 
     QSize size = screenshot->pixmap().size();
 
     if (size.width() > mSize || size.height() > mSize) {
         size.scale(mSize, mSize, Qt::KeepAspectRatio);
     } else {
-        small = true;
+        smallShot = true;
     }
 
     QPixmap thumbnail = screenshot->pixmap().scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -156,19 +170,19 @@ void PreviewDialog::add(Screenshot *screenshot)
             confirmMenu->setObjectName("confirmMenu");
 
             QAction *uploadAction = new QAction(os::icon("imgur"), tr("Upload"), confirmPushButton);
-            connect(uploadAction, SIGNAL(triggered()), screenshot,   SLOT(markUpload()));
-            connect(uploadAction, SIGNAL(triggered()), screenshot,   SLOT(confirm()));
-            connect(uploadAction, SIGNAL(triggered()), this,         SLOT(closePreview()));
-            connect(this,         SIGNAL(uploadAll()), uploadAction, SLOT(trigger()));
+            connect(uploadAction, &QAction::triggered, screenshot, &Screenshot::markUpload);
+            connect(uploadAction, &QAction::triggered, screenshot, &Screenshot::confirm);
+            connect(uploadAction, &QAction::triggered, this,       &PreviewDialog::closePreview);
+            connect(this,         &PreviewDialog::uploadAll, uploadAction, &QAction::trigger);
 
             confirmMenu->addAction(uploadAction);
             confirmPushButton->setMenu(confirmMenu);
             confirmPushButton->setPopupMode(QToolButton::MenuButtonPopup);
         }
 
-        connect(this, SIGNAL(acceptAll()), confirmPushButton, SLOT(click()));
-        connect(confirmPushButton, SIGNAL(clicked()), screenshot, SLOT(confirm()));
-        connect(confirmPushButton, SIGNAL(clicked()), this, SLOT(closePreview()));
+        connect(this, &PreviewDialog::acceptAll, confirmPushButton, &QPushButton::click);
+        connect(confirmPushButton, &QPushButton::clicked, screenshot, &Screenshot::confirm);
+        connect(confirmPushButton, &QPushButton::clicked, this, &PreviewDialog::closePreview);
     } else {
         // Reversed button, upload & confirm.
         confirmPushButton->setIcon(os::icon("imgur"));
@@ -177,14 +191,14 @@ void PreviewDialog::add(Screenshot *screenshot)
         confirmMenu->setObjectName("confirmMenu");
 
         QAction *confirmAction = new QAction(os::icon("yes"), tr("Save"), confirmPushButton);
-        connect(this, SIGNAL(acceptAll()), confirmAction, SLOT(trigger()));
-        connect(confirmAction, SIGNAL(triggered()), screenshot, SLOT(confirm()));
-        connect(confirmAction, SIGNAL(triggered()), this, SLOT(closePreview()));
+        connect(this, &PreviewDialog::acceptAll, confirmAction, &QAction::trigger);
+        connect(confirmAction, &QAction::triggered, screenshot, &Screenshot::confirm);
+        connect(confirmAction, &QAction::triggered, this, &PreviewDialog::closePreview);
 
-        connect(confirmPushButton, SIGNAL(clicked()), screenshot,   SLOT(markUpload()));
-        connect(confirmPushButton, SIGNAL(clicked()), screenshot,   SLOT(confirm()));
-        connect(confirmPushButton, SIGNAL(clicked()), this,         SLOT(closePreview()));
-        connect(this,         SIGNAL(uploadAll()), confirmPushButton, SLOT(click()));
+        connect(confirmPushButton, &QPushButton::clicked, screenshot, &Screenshot::markUpload);
+        connect(confirmPushButton, &QPushButton::clicked, screenshot, &Screenshot::confirm);
+        connect(confirmPushButton, &QPushButton::clicked, this,       &PreviewDialog::closePreview);
+        connect(this, &PreviewDialog::uploadAll, confirmPushButton, &QPushButton::click);
 
         confirmMenu->addAction(confirmAction);
         confirmPushButton->setMenu(confirmMenu);
@@ -206,14 +220,14 @@ void PreviewDialog::add(Screenshot *screenshot)
     enlargePushButton->setFlat(true);
     enlargePushButton->setVisible(false);
 
-    enlargePushButton->setDisabled(small);
+    enlargePushButton->setDisabled(smallShot);
 
-    connect(this, SIGNAL(rejectAll()), discardPushButton, SLOT(click()));
+    connect(this, &PreviewDialog::rejectAll, discardPushButton, &QPushButton::click);
 
-    connect(discardPushButton, SIGNAL(clicked()), screenshot, SLOT(discard()));
-    connect(discardPushButton, SIGNAL(clicked()), this, SLOT(closePreview()));
+    connect(discardPushButton, &QPushButton::clicked, screenshot, &Screenshot::discard);
+    connect(discardPushButton, &QPushButton::clicked, this, &PreviewDialog::closePreview);
 
-    connect(enlargePushButton, SIGNAL(clicked()), this, SLOT(enlargePreview()));
+    connect(enlargePushButton, &QPushButton::clicked, this, &PreviewDialog::enlargePreview);
 
     QHBoxLayout *wlayout = new QHBoxLayout;
     wlayout->addWidget(confirmPushButton);
@@ -434,3 +448,4 @@ void PreviewDialog::timerEvent(QTimerEvent *event)
         mAutoclose--;
     }
 }
+

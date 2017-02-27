@@ -82,7 +82,6 @@ public slots:
     void uploadCancel();
     void uploadLast();
     void uploadProgress(int progress);
-    void uploadMenuShown();
     void windowHotkey();
     void windowPickerHotkey();
 

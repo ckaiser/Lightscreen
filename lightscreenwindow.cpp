@@ -298,7 +298,9 @@ void LightscreenWindow::createUploadMenu()
     imgurMenu->addAction(historyAction);
     imgurMenu->addSeparator();
 
-    connect(imgurMenu, &QMenu::aboutToShow, this, &LightscreenWindow::uploadMenuShown);
+    connect(imgurMenu, &QMenu::aboutToShow, this, [&, imgurMenu] {
+        imgurMenu->actions().at(0)->setEnabled(!mLastScreenshot.isEmpty());
+    });
 
     ui.imgurPushButton->setMenu(imgurMenu);
 }
@@ -807,12 +809,6 @@ void LightscreenWindow::uploadProgress(int progress)
             setWindowTitle(tr("%1% - Lightscreen").arg(progress));
         }
     }
-}
-
-void LightscreenWindow::uploadMenuShown()
-{
-    QMenu *imgurMenu = qobject_cast<QMenu *>(sender());
-    imgurMenu->actions().at(0)->setEnabled(!mLastScreenshot.isEmpty());
 }
 
 void LightscreenWindow::windowHotkey()
