@@ -751,7 +751,7 @@ Quality is related to file size and of course to readability and overall quality
             <x>0</x>
             <y>0</y>
             <width>360</width>
-            <height>706</height>
+            <height>729</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -1316,31 +1316,38 @@ Quality is related to file size and of course to readability and overall quality
              <property name="flat">
               <bool>true</bool>
              </property>
-             <layout class="QHBoxLayout" name="updaterLayout">
-              <item>
+             <layout class="QGridLayout" name="gridLayout_4">
+              <item row="0" column="0">
                <widget class="QCheckBox" name="updaterCheckBox">
                 <property name="text">
                  <string>Check for updates regularly.</string>
                 </property>
                </widget>
               </item>
-              <item>
+              <item row="0" column="1">
                <spacer name="horizontalSpacer_3">
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
-                  <width>40</width>
-                  <height>0</height>
+                  <width>78</width>
+                  <height>13</height>
                  </size>
                 </property>
                </spacer>
               </item>
-              <item>
+              <item row="0" column="2">
                <widget class="QPushButton" name="checkUpdatesPushButton">
                 <property name="text">
                  <string>Chec&amp;k Now</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" colspan="3">
+               <widget class="QCheckBox" name="telemetryCheckBox">
+                <property name="text">
+                 <string>Send telemetry data when checking for updates.</string>
                 </property>
                </widget>
               </item>

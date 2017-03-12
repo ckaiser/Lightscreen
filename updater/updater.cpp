@@ -23,31 +23,68 @@
 #include <QNetworkReply>
 #include <QVersionNumber>
 
+#include <QJsonDocument>
+#include <QJsonObject>
+
+#include <QSettings>
+
 #include "updater.h"
-#include "../dialogs/updaterdialog.cpp"
+#include "../dialogs/updaterdialog.h"
+#include "../tools/screenshotmanager.h"
 
 Updater::Updater(QObject *parent) :
     QObject(parent)
 {
-    connect(&mNetwork, SIGNAL(finished(QNetworkReply *)), this, SLOT(finished(QNetworkReply *)));
+    connect(&mNetwork, &QNetworkAccessManager::finished, this, &Updater::finished);
 }
 
 void Updater::check()
 {
-#ifdef Q_OS_WIN
-    QString platform = QString("Windows_%1").arg(QSysInfo::WindowsVersion);
-#else
-    QString platform = QSysInfo::productType();
-#endif
+    QNetworkRequest request(QUrl("https://lightscreen.com.ar/version_telemetry"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-    QNetworkRequest request(QUrl::fromUserInput("https://lightscreen.com.ar/version?from=" + qApp->applicationVersion() + "&platform=" + platform));
-    mNetwork.get(request);
+    QJsonObject telemetryObject;
+    telemetryObject.insert("version", qApp->applicationVersion());
+    telemetryObject.insert("manual_check", property("withFeedback").toBool());
+    telemetryObject.insert("platform", QJsonObject{
+                               {"product_type", QSysInfo::productType()},
+                               {"product_version", QSysInfo::productVersion()},
+                               {"kernel_type", QSysInfo::kernelType()},
+                               {"kernel_version", QSysInfo::kernelVersion()}
+                           });
+
+    auto settings = ScreenshotManager::instance()->settings();
+    if (settings->value("options/telemetry", false).toBool()) {
+        QJsonObject settingsObject;
+        const auto keys = settings->allKeys();
+
+        for (const auto& key : qAsConst(keys)) {
+            if (key.contains("token") ||
+                key.contains("username") ||
+                key.contains("album") ||
+                key.contains("lastScreenshot") ||
+                key.contains("target") ||
+                key.contains("geometry")) {
+                continue; // Privacy/useless stuff
+            }
+
+            settingsObject.insert(key, QJsonValue::fromVariant(settings->value(key)));
+        }
+
+        telemetryObject.insert("settings", settingsObject);
+    }
+
+    QJsonDocument telemetry(telemetryObject);
+
+    mNetwork.post(request, telemetry.toJson());
 }
 
 void Updater::checkWithFeedback()
 {
     UpdaterDialog updaterDialog;
     connect(this, &Updater::done, &updaterDialog, &UpdaterDialog::updateDone);
+
+    setProperty("withFeedback", true);
 
     check();
     updaterDialog.exec();
@@ -56,7 +93,6 @@ void Updater::checkWithFeedback()
 void Updater::finished(QNetworkReply *reply)
 {
     QByteArray data = reply->readAll();
-
     auto currentVersion = QVersionNumber::fromString(qApp->applicationVersion()).normalized();
     auto remoteVersion  = QVersionNumber::fromString(QString(data)).normalized();
 
