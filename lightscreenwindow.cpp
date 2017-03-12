@@ -540,7 +540,7 @@ void LightscreenWindow::screenshotAction(Screenshot::Mode mode)
         options.animations     = settings()->value("options/animations",     true).toBool();
         options.replace        = settings()->value("options/replace",        false).toBool();
         options.upload         = settings()->value("options/uploadAuto",     false).toBool();
-        options.optimize       = settings()->value("options/optipng",        false).toBool();
+        options.optimize       = settings()->value("options/optimize",        false).toBool();
 
         options.uploadService  = Uploader::serviceName(settings()->value("upload/service", 0).toInt());
 

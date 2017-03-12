@@ -212,7 +212,7 @@ void OptionsDialog::loadSettings()
     // Advanced
     ui.clipboardCheckBox->setChecked(settings()->value("clipboard", true).toBool());
     ui.urlClipboardCheckBox->setChecked(settings()->value("urlClipboard", false).toBool());
-    ui.optiPngCheckBox->setChecked(settings()->value("optipng", false).toBool());
+    ui.optiPngCheckBox->setChecked(settings()->value("optimize", false).toBool());
     ui.closeHideCheckBox->setChecked(settings()->value("closeHide", true).toBool());
     ui.currentMonitorCheckBox->setChecked(settings()->value("currentMonitor", false).toBool());
     ui.replaceCheckBox->setChecked(settings()->value("replace", false).toBool());
@@ -358,7 +358,7 @@ void OptionsDialog::saveSettings()
     settings()->setValue("closeHide", ui.closeHideCheckBox->isChecked());
     settings()->setValue("clipboard", ui.clipboardCheckBox->isChecked());
     settings()->setValue("urlClipboard", ui.urlClipboardCheckBox->isChecked());
-    settings()->setValue("optipng", ui.optiPngCheckBox->isChecked());
+    settings()->setValue("optimize", ui.optiPngCheckBox->isChecked());
     settings()->setValue("currentMonitor", ui.currentMonitorCheckBox->isChecked());
     settings()->setValue("replace", ui.replaceCheckBox->isChecked());
 
