@@ -75,7 +75,7 @@ WindowPicker::WindowPicker() : QWidget(0), mCrosshair(":/icons/picker"), mWindow
     mCrosshairLabel->setPixmap(mCrosshair);
 
     QPushButton *closeButton = new QPushButton(tr("Close"));
-    connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(closeButton, &QPushButton::clicked, this, &WindowPicker::close);
 
     QHBoxLayout *windowLayout = new QHBoxLayout;
     windowLayout->addWidget(mWindowIcon);

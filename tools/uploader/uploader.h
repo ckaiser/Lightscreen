@@ -38,11 +38,11 @@ public:
 
     QString lastUrl() const;
     int progress() const;
+    int  uploading() const;
 
 public slots:
     void cancel();
     void upload(const QString &fileName, const QString &uploadService);
-    int  uploading();
     void reportProgress(int progressChanged);
 
 signals:

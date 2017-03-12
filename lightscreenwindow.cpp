@@ -608,7 +608,7 @@ void LightscreenWindow::showHotkeyError(const QStringList &hotkeys)
 
     if (msgBox.clickedButton() == exitButton) {
         dontShow = true;
-        QTimer::singleShot(10, this, SLOT(quit()));
+        QTimer::singleShot(10, this, &LightscreenWindow::quit);
     } else if (msgBox.clickedButton() == changeButton) {
         showOptions();
     } else if (msgBox.clickedButton() == disableButton) {

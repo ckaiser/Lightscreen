@@ -107,9 +107,9 @@ void ImgurUploader::upload(const QString &fileName)
     this->setProperty("fileName", fileName);
     multiPart->setParent(reply);
 
-    connect(reply, SIGNAL(uploadProgress(qint64, qint64)), this, SLOT(uploadProgress(qint64, qint64)));
-    connect(this , SIGNAL(cancelRequest()), reply, SLOT(abort()));
-    connect(this , SIGNAL(cancelRequest()), reply, SLOT(deleteLater()));
+    connect(reply, &QNetworkReply::uploadProgress, this, &ImgurUploader::uploadProgress);
+    connect(this , &ImgurUploader::cancelRequest, reply, &QNetworkReply::abort);
+    connect(this , &ImgurUploader::cancelRequest, reply, &QNetworkReply::deleteLater);
 
     connect(reply, &QNetworkReply::sslErrors, [reply](const QList<QSslError> &errors) {
         Q_UNUSED(errors);
@@ -118,7 +118,7 @@ void ImgurUploader::upload(const QString &fileName)
         }
     });
 
-    connect(reply, SIGNAL(finished()), this, SLOT(finished()));
+    connect(reply, &QNetworkReply::finished, this, &ImgurUploader::finished);
 }
 
 void ImgurUploader::retry()

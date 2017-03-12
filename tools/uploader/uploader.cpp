@@ -116,7 +116,7 @@ void Uploader::upload(const QString &fileName, const QString &uploadService)
     uploader->upload(fileName);
 }
 
-int Uploader::uploading()
+int Uploader::uploading() const
 {
     return mUploaders.count();
 }

@@ -38,7 +38,7 @@ UpdaterDialog::UpdaterDialog(QWidget *parent) :
     bar->setRange(0, 0);
 
     QLabel *label = new QLabel(tr("Checking for updates..."), this);
-    connect(label, SIGNAL(linkActivated(QString)), this, SLOT(link(QString)));
+    connect(label, &QLabel::linkActivated, this, &UpdaterDialog::link);
 
     setLabel(label);
     setBar(bar);

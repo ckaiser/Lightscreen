@@ -171,7 +171,7 @@ void PreviewDialog::add(Screenshot *screenshot)
 
             QAction *uploadAction = new QAction(os::icon("imgur"), tr("Upload"), confirmPushButton);
             connect(uploadAction, &QAction::triggered, screenshot, &Screenshot::markUpload);
-            connect(uploadAction, &QAction::triggered, screenshot, &Screenshot::confirm);
+            connect(uploadAction, &QAction::triggered, screenshot, [screenshot] { screenshot->confirm(true); });
             connect(uploadAction, &QAction::triggered, this,       &PreviewDialog::closePreview);
             connect(this,         &PreviewDialog::uploadAll, uploadAction, &QAction::trigger);
 
@@ -181,7 +181,7 @@ void PreviewDialog::add(Screenshot *screenshot)
         }
 
         connect(this, &PreviewDialog::acceptAll, confirmPushButton, &QPushButton::click);
-        connect(confirmPushButton, &QPushButton::clicked, screenshot, &Screenshot::confirm);
+        connect(confirmPushButton, &QPushButton::clicked, screenshot, [screenshot] { screenshot->confirm(true); });
         connect(confirmPushButton, &QPushButton::clicked, this, &PreviewDialog::closePreview);
     } else {
         // Reversed button, upload & confirm.
@@ -192,11 +192,11 @@ void PreviewDialog::add(Screenshot *screenshot)
 
         QAction *confirmAction = new QAction(os::icon("yes"), tr("Save"), confirmPushButton);
         connect(this, &PreviewDialog::acceptAll, confirmAction, &QAction::trigger);
-        connect(confirmAction, &QAction::triggered, screenshot, &Screenshot::confirm);
+        connect(confirmAction, &QAction::triggered, screenshot, [screenshot] { screenshot->confirm(true); });
         connect(confirmAction, &QAction::triggered, this, &PreviewDialog::closePreview);
 
         connect(confirmPushButton, &QPushButton::clicked, screenshot, &Screenshot::markUpload);
-        connect(confirmPushButton, &QPushButton::clicked, screenshot, &Screenshot::confirm);
+        connect(confirmPushButton, &QPushButton::clicked, screenshot, [screenshot] { screenshot->confirm(true); });
         connect(confirmPushButton, &QPushButton::clicked, this,       &PreviewDialog::closePreview);
         connect(this, &PreviewDialog::uploadAll, confirmPushButton, &QPushButton::click);
 

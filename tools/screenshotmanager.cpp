@@ -192,9 +192,9 @@ void ScreenshotManager::take(Screenshot::Options &options)
     Screenshot *newScreenshot = new Screenshot(this, options);
     mScreenshots.append(newScreenshot);
 
-    connect(newScreenshot, SIGNAL(askConfirmation()), this, SLOT(askConfirmation()));
-    connect(newScreenshot, SIGNAL(cleanup())        , this, SLOT(cleanup()));
-    connect(newScreenshot, SIGNAL(finished())       , this, SLOT(finished()));
+    connect(newScreenshot, &Screenshot::askConfirmation, this, &ScreenshotManager::askConfirmation);
+    connect(newScreenshot, &Screenshot::cleanup        , this, &ScreenshotManager::cleanup);
+    connect(newScreenshot, &Screenshot::finished       , this, &ScreenshotManager::finished);
 
     newScreenshot->take();
 }

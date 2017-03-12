@@ -61,7 +61,7 @@ void HotkeyWidget::showError()
     mShowingError = true;
 
     setStyleSheet(mDefaultStyleSheet + "color: #d90000;");
-    QTimer::singleShot(1000, this, SLOT(hideError()));
+    QTimer::singleShot(1000, this, &HotkeyWidget::hideError);
 }
 
 void HotkeyWidget::setHotkeyText()
