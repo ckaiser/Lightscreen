@@ -562,7 +562,7 @@ void LightscreenWindow::screenshotAction(Screenshot::Mode mode)
 
 void LightscreenWindow::screenshotActionTriggered(QAction *action)
 {
-    screenshotAction((Screenshot::Mode) action->data().toInt());
+    screenshotAction(action->data().value<Screenshot::Mode>());
 }
 
 void LightscreenWindow::screenHotkey()
@@ -879,16 +879,16 @@ void LightscreenWindow::createTrayIcon()
     connect(hideAction, &QAction::triggered, this, &LightscreenWindow::toggleVisibility);
 
     auto screenAction = new QAction(os::icon("screen"), tr("&Screen"), mTrayIcon);
-    screenAction->setData(QVariant(0));
+    screenAction->setData(QVariant::fromValue<Screenshot::Mode>(Screenshot::WholeScreen));
 
     auto windowAction = new QAction(os::icon("window"), tr("Active &Window"), this);
-    windowAction->setData(QVariant(1));
+    windowAction->setData(QVariant::fromValue<Screenshot::Mode>(Screenshot::ActiveWindow));
 
     auto windowPickerAction = new QAction(os::icon("pickWindow"), tr("&Pick Window"), this);
-    windowPickerAction->setData(QVariant(3));
+    windowPickerAction->setData(QVariant::fromValue<Screenshot::Mode>(Screenshot::SelectedWindow));
 
     auto areaAction = new QAction(os::icon("area"), tr("&Area"), mTrayIcon);
-    areaAction->setData(QVariant(2));
+    areaAction->setData(QVariant::fromValue<Screenshot::Mode>(Screenshot::SelectedArea));
 
     auto screenshotGroup = new QActionGroup(mTrayIcon);
     screenshotGroup->addAction(screenAction);
