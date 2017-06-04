@@ -392,7 +392,6 @@ const QString Screenshot::extension() const
         return QStringLiteral(".webp");
         break;
     case Screenshot::JPEG:
-    default:
         return QStringLiteral(".jpg");
         break;
     }
@@ -415,9 +414,10 @@ void Screenshot::grabDesktop()
 
     if (mOptions.cursor && !mPixmap.isNull()) {
         QPainter painter(&mPixmap);
-        QPixmap cursor = os::cursor();
-        cursor.setDevicePixelRatio(QApplication::desktop()->devicePixelRatio());
-        painter.drawPixmap(QCursor::pos(), cursor);
+        auto cursorInfo = os::cursor();
+        auto cursorPixmap = cursorInfo.first;
+        cursorPixmap.setDevicePixelRatio(QApplication::desktop()->devicePixelRatio());
+        painter.drawPixmap(QCursor::pos()-cursorInfo.second, cursorPixmap);
     }
 }
 

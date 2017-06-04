@@ -39,6 +39,7 @@
 #include <string>
 #include <QMessageBox>
 #include <QPainter>
+#include <QPair>
 
 #ifdef Q_OS_WIN
     #include <QtWin>
@@ -59,7 +60,7 @@
 
 #include "os.h"
 
-QPixmap os::cursor()
+QPair<QPixmap, QPoint> os::cursor()
 {
 #ifdef Q_OS_WIN
     /*
@@ -68,6 +69,7 @@ QPixmap os::cursor()
     */
 
     QPixmap pixmap;
+    QPoint hotspot;
 
     CURSORINFO cursorInfo;
     cursorInfo.cbSize = sizeof(cursorInfo);
@@ -110,6 +112,9 @@ QPixmap os::cursor()
             pixmap = QBitmap::fromImage(out, Qt::ColorOnly);
         }
 
+        hotspot.setX(info.xHotspot);
+        hotspot.setY(info.yHotspot);
+
         if (info.hbmMask) {
             ::DeleteObject(info.hbmMask);
         }
@@ -117,9 +122,11 @@ QPixmap os::cursor()
         if (info.hbmColor) {
             ::DeleteObject(info.hbmColor);
         }
+
+        ::DeleteObject(cursor);
     }
 
-    return pixmap;
+    return QPair<QPixmap, QPoint>(pixmap, hotspot);
 #else
     return QPixmap();
 #endif

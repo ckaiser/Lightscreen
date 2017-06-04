@@ -35,7 +35,7 @@ class QIcon;
 
 namespace os {
 // Returns the cursor pixmap in Windows
-QPixmap cursor();
+QPair<QPixmap, QPoint> cursor();
 
 // A QTimeLine based effect for a slot (TODO: look at the new effect classes)
 void effect(QObject *target, const char *slot, int frames, int duration = 400, const char *cleanup = 0);
