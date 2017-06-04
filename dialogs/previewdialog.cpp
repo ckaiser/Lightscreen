@@ -100,10 +100,14 @@ PreviewDialog::PreviewDialog(QWidget *parent) :
     auto contextMenu = new QMenu(this);
 
     contextMenu->setTitle(tr("Global Preview Actions"));
-    contextMenu->addAction(os::icon("yes")  , tr("Save All")  , this, &PreviewDialog::acceptAll);
-    contextMenu->addAction(os::icon("imgur"), tr("Upload All"), this, &PreviewDialog::uploadAll);
+    contextMenu->addAction(os::icon("yes")  , tr("&Save All")  , this, &PreviewDialog::acceptAll);
+    contextMenu->addAction(os::icon("imgur"), tr("&Upload All"), this, &PreviewDialog::uploadAll);
     contextMenu->addSeparator();
-    contextMenu->addAction(os::icon("no")   , tr("Cancel All"), this, &PreviewDialog::rejectAll);
+    contextMenu->addAction(os::icon("no")   , tr("&Cancel All"), this, &PreviewDialog::rejectAll);
+    contextMenu->addSeparator();
+    contextMenu->addAction(os::icon("folder"), tr("Open &Folder"), this, [parent] {
+        QMetaObject::invokeMethod(parent, "goToFolder");
+    });
 
     connect(this, &PreviewDialog::customContextMenuRequested, contextMenu, [contextMenu](const QPoint &pos) {
         Q_UNUSED(pos)
