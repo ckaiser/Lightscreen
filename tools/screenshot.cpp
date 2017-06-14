@@ -43,6 +43,7 @@
 #ifdef Q_OS_LINUX
     #include <QX11Info>
     #include <X11/X.h>
+    #undef Success
     #include <X11/Xlib.h>
 #endif
 
