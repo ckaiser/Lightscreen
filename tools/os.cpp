@@ -44,11 +44,11 @@
 #ifdef Q_OS_WIN
     #include <QtWin>
     #include <qt_windows.h>
-    #include <shlobj.h>
+    #include <ShlObj.h>
 
     // Define for MinGW
     #ifndef SM_CXPADDEDBORDER
-    #define SM_CXPADDEDBORDER 92
+        #define SM_CXPADDEDBORDER 92
     #endif
 #elif defined(Q_OS_LINUX)
     #include <QX11Info>
@@ -91,7 +91,7 @@ QPair<QPixmap, QPoint> os::cursor()
             QImage img = orig.toImage();
 
             int h = img.height() / 2;
-            int w = img.bytesPerLine() / sizeof(quint32);
+            int w = static_cast<uint>(img.bytesPerLine()) / sizeof(quint32);
 
             QImage out(img.width(), h, QImage::Format_MonoLSB);
             QImage outmask(img.width(), h, QImage::Format_MonoLSB);
@@ -112,8 +112,8 @@ QPair<QPixmap, QPoint> os::cursor()
             pixmap = QBitmap::fromImage(out, Qt::ColorOnly);
         }
 
-        hotspot.setX(info.xHotspot);
-        hotspot.setY(info.yHotspot);
+        hotspot.setX(static_cast<int>(info.xHotspot));
+        hotspot.setY(static_cast<int>(info.yHotspot));
 
         if (info.hbmMask) {
             ::DeleteObject(info.hbmMask);
@@ -128,7 +128,7 @@ QPair<QPixmap, QPoint> os::cursor()
 
     return QPair<QPixmap, QPoint>(pixmap, hotspot);
 #else
-    return QPixmap();
+    return QPair<QPixmap, QPoint>(QPixmap(), QPoint());
 #endif
 }
 
@@ -159,9 +159,7 @@ QString os::getDocumentsPath()
                                   NULL,
                                   0,
                                   szPath))) {
-        std::wstring path(szPath);
-
-        return QString::fromWCharArray(path.c_str());
+        return QString::fromWCharArray(szPath);
     }
 
     return QDir::homePath() + QDir::separator() + "My Documents";

@@ -400,13 +400,28 @@ const QString Screenshot::extension() const
 void Screenshot::grabDesktop()
 {
     QRect geometry;
+    QPoint cursorPosition = QCursor::pos();
 
     if (mOptions.currentMonitor) {
         geometry = QApplication::primaryScreen()->geometry();
     } else {
+        int top = 0;
+
         for (QScreen *screen : QGuiApplication::screens()) {
-            geometry = geometry.united(screen->geometry());
+            auto screenRect = screen->geometry();
+
+            if (screenRect.top() < 0) {
+                top += screenRect.top() * -1;
+            }
+
+            if (screenRect.left() < 0) {
+                cursorPosition.setX(cursorPosition.x() + screenRect.width()); //= localCursorPos + screenRect.normalized().topLeft();
+            }
+
+            geometry = geometry.united(screenRect);
         }
+
+        cursorPosition.setY(cursorPosition.y() + top);
     }
 
     mPixmap = QApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId(), geometry.x(), geometry.y(), geometry.width(), geometry.height());
@@ -416,8 +431,18 @@ void Screenshot::grabDesktop()
         QPainter painter(&mPixmap);
         auto cursorInfo = os::cursor();
         auto cursorPixmap = cursorInfo.first;
-        cursorPixmap.setDevicePixelRatio(QApplication::desktop()->devicePixelRatio());
-        painter.drawPixmap(QCursor::pos()-cursorInfo.second, cursorPixmap);
+        cursorPixmap.setDevicePixelRatio(QApplication::desktop()->devicePixelRatio()); 
+
+#if 0 // Debug cursor position helper
+        painter.setBrush(QBrush(Qt::darkRed));
+        painter.setPen(QPen(QBrush(Qt::red), 5));
+        QRectF rect;
+        rect.setSize(QSizeF(100, 100));
+        rect.moveCenter(cursorPosition);
+        painter.drawRoundRect(rect, rect.size().height()*2, rect.size().height()*2);
+#endif
+
+        painter.drawPixmap(cursorPosition-cursorInfo.second, cursorPixmap);
     }
 }
 
