@@ -525,8 +525,10 @@ void AreaDialog::paintEvent(QPaintEvent *e)
     if (!mMouseMagnifier) {
         magPainter.setCompositionMode(QPainter::CompositionMode_Exclusion);
         magPainter.setPen(QPen(QBrush(QColor(255, 255, 255, 180)), 1));
-        magPainter.drawLine(QLine(magnified.rect().left(), magnified.rect().width()/2, magnified.rect().right(), magnified.rect().width()/2));
-        magPainter.drawLine(QLine(magnified.rect().width()/2, 0, magnified.rect().height()/2, magnified.height()));
+
+        QRect magRect = magnified.rect();
+        magPainter.drawLine(QLine(magRect.left(), magRect.width()/2, magRect.right(), magRect.width()/2));
+        magPainter.drawLine(QLine(magRect.width()/2, 0, magRect.height()/2, magnified.height()));
     }
 
     painter.drawPixmap(drawPosition, magnified);

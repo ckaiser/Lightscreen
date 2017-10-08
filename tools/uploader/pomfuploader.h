@@ -12,7 +12,7 @@ public:
     PomfUploader(QObject *parent = 0);
 
     typedef std::function<void(bool)> VerificationCallback;
-    static void verify(const QString &url, VerificationCallback callback);
+    static QNetworkReply* verify(const QString &url, VerificationCallback callback);
 
 public slots:
     void upload(const QString &fileName);

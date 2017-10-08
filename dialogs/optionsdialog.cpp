@@ -565,9 +565,7 @@ void OptionsDialog::flipToggled(bool checked)
 void OptionsDialog::init()
 {
     // Make the scroll area share the Tab Widget background color
-    QPalette optionsPalette = ui.optionsScrollArea->palette();
-    optionsPalette.setColor(QPalette::Window,  ui.tabWidget->palette().color(QPalette::Base));
-    ui.optionsScrollArea->setPalette(optionsPalette);
+    ui.optionsScrollArea->setStyleSheet("QScrollArea { background-color: transparent; } #scrollAreaWidgetContents { background-color: transparent; }");
 
     ui.browsePushButton->setIcon(os::icon("folder"));
     ui.namingOptionsButton->setIcon(os::icon("configure"));

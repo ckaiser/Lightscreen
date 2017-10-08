@@ -11,12 +11,13 @@ PomfUploader::PomfUploader(QObject *parent) : ImageUploader(parent)
     loadSettings();
 }
 
-void PomfUploader::verify(const QString &url, VerificationCallback callback)
+QNetworkReply* PomfUploader::verify(const QString &url, VerificationCallback callback)
 {
     QNetworkRequest request(QUrl::fromUserInput(QString("%1/upload.php").arg(url)));
 
     if (!request.url().isValid()) {
         callback(false);
+        return 0;
     }
 
     QNetworkReply *reply = Uploader::network()->get(request);
@@ -33,12 +34,16 @@ void PomfUploader::verify(const QString &url, VerificationCallback callback)
         }
     });
 
-    connect(reply, &QNetworkReply::sslErrors, [reply](const QList<QSslError> &errors) {
+    connect(reply, &QNetworkReply::sslErrors, [reply, callback](const QList<QSslError> &errors) {
         Q_UNUSED(errors);
         if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
             reply->ignoreSslErrors();
+        } else {
+            callback(false);
         }
     });
+
+    return reply;
 }
 
 void PomfUploader::upload(const QString &fileName)

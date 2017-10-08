@@ -17,14 +17,18 @@ PomfOptionsWidget::PomfOptionsWidget(QWidget *parent) : QWidget(parent)
     ui.setupUi(this);
 
     ui.progressIndicatorBar->setVisible(false);
+    ui.cancelButton->setVisible(false);
 
     connect(ui.verifyButton, &QPushButton::clicked, this, [&]() {
         ui.verifyButton->setEnabled(false);
         ui.downloadListButton->setEnabled(false);
         ui.progressIndicatorBar->setVisible(true);
+        ui.cancelButton->setVisible(true);
+        disconnect(ui.cancelButton);
+        ui.cancelButton->disconnect();
 
         QPointer<QWidget> guard(parentWidget());
-        PomfUploader::verify(ui.pomfUrlComboBox->currentText(), [&, guard](bool result) {
+        QPointer<QNetworkReply> reply = PomfUploader::verify(ui.pomfUrlComboBox->currentText(), [&, guard](bool result) {
             if (guard.isNull()) return;
 
             ui.verifyButton->setEnabled(true);
@@ -35,12 +39,23 @@ PomfOptionsWidget::PomfOptionsWidget(QWidget *parent) : QWidget(parent)
                 ui.verifyButton->setText(tr("Valid uploader!"));
                 ui.verifyButton->setStyleSheet("color: green;");
                 ui.verifyButton->setIcon(os::icon("yes"));
-            } else {
+            } else if (ui.cancelButton->isVisible() == true) { // Not cancelled
                 ui.verifyButton->setStyleSheet("color: red;");
                 ui.verifyButton->setIcon(os::icon("no"));
                 ui.verifyButton->setText(tr("Invalid uploader :("));
             }
+
+            ui.cancelButton->setVisible(false);
         });
+
+        if (reply) {
+            connect(ui.cancelButton, &QPushButton::clicked, [&, reply] {
+                if (reply) {
+                    ui.cancelButton->setVisible(false);
+                    reply->abort();
+                }
+            });
+        }
     });
 
     connect(ui.pomfUrlComboBox, &QComboBox::currentTextChanged, [&](const QString &text) {
@@ -67,6 +82,9 @@ PomfOptionsWidget::PomfOptionsWidget(QWidget *parent) : QWidget(parent)
         ui.verifyButton->setEnabled(false);
         ui.downloadListButton->setEnabled(false);
         ui.progressIndicatorBar->setVisible(true);
+        ui.cancelButton->setVisible(true);
+        disconnect(ui.cancelButton);
+        ui.cancelButton->disconnect();
 
         QUrl pomfRepoURL = QUrl(ScreenshotManager::instance()->settings()->value("options/upload/pomfRepo").toString());
 
@@ -74,15 +92,17 @@ PomfOptionsWidget::PomfOptionsWidget(QWidget *parent) : QWidget(parent)
             pomfRepoURL = QUrl("https://lightscreen.com.ar/pomf.json");
         }
 
-        auto pomflistReply = Uploader::network()->get(QNetworkRequest(pomfRepoURL));
+        auto pomflistReply = QPointer<QNetworkReply>(Uploader::network()->get(QNetworkRequest(pomfRepoURL)));
 
         QPointer<QWidget> guard(parentWidget());
         connect(pomflistReply, &QNetworkReply::finished, [&, guard, pomflistReply] {
             if (guard.isNull()) return;
+            if (pomflistReply.isNull()) return;
 
             ui.verifyButton->setEnabled(true);
             ui.downloadListButton->setEnabled(true);
             ui.progressIndicatorBar->setVisible(false);
+            ui.cancelButton->setVisible(false);
 
             if (pomflistReply->error() != QNetworkReply::NoError) {
                 QMessageBox::warning(parentWidget(), tr("Connection error"), pomflistReply->errorString());
@@ -106,9 +126,17 @@ PomfOptionsWidget::PomfOptionsWidget(QWidget *parent) : QWidget(parent)
 
         connect(pomflistReply, &QNetworkReply::sslErrors, [pomflistReply](const QList<QSslError> &errors) {
             Q_UNUSED(errors);
-            if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
+            if (!pomflistReply.isNull() && QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
                 pomflistReply->ignoreSslErrors();
             }
         });
+
+        connect(ui.cancelButton, &QPushButton::clicked, [&, guard, pomflistReply] {
+            if (guard.isNull()) return;
+            if (pomflistReply.isNull()) return;
+
+            pomflistReply->abort();
+        });
+
     });
 }
