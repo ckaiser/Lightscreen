@@ -403,7 +403,10 @@ void Screenshot::grabDesktop()
     QPoint cursorPosition = QCursor::pos();
 
     if (mOptions.currentMonitor) {
-        geometry = QApplication::primaryScreen()->geometry();
+        int currentScreen = qApp->desktop()->screenNumber(cursorPosition);
+
+        geometry = qApp->desktop()->screen(currentScreen)->geometry();
+        cursorPosition = cursorPosition - geometry.topLeft();
     } else {
         int top = 0;
 

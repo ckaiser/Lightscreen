@@ -537,10 +537,10 @@ void LightscreenWindow::screenshotAction(Screenshot::Mode mode)
         options.magnify        = settings()->value("options/magnify",        false).toBool();
         options.cursor         = settings()->value("options/cursor",         true).toBool();
         options.saveAs         = settings()->value("options/saveAs",         false).toBool();
-        options.animations     = settings()->value("options/animations",     true).toBool();
+        options.animations     = settings()->value("options/animations",     true)  .toBool();
         options.replace        = settings()->value("options/replace",        false).toBool();
         options.upload         = settings()->value("options/uploadAuto",     false).toBool();
-        options.optimize       = settings()->value("options/optimize",        false).toBool();
+        options.optimize       = settings()->value("options/optimize",       false).toBool();
 
         options.uploadService  = Uploader::serviceName(settings()->value("upload/service", 0).toInt());
 
