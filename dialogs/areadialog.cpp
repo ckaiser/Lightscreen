@@ -35,6 +35,7 @@
 #include <QSettings>
 #include <QTimer>
 #include <QToolTip>
+#include <QThread>
 
 AreaDialog::AreaDialog(Screenshot *screenshot) :
     QDialog(0), mScreenshot(screenshot), mMouseDown(false), mMouseMagnifier(false),
@@ -127,14 +128,111 @@ void AreaDialog::grabRect()
     }
 }
 
+void AreaDialog::keyboardResize()
+{
+    if (mKeyboardSize.contains("x")) {
+        auto sizeList = mKeyboardSize.split("x");
+
+        if (sizeList.count() == 2) {
+            bool okw = false, okh = false;
+
+            QSize size(sizeList.at(0).toInt(&okw), sizeList.at(1).toInt(&okh));
+
+            if (okw && okh && size.width() > 0 && size.height() > 0) {
+                auto oldSize = mSelection.size();
+
+                mSelection.setSize(size);
+
+                if (rect().contains(mSelection)) {
+                    updateHandles();
+                } else {
+                    mSelection.setSize(oldSize); // Reverting size
+                }
+            }
+        }
+    }
+
+    mKeyboardSize.clear();
+    update();
+}
+
 void AreaDialog::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Escape) {
-        cancel();
+        if (mKeyboardSize.isEmpty()) {
+            cancel();
+        } else {
+            mKeyboardSize.clear();
+            update();
+        }
     } else if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) {
-        grabRect();
+        if (mKeyboardSize.isEmpty()) {
+            grabRect();
+        } else {
+            keyboardResize();
+        }
+    } else if (e->key() == Qt::Key_Up || e->key() == Qt::Key_Down || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right) {
+        // Keyboard movement
+        int adjustMagnitude = 1;
+
+        if (e->modifiers() & Qt::ShiftModifier)
+            adjustMagnitude += 4;
+
+        if (e->modifiers() & Qt::ControlModifier)
+            adjustMagnitude += 4;
+
+        if (e->modifiers() & Qt::AltModifier)
+            adjustMagnitude += 4;
+
+        int xAdjust = 0;
+        int yAdjust = 0;
+
+        if (e->key() == Qt::Key_Left)
+            xAdjust = -(adjustMagnitude);
+
+        if (e->key() == Qt::Key_Right)
+            xAdjust = adjustMagnitude;
+
+        if (e->key() == Qt::Key_Up)
+            yAdjust = -(adjustMagnitude);
+
+        if (e->key() == Qt::Key_Down)
+            yAdjust = adjustMagnitude;
+
+        auto adjusted = mSelection.adjusted(xAdjust, yAdjust, xAdjust, yAdjust);
+
+        if (rect().contains(adjusted)) {
+            mSelection = adjusted;
+            updateHandles();
+            update();
+        }
+    } else if (e->key() == Qt::Key_F5) {
+        setWindowOpacity(0);
+        QThread::msleep(200); // Give the window system time to catch up
+        mScreenshot->refresh();
+        setWindowOpacity(1);
     } else {
-        e->ignore();
+        if (e->key() == Qt::Key_Backspace && !mKeyboardSize.isEmpty()) {
+            mKeyboardSize.remove(mKeyboardSize.size()-1, 1);
+            update();
+            return;
+        }
+
+        if (e->key() != Qt::Key_X) {
+            bool ok = false;
+            int number = e->text().toInt(&ok);
+
+            if (!ok || number < 0 || number > qMax<int>(width(), height())) {
+                e->ignore();
+                return;
+            }
+        } else {
+            if (mKeyboardSize.contains("x"))
+                return;
+        }
+
+        mKeyboardSize += e->text();
+        update();
     }
 }
 
@@ -404,6 +502,36 @@ void AreaDialog::paintEvent(QPaintEvent *e)
         // Draw the text:
         painter.setPen(QPen(Qt::black));
         painter.drawText(helpRect, Qt::AlignCenter, helpTxt);
+    }
+
+    if (!mKeyboardSize.isEmpty()) {
+        QRect keyboardSizeRect = qApp->desktop()->screenGeometry(qApp->desktop()->primaryScreen());
+
+        QFont originalFont = painter.font();
+        QFont font = originalFont;
+        font.setPixelSize(16);
+        font.setBold(true);
+        painter.setFont(font);
+
+        painter.setPen(QPen(Qt::white));
+        painter.setBrush(QBrush(QColor(255, 255, 255, 180), Qt::SolidPattern));
+        QRectF textRect = painter.boundingRect(keyboardSizeRect, Qt::AlignLeft, mKeyboardSize);
+
+        textRect.setX(textRect.x() + 9);
+        textRect.setY(textRect.y() + 10);
+        textRect.setWidth(textRect.width() + 14);
+        textRect.setHeight(textRect.height() + 12);
+
+        painter.drawRect(textRect);
+
+        // Left-Right padding
+        textRect.setX(textRect.x() + 3);
+        textRect.setWidth(textRect.width() - 2);
+
+        painter.setPen(QPen(Qt::black));
+        painter.drawText(textRect, Qt::AlignCenter, mKeyboardSize, &textRect);
+
+        painter.setFont(originalFont); // Reset the font
     }
 
     if (!mSelection.isNull()) {

@@ -585,6 +585,11 @@ Quality is related to file size and of course to readability and overall quality
        </item>
        <item>
         <widget class="QCheckBox" name="urlClipboardCheckBox">
+         <property name="whatsThis">
+          <string>After uploading, Lightscreen will put the resulting image URL in your clipboard.
+
+Warning: Cannot be used in tandem with the &quot;Copy screenshot to clipboard&quot; option.</string>
+         </property>
          <property name="text">
           <string>After uploading, copy the URL to the clipboard.</string>
          </property>
@@ -749,7 +754,7 @@ Quality is related to file size and of course to readability and overall quality
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>0</y>
+            <y>-357</y>
             <width>360</width>
             <height>729</height>
            </rect>
@@ -1261,6 +1266,11 @@ Quality is related to file size and of course to readability and overall quality
              <layout class="QVBoxLayout" name="verticalLayout_10">
               <item>
                <widget class="QCheckBox" name="clipboardCheckBox">
+                <property name="whatsThis">
+                 <string>Lightscreen will copy the screenshot image data to your clipboard.
+
+Warning: Cannot be used in tandem with the &quot;After uploading, copy the URL to the clipboard.&quot; option</string>
+                </property>
                 <property name="text">
                  <string>&amp;Copy the screenshot to the clipboard.</string>
                 </property>
@@ -1280,6 +1290,9 @@ Quality is related to file size and of course to readability and overall quality
              <layout class="QHBoxLayout" name="historyLayout">
               <item>
                <widget class="QCheckBox" name="historyCheckBox">
+                <property name="whatsThis">
+                 <string>Lightscreen will save a list of all the screenshots you've taken and where you've uploaded them to (and a deletion link to delete this upload [imgur only]).</string>
+                </property>
                 <property name="text">
                  <string>Save my screenshot history.</string>
                 </property>
@@ -1319,6 +1332,9 @@ Quality is related to file size and of course to readability and overall quality
              <layout class="QGridLayout" name="gridLayout_4">
               <item row="0" column="0">
                <widget class="QCheckBox" name="updaterCheckBox">
+                <property name="whatsThis">
+                 <string>Every 7 days Lightscreen will ping the update server for a new version and notify you if there's an update to download.</string>
+                </property>
                 <property name="text">
                  <string>Check for updates regularly.</string>
                 </property>
@@ -1346,6 +1362,9 @@ Quality is related to file size and of course to readability and overall quality
               </item>
               <item row="1" column="0" colspan="3">
                <widget class="QCheckBox" name="telemetryCheckBox">
+                <property name="whatsThis">
+                 <string>Lightscreen will send anonymous data about which configuration settings you're using, to better understand how to improve this software.</string>
+                </property>
                 <property name="text">
                  <string>Send telemetry data when checking for updates.</string>
                 </property>

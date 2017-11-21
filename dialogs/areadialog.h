@@ -50,6 +50,7 @@ protected slots:
     void cancel();
     void displayHelp();
     void grabRect();
+    void keyboardResize();
 
 signals:
     void regionGrabbed(const QPixmap &);
@@ -94,6 +95,8 @@ protected:
 
     QVector<QRect *>   mHandles;
     QPointer<QWidget> mAcceptWidget;
+
+    QString mKeyboardSize;
 };
 
 #endif

@@ -74,9 +74,7 @@ void Updater::check()
         telemetryObject.insert("settings", settingsObject);
     }
 
-    QJsonDocument telemetry(telemetryObject);
-
-    mNetwork.post(request, telemetry.toJson());
+    mNetwork.post(request, QJsonDocument(telemetryObject).toJson());
 }
 
 void Updater::checkWithFeedback()

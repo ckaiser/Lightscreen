@@ -89,6 +89,5 @@ int main(int argc, char *argv[])
     QObject::connect(&application, &SingleApplication::instanceArguments, &lightscreen, &LightscreenWindow::executeArguments);
     QObject::connect(&lightscreen, &LightscreenWindow::finished, &application, &SingleApplication::quit);
 
-    int result = application.exec();
-    return result;
+    return application.exec();
 }

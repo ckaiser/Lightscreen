@@ -114,6 +114,7 @@ public slots:
     void take();
     void upload();
     void uploadDone(const QString &url);
+    void refresh();
 
 signals:
     void askConfirmation();

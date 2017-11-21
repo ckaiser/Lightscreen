@@ -350,6 +350,11 @@ void Screenshot::uploadDone(const QString &url)
     emit finished();
 }
 
+void Screenshot::refresh()
+{
+    grabDesktop();
+}
+
 //
 
 void Screenshot::activeWindow()
