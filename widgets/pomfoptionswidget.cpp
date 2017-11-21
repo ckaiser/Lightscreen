@@ -124,12 +124,14 @@ PomfOptionsWidget::PomfOptionsWidget(QWidget *parent) : QWidget(parent)
             }
         });
 
+#ifdef Q_OS_WIN
         connect(pomflistReply, &QNetworkReply::sslErrors, [pomflistReply](const QList<QSslError> &errors) {
             Q_UNUSED(errors);
-            if (!pomflistReply.isNull() && QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
+            if (!pomflistReply.isNull() && QSysInfo::WindowsVersion <= QSysInfo::WV_2003) {
                 pomflistReply->ignoreSslErrors();
             }
         });
+#endif
 
         connect(ui.cancelButton, &QPushButton::clicked, [&, guard, pomflistReply] {
             if (guard.isNull()) return;

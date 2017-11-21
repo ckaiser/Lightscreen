@@ -36,7 +36,7 @@ QNetworkReply* PomfUploader::verify(const QString &url, VerificationCallback cal
 
     connect(reply, &QNetworkReply::sslErrors, [reply, callback](const QList<QSslError> &errors) {
         Q_UNUSED(errors);
-        if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
+        if (QSysInfo::WindowsVersion <= QSysInfo::WV_2003) {
             reply->ignoreSslErrors();
         } else {
             callback(false);
@@ -120,12 +120,14 @@ void PomfUploader::upload(const QString &fileName)
         }
     });
 
+#ifdef Q_OS_WIN
     connect(reply, &QNetworkReply::sslErrors, [reply](const QList<QSslError> &errors) {
         Q_UNUSED(errors);
-        if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
+        if (QSysInfo::WindowsVersion <= QSysInfo::WV_2003) {
             reply->ignoreSslErrors();
         }
     });
+#endif
 }
 
 void PomfUploader::retry()

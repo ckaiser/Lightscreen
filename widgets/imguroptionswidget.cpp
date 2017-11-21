@@ -164,10 +164,12 @@ void ImgurOptionsWidget::requestAlbumList()
         setUpdatesEnabled(true);
     });
 
+#ifdef Q_OS_WIN
     connect(reply, &QNetworkReply::sslErrors, [reply](const QList<QSslError> &errors) {
         Q_UNUSED(errors);
-        if (QSysInfo::WindowsVersion == QSysInfo::WV_XP) {
+        if (QSysInfo::WindowsVersion <= QSysInfo::WV_2003) {
             reply->ignoreSslErrors();
         }
     });
+#endif
 }
