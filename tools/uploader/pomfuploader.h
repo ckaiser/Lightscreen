@@ -1,7 +1,7 @@
 #ifndef POMFUPLOADER_H
 #define POMFUPLOADER_H
 
-#include "imageuploader.h"
+#include <tools/uploader/imageuploader.h>
 #include <functional>
 
 class PomfUploader : public ImageUploader

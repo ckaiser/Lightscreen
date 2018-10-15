@@ -16,9 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-#include "uploader.h"
-#include "../screenshotmanager.h"
-#include "imguruploader.h"
+#include <tools/uploader/uploader.h>
+#include <tools/screenshotmanager.h>
+#include <tools/uploader/imguruploader.h>
 
 #include <QtNetwork>
 #include <QSettings>

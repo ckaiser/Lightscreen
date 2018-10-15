@@ -1,5 +1,5 @@
-#include "imguruploader.h"
-#include "../uploader/uploader.h"
+#include <tools/uploader/imguruploader.h>
+#include <tools/uploader/uploader.h>
 
 #include <QNetworkAccessManager>
 #include <QtNetwork>

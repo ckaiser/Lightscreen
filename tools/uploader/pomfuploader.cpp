@@ -1,5 +1,5 @@
-#include "pomfuploader.h"
-#include "../uploader/uploader.h"
+#include <tools/uploader/pomfuploader.h>
+#include <tools/uploader/uploader.h>
 
 #include <QtNetwork>
 #include <QJsonDocument>

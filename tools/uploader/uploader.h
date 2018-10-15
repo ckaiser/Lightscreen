@@ -21,7 +21,8 @@
 
 #include <QObject>
 #include <QtNetwork>
-#include "imageuploader.h"
+
+#include <tools/uploader/imageuploader.h>
 
 class Uploader : public QObject
 {

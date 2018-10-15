@@ -4,11 +4,11 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 
-#include "imguroptionswidget.h"
-#include "../uploader/uploader.h"
-#include "../uploader/imguruploader.h"
+#include <widgets/imguroptionswidget.h>
+#include <tools/uploader/uploader.h>
+#include <tools/uploader/imguruploader.h>
 
-#include "../screenshotmanager.h"
+#include <tools/screenshotmanager.h>
 
 ImgurOptionsWidget::ImgurOptionsWidget(QWidget *parent) : QWidget(parent)
 {

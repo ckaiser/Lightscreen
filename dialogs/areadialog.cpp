@@ -21,10 +21,10 @@
  * released under the GNU LGPL  <http://www.gnu.org/licenses/old-licenses/library.txt>
  *
  */
-#include "areadialog.h"
-#include "../tools/os.h"
-#include "../tools/screenshot.h"
-#include "../tools/screenshotmanager.h"
+#include <dialogs/areadialog.h>
+#include <tools/os.h>
+#include <tools/screenshot.h>
+#include <tools/screenshotmanager.h>
 
 #include <QApplication>
 #include <QDesktopWidget>

@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QList>
 
-#include "screenshot.h"
+#include <tools/screenshot.h>
 
 class QSettings;
 class ScreenshotManager : public QObject

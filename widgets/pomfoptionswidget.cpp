@@ -5,12 +5,12 @@
 #include <QMessageBox>
 
 #include <QRegExpValidator>
-#include "pomfoptionswidget.h"
-#include "../uploader/uploader.h"
-#include "../uploader/pomfuploader.h"
+#include <widgets/pomfoptionswidget.h>
+#include <tools/uploader/uploader.h>
+#include <tools/uploader/pomfuploader.h>
 
-#include "../screenshotmanager.h"
-#include "../os.h"
+#include <tools/screenshotmanager.h>
+#include <tools/os.h>
 
 PomfOptionsWidget::PomfOptionsWidget(QWidget *parent) : QWidget(parent)
 {

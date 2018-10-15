@@ -23,8 +23,8 @@
 #include <QProgressBar>
 #include <QUrl>
 
-#include "updaterdialog.h"
-#include "../tools/os.h"
+#include <dialogs/updaterdialog.h>
+#include <tools/os.h>
 
 UpdaterDialog::UpdaterDialog(QWidget *parent) :
     QProgressDialog("", tr("Cancel"), 0, 0, parent)

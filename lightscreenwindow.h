@@ -23,10 +23,10 @@
 #include <QPointer>
 #include <QSystemTrayIcon>
 
-#include "updater/updater.h"
-#include "tools/screenshot.h"
+#include <updater/updater.h>
+#include <tools/screenshot.h>
 
-#include "dialogs/previewdialog.h"
+#include <dialogs/previewdialog.h>
 
 #include "ui_lightscreenwindow.h"
 

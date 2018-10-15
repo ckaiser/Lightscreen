@@ -28,9 +28,9 @@
 
 #include <QSettings>
 
-#include "updater.h"
-#include "../dialogs/updaterdialog.h"
-#include "../tools/screenshotmanager.h"
+#include <updater/updater.h>
+#include <dialogs/updaterdialog.h>
+#include <tools/screenshotmanager.h>
 
 Updater::Updater(QObject *parent) :
     QObject(parent)

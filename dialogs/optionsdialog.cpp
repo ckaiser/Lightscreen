@@ -40,14 +40,16 @@
     #include <windows.h>
 #endif
 
-#include "optionsdialog.h"
-#include "namingdialog.h"
-#include "historydialog.h"
-#include "../tools/os.h"
-#include "../tools/screenshot.h"
-#include "../tools/screenshotmanager.h"
-#include "../tools/uploader/uploader.h"
-#include "../updater/updater.h"
+#include <dialogs/optionsdialog.h>
+#include <dialogs/namingdialog.h>
+#include <dialogs/historydialog.h>
+
+#include <tools/os.h>
+#include <tools/screenshot.h>
+#include <tools/screenshotmanager.h>
+#include <tools/uploader/uploader.h>
+
+#include <updater/updater.h>
 
 OptionsDialog::OptionsDialog(QWidget *parent) :
     QDialog(parent)

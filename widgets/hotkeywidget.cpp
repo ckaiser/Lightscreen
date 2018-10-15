@@ -23,7 +23,7 @@
 #include <QStyle>
 #include <QTimer>
 
-#include "hotkeywidget.h"
+#include <widgets/hotkeywidget.h>
 
 HotkeyWidget::HotkeyWidget(QWidget *parent) :
     QPushButton(parent), mHotkey(QKeySequence()), mShowingError(false), mKeyboardFocus(false)

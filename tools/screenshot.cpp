@@ -28,13 +28,13 @@
 #include <QScreen>
 #include <QStringBuilder>
 
-#include "windowpicker.h"
-#include "../dialogs/areadialog.h"
-#include "uploader/uploader.h"
-#include "screenshot.h"
-#include "screenshotmanager.h"
+#include <tools/screenshot.h>
+#include <tools/screenshotmanager.h>
+#include <tools/windowpicker.h>
+#include <tools/uploader/uploader.h>
+#include <dialogs/areadialog.h>
 
-#include "os.h"
+#include <tools/os.h>
 
 #ifdef Q_OS_WIN
     #include <windows.h>

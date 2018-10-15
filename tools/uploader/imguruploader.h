@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include "imageuploader.h"
+#include <tools/uploader/imageuploader.h>
 #include <functional>
 
 class ImgurUploader : public ImageUploader

@@ -58,7 +58,7 @@
     #include <X11/Xatom.h>
 #endif
 
-#include "os.h"
+#include <tools/os.h>
 
 QPair<QPixmap, QPoint> os::cursor()
 {

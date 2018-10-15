@@ -19,8 +19,8 @@
 #ifndef NAMINGDIALOG_H
 #define NAMINGDIALOG_H
 
+#include <tools/screenshot.h>
 #include "ui_namingdialog.h"
-#include "../tools/screenshot.h"
 
 #include <QUrl>
 

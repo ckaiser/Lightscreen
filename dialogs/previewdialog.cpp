@@ -16,10 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-#include "previewdialog.h"
-#include "../tools/screenshot.h"
-#include "../tools/screenshotmanager.h"
-#include "../tools/os.h"
+#include <dialogs/previewdialog.h>
+#include <tools/screenshot.h>
+#include <tools/screenshotmanager.h>
+#include <tools/os.h>
 
 #include <QApplication>
 #include <QDesktopServices>

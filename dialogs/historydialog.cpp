@@ -1,9 +1,9 @@
-#include "historydialog.h"
+#include <dialogs/historydialog.h>
 #include "ui_historydialog.h"
 
-#include "../tools/os.h"
-#include "../tools/uploader/uploader.h"
-#include "../tools/screenshotmanager.h"
+#include <tools/os.h>
+#include <tools/uploader/uploader.h>
+#include <tools/screenshotmanager.h>
 
 #include <QClipboard>
 #include <QDesktopServices>

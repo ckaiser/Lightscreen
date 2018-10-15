@@ -26,8 +26,8 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-#include "windowpicker.h"
-#include "os.h"
+#include <tools/windowpicker.h>
+#include <tools/os.h>
 
 #if defined(Q_OS_WIN)
     #include <QtWin>

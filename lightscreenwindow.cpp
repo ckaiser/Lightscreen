@@ -42,18 +42,18 @@
 //
 //Lightscreen includes
 //
-#include "lightscreenwindow.h"
-#include "dialogs/optionsdialog.h"
-#include "dialogs/previewdialog.h"
-#include "dialogs/historydialog.h"
+#include <lightscreenwindow.h>
+#include <dialogs/optionsdialog.h>
+#include <dialogs/previewdialog.h>
+#include <dialogs/historydialog.h>
 
-#include "tools/os.h"
-#include "tools/screenshot.h"
-#include "tools/screenshotmanager.h"
-#include "tools/UGlobalHotkey/uglobalhotkeys.h"
-#include "tools/uploader/uploader.h"
+#include <tools/os.h>
+#include <tools/screenshot.h>
+#include <tools/screenshotmanager.h>
+#include <tools/UGlobalHotkey/uglobalhotkeys.h>
+#include <tools/uploader/uploader.h>
 
-#include "updater/updater.h"
+#include <updater/updater.h>
 
 LightscreenWindow::LightscreenWindow(QWidget *parent) :
     QMainWindow(parent),

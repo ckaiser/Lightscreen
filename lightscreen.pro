@@ -52,6 +52,8 @@ FORMS += dialogs/historydialog.ui \
 
 RESOURCES += lightscreen.qrc
 CODECFORSRC = UTF-8
+INCLUDEPATH += $$PWD
+CONFIG += c++14
 
 QT += core gui widgets network sql multimedia concurrent
 

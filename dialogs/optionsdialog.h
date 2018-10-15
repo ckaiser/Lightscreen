@@ -20,7 +20,7 @@
 #define OPTIONSDIALOG_H
 
 #include <QDialog>
-#include "../updater/updater.h"
+#include <updater/updater.h>
 #include "ui_optionsdialog.h"
 
 class QSettings;

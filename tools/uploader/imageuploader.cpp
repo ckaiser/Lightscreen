@@ -1,9 +1,9 @@
-﻿#include "imageuploader.h"
-#include "imguruploader.h"
-#include "pomfuploader.h"
+#include <tools/uploader/imageuploader.h>
+#include <tools/uploader/imguruploader.h>
+#include <tools/uploader/pomfuploader.h>
 
 #include <QSettings>
-#include "../screenshotmanager.h"
+#include <tools/screenshotmanager.h>
 
 ImageUploader *ImageUploader::factory(const QString &name)
 {

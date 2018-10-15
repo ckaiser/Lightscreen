@@ -24,10 +24,10 @@
     #include <QtWinExtras>
 #endif
 
-#include "tools/os.h"
+#include <tools/os.h>
 #include "tools/SingleApplication/singleapplication.h"
 
-#include "lightscreenwindow.h"
+#include <lightscreenwindow.h>
 
 int main(int argc, char *argv[])
 {
