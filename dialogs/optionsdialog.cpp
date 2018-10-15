@@ -629,8 +629,8 @@ void OptionsDialog::init()
     connect(ui.namingOptionsButton, &QPushButton::clicked, this, &OptionsDialog::namingOptions);
 
     connect(ui.prefixLineEdit, &QLineEdit::textEdited, this, &OptionsDialog::updatePreview);
-    connect(ui.formatComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &OptionsDialog::updatePreview);
-    connect(ui.namingComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &OptionsDialog::updatePreview);
+    connect(ui.formatComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &OptionsDialog::updatePreview);
+    connect(ui.namingComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &OptionsDialog::updatePreview);
 
     connect(ui.browsePushButton       , &QPushButton::clicked, this, &OptionsDialog::browse);
     connect(ui.checkUpdatesPushButton , &QPushButton::clicked, this, &OptionsDialog::checkUpdatesNow);
@@ -651,7 +651,7 @@ void OptionsDialog::init()
         ui.directoryLabel->setDisabled(checked);
     });
 
-    connect(ui.qualitySlider, QOverload<int>::of(&QSlider::valueChanged), ui.qualityValueLabel, QOverload<int>::of(&QLabel::setNum));
+    connect(ui.qualitySlider, static_cast<void (QSlider::*)(int)>(&QSlider::valueChanged), ui.qualityValueLabel, static_cast<void (QLabel::*)(int)>(&QLabel::setNum));
     connect(ui.startupCheckBox, &QCheckBox::toggled   , ui.startupHideCheckBox, &QCheckBox::setEnabled);
     connect(ui.trayCheckBox   , &QCheckBox::toggled   , ui.messageCheckBox    , &QCheckBox::setEnabled);
 

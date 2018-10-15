@@ -31,6 +31,7 @@
 #include <updater/updater.h>
 #include <dialogs/updaterdialog.h>
 #include <tools/screenshotmanager.h>
+#include <tools/os.h>
 
 Updater::Updater(QObject *parent) :
     QObject(parent)

@@ -1,6 +1,7 @@
 #include <tools/uploader/imageuploader.h>
 #include <tools/uploader/imguruploader.h>
 #include <tools/uploader/pomfuploader.h>
+#include <tools/os.h>
 
 #include <QSettings>
 #include <tools/screenshotmanager.h>
