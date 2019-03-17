@@ -754,9 +754,9 @@ Warning: Cannot be used in tandem with the &quot;Copy screenshot to clipboard&qu
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-357</y>
+            <y>-20</y>
             <width>360</width>
-            <height>729</height>
+            <height>706</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -1330,16 +1330,6 @@ Warning: Cannot be used in tandem with the &quot;After uploading, copy the URL t
               <bool>true</bool>
              </property>
              <layout class="QGridLayout" name="gridLayout_4">
-              <item row="0" column="0">
-               <widget class="QCheckBox" name="updaterCheckBox">
-                <property name="whatsThis">
-                 <string>Every 7 days Lightscreen will ping the update server for a new version and notify you if there's an update to download.</string>
-                </property>
-                <property name="text">
-                 <string>Check for updates regularly.</string>
-                </property>
-               </widget>
-              </item>
               <item row="0" column="1">
                <spacer name="horizontalSpacer_3">
                 <property name="orientation">
@@ -1353,20 +1343,20 @@ Warning: Cannot be used in tandem with the &quot;After uploading, copy the URL t
                 </property>
                </spacer>
               </item>
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="updaterCheckBox">
+                <property name="whatsThis">
+                 <string>Every 7 days Lightscreen will ping the update server for a new version and notify you if there's an update to download.</string>
+                </property>
+                <property name="text">
+                 <string>Check for updates regularly.</string>
+                </property>
+               </widget>
+              </item>
               <item row="0" column="2">
                <widget class="QPushButton" name="checkUpdatesPushButton">
                 <property name="text">
                  <string>Chec&amp;k Now</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0" colspan="3">
-               <widget class="QCheckBox" name="telemetryCheckBox">
-                <property name="whatsThis">
-                 <string>Lightscreen will send anonymous data about which configuration settings you're using, to better understand how to improve this software.</string>
-                </property>
-                <property name="text">
-                 <string>Send telemetry data when checking for updates.</string>
                 </property>
                </widget>
               </item>

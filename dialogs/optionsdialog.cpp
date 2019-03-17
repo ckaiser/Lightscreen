@@ -195,7 +195,6 @@ void OptionsDialog::loadSettings()
     ui.qualitySlider->setValue(settings()->value("quality", 100).toInt());
     ui.playSoundCheckBox->setChecked(settings()->value("playSound", false).toBool());
     ui.updaterCheckBox->setChecked(!settings()->value("disableUpdater", false).toBool());
-    ui.telemetryCheckBox->setChecked(settings()->value("telemetry", false).toBool());
     ui.magnifyCheckBox->setChecked(settings()->value("magnify", false).toBool());
     ui.cursorCheckBox->setChecked(settings()->value("cursor", true).toBool());
     ui.saveAsCheckBox->setChecked(settings()->value("saveAs", false).toBool());
@@ -342,7 +341,6 @@ void OptionsDialog::saveSettings()
     settings()->setValue("playSound", ui.playSoundCheckBox->isChecked());
     // This settings is inverted because the first iteration of the Updater did not have a settings but instead relied on the messagebox choice of the user.
     settings()->setValue("disableUpdater", !ui.updaterCheckBox->isChecked());
-    settings()->setValue("telemetry", ui.telemetryCheckBox->isChecked());
     settings()->setValue("magnify", ui.magnifyCheckBox->isChecked());
     settings()->setValue("cursor", ui.cursorCheckBox->isChecked());
     settings()->setValue("saveAs", ui.saveAsCheckBox->isChecked());
