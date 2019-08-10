@@ -177,7 +177,7 @@ void LightscreenWindow::cleanup(const Screenshot::Options &options)
 {
     // Reversing settings
     if (settings()->value("options/hide").toBool()) {
-#ifndef Q_OS_LINUX // X is not quick enough and the notification ends up everywhere but in the icon
+#if !defined(Q_OS_LINUX) && !defined(Q_OS_FREEBSD)  // X is not quick enough and the notification ends up everywhere but in the icon
         if (settings()->value("options/tray").toBool() && mTrayIcon) {
             mTrayIcon->show();
         }
@@ -206,7 +206,7 @@ void LightscreenWindow::cleanup(const Screenshot::Options &options)
     }
 
     if (settings()->value("options/playSound", false).toBool()) {
-        if (options.result == Screenshot::Success) {
+        if (options.result == Screenshot::SuccessLS) {
             QSound::play("sounds/ls.screenshot.wav");
         } else {
 #ifdef Q_OS_WIN
@@ -220,7 +220,7 @@ void LightscreenWindow::cleanup(const Screenshot::Options &options)
 
     updateStatus();
 
-    if (options.result != Screenshot::Success) {
+    if (options.result != Screenshot::SuccessLS) {
         return;
     }
 
@@ -379,7 +379,7 @@ void LightscreenWindow::executeArguments(const QStringList &arguments)
 void LightscreenWindow::notify(const Screenshot::Result &result)
 {
     switch (result) {
-    case Screenshot::Success:
+    case Screenshot::SuccessLS:
         mTrayIcon->setIcon(QIcon(":/icons/lightscreen.yes"));
 
         if (mHasTaskbarButton) {
@@ -481,7 +481,7 @@ void LightscreenWindow::screenshotAction(Screenshot::Mode mode)
     if (optionsHide) {
         hide();
 
-#ifndef Q_OS_LINUX // X is not quick enough and the notification ends up everywhere but in the icon
+#if !defined(Q_OS_LINUX) && !defined(Q_OS_FREEBSD) // X is not quick enough and the notification ends up everywhere but in the icon
         if (mTrayIcon) {
             mTrayIcon->hide();
         }
@@ -647,7 +647,7 @@ void LightscreenWindow::showScreenshotMessage(const Screenshot::Result &result, 
     QString title;
     QString message;
 
-    if (result == Screenshot::Success) {
+    if (result == Screenshot::SuccessLS) {
         title = QFileInfo(fileName).fileName();
 
         if (settings()->value("file/target").toString().isEmpty()) {

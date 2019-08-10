@@ -28,7 +28,7 @@ class QUrl;
 class QGraphicsEffect;
 class QIcon;
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     typedef unsigned long XID;
     typedef XID Window;
 #endif
@@ -59,7 +59,7 @@ QGraphicsEffect *shadow(const QColor &color = Qt::black, int blurRadius = 6, int
 QIcon icon(const QString &name, QColor backgroundColor = QColor());
 
 // X11-specific functions for the Window Picker
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     Window findRealWindow(Window w, int depth = 0);
     Window windowUnderCursor(bool includeDecorations = true);
 #endif

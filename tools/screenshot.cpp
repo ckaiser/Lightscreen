@@ -40,7 +40,7 @@
     #include <windows.h>
 #endif
 
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     #include <QX11Info>
     #include <X11/X.h>
     #include <X11/Xlib.h>
@@ -247,7 +247,7 @@ void Screenshot::save()
         QApplication::clipboard()->setPixmap(mPixmap, QClipboard::Clipboard);
 
         if (!mOptions.file) {
-            result = Screenshot::Success;
+            result = Screenshot::SuccessLS;
         }
     }
 
@@ -257,9 +257,9 @@ void Screenshot::save()
         if (name.isEmpty()) {
             result = Screenshot::Cancel;
         } else if (mUnloaded) {
-            result = (QFile::rename(mUnloadFilename, fileName)) ? Screenshot::Success : Screenshot::Failure;
+            result = (QFile::rename(mUnloadFilename, fileName)) ? Screenshot::SuccessLS : Screenshot::Failure;
         } else if (mPixmap.save(fileName, 0, mOptions.quality)) {
-            result = Screenshot::Success;
+            result = Screenshot::SuccessLS;
         } else {
             result = Screenshot::Failure;
         }
@@ -374,7 +374,7 @@ void Screenshot::activeWindow()
     mPixmap = os::grabWindow((WId)GetForegroundWindow());
 #endif
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     Window focus;
     int revert;
 
