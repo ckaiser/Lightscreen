@@ -36,7 +36,7 @@ NamingDialog::NamingDialog(Screenshot::Naming naming, QWidget *parent) :
     ui.dateFormatComboBox->installEventFilter(this);
 
     // Settings
-    QSettings *settings = ScreenshotManager::instance()->settings();
+    auto settings = ScreenshotManager::instance()->settings();
     ui.flipNamingCheckBox->setChecked(settings->value("options/flip", false).toBool());
 
     ui.dateFormatComboBox->setCurrentIndex(
@@ -51,12 +51,7 @@ NamingDialog::NamingDialog(Screenshot::Naming naming, QWidget *parent) :
     ui.leadingZerosSpinBox->setValue(settings->value("options/naming/leadingZeros", 0).toInt());
 
     // Signals/Slots
-    connect(ui.buttonBox    , &QDialogButtonBox::accepted, this, [&] {
-        settings->setValue("options/flip"               , ui.flipNamingCheckBox->isChecked());
-        settings->setValue("options/naming/dateFormat"  , ui.dateFormatComboBox->currentText());
-        settings->setValue("options/naming/leadingZeros", ui.leadingZerosSpinBox->value());
-    });
-
+    connect(ui.buttonBox    , &QDialogButtonBox::accepted, this, &NamingDialog::saveSettings);
     connect(ui.dateHelpLabel, &QLabel::linkActivated, this, [](const QUrl &url) {
         QDesktopServices::openUrl(QUrl(url));
     });
@@ -80,5 +75,12 @@ bool NamingDialog::eventFilter(QObject *object, QEvent *event)
     }
 
     return QDialog::eventFilter(object, event);
+}
+
+void NamingDialog::saveSettings() {
+    auto settings = ScreenshotManager::instance()->settings();
+    settings->setValue("options/flip"               , ui.flipNamingCheckBox->isChecked());
+    settings->setValue("options/naming/dateFormat"  , ui.dateFormatComboBox->currentText());
+    settings->setValue("options/naming/leadingZeros", ui.leadingZerosSpinBox->value());
 }
 

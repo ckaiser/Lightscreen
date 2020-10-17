@@ -248,8 +248,16 @@ void AreaDialog::mouseMoveEvent(QMouseEvent *e)
     if (mMouseDown) {
         mMousePos = e->pos();
 
+        bool symmetryMod = qApp->keyboardModifiers() & Qt::ShiftModifier;
+        bool aspectRatioMod = qApp->keyboardModifiers() & Qt::ControlModifier;
+
         if (mNewSelection) {
             mSelection = QRect(mDragStartPoint, limitPointToRect(mMousePos, rect())).normalized();
+
+            if (aspectRatioMod) {
+                // This is kinda wiggly but oh well
+                mSelection.setHeight(mSelection.width());
+            }
         } else if (mMouseOverHandle == 0) {
             // Moving the whole selection
             QRect r = rect().normalized(), s = mSelectionBeforeDrag.normalized();
@@ -263,9 +271,6 @@ void AreaDialog::mouseMoveEvent(QMouseEvent *e)
             // Dragging a handle
             QRect r = mSelectionBeforeDrag;
             QPoint offset = e->pos() - mDragStartPoint;
-
-            bool symmetryMod = qApp->keyboardModifiers() & Qt::ShiftModifier;
-            bool aspectRatioMod = qApp->keyboardModifiers() & Qt::ControlModifier;
 
             if (mMouseOverHandle == &mTLHandle || mMouseOverHandle == &mTHandle
                     || mMouseOverHandle == &mTRHandle) { // dragging one of the top handles

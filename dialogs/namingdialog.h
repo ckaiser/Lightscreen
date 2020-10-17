@@ -34,6 +34,9 @@ public:
 protected:
     bool eventFilter(QObject *object, QEvent *event);
 
+public slots:
+    void saveSettings();
+
 private:
     Ui::NamingDialog ui;
 };
