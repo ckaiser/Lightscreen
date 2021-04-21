@@ -53,7 +53,7 @@ Screenshot::Screenshot(QObject *parent, Screenshot::Options options):
     mUnloaded(false),
     mUnloadFilename()
 {
-    if (mOptions.format == Screenshot::PNG) {
+    if (mOptions.format == Format::F_PNG) {
         mOptions.quality = 80;
     }
 }
@@ -77,7 +77,7 @@ QString Screenshot::getName(const NamingOptions &options, const QString &prefix,
     }
 
     switch (options.naming) {
-    case Screenshot::Numeric: // Numeric
+    case Naming::N_Numeric: // Numeric
         // Iterating through the folder to find the largest numeric naming.
         for (auto file : directory.entryList(QDir::Files)) {
             if (file.contains(prefix)) {
@@ -100,13 +100,13 @@ QString Screenshot::getName(const NamingOptions &options, const QString &prefix,
             naming = naming.arg(naming_largest + 1);
         }
         break;
-    case  Screenshot::Date: // Date
+    case  Naming::N_Date: // Date
         naming = naming.arg(QLocale().toString(QDateTime::currentDateTime(), options.dateFormat));
         break;
-    case  Screenshot::Timestamp: // Timestamp
+    case  Naming::N_Timestamp: // Timestamp
         naming = naming.arg(QDateTime::currentDateTime().toTime_t());
         break;
-    case  Screenshot::Empty:
+    case  Naming::N_Empty:
         naming = naming.arg("");
         break;
     }
@@ -136,7 +136,7 @@ void Screenshot::confirm(bool result)
     if (result) {
         save();
     } else {
-        mOptions.result = Screenshot::Cancel;
+        mOptions.result = Result::R_Cancel;
         emit finished();
     }
 
@@ -205,7 +205,7 @@ void Screenshot::save()
 {
     QString name = "";
     QString fileName = "";
-    Screenshot::Result result = Screenshot::Failure;
+    Result result = Result::R_Failure;
 
     if (mOptions.file && !mOptions.saveAs)  {
         name = newFileName();
@@ -247,7 +247,7 @@ void Screenshot::save()
         QApplication::clipboard()->setPixmap(mPixmap, QClipboard::Clipboard);
 
         if (!mOptions.file) {
-            result = Screenshot::Success;
+            result = Result::R_Success;
         }
     }
 
@@ -255,24 +255,24 @@ void Screenshot::save()
         fileName = name % extension();
 
         if (name.isEmpty()) {
-            result = Screenshot::Cancel;
+            result = Result::R_Cancel;
         } else if (mUnloaded) {
-            result = (QFile::rename(mUnloadFilename, fileName)) ? Screenshot::Success : Screenshot::Failure;
+            result = (QFile::rename(mUnloadFilename, fileName)) ? Result::R_Success : Result::R_Failure;
         } else if (mPixmap.save(fileName, 0, mOptions.quality)) {
-            result = Screenshot::Success;
+            result = Result::R_Success;
         } else {
-            result = Screenshot::Failure;
+            result = Result::R_Failure;
         }
     }
 
     mOptions.fileName = fileName;
     mOptions.result   = result;
 
-    if (!mOptions.result) {
+    if (mOptions.result == Result::R_Success) {
         emit finished();
     }
 
-    if (mOptions.format == Screenshot::PNG && mOptions.optimize && mOptions.file) {
+    if (mOptions.format == Format::F_PNG && mOptions.optimize && mOptions.file) {
         if (!mOptions.upload) {
             ScreenshotManager::instance()->saveHistory(mOptions.fileName);
         }
@@ -301,21 +301,23 @@ void Screenshot::setPixmap(const QPixmap &pixmap)
 
 void Screenshot::take()
 {
-    switch (mOptions.mode) {
-    case Screenshot::WholeScreen:
+    switch (static_cast<Mode>(mOptions.mode)) {
+    case Mode::M_WholeScreen:
         wholeScreen();
         break;
 
-    case Screenshot::SelectedArea:
+    case Mode::M_SelectedArea:
         selectedArea();
         break;
 
-    case Screenshot::ActiveWindow:
+    case Mode::M_ActiveWindow:
         activeWindow();
         break;
 
-    case Screenshot::SelectedWindow:
+    case Mode::M_SelectedWindow:
         selectedWindow();
+        break;
+    default:
         break;
     }
 
@@ -386,17 +388,17 @@ void Screenshot::activeWindow()
 
 const QString Screenshot::extension() const
 {
-    switch (mOptions.format) {
-    case Screenshot::PNG:
+    switch (static_cast<Format>(mOptions.format)) {
+    case Format::F_PNG:
         return QStringLiteral(".png");
         break;
-    case Screenshot::BMP:
+    case Format::F_BMP:
         return QStringLiteral(".bmp");
         break;
-    case Screenshot::WEBP:
+    case Format::F_WEBP:
         return QStringLiteral(".webp");
         break;
-    case Screenshot::JPEG:
+    case Format::F_JPEG:
         return QStringLiteral(".jpg");
         break;
     }
@@ -439,7 +441,7 @@ void Screenshot::grabDesktop()
         QPainter painter(&mPixmap);
         auto cursorInfo = os::cursor();
         auto cursorPixmap = cursorInfo.first;
-        cursorPixmap.setDevicePixelRatio(QApplication::desktop()->devicePixelRatio()); 
+        cursorPixmap.setDevicePixelRatio(QApplication::desktop()->devicePixelRatio());
 
 #if 0 // Debug cursor position helper
         painter.setBrush(QBrush(Qt::darkRed));

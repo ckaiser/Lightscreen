@@ -424,7 +424,7 @@ void OptionsDialog::updatePreview()
     options.dateFormat   = settings()->value("options/naming/dateFormat", "yyyy-MM-dd").toString();
 
     if (ui.fileGroupBox->isChecked()) { // Only change the naming button when file options are enabled.
-        ui.namingOptionsButton->setDisabled((options.naming == Screenshot::Empty));
+        ui.namingOptionsButton->setDisabled((options.naming == Screenshot::Naming::N_Empty));
     }
 
     QString preview = Screenshot::getName(options,
