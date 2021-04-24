@@ -235,7 +235,7 @@ void Screenshot::save()
             }
         }
 
-        name = name % " (" % QString::number(count % 1) % ")";
+        name = name % " (" % QString::number(count + 1) % ")";
     }
 
     if (mOptions.clipboard && !(mOptions.upload && mOptions.urlClipboard)) {
