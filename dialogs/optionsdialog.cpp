@@ -196,7 +196,13 @@ void OptionsDialog::loadSettings()
     ui.playSoundCheckBox->setChecked(settings()->value("playSound", false).toBool());
     ui.updaterCheckBox->setChecked(!settings()->value("disableUpdater", false).toBool());
     ui.magnifyCheckBox->setChecked(settings()->value("magnify", false).toBool());
+
+#ifdef Q_OS_WIN
+    ui.cursorCheckBox->setChecked(settings()->value("cursor", QSysInfo::WindowsVersion > QSysInfo::WV_XP).toBool());
+#else
     ui.cursorCheckBox->setChecked(settings()->value("cursor", true).toBool());
+#endif
+
     ui.saveAsCheckBox->setChecked(settings()->value("saveAs", false).toBool());
     ui.previewGroupBox->setChecked(settings()->value("preview", false).toBool());
     ui.previewSizeSpinBox->setValue(settings()->value("previewSize", 300).toInt());

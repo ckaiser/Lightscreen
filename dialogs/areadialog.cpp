@@ -33,6 +33,7 @@
 #include <QPainter>
 #include <QPushButton>
 #include <QSettings>
+#include <QShortcut>
 #include <QTimer>
 #include <QToolTip>
 #include <QThread>
@@ -40,7 +41,7 @@
 AreaDialog::AreaDialog(Screenshot *screenshot) :
     QDialog(0), mScreenshot(screenshot), mMouseDown(false), mMouseMagnifier(false),
     mNewSelection(false), mHandleSize(10), mMouseOverHandle(0),
-    mShowHelp(true), mGrabbing(false), mOverlayAlpha(1), mAutoclose(false),
+    mShowHelp(true), mGrabbing(false), mOverlayAlpha(1), mAutoclose(false), mLocalMagnify(screenshot->options().magnify),
     mTLHandle(0, 0, mHandleSize, mHandleSize), mTRHandle(0, 0, mHandleSize, mHandleSize),
     mBLHandle(0, 0, mHandleSize, mHandleSize), mBRHandle(0, 0, mHandleSize, mHandleSize),
     mLHandle(0, 0, mHandleSize, mHandleSize), mTHandle(0, 0, mHandleSize, mHandleSize),
@@ -90,6 +91,11 @@ AreaDialog::AreaDialog(Screenshot *screenshot) :
 
     mAcceptWidget->setLayout(awLayout);
     mAcceptWidget->setVisible(false);
+
+    auto shortcut = new QShortcut(QKeySequence("Ctrl+M"), this);
+    connect(shortcut, &QShortcut::activated, this, [&]() {
+        mLocalMagnify = !mLocalMagnify;
+    });
 }
 
 QRect AreaDialog::resultRect() const
@@ -327,36 +333,46 @@ void AreaDialog::mouseMoveEvent(QMouseEvent *e)
             QPoint acceptPos = e->pos();
             QRect  acceptRect = QRect(acceptPos, QSize(120, 70));
 
+            if (mSelection.size().width() < acceptRect.size().width() || mSelection.size().height() < acceptRect.size().height()) {
+                acceptRect.moveTo(mBRHandle.bottomRight());
+            }
+
             // Prevent the widget from overlapping the handles
             if (acceptRect.intersects(mTLHandle)) {
-                acceptPos = mTLHandle.bottomRight() + QPoint(2, 2); // Corner case
+                acceptRect.moveTo(mTLHandle.bottomRight() + QPoint(2, 2)); // Corner case
             }
 
             if (acceptRect.intersects(mBRHandle)) {
-                acceptPos = mBRHandle.bottomRight();
+                acceptRect.moveTo(mBRHandle.bottomRight()  + QPoint(2, 2));
             }
 
             if (acceptRect.intersects(mBHandle)) {
-                acceptPos = mBHandle.bottomRight();
+                acceptRect.moveTo(mBHandle.bottomRight());
             }
 
             if (acceptRect.intersects(mRHandle)) {
-                acceptPos = mRHandle.topRight();
+                acceptRect.moveTo(mRHandle.topRight());
             }
 
             if (acceptRect.intersects(mTHandle)) {
-                acceptPos = mTHandle.bottomRight();
+                acceptRect.moveTo(mTHandle.bottomRight());
             }
 
-            if ((acceptPos.x() + 120) > mScreenshot->pixmap().rect().width()) {
-                acceptPos.setX(acceptPos.x() - 120);
+            if ((acceptRect.x() + 120) > mScreenshot->pixmap().rect().width()) {
+                acceptRect.setX(acceptRect.x() - 120);
             }
 
-            if ((acceptPos.y() + 70) > mScreenshot->pixmap().rect().height()) {
-                acceptPos.setY(acceptPos.y() - 70);
+            if ((acceptRect.y() + 70) > mScreenshot->pixmap().rect().height()) {
+                acceptRect.setY(acceptRect.y() - 70);
             }
 
-            mAcceptWidget->move(acceptPos);
+            // If it still intersects the BR handle, we're on the bottom right corner of the screen
+            if (acceptRect.intersects(mBRHandle)) {
+                acceptRect.setX(acceptRect.x() - 20);
+                acceptRect.setY(acceptRect.y() - 20);
+            }
+
+            mAcceptWidget->move(acceptRect.x(), acceptRect.y());
         }
 
         update();
@@ -487,13 +503,13 @@ void AreaDialog::paintEvent(QPaintEvent *e)
     if (mShowHelp) {
         //Drawing the explanatory text.
         QRect helpRect = qApp->desktop()->screenGeometry(qApp->desktop()->primaryScreen());
-        QString helpTxt = tr("Lightscreen area mode:\nUse your mouse to draw a rectangle to capture.\nPress any key or right click to exit.");
+        QString helpTxt = tr("Use your mouse to draw a rectangle to capture. Press any key or right click to exit.\nType \"100x100\" or similar and press enter for precise sizing. Ctrl+M toggles magnifier.");
 
         helpRect.setHeight(qRound((float)(helpRect.height() / 10))); // We get a decently sized rect where the text should be drawn (centered)
 
         // We draw the white contrasting background for the text, using the same text and options to get the boundingRect that the text will have.
         painter.setPen(QPen(Qt::white));
-        painter.setBrush(QBrush(QColor(255, 255, 255, 180), Qt::SolidPattern));
+        painter.setBrush(QBrush(QColor(255, 255, 255, 210), Qt::SolidPattern));
         QRectF bRect = painter.boundingRect(helpRect, Qt::AlignCenter, helpTxt);
 
         // These four calls provide padding for the rect
@@ -584,7 +600,7 @@ void AreaDialog::paintEvent(QPaintEvent *e)
         }
     }
 
-    if (!mScreenshot->options().magnify) {
+    if (!mLocalMagnify) {
         return;
     }
 
