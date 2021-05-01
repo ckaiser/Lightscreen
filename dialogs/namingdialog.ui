@@ -130,26 +130,6 @@
           <property name="horizontalSpacing">
            <number>0</number>
           </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="dateFormatLabel">
-            <property name="text">
-             <string>Date Format:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>1</width>
-              <height>1</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
           <item row="1" column="2">
            <widget class="QLabel" name="dateHelpLabel">
             <property name="font">
@@ -168,6 +148,26 @@
             </property>
            </widget>
           </item>
+          <item row="0" column="3">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>1</width>
+              <height>1</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="dateFormatLabel">
+            <property name="text">
+             <string>Date Format:</string>
+            </property>
+           </widget>
+          </item>
           <item row="1" column="0">
            <widget class="QComboBox" name="dateFormatComboBox">
             <property name="editable">
@@ -183,6 +183,23 @@
               <string notr="true">yyyy-MM-dd HH.mm.ss</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>ddd MMMM d yy</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>dddd d of MMMM</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="datePreviewLabel">
+            <property name="text">
+             <string notr="true"/>
+            </property>
            </widget>
           </item>
          </layout>

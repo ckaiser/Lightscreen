@@ -21,6 +21,7 @@
 #include <tools/os.h>
 #include <tools/screenshotmanager.h>
 
+#include <QDateTime>
 #include <QDesktopServices>
 #include <QKeyEvent>
 #include <QSettings>
@@ -48,6 +49,8 @@ NamingDialog::NamingDialog(Screenshot::Naming naming, QWidget *parent) :
         ui.dateFormatComboBox->setCurrentIndex(ui.dateFormatComboBox->count() - 1);
     }
 
+    updateDatePreview();
+
     ui.leadingZerosSpinBox->setValue(settings->value("options/naming/leadingZeros", 0).toInt());
 
     // Signals/Slots
@@ -55,6 +58,7 @@ NamingDialog::NamingDialog(Screenshot::Naming naming, QWidget *parent) :
     connect(ui.dateHelpLabel, &QLabel::linkActivated, this, [](const QUrl &url) {
         QDesktopServices::openUrl(QUrl(url));
     });
+    connect(ui.dateFormatComboBox, &QComboBox::currentTextChanged, this, &NamingDialog::updateDatePreview);
 
     // Stack & window size adjustments
     ui.stack->setCurrentIndex((int)naming);
@@ -68,13 +72,33 @@ bool NamingDialog::eventFilter(QObject *object, QEvent *event)
     if (event->type() == QEvent::KeyPress
             && object == ui.dateFormatComboBox) {
         QKeyEvent *keyEvent = (QKeyEvent *)(event);
+#ifdef Q_OS_WIN
         if (QRegExp("[?:\\\\/*\"<>|]").exactMatch(keyEvent->text())) {
             event->ignore();
             return true;
         }
+#endif
+
+#ifdef Q_OS_MACOS
+        if (keyEvent->text().contains(":")) {
+            event->ignore();
+            return true;
+        }
+#endif
+
+#ifdef Q_OS_UNIX
+        if (keyEvent->text().contains("/")) {
+            event->ignore();
+            return true;
+        }
+#endif
     }
 
     return QDialog::eventFilter(object, event);
+}
+
+void NamingDialog::updateDatePreview() {
+    ui.datePreviewLabel->setText(tr("<u>Preview</u>: ") + QDateTime::currentDateTime().toString(ui.dateFormatComboBox->currentText()));
 }
 
 void NamingDialog::saveSettings() {

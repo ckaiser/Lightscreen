@@ -36,6 +36,7 @@ protected:
 
 public slots:
     void saveSettings();
+    void updateDatePreview();
 
 private:
     Ui::NamingDialog ui;
