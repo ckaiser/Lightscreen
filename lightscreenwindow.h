@@ -66,7 +66,7 @@ public slots:
     void quit();
     void restoreNotification();
     void setStatus(QString status = "");
-    void screenshotAction(Screenshot::Mode mode = Screenshot::None);
+    void screenshotAction(Screenshot::Mode mode = Screenshot::Mode::M_None);
     void screenshotActionTriggered(QAction *action);
     void screenHotkey();
     void showHotkeyError(const QStringList &hotkeys);

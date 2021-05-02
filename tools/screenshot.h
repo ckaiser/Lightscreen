@@ -28,35 +28,35 @@ class Screenshot : public QObject
     Q_OBJECT
 
 public:
-    enum Format {
-        PNG  = 0,
-        JPEG = 1,
-        BMP  = 2,
-        WEBP = 3
+    enum class Format {
+        F_PNG,
+        F_JPEG,
+        F_BMP ,
+        F_WEBP,
     };
     Q_ENUM(Format)
 
-    enum Naming {
-        Numeric = 0,
-        Date = 1,
-        Timestamp = 2,
-        Empty = 3
+    enum class Naming {
+        N_Numeric,
+        N_Date,
+        N_Timestamp,
+        N_Empty,
     };
     Q_ENUM(Naming)
 
-    enum Mode {
-        None         = 0,
-        WholeScreen  = 1,
-        ActiveWindow = 2,
-        SelectedArea = 3,
-        SelectedWindow = 4
+    enum class Mode {
+        M_None,
+        M_WholeScreen,
+        M_ActiveWindow,
+        M_SelectedArea,
+        M_SelectedWindow,
     };
     Q_ENUM(Mode)
 
-    enum Result {
-        Failure = 0,
-        Success = 1,
-        Cancel = 2
+    enum class Result {
+        R_Failure,
+        R_Success,
+        R_Cancel,
     };
     Q_ENUM(Result)
 

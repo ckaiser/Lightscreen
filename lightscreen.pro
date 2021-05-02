@@ -2,6 +2,24 @@ TEMPLATE = app
 TARGET = lightscreen
 DEFINES += QT_DEPRECATED_WARNINGS
 
+DESTDIR = $${PWD}/Build
+BUILDDIR = $${DESTDIR}/.tmp/$${TARGET}
+
+CONFIG(debug, debug|release) {
+    win32: BUILDDIR = $${BUILDDIR}/win32-debug
+    linux: BUILDDIR = $${BUILDDIR}/linux-debug
+} else {
+    win32: BUILDDIR = $${BUILDDIR}/win32-release
+    linux: BUILDDIR = $${BUILDDIR}/linux-release
+}
+
+MOC_DIR += $${BUILDDIR}
+OBJECTS_DIR += $${BUILDDIR}/obj
+UI_DIR += $${BUILDDIR}
+RCC_DIR += $${BUILDDIR}
+
+INCLUDEPATH += $${UI_DIR}
+
 HEADERS += dialogs/areadialog.h \
     dialogs/historydialog.h \
     dialogs/namingdialog.h \

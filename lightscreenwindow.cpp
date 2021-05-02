@@ -62,7 +62,7 @@ LightscreenWindow::LightscreenWindow(QWidget *parent) :
     mReviveMain(false),
     mWasVisible(true),
     mLastMessage(0),
-    mLastMode(Screenshot::None),
+    mLastMode(Screenshot::Mode::M_None),
     mLastScreenshot(),
     mHasTaskbarButton(false)
 {
@@ -140,7 +140,7 @@ LightscreenWindow::~LightscreenWindow()
 
 void LightscreenWindow::action(int mode)
 {
-    if (mode <= Screenshot::SelectedWindow) {
+    if (mode <= static_cast<int>(Screenshot::Mode::M_SelectedWindow)) {
         screenshotAction((Screenshot::Mode)mode);
     } else if (mode == ShowMainWindow) {
         show();
@@ -153,7 +153,7 @@ void LightscreenWindow::action(int mode)
 
 void LightscreenWindow::areaHotkey()
 {
-    screenshotAction(Screenshot::SelectedArea);
+    screenshotAction(Screenshot::Mode::M_SelectedArea);
 }
 
 void LightscreenWindow::checkForUpdates()
@@ -206,7 +206,7 @@ void LightscreenWindow::cleanup(const Screenshot::Options &options)
     }
 
     if (settings()->value("options/playSound", false).toBool()) {
-        if (options.result == Screenshot::Success) {
+        if (options.result == Screenshot::Result::R_Success) {
             QSound::play("sounds/ls.screenshot.wav");
         } else {
 #ifdef Q_OS_WIN
@@ -220,7 +220,7 @@ void LightscreenWindow::cleanup(const Screenshot::Options &options)
 
     updateStatus();
 
-    if (options.result != Screenshot::Success) {
+    if (options.result != Screenshot::Result::R_Success) {
         return;
     }
 
@@ -343,13 +343,13 @@ void LightscreenWindow::executeArgument(const QString &message)
         os::setForegroundWindow(this);
         qApp->alert(this, 2000);
     } else if (message == "--screen") {
-        screenshotAction(Screenshot::WholeScreen);
+        screenshotAction(Screenshot::Mode::M_WholeScreen);
     } else if (message == "--area") {
-        screenshotAction(Screenshot::SelectedArea);
+        screenshotAction(Screenshot::Mode::M_SelectedArea);
     } else if (message == "--activewindow") {
-        screenshotAction(Screenshot::ActiveWindow);
+        screenshotAction(Screenshot::Mode::M_ActiveWindow);
     } else if (message == "--pickwindow") {
-        screenshotAction(Screenshot::SelectedWindow);
+        screenshotAction(Screenshot::Mode::M_SelectedWindow);
     } else if (message == "--folder") {
         action(OpenScreenshotFolder);
     } else if (message == "--uploadlast") {
@@ -379,7 +379,7 @@ void LightscreenWindow::executeArguments(const QStringList &arguments)
 void LightscreenWindow::notify(const Screenshot::Result &result)
 {
     switch (result) {
-    case Screenshot::Success:
+    case Screenshot::Result::R_Success:
         mTrayIcon->setIcon(QIcon(":/icons/lightscreen.yes"));
 
         if (mHasTaskbarButton) {
@@ -388,7 +388,7 @@ void LightscreenWindow::notify(const Screenshot::Result &result)
 
         setWindowTitle(tr("Success!"));
         break;
-    case Screenshot::Failure:
+    case Screenshot::Result::R_Failure:
         mTrayIcon->setIcon(QIcon(":/icons/lightscreen.no"));
         setWindowTitle(tr("Failed!"));
 
@@ -397,7 +397,7 @@ void LightscreenWindow::notify(const Screenshot::Result &result)
         }
 
         break;
-    case Screenshot::Cancel:
+    case Screenshot::Result::R_Cancel:
         setWindowTitle(tr("Cancelled!"));
         break;
     }
@@ -503,7 +503,7 @@ void LightscreenWindow::screenshotAction(Screenshot::Mode mode)
     // The delayed functions works using the static variable lastMode
     // which keeps the argument so a QTimer can call this function again.
     if (delayms > 0) {
-        if (mLastMode == Screenshot::None) {
+        if (mLastMode == Screenshot::Mode::M_None) {
             mLastMode = mode;
 
             QTimer::singleShot(delayms, this, [&] {
@@ -512,7 +512,7 @@ void LightscreenWindow::screenshotAction(Screenshot::Mode mode)
             return;
         } else {
             mode = mLastMode;
-            mLastMode = Screenshot::None;
+            mLastMode = Screenshot::Mode::M_None;
         }
     }
 
@@ -555,7 +555,7 @@ void LightscreenWindow::screenshotAction(Screenshot::Mode mode)
         mDoCache = true;
     }
 
-    options.mode = mode;
+    options.mode = static_cast<int>(mode);
 
     ScreenshotManager::instance()->take(options);
 }
@@ -567,7 +567,7 @@ void LightscreenWindow::screenshotActionTriggered(QAction *action)
 
 void LightscreenWindow::screenHotkey()
 {
-    screenshotAction(Screenshot::WholeScreen);
+    screenshotAction(Screenshot::Mode::M_WholeScreen);
 }
 
 void LightscreenWindow::showHotkeyError(const QStringList &hotkeys)
@@ -639,7 +639,7 @@ void LightscreenWindow::showOptions()
 
 void LightscreenWindow::showScreenshotMessage(const Screenshot::Result &result, const QString &fileName)
 {
-    if (result == Screenshot::Cancel) {
+    if (result == Screenshot::Result::R_Cancel) {
         return;
     }
 
@@ -647,7 +647,7 @@ void LightscreenWindow::showScreenshotMessage(const Screenshot::Result &result, 
     QString title;
     QString message;
 
-    if (result == Screenshot::Success) {
+    if (result == Screenshot::Result::R_Success) {
         title = QFileInfo(fileName).fileName();
 
         if (settings()->value("file/target").toString().isEmpty()) {
@@ -673,7 +673,7 @@ void LightscreenWindow::showUploaderError(const QString &error)
         mTrayIcon->showMessage(tr("Upload error"), error);
     }
 
-    notify(Screenshot::Failure);
+    notify(Screenshot::Result::R_Failure);
 }
 
 void LightscreenWindow::showUploaderMessage(const QString &fileName, const QString &url)
@@ -813,12 +813,12 @@ void LightscreenWindow::uploadProgress(int progress)
 
 void LightscreenWindow::windowHotkey()
 {
-    screenshotAction(Screenshot::ActiveWindow);
+    screenshotAction(Screenshot::Mode::M_ActiveWindow);
 }
 
 void LightscreenWindow::windowPickerHotkey()
 {
-    screenshotAction(Screenshot::SelectedWindow);
+    screenshotAction(Screenshot::Mode::M_SelectedWindow);
 }
 
 void LightscreenWindow::applySettings()
@@ -847,7 +847,7 @@ void LightscreenWindow::connectHotkeys()
 {
     const QStringList actions = {"screen", "window", "area", "windowPicker", "open", "directory"};
     QStringList failed;
-    size_t id = Screenshot::WholeScreen;
+    size_t id = static_cast<size_t>(Screenshot::Mode::M_WholeScreen);
 
     for (auto action : actions) {
         if (settings()->value("actions/" + action + "/enabled").toBool()) {
@@ -879,16 +879,16 @@ void LightscreenWindow::createTrayIcon()
     connect(hideAction, &QAction::triggered, this, &LightscreenWindow::toggleVisibility);
 
     auto screenAction = new QAction(os::icon("screen"), tr("&Screen"), mTrayIcon);
-    screenAction->setData(QVariant::fromValue<Screenshot::Mode>(Screenshot::WholeScreen));
+    screenAction->setData(QVariant::fromValue<Screenshot::Mode>(Screenshot::Mode::M_WholeScreen));
 
     auto windowAction = new QAction(os::icon("window"), tr("Active &Window"), this);
-    windowAction->setData(QVariant::fromValue<Screenshot::Mode>(Screenshot::ActiveWindow));
+    windowAction->setData(QVariant::fromValue<Screenshot::Mode>(Screenshot::Mode::M_ActiveWindow));
 
     auto windowPickerAction = new QAction(os::icon("pickWindow"), tr("&Pick Window"), this);
-    windowPickerAction->setData(QVariant::fromValue<Screenshot::Mode>(Screenshot::SelectedWindow));
+    windowPickerAction->setData(QVariant::fromValue<Screenshot::Mode>(Screenshot::Mode::M_SelectedWindow));
 
     auto areaAction = new QAction(os::icon("area"), tr("&Area"), mTrayIcon);
-    areaAction->setData(QVariant::fromValue<Screenshot::Mode>(Screenshot::SelectedArea));
+    areaAction->setData(QVariant::fromValue<Screenshot::Mode>(Screenshot::Mode::M_SelectedArea));
 
     auto screenshotGroup = new QActionGroup(mTrayIcon);
     screenshotGroup->addAction(screenAction);
@@ -975,7 +975,7 @@ bool LightscreenWindow::event(QEvent *event)
     if (event->type() == QEvent::Show) {
         QPoint savedPosition = settings()->value("position").toPoint();
 
-        if (!savedPosition.isNull() && qApp->desktop()->availableGeometry().contains(QRect(savedPosition, size()))) {
+        if (!savedPosition.isNull() && qApp->desktop()->screenGeometry(this).contains(QRect(savedPosition, size()))) {
             move(savedPosition);
         }
 
