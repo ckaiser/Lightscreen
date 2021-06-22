@@ -1,0 +1,10 @@
+--- screenshot_old.cpp	2018-04-30 11:54:08.012803000 +0200
++++ screenshot.cpp	2018-04-30 11:55:30.725966171 +0200
+@@ -401,6 +401,7 @@
+         return QStringLiteral(".jpg");
+         break;
+     }
++    return QStringLiteral(".png");
+ }
+ 
+ void Screenshot::grabDesktop()

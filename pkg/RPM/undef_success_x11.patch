@@ -1,0 +1,12 @@
+*** screenshot_old.cpp	2018-04-22 18:14:15.969692651 +0200
+--- screenshot.cpp	2018-04-22 18:15:57.137990615 +0200
+***************
+*** 43,48 ****
+--- 43,49 ----
+  #ifdef Q_OS_LINUX
+      #include <QX11Info>
+      #include <X11/X.h>
++     #undef Success
+      #include <X11/Xlib.h>
+  #endif
+  
